@@ -1,0 +1,71 @@
+DEVTRICKED is dedicated to bring low price assets to indie developers!
+
+LOW-POLY GHOST HUNTING PACK LITE
+
+Models:
+
+- Basic Candle
+- Large Candle
+- Spirit Box
+- Handheld UV Light
+- Flashlight
+- Salt Container
+- Simple Cross
+
+Total Models: 7
+
+Icons:
+
+- Basic Candle
+- Large Candle
+- Spirit Box
+- Handheld UV Light
+- Flashlight
+- Salt Container
+- Simple Cross
+
+Total Icons: 7
+
+Icon Resolution: 512x512
+Icon Format: PNG
+
+
+Total Assets: 14
+
+
+Materials:
+
+- LPGHPBuilt-In_Mat
+
+BaseColor (Albedo Only)
+
+This material is shared between all models for optimization.
+
+- LPGHPBuilt-In_Alt_Mat
+
+BaseColor (Albedo Only)
+
+This material is the same as the LPGHPBuilt-In_Mat, except it lights up the Flashlight, and it makes the UV Light a dark purple.
+
+
+
+
+Text:
+
+Text on the models was created as geometry for a crisp look.
+
+
+Game-Ready:
+
+Objects like buttons were intentionally made as separate objects for easy animation!
+
+There is already URP versions of the materials and prefabs for easy use!
+
+Pivot:
+
+when rotationg the Shotgun be sure to change the top left box in the inspector from Center to Pivot!
+
+
+
+
+Thank you for downloading the Low-Poly Ghost Hunting Pack LITE! The Assets can be dragged and dropped from the prefabs folder. Any questions or suggestions for future packs contact me at devtricked@gmail.com
