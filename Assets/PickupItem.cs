@@ -72,8 +72,7 @@ public class PickupItem : MonoBehaviour
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null) rb.isKinematic = true;
 
-            foreach (Renderer r in GetComponentsInChildren<Renderer>())
-                r.enabled = false;
+            // Inventory.SetItemHeld keeps the newly selected item visible in the player's hand.
 
             ItemSubtitleTrigger st = GetComponent<ItemSubtitleTrigger>();
             if (st != null) st.OnPickedUp();

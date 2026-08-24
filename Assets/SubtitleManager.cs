@@ -1,6 +1,9 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
+[ExecuteAlways]
 public class SubtitleManager : MonoBehaviour
 {
     public static SubtitleManager Instance;
@@ -8,23 +11,28 @@ public class SubtitleManager : MonoBehaviour
     [Header("Subtitle Settings")]
     public float defaultDisplayTime = 4f;
     public float fadeSpeed = 2f;
-    public float characterDelay = 0.03f; // typewriter effect
+    public float characterDelay = 0.03f;
 
-    [Header("Positioning")]
-    public float verticalOffset = 100f; // Pixels from bottom
-    public float horizontalOffset = 0f; // Offset from center
+    [Header("Initial UI Position")]
+    public float verticalOffset = 100f;
+    public float horizontalOffset = 0f;
 
     [Header("Appearance")]
     public Color backgroundColor = Color.black;
-    [Range(0f, 1f)]
-    public float backgroundOpacity = 0.55f;
+    [Range(0f, 1f)] public float backgroundOpacity = 0.55f;
     public Color textColor = Color.white;
 
-    private string currentText = "";
+    [Header("Canvas UI")]
+    [SerializeField] private GameObject subtitlePanel;
+    [SerializeField] private Image subtitleBackground;
+    [SerializeField] private Image accentLine;
+    [SerializeField] private TextMeshProUGUI shadowText;
+    [SerializeField] private TextMeshProUGUI subtitleText;
+    [SerializeField] private CanvasGroup subtitleCanvasGroup;
+
     private string displayedText = "";
-    private float subtitleAlpha = 0f;
-    private bool isShowing = false;
-    private bool isTyping = false;
+    private float subtitleAlpha;
+    private bool isShowing;
     private Coroutine currentCoroutine;
     private Coroutine typeCoroutine;
 
@@ -33,128 +41,200 @@ public class SubtitleManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
+        {
             Destroy(gameObject);
+            return;
+        }
+
+        EnsureUi();
+    }
+
+    void OnEnable()
+    {
+        if (!Application.isPlaying)
+            EnsureUi();
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
     }
 
     void Update()
     {
-        if (isShowing)
-            subtitleAlpha = Mathf.Lerp(subtitleAlpha, 1f, Time.deltaTime * fadeSpeed);
-        else
-            subtitleAlpha = Mathf.Lerp(subtitleAlpha, 0f, Time.deltaTime * fadeSpeed);
+        if (!Application.isPlaying) return;
+
+        EnsureUi();
+        subtitleAlpha = isShowing
+            ? Mathf.Lerp(subtitleAlpha, 1f, Time.deltaTime * fadeSpeed)
+            : Mathf.Lerp(subtitleAlpha, 0f, Time.deltaTime * fadeSpeed);
+        RefreshUi();
     }
 
     public void ShowSubtitle(string text, float duration = -1f)
     {
         if (duration < 0f) duration = defaultDisplayTime;
-
-        if (currentCoroutine != null)
-            StopCoroutine(currentCoroutine);
-        if (typeCoroutine != null)
-            StopCoroutine(typeCoroutine);
-
-        currentText = text;
+        StopActiveSubtitles();
         displayedText = "";
-        currentCoroutine = StartCoroutine(SubtitleRoutine(text, duration));
+        currentCoroutine = StartCoroutine(SubtitleRoutine(text, duration, true));
     }
 
     public void ShowSubtitleImmediate(string text, float duration = -1f)
     {
         if (duration < 0f) duration = defaultDisplayTime;
-
-        if (currentCoroutine != null)
-            StopCoroutine(currentCoroutine);
-        if (typeCoroutine != null)
-            StopCoroutine(typeCoroutine);
-
-        currentText = text;
+        StopActiveSubtitles();
         displayedText = text;
-        currentCoroutine = StartCoroutine(SubtitleRoutine(text, duration));
+        currentCoroutine = StartCoroutine(SubtitleRoutine(text, duration, false));
     }
 
-    IEnumerator SubtitleRoutine(string text, float duration)
+    IEnumerator SubtitleRoutine(string text, float duration, bool useTypewriter)
     {
         isShowing = true;
 
-        // Typewriter effect
-        typeCoroutine = StartCoroutine(TypeText(text));
-        yield return typeCoroutine;
+        if (useTypewriter)
+        {
+            typeCoroutine = StartCoroutine(TypeText(text));
+            yield return typeCoroutine;
+        }
 
-        // Hold
         yield return new WaitForSeconds(duration);
-
-        // Fade out
         isShowing = false;
         displayedText = "";
     }
 
     IEnumerator TypeText(string text)
     {
-        isTyping = true;
         displayedText = "";
-
-        foreach (char c in text)
+        foreach (char character in text)
         {
-            displayedText += c;
+            displayedText += character;
             yield return new WaitForSeconds(characterDelay);
         }
-
-        isTyping = false;
     }
 
     public void HideSubtitle()
     {
-        if (currentCoroutine != null)
-            StopCoroutine(currentCoroutine);
-        if (typeCoroutine != null)
-            StopCoroutine(typeCoroutine);
-
+        StopActiveSubtitles();
         isShowing = false;
         displayedText = "";
     }
 
-    void OnGUI()
+    [ContextMenu("Rebuild Subtitle UI in Canvas")]
+    public void RebuildSubtitleUiInCanvas()
     {
-        if (subtitleAlpha <= 0.01f) return;
+        if (subtitlePanel != null)
+        {
+            if (Application.isPlaying) Destroy(subtitlePanel);
+            else DestroyImmediate(subtitlePanel);
+        }
 
-        float sw = Screen.width;
-        float sh = Screen.height;
-        float cx = sw / 2f;
+        subtitlePanel = null;
+        subtitleBackground = null;
+        accentLine = null;
+        shadowText = null;
+        subtitleText = null;
+        subtitleCanvasGroup = null;
+        EnsureUi();
+    }
 
-        // Subtitle background
-        float bgW = 600f;
-        float bgH = 44f;
-        float bgX = cx - bgW / 2f + horizontalOffset;
-        float bgY = sh - verticalOffset;
+    private void StopActiveSubtitles()
+    {
+        if (currentCoroutine != null) StopCoroutine(currentCoroutine);
+        if (typeCoroutine != null) StopCoroutine(typeCoroutine);
+        currentCoroutine = null;
+        typeCoroutine = null;
+    }
 
-        GUI.color = new Color(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundOpacity * subtitleAlpha);
-        GUI.DrawTexture(new Rect(bgX - 10, bgY - 6, bgW + 20, bgH),
-            Texture2D.whiteTexture);
+    private void EnsureUi()
+    {
+        if (subtitlePanel != null)
+        {
+            if (subtitleCanvasGroup == null)
+                subtitleCanvasGroup = subtitlePanel.GetComponent<CanvasGroup>();
+            if (subtitleCanvasGroup == null)
+                subtitleCanvasGroup = subtitlePanel.AddComponent<CanvasGroup>();
+            return;
+        }
 
-        // Left accent line
-        GUI.DrawTexture(new Rect(bgX - 10, bgY - 6, 3f, bgH),
-            Texture2D.whiteTexture);
+        Canvas canvas = GetComponent<Canvas>();
+        if (canvas == null) canvas = FindObjectOfType<Canvas>();
+        if (canvas == null) return;
 
-        GUI.color = Color.white;
+        subtitlePanel = CreateUiObject("Subtitle UI", canvas.transform);
+        subtitleCanvasGroup = subtitlePanel.AddComponent<CanvasGroup>();
 
-        // Shadow
-        GUIStyle shadow = new GUIStyle();
-        shadow.fontSize = 17;
-        shadow.fontStyle = FontStyle.Italic;
-        shadow.alignment = TextAnchor.MiddleCenter;
-        shadow.wordWrap = true;
-        shadow.normal.textColor = new Color(0f, 0f, 0f, subtitleAlpha * 0.7f);
-        GUI.Label(new Rect(bgX + 1, bgY + 1, bgW, bgH),
-            displayedText, shadow);
+        RectTransform panelRect = subtitlePanel.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(0.5f, 0f);
+        panelRect.anchorMax = new Vector2(0.5f, 0f);
+        panelRect.pivot = new Vector2(0.5f, 0.5f);
+        panelRect.anchoredPosition = new Vector2(horizontalOffset, verticalOffset);
+        panelRect.sizeDelta = new Vector2(620f, 60f);
 
-        // Main text
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 17;
-        style.fontStyle = FontStyle.Italic;
-        style.alignment = TextAnchor.MiddleCenter;
-        style.wordWrap = true;
-        style.normal.textColor = new Color(textColor.r, textColor.g, textColor.b, subtitleAlpha);
-        GUI.Label(new Rect(bgX, bgY, bgW, bgH),
-            displayedText, style);
+        subtitleBackground = subtitlePanel.AddComponent<Image>();
+        subtitleBackground.raycastTarget = false;
+        subtitleBackground.color = new Color(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundOpacity);
+
+        GameObject accentObject = CreateUiObject("Subtitle Accent", subtitlePanel.transform);
+        accentLine = accentObject.AddComponent<Image>();
+        accentLine.raycastTarget = false;
+        accentLine.color = textColor;
+        SetRect(accentObject.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(4f, 0f), new Vector2(4f, 52f));
+
+        shadowText = CreateSubtitleText("Subtitle Shadow", subtitlePanel.transform, new Vector2(1f, -1f), new Color(0f, 0f, 0f, 0.7f));
+        subtitleText = CreateSubtitleText("Subtitle Text", subtitlePanel.transform, Vector2.zero, textColor);
+
+        if (!Application.isPlaying)
+        {
+            subtitleText.text = "Subtitle Preview";
+            shadowText.text = subtitleText.text;
+        }
+    }
+
+    private void RefreshUi()
+    {
+        if (subtitlePanel == null) return;
+
+        bool visible = isShowing || subtitleAlpha > 0.01f;
+        if (subtitlePanel.activeSelf != visible)
+            subtitlePanel.SetActive(visible);
+        if (!visible) return;
+
+        if (subtitleCanvasGroup != null)
+            subtitleCanvasGroup.alpha = subtitleAlpha;
+        if (shadowText != null) shadowText.text = displayedText;
+        if (subtitleText != null) subtitleText.text = displayedText;
+    }
+
+    private static GameObject CreateUiObject(string objectName, Transform parent)
+    {
+        GameObject uiObject = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer));
+        uiObject.layer = 5;
+        uiObject.transform.SetParent(parent, false);
+        return uiObject;
+    }
+
+    private static TextMeshProUGUI CreateSubtitleText(string objectName, Transform parent, Vector2 offset, Color color)
+    {
+        GameObject textObject = CreateUiObject(objectName, parent);
+        TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
+        text.font = TMP_Settings.defaultFontAsset;
+        text.fontSize = 17f;
+        text.fontStyle = FontStyles.Italic;
+        text.alignment = TextAlignmentOptions.Center;
+        text.enableWordWrapping = true;
+        text.raycastTarget = false;
+        text.color = color;
+        SetRect(text.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), offset, new Vector2(580f, 52f));
+        return text;
+    }
+
+    private static void SetRect(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax, Vector2 position, Vector2 size)
+    {
+        rect.anchorMin = anchorMin;
+        rect.anchorMax = anchorMax;
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = position;
+        rect.sizeDelta = size;
     }
 }

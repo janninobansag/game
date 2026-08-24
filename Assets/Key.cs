@@ -80,8 +80,7 @@ public class Key : MonoBehaviour
                 rb.useGravity = false;
             }
 
-            foreach (Renderer r in GetComponentsInChildren<Renderer>())
-                r.enabled = false;
+            // Inventory.SetItemHeld keeps the newly selected item visible in the player's hand.
         }
 
         if (drawer != null)

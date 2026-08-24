@@ -30,6 +30,7 @@ public class FlashlightPickup : MonoBehaviour
 
     public static FlashlightPickup HeldFlashlight { get; private set; }
     public bool IsHeld => isHeld;
+    public bool IsOn => isOn;
 
     void Start()
     {
@@ -69,9 +70,7 @@ public class FlashlightPickup : MonoBehaviour
 
     void Update()
     {
-        if (!isHeld) return;
-
-        if (Input.GetKeyDown(KeyCode.F))
+        if (isHeld && Input.GetKeyDown(KeyCode.F))
         {
             if (!isOn && currentBattery <= 0f)
             {
@@ -154,21 +153,6 @@ public class FlashlightPickup : MonoBehaviour
             HeldFlashlight = this;
         else if (HeldFlashlight == this)
             HeldFlashlight = null;
-        
-        if (!held)
-        {
-            wasDropped = true;
-            isOn = false;
-            if (flashlight != null)
-                flashlight.enabled = false;
-
-            if (adjustFogWhenOn)
-            {
-                RenderSettings.fogStartDistance = originalFogStart;
-                RenderSettings.fogEndDistance = originalFogEnd;
-                RenderSettings.fogDensity = originalFogDensity;
-            }
-        }
     }
 
     public void Recharge(float amount)

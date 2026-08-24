@@ -305,9 +305,13 @@ Visual and atmosphere systems include:
 - Both old and new jumpscare systems exist: `JumpscareSystem.cs` and `JumpscareSystemNEW.cs`.
 - The checkpoint code explicitly resets the older `MutantAI`; verify that the active Varen prefab uses the intended AI system.
 - Inventory capacity is three, while the ritual requires four objects. The player must place or drop at least one item during the ritual setup.
+- Picking up any inventory item now selects it immediately and keeps its model visible in the player?s hand. This does not change the existing save/load data format.
 - The ritual UI still contains the word `Munduan` in one location, while the story name is Varen. Change it if `Munduan` is not intended as an alternate name.
+- An active flashlight now stays attached to the camera and continues lighting and draining its battery when the player selects another bag item; dropping it and battery depletion still turn it off.
 - Some save operations use empty exception handlers, so certain database failures may fail silently.
+- Health is saved with the player data and now restores through `PlayerHealth.RestoreHealth`, which refreshes the HealthBar immediately. The bar uses a green-to-red status color and the label displays `HP current / max`; older saves with no HP values start at the Inspector maximum.
 - `SQLite4Unity3d` uses native `sqlite3` calls. Windows, macOS, and Linux builds must each be tested with saving and loading.
+- The old circular HealthBar image is hidden when the game starts and replaced by a rectangular Canvas `HealthBarSlider`, matching the stamina-bar style. Its size and position can be adjusted on `PlayerHealth` with `Health Bar Size` and `Health Bar Position`.
 - Video playback depends on the codecs supported by the target operating system.
 
 ## Story Details Still To Decide
@@ -317,3 +321,83 @@ Visual and atmosphere systems include:
 - What the player can do to help, release, or avoid Laica and Jude's trapped spirits.
 - Why the Q&A challenge exists in the story.
 - What the final sealing does to Varen.
+
+## Bag UI Canvas Layout
+
+- The bag uses three bottom-center Canvas slots. Bag UI and its Bag Slot children are created under the Canvas in Edit mode, so their Rect Transforms can be manually repositioned. Use **Rebuild Bag UI in Canvas** on BagUI if the scene needs a fresh layout.
+
+- Bag UI was restyled to match the three-frame reference: a transparent layout container with three 94x94 bottom-center slot frames, no BAG title, no hint text, and no large panel background.
+
+## 3D Bag Item Previews
+
+- BagUI now requests a 3D preview for each stored item instead of displaying its flat material texture.
+- InventoryItemPreview creates a hidden camera and a safe visual-only copy of each pickup prefab, rendering it to the slot without changing the real item in the player's hand.
+
+## Transparent Item Icons
+
+- Added Assets/Resources/UI/InventoryItemIcons.png, a transparent six-icon sheet made from the supplied references.
+- Bag slots now use the supplied transparent icon for recognized batteries, candles, keys, flashlights, crosses, and Bibles. Other inventory items keep the 3D preview fallback.
+
+- Removed the selected-slot yellow tint from Bag UI. Every frame, slot icons are reset to white and frames to their normal brown color.
+
+## Bag Selection Clarity
+
+- The currently equipped bag slot now has a separate gold outline outside its frame; icons themselves remain their original colors.
+- Mouse-wheel selection now cycles through all three bag slots, including empty slots. Selecting an empty slot hides the previously held item but does not drop it.
+
+- Split the transparent item sheet into individual Battery, Candle, Key, Flashlight, Cross, and Bible PNG icons. Bag UI now loads each icon separately, so images cannot spill into neighboring slots.
+
+- Fixed Bag slot frame darkening: the frame image is now kept at Color.white during play so Unity displays its original wood colors instead of tinting it nearly black.
+
+## Canvas Subtitle UI
+
+- Replaced SubtitleManager OnGUI subtitles with a Canvas-based Subtitle UI hierarchy: background, accent line, shadow text, and subtitle text.
+- The root is created under the Canvas in Edit mode. Move or resize Subtitle UI with Rect Transform to choose where subtitles appear; use **Rebuild Subtitle UI in Canvas** on the manager if needed.
+
+- Subtitle fading now uses a CanvasGroup on Subtitle UI instead of resetting the background, accent, shadow, and text colors every frame. Manual UI colors and transparency are preserved during play.
+
+## Editable HealthBar UI
+
+- PlayerHealth now creates HealthBar UI under the Canvas in Edit mode, including Health Fill and Health Text children.
+- Select HealthBar UI in the Canvas Hierarchy to move or resize it manually. **Rebuild HealthBar UI in Canvas** on PlayerHealth recreates the default layout when needed.
+
+- Removed the legacy HealthBar UI during editor/runtime setup. If its DamageVignette was nested inside it, the script first reparents that vignette to the Canvas so damage feedback remains functional. The new HealthBar UI remains the only health bar.
+
+- Prevented duplicate HealthBar UI objects: PlayerHealth now searches the Canvas for an existing health slider and reconnects to it before creating a new one.
+
+
+## AI Script Ownership
+
+- **Varen** uses `MutantAI.cs`.
+- **White Lady** and **Tikbalang** share `MonsterAI_New.cs`.
+- Future Varen behaviour changes must be made in `MutantAI.cs`; changes to `MonsterAI_New.cs` affect White Lady and Tikbalang.
+
+
+## Varen Catch Damage and Respawn
+
+- Varen (`MutantAI.cs`) deals 30 HP damage when he catches the player.
+- If the player survives, the jumpscare returns them to their latest checkpoint while preserving their remaining HP; checkpoint respawns from other causes still restore full HP.
+- If Varen's hit reduces HP to zero, the active chapter reloads from its beginning with full health. This restart does not delete the player's manually saved database data.
+
+
+## Persistent One-Time Subtitles
+
+- Pickup subtitles (`ItemSubtitleTrigger`) and area subtitles (`PlayerSubtitleTrigger`) now receive stable hidden IDs and can display only once.
+- The SQLite `SubtitleData` table saves which subtitles have already played. Loading a game restores those states, including for inactive subtitle trigger objects.
+- Starting a new game or deleting a save clears the subtitle records together with the other saved game data.
+
+- Subtitle triggers now also write their `SubtitleData` record immediately when activated and check SQLite before displaying, so they remain one-time even before the next full Save Game.
+
+- `SubtitleData` now has a visible `IsTriggered` boolean column. Every activated subtitle row is stored with `IsTriggered = true`; older subtitle tables are upgraded automatically when the database initializes.
+
+
+
+## Reliable Blood Damage Shader
+
+- Added ReliableBloodDamage.shader, a simple UI blood overlay shader with a material stored in Resources.
+- PlayerHealth reparents the existing DamageVignette directly to the Canvas, stretches it full screen, and gives it a high Canvas sorting order so every damage source—including wrong Q&A answers—shows the effect.
+- A red UI fallback remains visible if the shader material cannot load; use **Blood Effect Intensity** on PlayerHealth to tune the shader strength.
+
+- DamageVignette is now moved directly under the Canvas in Edit mode. Select it in the Canvas Hierarchy to manually adjust its Rect Transform; PlayerHealth preserves those manual values during play.
+
+- Moved the saved DamageVignette object directly under the Canvas in Chapter 1 and Chapter 2. It is no longer nested inside HealthBarBackground, so it is visible in the Canvas Hierarchy and can be manually adjusted.

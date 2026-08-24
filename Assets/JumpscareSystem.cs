@@ -177,17 +177,26 @@ mutantTargetRot = Quaternion.Euler(euler);
 
         yield return new WaitForSeconds(deathDelay);
 
-        // Respawn at checkpoint instead of reloading scene
+        PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
+
+        // Zero HP means the run restarts from the beginning of this chapter.
+        if (playerHealth != null && playerHealth.currentHealth <= 0f)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(
+                UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            yield break;
+        }
+
+        // A surviving player returns to the latest checkpoint with the HP left after Varen's hit.
         CheckpointTrigger ct = FindObjectOfType<CheckpointTrigger>();
         if (ct != null && ct.HasCheckpoint())
         {
-            ct.Respawn();
+            ct.Respawn(false);
         }
         else if (reloadSceneOnDeath)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(
-                UnityEngine.SceneManagement.SceneManager
-                .GetActiveScene().name);
+                UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
     }
 

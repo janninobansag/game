@@ -19,7 +19,7 @@ public class MutantAI : MonoBehaviour
     public float roamWaitMax = 5f;
 
     [Header("Attack")]
-    public float attackDamage = 25f;
+    public float attackDamage = 30f;
     public float attackCooldown = 1.5f;
 
     [Header("Audio")]
@@ -298,7 +298,7 @@ public class MutantAI : MonoBehaviour
             JumpscareSystem.Instance.TriggerJumpscare(gameObject);
 
         PlayerHealth ph = player.GetComponent<PlayerHealth>();
-        if (ph != null) ph.TakeDamage(attackDamage);
+        if (ph != null) ph.TakeDamageForEnemyCatch(attackDamage);
     }
 
     void SetAnimation(bool walking, bool running)

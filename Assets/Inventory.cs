@@ -6,7 +6,7 @@ public class Inventory : MonoBehaviour
     public static Inventory Instance;
 
     [Header("Bag Settings")]
-    public int maxCapacity = 2;
+    public int maxCapacity = 3;
 
     [Header("Drop Item Light (Optional)")]
     public bool enableDropLight = true;
@@ -28,28 +28,28 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-        if (items.Count == 0) return;
-
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll > 0f) CycleItem(-1);
         else if (scroll < 0f) CycleItem(1);
 
-        if (Input.GetKeyDown(KeyCode.G) && selectedIndex >= 0)
+        if (Input.GetKeyDown(KeyCode.G) && selectedIndex >= 0 && selectedIndex < items.Count)
             DropItem(selectedIndex);
     }
 
     void CycleItem(int direction)
     {
-        int newIndex = selectedIndex + direction;
-        if (newIndex >= items.Count) newIndex = 0;
-        if (newIndex < 0) newIndex = items.Count - 1;
+        int slotCount = Mathf.Max(1, maxCapacity);
+        int newIndex = selectedIndex;
+        if (newIndex < 0) newIndex = direction > 0 ? -1 : 0;
+        newIndex = (newIndex + direction + slotCount) % slotCount;
         if (newIndex == selectedIndex) return;
 
         if (selectedIndex >= 0 && selectedIndex < items.Count)
             SetItemHeld(items[selectedIndex], false);
 
         selectedIndex = newIndex;
-        SetItemHeld(items[selectedIndex], true);
+        if (selectedIndex < items.Count)
+            SetItemHeld(items[selectedIndex], true);
     }
 
     public void SetItemHeld(GameObject item, bool held)
@@ -104,7 +104,9 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            item.transform.SetParent(null);
+            bool keepFlashlightLightWithPlayer = fp != null && fp.IsOn;
+            if (!keepFlashlightLightWithPlayer)
+                item.transform.SetParent(null);
             foreach (Renderer r in item.GetComponentsInChildren<Renderer>())
                 r.enabled = false;
         }
@@ -150,11 +152,12 @@ public class Inventory : MonoBehaviour
 
         RemoveDropLight(item);
 
-        if (items.Count == 1)
-        {
-            selectedIndex = 0;
-            SetItemHeld(item, true);
-        }
+        // Make each newly collected item the active item in the player's hand.
+        if (selectedIndex >= 0 && selectedIndex < items.Count - 1)
+            SetItemHeld(items[selectedIndex], false);
+
+        selectedIndex = items.Count - 1;
+        SetItemHeld(item, true);
         return true;
     }
 

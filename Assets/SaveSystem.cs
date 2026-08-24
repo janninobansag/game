@@ -69,6 +69,11 @@ public class SaveSystem : MonoBehaviour
             connection.CreateTable<BatteryData>();
             connection.CreateTable<RitualItemData>();
             connection.CreateTable<StaminaData>();
+            connection.CreateTable<SubtitleData>();
+
+            // Existing saves created before IsTriggered was added need this column.
+            try { connection.Execute("ALTER TABLE SubtitleData ADD COLUMN IsTriggered INTEGER NOT NULL DEFAULT 0"); }
+            catch (System.Exception) { }
             // ── NEW: ProgressionData table ──
             connection.CreateTable<ProgressionData>();
 
@@ -535,6 +540,7 @@ public class SaveSystem : MonoBehaviour
                 connection.Insert(playerData);
 
                 connection.DeleteAll<StaminaData>();
+            connection.DeleteAll<SubtitleData>();
                 StaminaController stamina = player.GetComponent<StaminaController>();
                 if (stamina != null && stamina.IsHardMode)
                 {
@@ -807,6 +813,22 @@ public class SaveSystem : MonoBehaviour
                 }
             }
 
+            // -- SAVE ONE-TIME SUBTITLES --
+            connection.DeleteAll<SubtitleData>();
+            foreach (ItemSubtitleTrigger trigger in Resources.FindObjectsOfTypeAll<ItemSubtitleTrigger>())
+            {
+                if (trigger != null && trigger.gameObject.scene.IsValid() && trigger.HasTriggered())
+                {
+                    connection.InsertOrReplace(new SubtitleData { SubtitleId = trigger.GetSubtitleId(), IsTriggered = true });
+                }
+            }
+            foreach (PlayerSubtitleTrigger trigger in Resources.FindObjectsOfTypeAll<PlayerSubtitleTrigger>())
+            {
+                if (trigger != null && trigger.gameObject.scene.IsValid() && trigger.HasTriggered())
+                {
+                    connection.InsertOrReplace(new SubtitleData { SubtitleId = trigger.GetSubtitleId(), IsTriggered = true });
+                }
+            }
             // ── SAVE CHECKPOINT ──
             connection.DeleteAll<GameStateData>();
             if (CheckpointTrigger.HasCheckpointSaved)
@@ -1028,9 +1050,10 @@ public class SaveSystem : MonoBehaviour
             PlayerHealth health = player.GetComponent<PlayerHealth>();
             if (health != null)
             {
-                health.currentHealth = playerData.Health;
-                health.maxHealth = playerData.MaxHealth;
-                health.isDead = false;
+                health.RestoreHealth(
+                    playerData.Health,
+                    playerData.MaxHealth
+                );
             }
 
             PlayerController pc = player.GetComponent<PlayerController>();
@@ -1815,6 +1838,19 @@ public class SaveSystem : MonoBehaviour
                 }
             }
 
+            // -- LOAD ONE-TIME SUBTITLES --
+            var shownSubtitleIds = new HashSet<string>(
+                connection.Table<SubtitleData>().Where(data => data.IsTriggered).Select(data => data.SubtitleId));
+            foreach (ItemSubtitleTrigger trigger in Resources.FindObjectsOfTypeAll<ItemSubtitleTrigger>())
+            {
+                if (trigger != null && trigger.gameObject.scene.IsValid())
+                    trigger.RestoreTriggeredState(shownSubtitleIds.Contains(trigger.GetSubtitleId()));
+            }
+            foreach (PlayerSubtitleTrigger trigger in Resources.FindObjectsOfTypeAll<PlayerSubtitleTrigger>())
+            {
+                if (trigger != null && trigger.gameObject.scene.IsValid())
+                    trigger.RestoreTriggeredState(shownSubtitleIds.Contains(trigger.GetSubtitleId()));
+            }
             // ── NEW: LOAD PROGRESSION ──
             var progressionData = connection.Table<ProgressionData>().FirstOrDefault();
             if (progressionData != null)
@@ -1846,6 +1882,39 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
+    public bool HasSubtitleTriggered(string subtitleId)
+    {
+        if (string.IsNullOrEmpty(subtitleId)) return false;
+
+        EnsureDatabaseReady();
+        if (!isDatabaseReady) return false;
+
+        try
+        {
+            SubtitleData data = connection.Find<SubtitleData>(subtitleId);
+            return data != null && data.IsTriggered;
+        }
+        catch (System.Exception)
+        {
+            return false;
+        }
+    }
+
+    public void MarkSubtitleTriggered(string subtitleId)
+    {
+        if (string.IsNullOrEmpty(subtitleId)) return;
+
+        EnsureDatabaseReady();
+        if (!isDatabaseReady) return;
+
+        try
+        {
+            connection.InsertOrReplace(new SubtitleData { SubtitleId = subtitleId, IsTriggered = true });
+        }
+        catch (System.Exception)
+        {
+        }
+    }
     public bool HasSaveFile()
     {
         // ── Check if the database file exists without creating it ──
@@ -1870,6 +1939,7 @@ public class SaveSystem : MonoBehaviour
             connection.DeleteAll<BatteryData>();
             connection.DeleteAll<RitualItemData>();
             connection.DeleteAll<StaminaData>();
+            connection.DeleteAll<SubtitleData>();
             // ── NEW: Delete ProgressionData ──
             connection.DeleteAll<ProgressionData>();
 
@@ -2070,6 +2140,13 @@ public class ProgressionData
     public int TotalPoints { get; set; }
 }
 
+[Table("SubtitleData")]
+public class SubtitleData
+{
+    [PrimaryKey]
+    public string SubtitleId { get; set; }
+    public bool IsTriggered { get; set; }
+}
 [Table("StaminaData")]
 public class StaminaData
 {

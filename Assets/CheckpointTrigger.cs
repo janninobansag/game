@@ -53,15 +53,15 @@ public class CheckpointTrigger : MonoBehaviour
         StartCoroutine(ShowNotif());
     }
 
-    public void Respawn()
+    public void Respawn(bool restoreFullHealth = true)
     {
         if (isRespawning) return;
-        StartCoroutine(RespawnSequence());
+        StartCoroutine(RespawnSequence(restoreFullHealth));
     }
 
     public bool HasCheckpoint() => checkpointSaved;
 
-    IEnumerator RespawnSequence()
+    IEnumerator RespawnSequence(bool restoreFullHealth)
     {
         isRespawning = true;
 
@@ -97,7 +97,8 @@ public class CheckpointTrigger : MonoBehaviour
         PlayerHealth ph = FindObjectOfType<PlayerHealth>();
         if (ph != null)
         {
-            ph.currentHealth = ph.maxHealth;
+            if (restoreFullHealth)
+                ph.currentHealth = ph.maxHealth;
             ph.isDead = false;
         }
 
