@@ -401,3 +401,20 @@ Visual and atmosphere systems include:
 - DamageVignette is now moved directly under the Canvas in Edit mode. Select it in the Canvas Hierarchy to manually adjust its Rect Transform; PlayerHealth preserves those manual values during play.
 
 - Moved the saved DamageVignette object directly under the Canvas in Chapter 1 and Chapter 2. It is no longer nested inside HealthBarBackground, so it is visible in the Canvas Hierarchy and can be manually adjusted.
+
+
+## Pushing the Backup Branch to GitHub
+
+Run these commands in the Unity project folder:
+
+```powershell
+git switch backup
+git status
+git add .
+git commit -m "Describe your changes"
+git push -u origin backup
+```
+
+- Use `git status` first to review files before committing.
+- Replace `Describe your changes` with a short note, such as `Fix health UI`.
+- `git push -u origin backup` uploads the branch to GitHub. Future pushes from the same branch only need `git push`.
