@@ -5,14 +5,26 @@ public class FlashlightPickup : MonoBehaviour
     [Header("Flashlight Settings")]
     public float batteryLife = 100f;
     public float drainRate = 2f;
-    public float intensity = 5f;
-    public float range = 40f;
 
-    [Header("Fog Settings")]
-    public bool adjustFogWhenOn = false;
-    public float fogStartDistance = 10f;
-    public float fogEndDistance = 80f;
-    public float fogDensity = 0.02f;
+    [Header("Light Settings")]
+    [Tooltip("Maximum brightness of the flashlight beam when the battery is full.")]
+    [Min(0f)] public float intensity = 5f;
+    [Min(0f)] public float range = 40f;
+
+    [Header("Beam Shape")]
+    [Range(1f, 179f)] public float spotAngle = 42f;
+    [Range(0f, 179f)] public float innerSpotAngle = 28f;
+    public LightShadows shadows = LightShadows.None;
+    [Header("Near Object Dimming")]
+    [Tooltip("Dims the beam when it hits an object close to the flashlight.")]
+    public bool dimNearObjects = true;
+    [Min(0.05f)] public float dimmingDistance = 2f;
+    [Range(0f, 1f)] public float minimumNearObjectIntensity = 0.3f;
+    public LayerMask dimmingLayers = ~0;
+
+    [Header("Beam Aim")]
+    [Tooltip("Keeps the light beam aimed where the player camera looks, even though the flashlight model is rotated in the hand.")]
+    public bool aimBeamWithCamera = true;
 
     [Header("State")]
     public bool wasDropped = false;
@@ -22,22 +34,31 @@ public class FlashlightPickup : MonoBehaviour
     private bool isOn = false;
     private Light flashlight;
     private float currentBattery;
-    private float originalFogStart;
-    private float originalFogEnd;
-    private float originalFogDensity;
-    private bool originalFogEnabled;
-    private bool isInitialized = false; // ── NEW: Track if initialized
+    private bool isInitialized = false; // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ NEW: Track if initialized
 
     public static FlashlightPickup HeldFlashlight { get; private set; }
     public bool IsHeld => isHeld;
     public bool IsOn => isOn;
 
+
+    private void OnValidate()
+    {
+        Light previewLight = GetComponentInChildren<Light>();
+        if (previewLight == null)
+            return;
+
+        previewLight.intensity = intensity;
+        previewLight.range = range;
+        previewLight.spotAngle = spotAngle;
+        previewLight.innerSpotAngle = Mathf.Min(innerSpotAngle, spotAngle);
+        previewLight.shadows = shadows;
+    }
     void Start()
     {
         InitializeFlashlight();
     }
 
-    // ── NEW: Separate initialization method ──
+    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ NEW: Separate initialization method ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     private void InitializeFlashlight()
     {
         if (isInitialized) return;
@@ -46,11 +67,15 @@ public class FlashlightPickup : MonoBehaviour
         if (flashlight != null)
         {
             flashlight.enabled = false;
+            flashlight.type = LightType.Spot;
             flashlight.intensity = intensity;
             flashlight.range = range;
+            flashlight.spotAngle = spotAngle;
+            flashlight.innerSpotAngle = Mathf.Min(innerSpotAngle, spotAngle);
+            flashlight.shadows = shadows;
         }
 
-        // ── Only set battery to full if NOT spawned from prefab ──
+        // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Only set battery to full if NOT spawned from prefab ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         if (!isSpawnedFromPrefab)
         {
             currentBattery = batteryLife;
@@ -59,11 +84,6 @@ public class FlashlightPickup : MonoBehaviour
         {
             // If spawned from prefab, battery should already be set
         }
-
-        originalFogStart = RenderSettings.fogStartDistance;
-        originalFogEnd = RenderSettings.fogEndDistance;
-        originalFogDensity = RenderSettings.fogDensity;
-        originalFogEnabled = RenderSettings.fog;
 
         isInitialized = true;
     }
@@ -81,21 +101,6 @@ public class FlashlightPickup : MonoBehaviour
             if (flashlight != null)
                 flashlight.enabled = isOn;
 
-            if (adjustFogWhenOn)
-            {
-                if (isOn)
-                {
-                    RenderSettings.fogStartDistance = fogStartDistance;
-                    RenderSettings.fogEndDistance = fogEndDistance;
-                    RenderSettings.fogDensity = fogDensity;
-                }
-                else
-                {
-                    RenderSettings.fogStartDistance = originalFogStart;
-                    RenderSettings.fogEndDistance = originalFogEnd;
-                    RenderSettings.fogDensity = originalFogDensity;
-                }
-            }
         }
 
         if (isOn)
@@ -107,7 +112,8 @@ public class FlashlightPickup : MonoBehaviour
                 if (flashlight != null)
                 {
                     float batteryPercent = currentBattery / batteryLife;
-                    flashlight.intensity = intensity * Mathf.Clamp01(batteryPercent + 0.2f);
+                    float batteryIntensity = intensity * Mathf.Clamp01(batteryPercent + 0.2f);
+                    flashlight.intensity = batteryIntensity * GetNearObjectDimmingMultiplier();
                 }
 
                 if (currentBattery <= 0f)
@@ -121,12 +127,6 @@ public class FlashlightPickup : MonoBehaviour
                         flashlight.intensity = intensity;
                     }
 
-                    if (adjustFogWhenOn)
-                    {
-                        RenderSettings.fogStartDistance = originalFogStart;
-                        RenderSettings.fogEndDistance = originalFogEnd;
-                        RenderSettings.fogDensity = originalFogDensity;
-                    }
                 }
             }
             else
@@ -135,14 +135,32 @@ public class FlashlightPickup : MonoBehaviour
                 if (flashlight != null)
                     flashlight.enabled = false;
 
-                if (adjustFogWhenOn)
-                {
-                    RenderSettings.fogStartDistance = originalFogStart;
-                    RenderSettings.fogEndDistance = originalFogEnd;
-                    RenderSettings.fogDensity = originalFogDensity;
-                }
             }
         }
+    }
+
+
+    private float GetNearObjectDimmingMultiplier()
+    {
+        if (!dimNearObjects || flashlight == null)
+            return 1f;
+
+        Vector3 origin = flashlight.transform.position + flashlight.transform.forward * 0.05f;
+        if (!Physics.Raycast(origin, flashlight.transform.forward, out RaycastHit hit, dimmingDistance, dimmingLayers, QueryTriggerInteraction.Ignore))
+            return 1f;
+
+        // Full brightness at the edge of the dimming distance; minimum brightness at point-blank range.
+        float distancePercent = Mathf.Clamp01(hit.distance / dimmingDistance);
+        return Mathf.Lerp(minimumNearObjectIntensity, 1f, distancePercent);
+    }
+    void LateUpdate()
+    {
+        if (!isHeld || !aimBeamWithCamera || flashlight == null)
+            return;
+
+        Camera cameraToFollow = Camera.main;
+        if (cameraToFollow != null)
+            flashlight.transform.rotation = cameraToFollow.transform.rotation;
     }
 
     public void SetHeld(bool held)
@@ -162,7 +180,7 @@ public class FlashlightPickup : MonoBehaviour
 
     public void SetBattery(float amount)
     {
-        // ── Ensure initialization first ──
+        // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Ensure initialization first ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         if (!isInitialized)
         {
             InitializeFlashlight();
@@ -189,12 +207,5 @@ public class FlashlightPickup : MonoBehaviour
     void OnDestroy()
     {
         if (HeldFlashlight == this)
-            HeldFlashlight = null;
-        if (adjustFogWhenOn)
-        {
-            RenderSettings.fogStartDistance = originalFogStart;
-            RenderSettings.fogEndDistance = originalFogEnd;
-            RenderSettings.fogDensity = originalFogDensity;
-        }
-    }
+            HeldFlashlight = null;    }
 }

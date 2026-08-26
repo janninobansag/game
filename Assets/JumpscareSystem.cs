@@ -221,33 +221,8 @@ mutantTargetRot = Quaternion.Euler(euler);
         // Jumpscare overlay
         if (jumpscareAlpha > 0.01f && !isDead)
         {
-            // Dark vignette
-            GUI.color = new Color(0f, 0f, 0f, 0.5f * jumpscareAlpha);
-            GUI.DrawTexture(new Rect(sx, sy, sw, sh),
-                Texture2D.whiteTexture);
-
-            // Red edges
-            int steps = 60;
-            for (int i = 0; i < steps; i++)
-            {
-                float t = 1f - (i / (float)steps);
-                GUI.color = new Color(0.25f, 0f, 0f,
-                    t * t * jumpscareAlpha * 0.3f);
-                GUI.DrawTexture(new Rect(sx, sy,
-                    sw * (i / (float)steps) * 0.03f, sh),
-                    Texture2D.whiteTexture);
-                GUI.DrawTexture(new Rect(
-                    sx + sw - sw * (i / (float)steps) * 0.03f, sy,
-                    sw * (i / (float)steps) * 0.03f, sh),
-                    Texture2D.whiteTexture);
-                GUI.DrawTexture(new Rect(sx, sy,
-                    sw, sh * (i / (float)steps) * 0.02f),
-                    Texture2D.whiteTexture);
-                GUI.DrawTexture(new Rect(sx,
-                    sy + sh - sh * (i / (float)steps) * 0.02f,
-                    sw, sh * (i / (float)steps) * 0.02f),
-                    Texture2D.whiteTexture);
-            }
+            // The Canvas blood overlay supplies the damage background.
+            // Keep only the warning text in this legacy GUI system.
 
             // IT FOUND YOU text
             GUIStyle scareStyle = new GUIStyle();

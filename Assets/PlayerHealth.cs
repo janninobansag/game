@@ -144,7 +144,12 @@ public class PlayerHealth : MonoBehaviour
 
     void ShowDamageEffects()
     {
-        damageFlashTimer = damageFlashDuration;
+        ShowBloodDamageOverlay(damageFlashDuration);
+    }
+
+    public void ShowBloodDamageOverlay(float duration)
+    {
+        damageFlashTimer = Mathf.Max(damageFlashTimer, Mathf.Max(0.05f, duration));
         if (damageVignette == null) return;
 
         damageVignette.transform.SetAsLastSibling();
@@ -158,7 +163,6 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
-            // A visible fallback remains if Unity cannot load the shader.
             vignetteImage.color = new Color(damageColor.r, damageColor.g, damageColor.b, Mathf.Max(0.35f, damageColor.a));
         }
     }

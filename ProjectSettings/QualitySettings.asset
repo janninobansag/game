@@ -33,7 +33,7 @@ QualitySettings:
     lodBias: 0.4
     maximumLODLevel: 0
     enableLODCrossFade: 1
-    streamingMipmapsActive: 0
+    streamingMipmapsActive: 1
     streamingMipmapsAddAllCameras: 1
     streamingMipmapsMemoryBudget: 512
     streamingMipmapsRenderersPerFrame: 512
@@ -50,11 +50,11 @@ QualitySettings:
     terrainPixelError: 1
     terrainDetailDensityScale: 1
     terrainBasemapDistance: 1000
-    terrainDetailDistance: 80
-    terrainTreeDistance: 5000
-    terrainBillboardStart: 50
+    terrainDetailDistance: 60
+    terrainTreeDistance: 800
+    terrainBillboardStart: 40
     terrainFadeLength: 5
-    terrainMaxTrees: 50
+    terrainMaxTrees: 30
     excludedTargetPlatforms: []
   - serializedVersion: 3
     name: Balanced
@@ -78,12 +78,12 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
-    vSyncCount: 1
+    vSyncCount: 0
     realtimeGICPUUsage: 25
     lodBias: 1
     maximumLODLevel: 0
     enableLODCrossFade: 1
-    streamingMipmapsActive: 0
+    streamingMipmapsActive: 1
     streamingMipmapsAddAllCameras: 1
     streamingMipmapsMemoryBudget: 512
     streamingMipmapsRenderersPerFrame: 512
@@ -100,11 +100,11 @@ QualitySettings:
     terrainPixelError: 1
     terrainDetailDensityScale: 1
     terrainBasemapDistance: 1000
-    terrainDetailDistance: 80
-    terrainTreeDistance: 5000
-    terrainBillboardStart: 50
+    terrainDetailDistance: 60
+    terrainTreeDistance: 800
+    terrainBillboardStart: 40
     terrainFadeLength: 5
-    terrainMaxTrees: 50
+    terrainMaxTrees: 30
     excludedTargetPlatforms: []
   - serializedVersion: 3
     name: High Fidelity
@@ -133,7 +133,7 @@ QualitySettings:
     lodBias: 0.73
     maximumLODLevel: 0
     enableLODCrossFade: 1
-    streamingMipmapsActive: 0
+    streamingMipmapsActive: 1
     streamingMipmapsAddAllCameras: 1
     streamingMipmapsMemoryBudget: 512
     streamingMipmapsRenderersPerFrame: 512
@@ -150,11 +150,11 @@ QualitySettings:
     terrainPixelError: 1
     terrainDetailDensityScale: 1
     terrainBasemapDistance: 1000
-    terrainDetailDistance: 80
-    terrainTreeDistance: 5000
-    terrainBillboardStart: 50
+    terrainDetailDistance: 60
+    terrainTreeDistance: 800
+    terrainBillboardStart: 40
     terrainFadeLength: 5
-    terrainMaxTrees: 50
+    terrainMaxTrees: 30
     excludedTargetPlatforms: []
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:

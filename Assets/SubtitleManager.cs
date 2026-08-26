@@ -29,6 +29,7 @@ public class SubtitleManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI shadowText;
     [SerializeField] private TextMeshProUGUI subtitleText;
     [SerializeField] private CanvasGroup subtitleCanvasGroup;
+    [SerializeField] private TMP_FontAsset koreanFont;
 
     private string displayedText = "";
     private float subtitleAlpha;
@@ -74,6 +75,8 @@ public class SubtitleManager : MonoBehaviour
 
     public void ShowSubtitle(string text, float duration = -1f)
     {
+        text = GameplayLocalization.TranslateSubtitle(text);
+        ApplyLanguageFont();
         if (duration < 0f) duration = defaultDisplayTime;
         StopActiveSubtitles();
         displayedText = "";
@@ -82,6 +85,8 @@ public class SubtitleManager : MonoBehaviour
 
     public void ShowSubtitleImmediate(string text, float duration = -1f)
     {
+        text = GameplayLocalization.TranslateSubtitle(text);
+        ApplyLanguageFont();
         if (duration < 0f) duration = defaultDisplayTime;
         StopActiveSubtitles();
         displayedText = text;
@@ -191,6 +196,15 @@ public class SubtitleManager : MonoBehaviour
         }
     }
 
+    private void ApplyLanguageFont()
+    {
+        TMP_FontAsset font = GameplayLocalization.IsKorean && koreanFont != null
+            ? koreanFont
+            : TMP_Settings.defaultFontAsset;
+
+        if (subtitleText != null) subtitleText.font = font;
+        if (shadowText != null) shadowText.font = font;
+    }
     private void RefreshUi()
     {
         if (subtitlePanel == null) return;

@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float sprintSpeed = 9f;      
     public float sprintFOVIncrease = 10f; 
     public float gravity = -9.81f;
+    [Range(30f, 75f)] public float maxWalkableSlope = 55f;
 
     private bool isSprinting = false;
     private bool wasSprintingBeforeJump = false;
@@ -47,6 +48,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         cc = GetComponent<CharacterController>();
+        cc.slopeLimit = maxWalkableSlope;
         staminaController = GetComponent<StaminaController>();
         normalHeight = cc.height;
         normalCenterY = cc.center.y;

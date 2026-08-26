@@ -114,7 +114,7 @@ public class ObjectiveManager : MonoBehaviour
             newStyle.alignment = TextAnchor.MiddleLeft;
             GUI.color = Color.white;
             GUI.Label(new Rect(20f, bannerY + 6f, 200f, 18f),
-                "▶ NEW OBJECTIVE", newStyle);
+                GameplayLocalization.TranslateObjective("▶ NEW OBJECTIVE"), newStyle);
 
             // Objective text
             GUIStyle objStyle = new GUIStyle();
@@ -124,7 +124,7 @@ public class ObjectiveManager : MonoBehaviour
                 new Color(0.92f, 0.88f, 0.85f, flashAlpha);
             objStyle.alignment = TextAnchor.MiddleLeft;
             GUI.Label(new Rect(20f, bannerY + 22f, sw - 40f, 26f),
-                currentObjective, objStyle);
+                GameplayLocalization.TranslateObjective(currentObjective), objStyle);
         }
 
         // ── PERSISTENT OBJECTIVE (top left corner) ──
@@ -165,7 +165,7 @@ public class ObjectiveManager : MonoBehaviour
             labelStyle.normal.textColor =
                 new Color(0.7f, 0.2f, 0.2f, cornerAlpha);
             GUI.Label(new Rect(px + 8f, py + 5f, pw - 12f, 16f),
-                "OBJECTIVE", labelStyle);
+                GameplayLocalization.TranslateObjective("OBJECTIVE"), labelStyle);
 
             // Objective text
             GUIStyle textStyle = new GUIStyle();
@@ -174,7 +174,7 @@ public class ObjectiveManager : MonoBehaviour
             textStyle.normal.textColor =
                 new Color(0.88f, 0.85f, 0.82f, cornerAlpha);
             GUI.Label(new Rect(px + 8f, py + 20f, pw - 16f, 28f),
-                currentObjective, textStyle);
+                GameplayLocalization.TranslateObjective(currentObjective), textStyle);
         }
 
         GUI.color = Color.white;

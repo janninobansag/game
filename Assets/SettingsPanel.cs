@@ -2,6 +2,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+public enum GameLanguage
+{
+    English = 0,
+    Korean = 1,
+    Tagalog = 2
+}
 public class SettingsPanel : MonoBehaviour
 {
     [Header("UI References")]
@@ -19,10 +25,21 @@ public class SettingsPanel : MonoBehaviour
     public Button mediumButton;
     public Button highButton;
     public TextMeshProUGUI graphicsLabel;
+
+    [Header("Language Settings")]
+    public Button englishLanguageButton;
+    public Button koreanLanguageButton;
+    public Button tagalogLanguageButton;
+    [Tooltip("Your dynamic NotoSansKR TMP Font Asset. It is used while Korean is selected.")]
+    public TMP_FontAsset koreanFont;
+    [Range(0, 2)] public int defaultLanguage = 0;
+    [HideInInspector] public int currentLanguage;
     
     [Header("Panel References")]
     public GameObject settingsPanel;
     public GameObject controlsPanel;
+    [Tooltip("Hide only the visual settings window when the menu scene starts.")]
+    public bool hideSettingsPanelOnStart = true;
     
     public Button controlsButton;
     public Button backToSettingsButton;
@@ -31,8 +48,8 @@ public class SettingsPanel : MonoBehaviour
 
     [Header("Default Settings")]
     public float defaultVolume = 100f;
-    public float defaultSensitivity = 2f;
-    public float defaultBrightness = 0.3f;
+    public float defaultSensitivity = 5f;
+    public float defaultBrightness = 0.5f;
     public int defaultQuality = 2; // 0=Low, 1=Medium, 2=High
 
     public float currentVolume;
@@ -44,6 +61,8 @@ public class SettingsPanel : MonoBehaviour
     {
         LoadAllSettings();
         ApplyAllSettings();
+        ApplyFrameRateCap();
+        ApplySelectedLanguage();
         
         // Setup button listeners
         if (controlsButton != null)
@@ -61,49 +80,48 @@ public class SettingsPanel : MonoBehaviour
             highButton.onClick.AddListener(() => SetQuality(2));
     }
 
+    private void Start()
+    {
+        // Keep this manager active so saved settings continue loading.
+        // Only the visual SettingsPanel is hidden until the player presses Settings.
+        if (hideSettingsPanelOnStart && settingsPanel != null)
+            settingsPanel.SetActive(false);
+    }
     private void LoadAllSettings()
     {
-        // Load saved volume
-        if (PlayerPrefs.HasKey("MasterVolume"))
-            currentVolume = PlayerPrefs.GetFloat("MasterVolume");
+        SettingsData savedSettings;
+        if (SettingsDatabase.TryLoad(out savedSettings))
+        {
+            currentVolume = savedSettings.Volume;
+            currentSensitivity = savedSettings.Sensitivity;
+            currentBrightness = savedSettings.Brightness;
+            currentQuality = savedSettings.QualityLevel;
+            currentLanguage = Mathf.Clamp(savedSettings.Language, 0, 2);
+        }
         else
-            currentVolume = defaultVolume;
-        
-        // Load saved sensitivity
-        if (PlayerPrefs.HasKey("MouseSensitivity"))
-            currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity");
-        else
-            currentSensitivity = defaultSensitivity;
-        
-        // Load saved brightness
-        if (PlayerPrefs.HasKey("Brightness"))
-            currentBrightness = PlayerPrefs.GetFloat("Brightness");
-        else
-            currentBrightness = defaultBrightness;
-        
-        // Load saved quality
-        if (PlayerPrefs.HasKey("QualityLevel"))
-            currentQuality = PlayerPrefs.GetInt("QualityLevel");
-        else
-            currentQuality = defaultQuality;
-        
-        // Update UI sliders and labels
+        {
+            // One-time migration of settings saved by older game versions.
+            LoadLegacyPlayerPrefs();
+            SaveSettingsToDatabase();
+        }
+
+        // Compatibility cache for older scripts. SettingsData is the saved source.
+        SyncPlayerPrefsCache();
+        UpdateLanguageButtonsHighlight();
+
         if (volumeSlider != null)
-            volumeSlider.value = currentVolume;
+            volumeSlider.SetValueWithoutNotify(currentVolume);
         UpdateVolumeLabel(currentVolume);
-        
+
         if (sensitivitySlider != null)
-            sensitivitySlider.value = currentSensitivity;
+            sensitivitySlider.SetValueWithoutNotify(currentSensitivity);
         UpdateSensitivityLabel(currentSensitivity);
-        
+
         if (brightnessSlider != null)
-            brightnessSlider.value = currentBrightness;
+            brightnessSlider.SetValueWithoutNotify(currentBrightness);
         UpdateBrightnessLabel(currentBrightness);
-        
-        // Update graphics buttons highlight
         UpdateGraphicsButtonsHighlight();
-        
-        // Add listeners to sliders
+
         if (volumeSlider != null)
             volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
         if (sensitivitySlider != null)
@@ -112,6 +130,63 @@ public class SettingsPanel : MonoBehaviour
             brightnessSlider.onValueChanged.AddListener(OnBrightnessChanged);
     }
 
+    private void LoadLegacyPlayerPrefs()
+    {
+        RepairLegacyZeroSettings();
+        currentVolume = PlayerPrefs.GetFloat("MasterVolume", defaultVolume);
+        currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
+        currentBrightness = PlayerPrefs.GetFloat("Brightness", defaultBrightness);
+        currentQuality = PlayerPrefs.GetInt("QualityLevel", defaultQuality);
+        currentLanguage = Mathf.Clamp(PlayerPrefs.GetInt("GameLanguage", defaultLanguage), 0, 2);
+    }
+
+    private void SaveSettingsToDatabase()
+    {
+        SettingsDatabase.Save(new SettingsData
+        {
+            Volume = currentVolume,
+            Sensitivity = currentSensitivity,
+            Brightness = currentBrightness,
+            QualityLevel = currentQuality,
+            Language = currentLanguage
+        });
+    }
+
+    private void SyncPlayerPrefsCache()
+    {
+        PlayerPrefs.SetFloat("MasterVolume", currentVolume);
+        PlayerPrefs.SetFloat("MouseSensitivity", currentSensitivity);
+        PlayerPrefs.SetFloat("Brightness", currentBrightness);
+        PlayerPrefs.SetInt("QualityLevel", currentQuality);
+        PlayerPrefs.SetInt("GameLanguage", currentLanguage);
+        PlayerPrefs.Save();
+    }
+    private void RepairLegacyZeroSettings()
+    {
+        const int repairedSettingsVersion = 2;
+        if (PlayerPrefs.GetInt("SettingsRepairVersion", 0) >= repairedSettingsVersion)
+            return;
+
+        bool hasAllSettings = PlayerPrefs.HasKey("MasterVolume") &&
+                              PlayerPrefs.HasKey("MouseSensitivity") &&
+                              PlayerPrefs.HasKey("Brightness");
+        bool allAreZero = hasAllSettings &&
+                          Mathf.Approximately(PlayerPrefs.GetFloat("MasterVolume"), 0f) &&
+                          Mathf.Approximately(PlayerPrefs.GetFloat("MouseSensitivity"), 0f) &&
+                          Mathf.Approximately(PlayerPrefs.GetFloat("Brightness"), 0f);
+
+        // Older language switching could save a full set of invalid zero values.
+        // Repair that exact legacy state once; deliberately muted individual values remain valid.
+        if (allAreZero)
+        {
+            PlayerPrefs.SetFloat("MasterVolume", defaultVolume);
+            PlayerPrefs.SetFloat("MouseSensitivity", defaultSensitivity);
+            PlayerPrefs.SetFloat("Brightness", defaultBrightness);
+        }
+
+        PlayerPrefs.SetInt("SettingsRepairVersion", repairedSettingsVersion);
+        PlayerPrefs.Save();
+    }
     private void ApplyAllSettings()
     {
         // Apply volume
@@ -126,6 +201,13 @@ public class SettingsPanel : MonoBehaviour
         // Apply quality
         QualitySettings.SetQualityLevel(currentQuality);
         
+    }
+
+    private static void ApplyFrameRateCap()
+    {
+        // Do not cap capable PCs. The quality profiles still target stable performance on lower-end hardware.
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = -1;
     }
 
     public void OpenSettings()
@@ -164,6 +246,9 @@ public class SettingsPanel : MonoBehaviour
         
         // Hide controls button
         if (controlsButton != null) controlsButton.gameObject.SetActive(false);
+
+        // Hide the language heading and all language buttons while controls are shown.
+        SetLanguageControlsVisible(false);
         
         // Hide save and back buttons
         if (saveButton != null) saveButton.gameObject.SetActive(false);
@@ -196,6 +281,9 @@ public class SettingsPanel : MonoBehaviour
         
         // Show controls button
         if (controlsButton != null) controlsButton.gameObject.SetActive(true);
+
+        // Restore the language heading and all language buttons.
+        SetLanguageControlsVisible(true);
         
         // Show save and back buttons
         if (saveButton != null) saveButton.gameObject.SetActive(true);
@@ -204,6 +292,24 @@ public class SettingsPanel : MonoBehaviour
         RefreshUI();
     }
 
+    private void SetLanguageControlsVisible(bool visible)
+    {
+        // The menu scene places the language heading and its buttons under the
+        // same parent. Hiding that parent keeps the Controls page uncluttered.
+        Transform languageRoot = null;
+        if (englishLanguageButton != null) languageRoot = englishLanguageButton.transform.parent;
+        else if (koreanLanguageButton != null) languageRoot = koreanLanguageButton.transform.parent;
+        else if (tagalogLanguageButton != null) languageRoot = tagalogLanguageButton.transform.parent;
+
+        if (languageRoot != null)
+            languageRoot.gameObject.SetActive(visible);
+        else
+        {
+            if (englishLanguageButton != null) englishLanguageButton.gameObject.SetActive(visible);
+            if (koreanLanguageButton != null) koreanLanguageButton.gameObject.SetActive(visible);
+            if (tagalogLanguageButton != null) tagalogLanguageButton.gameObject.SetActive(visible);
+        }
+    }
     public void SetQuality(int qualityLevel)
     {
         currentQuality = qualityLevel;
@@ -211,6 +317,7 @@ public class SettingsPanel : MonoBehaviour
         
         // Preview quality
         QualitySettings.SetQualityLevel(qualityLevel);
+        ApplyFrameRateCap();
         
         // PlayClickSound(); // Commented out - no SoundManager
     }
@@ -296,41 +403,40 @@ public class SettingsPanel : MonoBehaviour
         }
     }
 
+    private void CaptureCurrentSliderValues()
+    {
+        // Slider values are the current UI source of truth while the panel is open.
+        // Capture them before changing language so labels never fall back to stale data.
+        if (volumeSlider != null) currentVolume = volumeSlider.value;
+        if (sensitivitySlider != null) currentSensitivity = sensitivitySlider.value;
+        if (brightnessSlider != null) currentBrightness = brightnessSlider.value;
+    }
     private void RefreshUI()
     {
-        currentVolume = PlayerPrefs.GetFloat("MasterVolume", defaultVolume);
+        // Keep the player's current slider values. Re-reading PlayerPrefs here
+        // discarded unsaved changes when opening settings or choosing a language.
         if (volumeSlider != null)
-            volumeSlider.value = currentVolume;
+            volumeSlider.SetValueWithoutNotify(currentVolume);
         UpdateVolumeLabel(currentVolume);
-        
-        currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
+
         if (sensitivitySlider != null)
-            sensitivitySlider.value = currentSensitivity;
+            sensitivitySlider.SetValueWithoutNotify(currentSensitivity);
         UpdateSensitivityLabel(currentSensitivity);
-        
-        currentBrightness = PlayerPrefs.GetFloat("Brightness", defaultBrightness);
+
         if (brightnessSlider != null)
-            brightnessSlider.value = currentBrightness;
+            brightnessSlider.SetValueWithoutNotify(currentBrightness);
         UpdateBrightnessLabel(currentBrightness);
-        
-        currentQuality = PlayerPrefs.GetInt("QualityLevel", defaultQuality);
+
         UpdateGraphicsButtonsHighlight();
     }
-
     public void SaveSettings()
     {
-        // PlayClickSound(); // Commented out - no SoundManager
-        
-        PlayerPrefs.SetFloat("MasterVolume", currentVolume);
-        PlayerPrefs.SetFloat("MouseSensitivity", currentSensitivity);
-        PlayerPrefs.SetFloat("Brightness", currentBrightness);
-        PlayerPrefs.SetInt("QualityLevel", currentQuality);
-        PlayerPrefs.Save();
-        
+        // Save exactly what is currently visible in the three sliders.
+        CaptureCurrentSliderValues();
+        SaveSettingsToDatabase();
+        SyncPlayerPrefsCache();
         ApplyAllSettings();
-        
     }
-
     public void OnVolumeChanged(float value)
     {
         currentVolume = value;
@@ -352,24 +458,80 @@ public class SettingsPanel : MonoBehaviour
         ApplyBrightness(value);
     }
 
+    public void SetLanguage(int languageIndex)
+    {
+        CaptureCurrentSliderValues();
+        currentLanguage = Mathf.Clamp(languageIndex, 0, 2);
+        SaveSettingsToDatabase();
+        SyncPlayerPrefsCache();
+        UpdateLanguageButtonsHighlight();
+        ApplySelectedLanguage();
+    }
+    public GameLanguage GetSelectedLanguage()
+    {
+        return (GameLanguage)currentLanguage;
+    }
+
+    private void UpdateLanguageButtonsHighlight()
+    {
+        UpdateLanguageButton(englishLanguageButton, currentLanguage == (int)GameLanguage.English);
+        UpdateLanguageButton(koreanLanguageButton, currentLanguage == (int)GameLanguage.Korean);
+        UpdateLanguageButton(tagalogLanguageButton, currentLanguage == (int)GameLanguage.Tagalog);
+    }
+
+    private static void UpdateLanguageButton(Button button, bool selected)
+    {
+        if (button == null) return;
+
+        ColorBlock colors = button.colors;
+        colors.normalColor = selected ? new Color(0.5f, 0.2f, 0.7f, 1f) : Color.white;
+        colors.selectedColor = colors.normalColor;
+        button.colors = colors;
+
+        TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>();
+        if (label != null)
+            label.color = selected ? new Color(0.486f, 0.051f, 0.027f, 1f) : Color.white;
+    }
+
     private void UpdateVolumeLabel(float value)
     {
+        float displayedValue = volumeSlider != null ? volumeSlider.value : value;
         if (volumeLabel != null)
-            volumeLabel.text = $"Volume: {Mathf.RoundToInt(value)}%";
+            volumeLabel.text = GetSelectedLanguage() == GameLanguage.Korean && koreanFont != null
+                ? $"\uBCFC\uB968: {Mathf.RoundToInt(displayedValue)}%"
+                : GetSelectedLanguage() == GameLanguage.Tagalog
+                    ? $"Lakas ng tunog: {Mathf.RoundToInt(displayedValue)}%"
+                    : $"Volume: {Mathf.RoundToInt(displayedValue)}%";
     }
 
     private void UpdateSensitivityLabel(float value)
     {
+        float displayedValue = sensitivitySlider != null ? sensitivitySlider.value : value;
         if (sensitivityLabel != null)
-            sensitivityLabel.text = $"Sensitivity: {value:F1}";
+            sensitivityLabel.text = GetSelectedLanguage() == GameLanguage.Korean && koreanFont != null
+                ? $"\uAC10\uB3C4: {displayedValue:F1}"
+                : GetSelectedLanguage() == GameLanguage.Tagalog
+                    ? $"Sensitibidad: {displayedValue:F1}"
+                    : $"Sensitivity: {displayedValue:F1}";
     }
 
     private void UpdateBrightnessLabel(float value)
     {
+        float displayedValue = brightnessSlider != null ? brightnessSlider.value : value;
         if (brightnessLabel != null)
-            brightnessLabel.text = $"Brightness: {Mathf.RoundToInt(value * 100)}%";
+            brightnessLabel.text = GetSelectedLanguage() == GameLanguage.Korean && koreanFont != null
+                ? $"\uBC1D\uAE30: {Mathf.RoundToInt(displayedValue * 100)}%"
+                : GetSelectedLanguage() == GameLanguage.Tagalog
+                    ? $"Liwanag: {Mathf.RoundToInt(displayedValue * 100)}%"
+                    : $"Brightness: {Mathf.RoundToInt(displayedValue * 100)}%";
     }
-
+    private void ApplySelectedLanguage()
+    {
+        MenuLocalization.Apply(GetSelectedLanguage(), koreanFont);
+        UpdateVolumeLabel(currentVolume);
+        UpdateSensitivityLabel(currentSensitivity);
+        UpdateBrightnessLabel(currentBrightness);
+    }
     private void ApplySensitivity(float value)
     {
         PlayerController playerController = FindObjectOfType<PlayerController>();

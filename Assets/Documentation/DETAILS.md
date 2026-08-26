@@ -33,7 +33,7 @@ Varen kills Father Mateo and reveals its true identity. It kills Ann, Laica, and
 
 Laica becomes the **White Lady** after death because she cannot accept that she died. Jude becomes the **Tikbalang** for the same reason. They remain trapped as spirits in Malawak Forest.
 
-In the present day, the player is a normal adventurer on vacation who unexpectedly finds an isolated town in the middle of Malawak Forest. Curiosity leads the player to explore the three houses, guard house, and church‚Äîand uncover what happened to the village.
+In the present day, the player is a normal adventurer on vacation who unexpectedly finds an isolated town in the middle of Malawak Forest. Curiosity leads the player to explore the three houses, guard house, and church and uncover what happened to the village.
 
 ## Supernatural AI Characters
 
@@ -45,7 +45,7 @@ The intended game roster contains exactly three supernatural AI characters:
 
 ### Varen
 
-Varen is a shadow spirit that observed Malawak Forest and possessed Father Mateo, the village's highest authority, to gain trust and perform a ritual. It is the character currently called ‚Äúthe mutant‚Äù in some code and Unity object names. The old implementation name is `MutantAI`; it does not mean Varen is a separate creature.
+Varen is a shadow spirit that observed Malawak Forest and possessed Father Mateo, the village's highest authority, to gain trust and perform a ritual. It is the character currently called the mutant in some code and Unity object names. The old implementation name is `MutantAI`; it does not mean Varen is a separate creature.
 
 The project contains two Varen behavior systems:
 
@@ -395,7 +395,7 @@ Visual and atmosphere systems include:
 ## Reliable Blood Damage Shader
 
 - Added ReliableBloodDamage.shader, a simple UI blood overlay shader with a material stored in Resources.
-- PlayerHealth reparents the existing DamageVignette directly to the Canvas, stretches it full screen, and gives it a high Canvas sorting order so every damage sourceóincluding wrong Q&A answersóshows the effect.
+- PlayerHealth reparents the existing DamageVignette directly to the Canvas, stretches it full screen, and gives it a high Canvas sorting order so every damage source including wrong Q&A answers shows the effect.
 - A red UI fallback remains visible if the shader material cannot load; use **Blood Effect Intensity** on PlayerHealth to tune the shader strength.
 
 - DamageVignette is now moved directly under the Canvas in Edit mode. Select it in the Canvas Hierarchy to manually adjust its Rect Transform; PlayerHealth preserves those manual values during play.
@@ -410,7 +410,7 @@ Run these commands in the Unity project folder:
 ```powershell
 git switch backup
 git status
-git add .
+git add.
 git commit -m "Describe your changes"
 git push -u origin backup
 ```
@@ -418,3 +418,111 @@ git push -u origin backup
 - Use `git status` first to review files before committing.
 - Replace `Describe your changes` with a short note, such as `Fix health UI`.
 - `git push -u origin backup` uploads the branch to GitHub. Future pushes from the same branch only need `git push`.
+
+- Varen now explicitly requests the Canvas blood overlay for 1.2 seconds after each successful hit. The old JumpscareSystem GUI no longer draws its dark/red background layer, so it cannot hide the Canvas blood effect; its warning text remains.
+
+## Unity Editor MCP Attempt
+
+The first Unity MCP package tested (`com.emeryporter.unitymcp` 2.2.0) was removed. Although it declared Unity 2022.3 support, it used newer Unity API members such as `Rigidbody.linearDamping`, so it cannot compile in this project s Unity 2022.3.62f3 Editor. Its local Codex endpoint was removed as well.
+
+The project package manifest is restored without that MCP package. Reopen Unity so Package Manager clears the old Safe Mode errors before considering a different, verified Unity 2022.3-compatible bridge.
+
+## Flashlight Forward Beam
+
+The flashlight now forces its child light to use a Spot light and exposes **Spot Angle**, **Inner Spot Angle**, and **Shadows** in `FlashlightPickup` s Inspector. The flashlight prefab uses a focused 42 outer cone, 28 inner cone, and its existing 80.8 range. Its active fog settings were corrected from a 12.2-unit end distance and density `23.68` to a clearer 20 100 range with density `0.01`, allowing the forward beam to reveal objects farther away.
+
+You can tune the beam later by selecting `Assets/ANDRIE/DROPPED ITEMS/Flashlight.prefab` and changing the **Beam Shape** values on `FlashlightPickup`. Smaller angles make a narrower, longer-looking beam; larger angles light more of the surrounding area.
+
+- Flashlight fog control is now disabled on the Flashlight prefab. Turning the flashlight on no longer changes global map fog or brightens the whole scene; only its focused beam is used.
+
+- Flashlight beam balance was increased: intensity 120, range 120, outer cone 52, and inner cone 34. This keeps a long focused beam while softly lighting more of the nearby surroundings without changing global fog.
+
+- Fixed the held flashlight beam direction: FlashlightPickup now aims its child Spot Light at Camera.main in LateUpdate while held. The model can remain rotated naturally in the player's hand, but the beam now points straight ahead. The prefab enables **Aim Beam With Camera** by default.
+
+- Flashlight long-distance strength was raised after testing showed the 120-intensity beam only lit close ground: intensity is now 800, range 220, outer cone 58, and inner cone 42. This compensates for Unity spotlight distance falloff while retaining a forward beam.
+
+- Flashlight fog reduction is enabled again with a gentle density of `0.04` while on. Chapter 1's normal exponential-squared fog density is `0.06`, so this improves long-range visibility without the overly bright result caused by the earlier `0.01` setting. The original fog is restored immediately when the flashlight turns off.
+
+- Removed all flashlight fog controls and `RenderSettings` access. The flashlight now affects only its own Spot Light; scene fog is entirely controlled manually in Unity's Lighting/Render Settings. This also prevents the flashlight cleanup from accessing RenderSettings during Unity shutdown.
+
+## Language Selection Settings
+
+The menu scene's existing language buttons now save a selected language in `PlayerPrefs` under `GameLanguage`:
+
+- `ENGLISH` selects English (`0`).
+- `KOREA` selects Korean (`1`).
+- `TAGALOG` selects Tagalog (`2`).
+
+`SettingsPanel` highlights the selected language and keeps the choice after restarting the game. The buttons no longer call `SetQuality`, so choosing a language does not change graphics quality. This is the language-selection foundation; localized text and Korean/Tagalog font support are the next step.
+
+### Korean menu text
+
+- Added `MenuLocalization.cs`, which changes supported settings labels when Korean is selected and restores their original English text when English is selected.
+- `SettingsPanel` now has a **Korean Font** field. It must reference `NotoSansKR TMP Font Asset` in `Assets/OTHERS/Noto_Sans_KR` for Korean characters to display.
+- Volume, sensitivity, and brightness labels are translated dynamically. Tagalog remains English until Tagalog translations are added.
+- The stylized main-menu title and buttons (`VAREN`, Load Game, Play, Settings, About, Quit) are deliberately kept in English and retain their original horror font.
+
+- Main-menu protection now ignores the decorative spaces in labels such as `V A R E N` and `P L A Y`, so Korean selection does not replace their original horror font.
+
+- Opening **Controls** in the settings panel now hides the Language heading and all language buttons. Returning to Settings shows them again.
+
+- Korean localization now covers the Controls title, both control instruction lists, Graphics Quality, Save, and Back. Translation matching ignores decorative spaces and line breaks.
+- `RefreshUI()` now preserves the active volume, sensitivity, and brightness values instead of reloading older PlayerPrefs values when the settings UI or language is changed.
+
+## Story Intro and Gameplay Korean Translation
+
+- Replaced the StoryIntro narrative with the Malawak Forest story: Father Mateo, Varen, the broken church ritual, Mil and Jude, the sacred items, the White Lady, the Tikbalang, and the present-day adventurer.
+- Added Korean versions of the story intro and common gameplay subtitles. SubtitleManager now translates text at display time and switches to Noto Sans KR in Chapter 1, Chapter 2, and IntroTimeline.
+
+- Selecting a language now captures the live slider values before refreshing labels, preventing volume, sensitivity, and brightness from displaying stale zero values.
+
+- Added a one-time settings repair for the previous language-switching bug: if all three saved values are exactly zero, the menu restores 100% volume, 5.0 sensitivity, and 50% brightness. Individual intentional zero values are preserved.
+
+- AudioManager defaults now match SettingsPanel (100% volume, 5.0 sensitivity, 50% brightness). The one-time zero-settings repair was advanced so existing affected PlayerPrefs values are repaired on the next launch.
+
+- Settings labels now display the actual Slider values directly, preventing Volume, Sensitivity, and Brightness text from showing stale `0` values after a correct save/load.
+
+- SaveSettings now captures the visible Volume, Sensitivity, and Brightness Slider values immediately before writing PlayerPrefs, so restarting the game loads the settings the player actually saved.
+
+
+## Tagalog Localization
+
+- The existing PH menu button now selects Tagalog.
+- Settings labels, graphics options, controls instructions, story intro, and supported gameplay subtitles have Tagalog translations.
+- The stylized VAREN title and left-side main menu artwork text intentionally remain English.
+
+## Settings Panel Startup Visibility
+
+- The visual SettingsPanel now hides automatically when the menu starts.
+- The separate Setting pannel cs manager remains active, so saved slider values and language still load correctly.
+
+## Settings Database
+
+- Menu settings now use a separate SQLite database named settings.db in the game's persistent-data folder.
+- Its SettingsData table stores volume, sensitivity, brightness, graphics quality, and selected language in one global row.
+- Existing PlayerPrefs values migrate automatically the first time the updated menu runs. PlayerPrefs remains only as a compatibility cache for older scripts.
+- The database is separate from Normal and Hard save files, so opening Settings cannot create a false game save or affect player progress.
+
+For the complete table-by-table database reference, see DATABASE_README.md.
+
+## Documentation Organization
+
+- Project documentation is organized in Assets/Documentation.
+- README.md is the entry point; it links to the project details, database guide, and game story.
+
+## Story Intro Controls and Save State
+
+- Left mouse click advances the story intro one sentence at a time.
+- Enter skips the remaining story intro.
+- IntroData saves the current section and sentence in the active game save. Quitting before completion resumes from that sentence; completing or skipping the intro prevents it from replaying.
+
+## Pause During Story Intro
+
+- The intro overlay now hides while the pause menu is open, keeping the pause panel visible on top.
+- Resuming during an active intro keeps player movement disabled until the intro is finished or skipped.
+
+## New Game Intro and Subtitle Reset
+
+- Starting a New Game now clears IntroData and SubtitleData for the selected difficulty after its database is reinitialized.
+- The story intro appears again for a New Game, while loading an existing save still resumes or skips it based on IntroData.
+- Gameplay subtitle localization now reads the selected language directly from SettingsData, with PlayerPrefs only as a fallback.

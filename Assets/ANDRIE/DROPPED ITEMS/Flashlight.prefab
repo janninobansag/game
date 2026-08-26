@@ -179,13 +179,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   batteryLife: 100
   drainRate: 0.6
-  intensity: 63.7
-  range: 80.8
-  adjustFogWhenOn: 1
-  fogStartDistance: -18.62
-  fogEndDistance: 12.2
-  fogDensity: 23.68
+  intensity: 800
+  range: 220
+  spotAngle: 58
+  innerSpotAngle: 42
+  shadows: 0
+  dimNearObjects: 1
+  dimmingDistance: 2
+  minimumNearObjectIntensity: 0.3
+  dimmingLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  aimBeamWithCamera: 1
   wasDropped: 0
+  isSpawnedFromPrefab: 0
 --- !u!114 &4465770474920216188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +244,7 @@ MonoBehaviour:
   subtitleText: "Good\u2026 I'll need this."
   displayDuration: 2.81
   delayBeforeShow: 0.5
+  subtitleId: :0:Flashlight
 --- !u!1 &6720801816340489328
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,10 +290,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 85.9
-  m_Range: 47.4
-  m_SpotAngle: 96
-  m_InnerSpotAngle: 63
+  m_Intensity: 800
+  m_Range: 220
+  m_SpotAngle: 58
+  m_InnerSpotAngle: 42
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
