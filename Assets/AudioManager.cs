@@ -6,8 +6,8 @@ public class AudioManager : MonoBehaviour
 
     [Header("Default Settings")]
     public float defaultVolume = 100f;
-    public float defaultSensitivity = 2f;
-    public float defaultBrightness = 0.3f;
+    public float defaultSensitivity = 5f;
+    public float defaultBrightness = 0.5f;
 
     private float currentVolume;
     private float currentSensitivity;

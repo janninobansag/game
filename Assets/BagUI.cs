@@ -15,15 +15,18 @@ public class BagUI : MonoBehaviour
     [SerializeField] private List<Image> slotBackgrounds = new List<Image>();
     [SerializeField] private List<RawImage> slotIcons = new List<RawImage>();
     [SerializeField] private List<GameObject> slotHighlights = new List<GameObject>();
+    [Header("Equipped Item Name UI")]
+    [SerializeField] private GameObject equippedItemNamePanel;
+    [SerializeField] private TextMeshProUGUI equippedItemNameText;
     [SerializeField] private Texture2D[] itemIcons = new Texture2D[6];
     private static readonly string[] ItemIconResourceNames = { "Battery", "Candle", "Key", "Flashlight", "Cross", "Bible" };
     [SerializeField] private int displayedCapacity = -1;
-    private const int CurrentLayoutVersion = 8;
+    private const int CurrentLayoutVersion = 9;
     [SerializeField] private int builtLayoutVersion = -1;
 
     void OnEnable()
     {
-        if (!Application.isPlaying && (panel == null || builtLayoutVersion != CurrentLayoutVersion))
+        if (!Application.isPlaying && (panel == null || equippedItemNamePanel == null || builtLayoutVersion != CurrentLayoutVersion))
             CreatePanel(editorSlotCount);
     }
 
@@ -34,6 +37,7 @@ public class BagUI : MonoBehaviour
 
         int max = Inventory.Instance.GetMax();
         if (panel == null || displayedCapacity != max || builtLayoutVersion != CurrentLayoutVersion) CreatePanel(max);
+        EnsureEquippedItemNameUi();
         Refresh();
     }
 
@@ -45,8 +49,7 @@ public class BagUI : MonoBehaviour
             else DestroyImmediate(panel);
         }
 
-        Canvas canvas = GetComponent<Canvas>();
-        if (canvas == null) canvas = FindObjectOfType<Canvas>();
+        Canvas canvas = GetUiCanvas();
         if (canvas == null) return;
 
         displayedCapacity = max;
@@ -58,6 +61,8 @@ public class BagUI : MonoBehaviour
         panelRect.pivot = new Vector2(0.5f, 0f);
         panelRect.anchoredPosition = new Vector2(0f, 10f);
         panelRect.sizeDelta = new Vector2(390f, 110f);
+
+        CreateEquippedItemNameUi(canvas.transform);
 
         // Transparent layout container: only the three slot frames are visible.
         titleText = null;
@@ -112,6 +117,8 @@ public class BagUI : MonoBehaviour
         int selected = Inventory.Instance.GetSelectedIndex();
         List<GameObject> items = Inventory.Instance.GetItems();
 
+        RefreshEquippedItemName(items, selected);
+
         if (titleText != null) titleText.text = $"BAG  {count}/{max}";
         for (int i = 0; i < slotTexts.Count; i++)
         {
@@ -154,6 +161,86 @@ public class BagUI : MonoBehaviour
         }
     }
 
+
+
+
+    private Canvas GetUiCanvas()
+    {
+        // The existing Bag UI is already on the correct player HUD Canvas.
+        // Prefer it over FindObjectOfType, which can select a world-space Canvas.
+        if (panel != null && panel.transform.parent != null)
+        {
+            Canvas bagCanvas = panel.transform.parent.GetComponent<Canvas>();
+            if (bagCanvas != null)
+                return bagCanvas;
+        }
+
+        Canvas ownCanvas = GetComponent<Canvas>();
+        return ownCanvas != null ? ownCanvas : FindObjectOfType<Canvas>();
+    }
+    private void EnsureEquippedItemNameUi()
+    {
+        if (equippedItemNamePanel != null && equippedItemNameText != null)
+            return;
+
+        Canvas canvas = GetComponent<Canvas>();
+        if (canvas == null)
+            canvas = FindObjectOfType<Canvas>();
+        if (canvas != null)
+            CreateEquippedItemNameUi(canvas.transform);
+    }
+    private void CreateEquippedItemNameUi(Transform canvasTransform)
+    {
+        if (equippedItemNamePanel != null)
+        {
+            if (Application.isPlaying) Destroy(equippedItemNamePanel);
+            else DestroyImmediate(equippedItemNamePanel);
+        }
+
+        equippedItemNamePanel = CreateUiObject("Equipped Item Name UI", canvasTransform);
+        Image background = equippedItemNamePanel.AddComponent<Image>();
+        background.raycastTarget = false;
+        background.color = new Color(0f, 0f, 0f, 0.58f);
+
+        RectTransform panelRect = equippedItemNamePanel.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(0.5f, 0f);
+        panelRect.anchorMax = new Vector2(0.5f, 0f);
+        panelRect.pivot = new Vector2(0.5f, 0.5f);
+        panelRect.anchoredPosition = new Vector2(0f, 135f);
+        panelRect.sizeDelta = new Vector2(240f, 38f);
+
+        equippedItemNameText = CreateText("Equipped Item Name", equippedItemNamePanel.transform, 20f, FontStyles.Bold, TextAlignmentOptions.Center);
+        equippedItemNameText.text = "";
+        SetRect(equippedItemNameText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(228f, 34f));
+        equippedItemNamePanel.SetActive(false);
+    }
+
+    private void RefreshEquippedItemName(List<GameObject> items, int selected)
+    {
+        if (equippedItemNamePanel == null || equippedItemNameText == null)
+            return;
+
+        GameObject equippedItem = selected >= 0 && selected < items.Count ? items[selected] : null;
+        bool hasEquippedItem = equippedItem != null;
+        equippedItemNamePanel.SetActive(hasEquippedItem);
+        if (!hasEquippedItem)
+            return;
+
+        equippedItemNameText.text = GetItemDisplayName(equippedItem);
+    }
+
+    private static string GetItemDisplayName(GameObject item)
+    {
+        PickupItem pickup = item.GetComponent<PickupItem>();
+        if (pickup != null && !string.IsNullOrEmpty(pickup.itemName))
+            return pickup.itemName;
+
+        Key key = item.GetComponent<Key>();
+        if (key != null && !string.IsNullOrEmpty(key.itemName))
+            return key.itemName;
+
+        return item.name.Replace("(Clone)", "").Trim();
+    }
     private void LoadItemIcons()
     {
         if (itemIcons == null || itemIcons.Length != ItemIconResourceNames.Length)

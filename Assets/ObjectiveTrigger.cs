@@ -109,7 +109,7 @@ public class ObjectiveTrigger : MonoBehaviour
             // Set text
             if (objectiveLabel != null)
             {
-                objectiveLabel.text = objectiveText;
+                objectiveLabel.text = GameplayLocalization.TranslateObjective(objectiveText);
             }
 
             // Ensure canvas group exists

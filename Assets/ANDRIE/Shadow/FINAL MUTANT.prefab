@@ -604,8 +604,11 @@ MonoBehaviour:
   chaseVolume: 1
   maxAudioDistance: 50
   attackSound: {fileID: 8300000, guid: 1d2cd61e33175264e890c278323846d5, type: 3}
-  effectDistance: 8
-  maxShakeIntensity: 0.3
+  effectDistance: 6.52
+  maxShakeIntensity: 0.06
+  bushTag: Bush
+  checkBush: 1
+  startPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1268534168301374257
 GameObject:
   m_ObjectHideFlags: 0

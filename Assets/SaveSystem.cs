@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.IO;
 using System.Linq;
 using SQLite4Unity3d;
@@ -22,6 +23,26 @@ public class SaveSystem : MonoBehaviour
     private SQLiteConnection connection;
     private bool isDatabaseReady = false;
 
+    private static string GetDifficultyForActiveScene()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "chapter 1")
+        {
+            PlayerPrefs.SetString("GameDifficulty", "Normal");
+            PlayerPrefs.Save();
+            return "Normal";
+        }
+
+        if (sceneName == "chapter 2")
+        {
+            PlayerPrefs.SetString("GameDifficulty", "Hard");
+            PlayerPrefs.Save();
+            return "Hard";
+        }
+
+        return PlayerPrefs.GetString("GameDifficulty", "Normal");
+    }
+
     void Awake()
     {
         if (Instance == null)
@@ -36,7 +57,7 @@ public class SaveSystem : MonoBehaviour
 
         // ── FIX: Don't create database immediately ──
         // Just set the path based on difficulty, but don't initialize yet
-        string difficulty = PlayerPrefs.GetString("GameDifficulty", "Normal");
+        string difficulty = GetDifficultyForActiveScene();
         string fileName = difficulty == "Hard" ? "gameSave_Hard.db" : "gameSave.db";
         savePath = Path.Combine(Application.persistentDataPath, fileName);
 
@@ -70,6 +91,7 @@ public class SaveSystem : MonoBehaviour
             connection.CreateTable<RitualItemData>();
             connection.CreateTable<StaminaData>();
             connection.CreateTable<SubtitleData>();
+            connection.CreateTable<IntroData>();
 
             // Existing saves created before IsTriggered was added need this column.
             try { connection.Execute("ALTER TABLE SubtitleData ADD COLUMN IsTriggered INTEGER NOT NULL DEFAULT 0"); }
@@ -101,7 +123,7 @@ public class SaveSystem : MonoBehaviour
         isDatabaseReady = false;
 
         // ── Use different database files for different difficulties ──
-        string difficulty = PlayerPrefs.GetString("GameDifficulty", "Normal");
+        string difficulty = GetDifficultyForActiveScene();
         string fileName = difficulty == "Hard" ? "gameSave_Hard.db" : "gameSave.db";
         savePath = Path.Combine(Application.persistentDataPath, fileName);
 
@@ -1882,6 +1904,67 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
+    public bool TryGetStoryIntroProgress(out int sectionIndex, out int lineIndex, out bool isComplete)
+    {
+        sectionIndex = 0;
+        lineIndex = 0;
+        isComplete = false;
+
+        EnsureDatabaseReady();
+        if (!isDatabaseReady) return false;
+
+        try
+        {
+            IntroData data = connection.Table<IntroData>().FirstOrDefault();
+            if (data == null) return false;
+
+            sectionIndex = data.SectionIndex;
+            lineIndex = data.LineIndex;
+            isComplete = data.IsComplete;
+            return true;
+        }
+        catch (System.Exception)
+        {
+            return false;
+        }
+    }
+
+    public void SaveStoryIntroProgress(int sectionIndex, int lineIndex, bool isComplete)
+    {
+        EnsureDatabaseReady();
+        if (!isDatabaseReady) return;
+
+        try
+        {
+            connection.InsertOrReplace(new IntroData
+            {
+                Id = 1,
+                SectionIndex = sectionIndex,
+                LineIndex = lineIndex,
+                IsComplete = isComplete
+            });
+        }
+        catch (System.Exception)
+        {
+        }
+    }
+    public void ClearStoryIntroData()
+    {
+        EnsureDatabaseReady();
+        if (!isDatabaseReady) return;
+
+        try { connection.DeleteAll<IntroData>(); }
+        catch (System.Exception) { }
+    }
+
+    public void ClearSubtitleData()
+    {
+        EnsureDatabaseReady();
+        if (!isDatabaseReady) return;
+
+        try { connection.DeleteAll<SubtitleData>(); }
+        catch (System.Exception) { }
+    }
     public bool HasSubtitleTriggered(string subtitleId)
     {
         if (string.IsNullOrEmpty(subtitleId)) return false;
@@ -1940,6 +2023,7 @@ public class SaveSystem : MonoBehaviour
             connection.DeleteAll<RitualItemData>();
             connection.DeleteAll<StaminaData>();
             connection.DeleteAll<SubtitleData>();
+            connection.DeleteAll<IntroData>();
             // ── NEW: Delete ProgressionData ──
             connection.DeleteAll<ProgressionData>();
 
@@ -2153,4 +2237,14 @@ public class StaminaData
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
     public float CurrentStamina { get; set; }
+}
+
+[Table("IntroData")]
+public class IntroData
+{
+    [PrimaryKey]
+    public int Id { get; set; }
+    public int SectionIndex { get; set; }
+    public int LineIndex { get; set; }
+    public bool IsComplete { get; set; }
 }

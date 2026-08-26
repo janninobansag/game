@@ -298,7 +298,11 @@ public class MutantAI : MonoBehaviour
             JumpscareSystem.Instance.TriggerJumpscare(gameObject);
 
         PlayerHealth ph = player.GetComponent<PlayerHealth>();
-        if (ph != null) ph.TakeDamageForEnemyCatch(attackDamage);
+        if (ph != null)
+        {
+            ph.TakeDamageForEnemyCatch(attackDamage);
+            ph.ShowBloodDamageOverlay(1.2f);
+        }
     }
 
     void SetAnimation(bool walking, bool running)

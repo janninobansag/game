@@ -13,6 +13,7 @@ public class NoteUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI contentText;
     [SerializeField] private Button closeButton;
+    private TextMeshProUGUI hintText;
     private Note promptOwner;
     private Note openNote;
     private bool closeBound;
@@ -49,7 +50,7 @@ public class NoteUIController : MonoBehaviour
         titleText = Text("Title", paper.transform, 28, TextAlignmentOptions.Center, new Color(.2f, .09f, .03f)); titleText.fontStyle = FontStyles.Bold; RectTransform title = titleText.rectTransform; title.anchorMin = new Vector2(0f, 1f); title.anchorMax = new Vector2(1f, 1f); title.pivot = new Vector2(.5f, 1f); title.anchoredPosition = new Vector2(0f, -40f); title.sizeDelta = new Vector2(-120f, 38f);
         contentText = Text("Content", paper.transform, 20, TextAlignmentOptions.TopLeft, new Color(.14f, .06f, .02f)); contentText.enableWordWrapping = true; Stretch(contentText.rectTransform, 90f, 95f, 90f, 100f);
         closeButton = Button("Close Note", paper.transform, "Close", new Vector2(0f, -205f)); if (Application.isPlaying) BindClose();
-        TextMeshProUGUI hint = Text("Hint", paper.transform, 14, TextAlignmentOptions.Center, new Color(.27f, .14f, .06f)); hint.text = "Press E, ESC, F, or click Close."; RectTransform h = hint.rectTransform; h.anchorMin = new Vector2(0f, 0f); h.anchorMax = new Vector2(1f, 0f); h.pivot = new Vector2(.5f, 0f); h.anchoredPosition = new Vector2(0f, 18f); h.sizeDelta = new Vector2(-80f, 23f);
+        hintText = Text("Hint", paper.transform, 14, TextAlignmentOptions.Center, new Color(.27f, .14f, .06f)); hintText.text = "Press F to Close."; RectTransform h = hintText.rectTransform; h.anchorMin = new Vector2(0f, 0f); h.anchorMax = new Vector2(1f, 0f); h.pivot = new Vector2(.5f, 0f); h.anchoredPosition = new Vector2(0f, 18f); h.sizeDelta = new Vector2(-80f, 23f);
         readerPanel.SetActive(false);
     }
 
@@ -66,6 +67,8 @@ public class NoteUIController : MonoBehaviour
         if (closeButton == null) { Transform t = paper.Find("Close Note"); if (t != null) closeButton = t.GetComponent<Button>(); }
         if (titleText == null) { Transform t = paper.Find("Title"); if (t != null) titleText = t.GetComponent<TextMeshProUGUI>(); }
         if (contentText == null) { Transform t = paper.Find("Content"); if (t != null) contentText = t.GetComponent<TextMeshProUGUI>(); }
+        if (hintText == null) { Transform t = paper.Find("Hint"); if (t != null) hintText = t.GetComponent<TextMeshProUGUI>(); }
+        if (hintText != null) hintText.text = "Press F to Close.";
     }
     private void BindClose() { if (closeBound || closeButton == null) return; closeButton.onClick.AddListener(() => { if (openNote != null) openNote.CloseNote(); }); closeBound = true; }
     private static GameObject Panel(string name, Transform parent, Color color) { GameObject item = new GameObject(name, typeof(RectTransform), typeof(Image)); item.transform.SetParent(parent, false); item.GetComponent<Image>().color = color; return item; }

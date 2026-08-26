@@ -4390,6 +4390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba6ea11f4446c446b8cf4c8c59d69a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  koreanFont: {fileID: 11400000, guid: e1988741a6844df4f8818cb2108ee7a3, type: 2}
   defaultDisplayTime: 4
   fadeSpeed: 2
   characterDelay: 0.03
@@ -18331,6 +18332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbbed66e7604d35479a1b949c8941031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  koreanFont: {fileID: 12800000, guid: cb0883446917e094485c9ffb21797cd9, type: 3}
   textFadeSpeed: 1.2
   textHoldTime: 3
   sectionPauseTime: 0.8

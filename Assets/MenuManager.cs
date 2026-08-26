@@ -356,6 +356,8 @@ public class MenuManager : MonoBehaviour
         {
             SaveSystem.Instance.ReinitializeDatabase();
             SaveSystem.Instance.ClearProgressionData();
+            SaveSystem.Instance.ClearStoryIntroData();
+            SaveSystem.Instance.ClearSubtitleData();
         }
         else
         {
@@ -405,6 +407,8 @@ public class MenuManager : MonoBehaviour
         {
             SaveSystem.Instance.ReinitializeDatabase();
             SaveSystem.Instance.ClearProgressionData();
+            SaveSystem.Instance.ClearStoryIntroData();
+            SaveSystem.Instance.ClearSubtitleData();
         }
         else
         {

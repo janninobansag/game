@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayerController))]
 public class StaminaController : MonoBehaviour
@@ -18,7 +19,7 @@ public class StaminaController : MonoBehaviour
     private float recoveryTimer;
 
     public float CurrentStamina => currentStamina;
-    public bool IsHardMode => PlayerPrefs.GetString("GameDifficulty", "Normal") == "Hard";
+    public bool IsHardMode => SceneManager.GetActiveScene().name == "chapter 2" || PlayerPrefs.GetString("GameDifficulty", "Normal") == "Hard";
     public bool CanSprint => !IsHardMode || currentStamina > 0.01f;
 
     void Awake()
@@ -28,6 +29,7 @@ public class StaminaController : MonoBehaviour
 
     void Start()
     {
+        FindStaminaBar();
         RefreshUI();
     }
 
@@ -63,8 +65,18 @@ public class StaminaController : MonoBehaviour
         RefreshUI();
     }
 
+    private void FindStaminaBar()
+    {
+        GameObject barObject = GameObject.Find("StaminaBar");
+        if (barObject != null)
+            staminaBar = barObject.GetComponent<Slider>();
+    }
+
     private void RefreshUI()
     {
+        if (staminaBar == null)
+            FindStaminaBar();
+
         if (staminaBar == null)
             return;
 

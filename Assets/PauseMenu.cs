@@ -32,11 +32,18 @@ public class PauseMenu : MonoBehaviour
     public float defaultSensitivity = 2f;
     public float defaultBrightness = 0.3f;
 
+    [Header("Hover Feedback")]
+    public AudioClip hoverSound;
+    [Range(0f, 1f)] public float hoverVolume = 0.6f;
+
     public bool isPaused = false;
     private float currentVolume;
     private float currentSensitivity;
     private float currentBrightness;
     private PlayerController playerController;
+    private AudioSource hoverAudioSource;
+    private Button hoveredPauseButton;
+    private Slider draggedSettingsSlider;
 
     void Awake()
     {
@@ -53,6 +60,9 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         playerController = FindObjectOfType<PlayerController>();
+        hoverAudioSource = gameObject.AddComponent<AudioSource>();
+        hoverAudioSource.playOnAwake = false;
+        hoverAudioSource.ignoreListenerPause = true;
         LoadSettings();
 
         if (pausePanel != null) pausePanel.SetActive(false);
@@ -91,6 +101,15 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        if (isPaused)
+        {
+            UpdatePauseMenuHover();
+            UpdateSettingsSliderDrag();
+        }
+
+        if (isPaused && Input.GetMouseButtonUp(0))
+            ClickPauseMenuButtonAtCursor();
+
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
             if (isPaused)
@@ -100,6 +119,122 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+
+
+
+    private void UpdateSettingsSliderDrag()
+    {
+        if (settingsPanel == null || !settingsPanel.activeInHierarchy)
+        {
+            draggedSettingsSlider = null;
+            return;
+        }
+
+        Canvas canvas = settingsPanel.GetComponent<Canvas>();
+        Camera eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+            ? canvas.worldCamera
+            : null;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            foreach (Slider slider in settingsPanel.GetComponentsInChildren<Slider>(true))
+            {
+                if (slider.gameObject.activeInHierarchy && slider.interactable &&
+                    RectTransformUtility.RectangleContainsScreenPoint(slider.transform as RectTransform, Input.mousePosition, eventCamera))
+                {
+                    draggedSettingsSlider = slider;
+                    SetSliderFromCursor(slider, eventCamera);
+                    break;
+                }
+            }
+        }
+
+        if (draggedSettingsSlider != null && Input.GetMouseButton(0))
+            SetSliderFromCursor(draggedSettingsSlider, eventCamera);
+
+        if (Input.GetMouseButtonUp(0))
+            draggedSettingsSlider = null;
+    }
+
+    private static void SetSliderFromCursor(Slider slider, Camera eventCamera)
+    {
+        RectTransform sliderRect = slider.transform as RectTransform;
+        if (sliderRect == null || !RectTransformUtility.ScreenPointToLocalPointInRectangle(sliderRect, Input.mousePosition, eventCamera, out Vector2 localPoint))
+            return;
+
+        float normalizedValue = Mathf.InverseLerp(sliderRect.rect.xMin, sliderRect.rect.xMax, localPoint.x);
+        if (slider.direction == Slider.Direction.RightToLeft)
+            normalizedValue = 1f - normalizedValue;
+        slider.normalizedValue = normalizedValue;
+    }
+    private void UpdatePauseMenuHover()
+    {
+        GameObject activePanel = settingsPanel != null && settingsPanel.activeInHierarchy
+            ? settingsPanel
+            : pausePanel;
+        if (activePanel == null || !activePanel.activeInHierarchy)
+            return;
+
+        Canvas canvas = activePanel.GetComponent<Canvas>();
+        Camera eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+            ? canvas.worldCamera
+            : null;
+        Button newHoveredButton = null;
+
+        foreach (Button button in activePanel.GetComponentsInChildren<Button>(true))
+        {
+            if (button.gameObject.activeInHierarchy && button.interactable &&
+                RectTransformUtility.RectangleContainsScreenPoint(button.transform as RectTransform, Input.mousePosition, eventCamera))
+            {
+                newHoveredButton = button;
+                break;
+            }
+        }
+
+        if (newHoveredButton == hoveredPauseButton)
+            return;
+
+        SetButtonHoverVisual(hoveredPauseButton, false);
+        hoveredPauseButton = newHoveredButton;
+        SetButtonHoverVisual(hoveredPauseButton, true);
+
+        if (hoveredPauseButton != null && hoverSound != null && hoverAudioSource != null)
+            hoverAudioSource.PlayOneShot(hoverSound, hoverVolume);
+    }
+
+    private static void SetButtonHoverVisual(Button button, bool hovered)
+    {
+        if (button == null || button.targetGraphic == null)
+            return;
+
+        Color color = hovered ? button.colors.highlightedColor : button.colors.normalColor;
+        button.targetGraphic.CrossFadeColor(color * button.colors.colorMultiplier, button.colors.fadeDuration, true, true);
+    }
+    private void ClickPauseMenuButtonAtCursor()
+    {
+        GameObject activePanel = settingsPanel != null && settingsPanel.activeInHierarchy
+            ? settingsPanel
+            : pausePanel;
+        if (activePanel == null || !activePanel.activeInHierarchy)
+            return;
+
+        Canvas canvas = activePanel.GetComponent<Canvas>();
+        Camera eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+            ? canvas.worldCamera
+            : null;
+
+        foreach (Button button in activePanel.GetComponentsInChildren<Button>(true))
+        {
+            if (!button.gameObject.activeInHierarchy || !button.interactable)
+                continue;
+
+            if (RectTransformUtility.RectangleContainsScreenPoint(button.transform as RectTransform, Input.mousePosition, eventCamera))
+            {
+                button.onClick.Invoke();
+                return;
+            }
+        }
+    }
     public void Pause()
     {
         isPaused = true;
@@ -121,6 +256,7 @@ public class PauseMenu : MonoBehaviour
         if (pausePanel != null)
         {
             pausePanel.SetActive(true);
+            PreparePanelForInput(pausePanel);
             BringToFront(pausePanel);
             if (settingsPanel != null)
                 settingsPanel.SetActive(false);
@@ -136,8 +272,10 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Re-enable player control
-        if (playerController != null)
+        // Do not re-enable movement if the story intro is still playing.
+        StoryIntro storyIntro = FindObjectOfType<StoryIntro>();
+        bool storyIntroActive = storyIntro != null && storyIntro.IsIntroActive;
+        if (playerController != null && !storyIntroActive)
             playerController.enabled = true;
 
         // RE-ENABLE CROSSHAIR WHEN RESUMED
@@ -157,6 +295,7 @@ public class PauseMenu : MonoBehaviour
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(true);
+            PreparePanelForInput(settingsPanel);
             BringToFront(settingsPanel);
         }
     }
@@ -167,10 +306,43 @@ public class PauseMenu : MonoBehaviour
         if (pausePanel != null)
         {
             pausePanel.SetActive(true);
+            PreparePanelForInput(pausePanel);
             BringToFront(pausePanel);
         }
     }
 
+
+    private static void PreparePanelForInput(GameObject panel)
+    {
+        Canvas panelCanvas = panel.GetComponent<Canvas>();
+        if (panelCanvas == null)
+            panelCanvas = panel.AddComponent<Canvas>();
+        panelCanvas.overrideSorting = true;
+        panelCanvas.sortingOrder = 1000;
+
+        GraphicRaycaster raycaster = panel.GetComponent<GraphicRaycaster>();
+        if (raycaster == null)
+            raycaster = panel.AddComponent<GraphicRaycaster>();
+        raycaster.enabled = true;
+
+        CanvasGroup canvasGroup = panel.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+            canvasGroup = panel.AddComponent<CanvasGroup>();
+
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+
+        // A full-screen Image or text label can otherwise intercept clicks intended
+        // for controls behind it. Only selectable controls should receive raycasts.
+        foreach (Graphic graphic in panel.GetComponentsInChildren<Graphic>(true))
+        {
+            if (graphic.GetComponent<Selectable>() == null)
+                graphic.raycastTarget = false;
+        }
+
+        foreach (Selectable selectable in panel.GetComponentsInChildren<Selectable>(true))
+            selectable.interactable = true;
+    }
     private static void BringToFront(GameObject panel)
     {
         // Canvas UI draws later siblings on top. This keeps pause/settings above document UIs.

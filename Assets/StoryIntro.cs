@@ -7,12 +7,15 @@ public class StoryIntro : MonoBehaviour
     public float textFadeSpeed = 1.2f;
     public float textHoldTime = 3f;
     public float sectionPauseTime = 0.8f;
-    public bool skipOnAnyKey = true;
+    [Tooltip("Kept for older scenes. The intro now uses left click to continue and Enter to skip.")]
+    public bool skipOnAnyKey = false;
+    [Tooltip("NotoSansKR-Regular font used only for the Korean story intro.")] public Font koreanFont;
 
     private float blackAlpha = 1f;
     private float textAlpha = 0f;
     private bool introDone = false;
     private bool isSkipping = false;
+    private bool advanceRequested = false;
 
     private string currentText = "";
     private string currentSubText = "";
@@ -42,9 +45,10 @@ public class StoryIntro : MonoBehaviour
     private float[] noiseH = new float[40];
     private float[] noiseA = new float[40];
 
+    public bool IsIntroActive => !introDone;
+
     void Start()
     {
-        // Disable player during intro
         playerController = FindObjectOfType<PlayerController>();
         if (playerController != null)
             playerController.enabled = false;
@@ -54,9 +58,25 @@ public class StoryIntro : MonoBehaviour
 
         InitSections();
         InitNoise();
+
+        int savedSection;
+        int savedLine;
+        bool wasCompleted;
+        if (SaveSystem.Instance != null &&
+            SaveSystem.Instance.TryGetStoryIntroProgress(out savedSection, out savedLine, out wasCompleted))
+        {
+            if (wasCompleted)
+            {
+                FinishIntro();
+                return;
+            }
+
+            currentSection = Mathf.Clamp(savedSection, 0, sections.Length - 1);
+            currentLine = Mathf.Clamp(savedLine, 0, sections[currentSection].lines.Length - 1);
+        }
+
         StartCoroutine(RunIntro());
     }
-
     void InitNoise()
     {
         for (int i = 0; i < noiseX.Length; i++)
@@ -76,182 +96,28 @@ public class StoryIntro : MonoBehaviour
     {
         sections = new IntroSection[]
         {
-            // Section 1 — Title
-            new IntroSection {
-                title = "",
-                lines = new string[] { "VAREN" },
-                isChapter = true,
-                holdTime = 3.5f
-            },
-
-            // Section 2 — The Forest
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "Deep in the heart of the Philippine forest,",
-                    "a village once stood.",
-                    "",
-                    "Now... it is empty."
-                },
-                isChapter = false,
-                holdTime = 3.5f
-            },
-
-            // Section 3 — The Disappearance
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "People vanished without a trace.",
-                    "No bodies. No blood. No struggle.",
-                    "",
-                    "Just... silence."
-                },
-                isChapter = false,
-                holdTime = 3.5f
-            },
-
-            // Section 4 — Varen
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "The elders spoke of an ancient spirit.",
-                    "They called it...",
-                    "",
-                    "VAREN."
-                },
-                isChapter = true,
-                holdTime = 4f
-            },
-
-            // Section 5 — Varen's Nature
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "Varen is not a monster that hunts.",
-                    "It is a presence that waits.",
-                    "",
-                    "It feeds on fear.",
-                    "It grows stronger with every whisper of its name.",
-                    "It watches from the trees.",
-                    "",
-                    "And when you feel its gaze...",
-                    "it is already too late."
-                },
-                isChapter = false,
-                holdTime = 5f
-            },
-
-            // Section 6 — The White Lady
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "Some say they saw her.",
-                    "A woman in white.",
-                    "",
-                    "She appears at the edge of the forest.",
-                    "Standing still.",
-                    "Watching.",
-                    "",
-                    "They say if you look into her eyes,",
-                    "you will see your death."
-                },
-                isChapter = false,
-                holdTime = 5f
-            },
-
-            // Section 7 — The Tikbalang
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "At night, you can hear the Tikbalang.",
-                    "A creature that leads travelers astray.",
-                    "Half-man, half-horse.",
-                    "",
-                    "It plays tricks to confuse and trap you.",
-                    "",
-                    "If you hear its footsteps behind you...",
-                    "do not turn around."
-                },
-                isChapter = false,
-                holdTime = 5f
-            },
-
-            // Section 8 — The Whispers
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "The forest is alive with whispers.",
-                    "",
-                    "Voices call your name.",
-                    "They sound like your mother.",
-                    "Your friends.",
-                    "Yourself.",
-                    "",
-                    "Do not answer."
-                },
-                isChapter = false,
-                holdTime = 4.5f
-            },
-
-            // Section 9 — The Ritual
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "The elders tried to seal Varen.",
-                    "They performed a ritual at the heart of the forest.",
-                    "",
-                    "It failed."
-                },
-                isChapter = false,
-                holdTime = 3.5f
-            },
-
-            // Section 10 — The Curse
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "Now the forest is cursed.",
-                    "",
-                    "Those who enter... never leave.",
-                    "",
-                    "And Varen is always watching."
-                },
-                isChapter = false,
-                holdTime = 4f
-            },
-
-            // Section 11 — The Player
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "You are the only one who can uncover the truth.",
-                    "",
-                    "But be careful.",
-                    "",
-                    "Varen knows you are here."
-                },
-                isChapter = false,
-                holdTime = 4.5f
-            },
-
-            // Section 12 — Final Warning
-            new IntroSection {
-                title = "",
-                lines = new string[] {
-                    "Do not trust the shadows.",
-                    "Do not answer the voices.",
-                    "",
-                    "...and never stop running."
-                },
-                isChapter = true,
-                holdTime = 5f
-            },
+            new IntroSection { lines = new[] { "VAREN" }, isChapter = true, holdTime = 3.5f },
+            new IntroSection { lines = new[] { "1989.", "Malawak Forest was once a living village.", "Father Mateo guided its people." }, holdTime = 3.5f },
+            new IntroSection { lines = new[] { "An ancient shadow named Varen possessed Father Mateo.", "It prepared a ritual to claim his body forever." }, holdTime = 4f },
+            new IntroSection { lines = new[] { "During a prayer in the church, Father Mateo begged everyone to stop.", "The ritual broke.", "Varen killed the people gathered inside." }, holdTime = 4.5f },
+            new IntroSection { lines = new[] { "Mil and Jude escaped with candles, a Bible, and a cross.", "They purified the sacred items.", "But Varen found them.", "Jude died outside House 3. Mil died inside." }, holdTime = 5f },
+            new IntroSection { lines = new[] { "Laica became the White Lady.", "Jude became the Tikbalang.", "Both spirits could not accept their deaths." }, holdTime = 4.5f },
+            new IntroSection { lines = new[] { "Now, an adventurer on vacation finds the abandoned village.", "Explore the guard house, the three homes, and the church.", "Return the sacred items. Pray at the Ritual Tree.", "Seal Varen before Malawak Forest claims you." }, holdTime = 5f }
         };
-    }
 
+        if (GameplayLocalization.IsLocalized)
+        {
+            for (int i = 0; i < sections.Length; i++)
+            {
+                IntroSection section = sections[i];
+                for (int line = 0; line < section.lines.Length; line++)
+                    section.lines[line] = GameplayLocalization.TranslateSubtitle(section.lines[line]);
+                sections[i] = section;
+            }
+        }
+    }
     void Update()
     {
-        // Update noise
         noiseTimer += Time.deltaTime;
         if (noiseTimer > 0.05f)
         {
@@ -260,96 +126,64 @@ public class StoryIntro : MonoBehaviour
                 if (Random.value > 0.7f) ResetNoise(i);
         }
 
-        // Skip on any key
-        if (skipOnAnyKey && !isSkipping &&
-            (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape)))
-        {
-            if (!introDone)
-            {
-                isSkipping = true;
-                StopAllCoroutines();
-                StartCoroutine(SkipIntro());
-            }
-        }
+        if (introDone || isSkipping || (PauseMenu.Instance != null && PauseMenu.Instance.isPaused))
+            return;
 
-        // Force skip with Escape
-        if (Input.GetKeyDown(KeyCode.Escape) && !introDone)
+        // Left mouse button advances exactly one sentence.
+        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.LeftArrow))
+            advanceRequested = true;
+
+        // Enter skips the remaining intro and marks it complete.
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             isSkipping = true;
             StopAllCoroutines();
             StartCoroutine(SkipIntro());
         }
     }
-
     IEnumerator RunIntro()
     {
-        // Initial black hold
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
-        foreach (var section in sections)
+        for (; currentSection < sections.Length; currentSection++)
         {
-            // Show chapter title if exists
-            if (!string.IsNullOrEmpty(section.title))
+            IntroSection section = sections[currentSection];
+            int firstLine = currentLine;
+
+            for (int line = firstLine; line < section.lines.Length; line++)
             {
-                currentText = section.title;
+                currentLine = line;
+                currentText = section.lines[line];
                 currentSubText = "";
-                isChapterTitle = true;
-                isCenterText = false;
+                isChapterTitle = section.isChapter;
+                isCenterText = section.isChapter;
+                textAlpha = 0f;
 
+                SaveCurrentProgress(false);
                 yield return StartCoroutine(FadeText(0f, 1f));
-                yield return new WaitForSeconds(1.5f);
-                yield return StartCoroutine(FadeText(1f, 0f));
-                yield return new WaitForSeconds(0.3f);
-            }
 
-            // Show lines one by one or all at once
-            if (section.isChapter)
-            {
-                // Show all lines centered together
-                currentText = string.Join("\n", section.lines);
-                currentSubText = "";
-                isChapterTitle = true;
-                isCenterText = true;
+                // A click is required before the following sentence is shown.
+                advanceRequested = false;
+                while (!advanceRequested)
+                    yield return null;
 
-                yield return StartCoroutine(FadeText(0f, 1f));
-                yield return new WaitForSeconds(section.holdTime);
-                yield return StartCoroutine(FadeText(1f, 0f));
-            }
-            else
-            {
-                // Show lines one by one
-                string accumulated = "";
-                foreach (string line in section.lines)
-                {
-                    if (line == "")
-                    {
-                        accumulated += "\n";
-                        continue;
-                    }
-
-                    accumulated += (accumulated.Length > 0 ? "\n" : "") + line;
-                    currentText = accumulated;
-                    isChapterTitle = false;
-                    isCenterText = false;
-
-                    yield return StartCoroutine(FadeText(
-                        textAlpha, 1f, textFadeSpeed * 1.5f));
-                    yield return new WaitForSeconds(textHoldTime * 0.6f);
-                }
-
-                yield return new WaitForSeconds(section.holdTime);
                 yield return StartCoroutine(FadeText(1f, 0f));
             }
 
-            yield return new WaitForSeconds(sectionPauseTime);
+            currentLine = 0;
+            SaveCurrentProgress(false);
         }
 
-        // Fade out black screen
+        SaveCurrentProgress(true);
         yield return StartCoroutine(FadeBlack(1f, 0f));
-
         FinishIntro();
     }
 
+    private void SaveCurrentProgress(bool isComplete)
+    {
+        if (SaveSystem.Instance != null)
+            SaveSystem.Instance.SaveStoryIntroProgress(currentSection, currentLine, isComplete);
+    }
     IEnumerator FadeText(float from, float to, float speed = -1f)
     {
         if (speed < 0) speed = textFadeSpeed;
@@ -381,6 +215,7 @@ public class StoryIntro : MonoBehaviour
 
     IEnumerator SkipIntro()
     {
+        SaveCurrentProgress(true);
         textAlpha = 0f;
         yield return StartCoroutine(FadeBlack(blackAlpha, 0f));
         FinishIntro();
@@ -391,13 +226,15 @@ public class StoryIntro : MonoBehaviour
         introDone = true;
         blackAlpha = 0f;
         textAlpha = 0f;
+        SaveCurrentProgress(true);
 
         if (playerController != null)
             playerController.enabled = true;
     }
-
     void OnGUI()
     {
+        // The pause Canvas must appear above the intro overlay.
+        if (PauseMenu.Instance != null && PauseMenu.Instance.isPaused) return;
         if (introDone && blackAlpha <= 0.01f) return;
 
         float sw = Screen.width;
@@ -453,6 +290,7 @@ public class StoryIntro : MonoBehaviour
             // Large title style
             GUIStyle titleStyle = new GUIStyle();
             titleStyle.fontSize = 64;
+            if (GameplayLocalization.IsKorean && koreanFont != null) titleStyle.font = koreanFont;
             titleStyle.fontStyle = FontStyle.Bold;
             titleStyle.alignment = TextAnchor.MiddleCenter;
             titleStyle.wordWrap = true;
@@ -490,6 +328,7 @@ public class StoryIntro : MonoBehaviour
             // Main story text
             GUIStyle textStyle = new GUIStyle();
             textStyle.fontSize = 20;
+            if (GameplayLocalization.IsKorean && koreanFont != null) textStyle.font = koreanFont;
             textStyle.fontStyle = FontStyle.Italic;
             textStyle.wordWrap = true;
             textStyle.richText = true;
@@ -516,7 +355,7 @@ public class StoryIntro : MonoBehaviour
                 new Color(0.4f, 0.38f, 0.35f, textAlpha * 0.6f);
             skipStyle.alignment = TextAnchor.MiddleRight;
             GUI.Label(new Rect(sw - 160f, sh - 30f, 140f, 18f),
-                "Any key to skip", skipStyle);
+                "Left Click: Continue | Enter: Skip", skipStyle);
         }
 
         GUI.color = Color.white;
