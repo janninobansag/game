@@ -291,6 +291,11 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenSettings()
     {
+        // Re-read saved settings here as well as at scene startup. This supports
+        // pressing Play directly from Chapter 2, without first opening the menu scene.
+        LoadSettings();
+        RefreshSettingsUi();
+
         if (pausePanel != null) pausePanel.SetActive(false);
         if (settingsPanel != null)
         {
@@ -365,9 +370,21 @@ public class PauseMenu : MonoBehaviour
 
     void LoadSettings()
     {
-        currentVolume = PlayerPrefs.GetFloat("MasterVolume", defaultVolume);
-        currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
-        currentBrightness = PlayerPrefs.GetFloat("Brightness", defaultBrightness);
+        // settings.db is the main source. PlayerPrefs is only kept as a fallback
+        // for older saves and scripts that still read the legacy values.
+        SettingsData savedSettings;
+        if (SettingsDatabase.TryLoad(out savedSettings))
+        {
+            currentVolume = savedSettings.Volume;
+            currentSensitivity = savedSettings.Sensitivity;
+            currentBrightness = savedSettings.Brightness;
+        }
+        else
+        {
+            currentVolume = PlayerPrefs.GetFloat("MasterVolume", defaultVolume);
+            currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
+            currentBrightness = PlayerPrefs.GetFloat("Brightness", defaultBrightness);
+        }
 
         AudioListener.volume = currentVolume / 100f;
         ApplySensitivity(currentSensitivity);
@@ -376,6 +393,26 @@ public class PauseMenu : MonoBehaviour
 
     void SaveSettings()
     {
+        // Preserve graphics quality and language already stored by SettingsPanel.
+        SettingsData existingSettings;
+        bool hasDatabaseSettings = SettingsDatabase.TryLoad(out existingSettings);
+        int qualityLevel = hasDatabaseSettings
+            ? existingSettings.QualityLevel
+            : PlayerPrefs.GetInt("QualityLevel", QualitySettings.GetQualityLevel());
+        int language = hasDatabaseSettings
+            ? existingSettings.Language
+            : PlayerPrefs.GetInt("GameLanguage", 0);
+
+        SettingsDatabase.Save(new SettingsData
+        {
+            Volume = currentVolume,
+            Sensitivity = currentSensitivity,
+            Brightness = currentBrightness,
+            QualityLevel = qualityLevel,
+            Language = language
+        });
+
+        // Compatibility cache for older scripts.
         PlayerPrefs.SetFloat("MasterVolume", currentVolume);
         PlayerPrefs.SetFloat("MouseSensitivity", currentSensitivity);
         PlayerPrefs.SetFloat("Brightness", currentBrightness);
@@ -405,6 +442,20 @@ public class PauseMenu : MonoBehaviour
         currentBrightness = value;
         UpdateBrightnessLabel(value);
         ApplyBrightness(value);
+    }
+
+    private void RefreshSettingsUi()
+    {
+        if (volumeSlider != null)
+            volumeSlider.SetValueWithoutNotify(currentVolume);
+        if (sensitivitySlider != null)
+            sensitivitySlider.SetValueWithoutNotify(currentSensitivity);
+        if (brightnessSlider != null)
+            brightnessSlider.SetValueWithoutNotify(currentBrightness);
+
+        UpdateVolumeLabel(currentVolume);
+        UpdateSensitivityLabel(currentSensitivity);
+        UpdateBrightnessLabel(currentBrightness);
     }
 
     private void UpdateVolumeLabel(float value)

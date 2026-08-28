@@ -34,29 +34,23 @@ public class AudioManager : MonoBehaviour
 
     public void LoadAndApplySettings()
     {
-        // Load volume
-        if (PlayerPrefs.HasKey("MasterVolume"))
-            currentVolume = PlayerPrefs.GetFloat("MasterVolume");
+        // Use settings.db so this also works when a gameplay scene is launched directly.
+        SettingsData savedSettings;
+        if (SettingsDatabase.TryLoad(out savedSettings))
+        {
+            currentVolume = savedSettings.Volume;
+            currentSensitivity = savedSettings.Sensitivity;
+            currentBrightness = savedSettings.Brightness;
+        }
         else
-            currentVolume = defaultVolume;
-        
-        // Load sensitivity
-        if (PlayerPrefs.HasKey("MouseSensitivity"))
-            currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity");
-        else
-            currentSensitivity = defaultSensitivity;
-        
-        // Load brightness
-        if (PlayerPrefs.HasKey("Brightness"))
-            currentBrightness = PlayerPrefs.GetFloat("Brightness");
-        else
-            currentBrightness = defaultBrightness;
-        
-        // Apply
-        AudioListener.volume = currentVolume / 100f;
-        
-    }
+        {
+            currentVolume = PlayerPrefs.GetFloat("MasterVolume", defaultVolume);
+            currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
+            currentBrightness = PlayerPrefs.GetFloat("Brightness", defaultBrightness);
+        }
 
+        AudioListener.volume = currentVolume / 100f;
+    }
     public float GetVolume()
     {
         return currentVolume;

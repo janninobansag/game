@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using System.Linq;
 using SQLite4Unity3d;
+using UnityEngine.AI;
 using System.Collections.Generic;
 
 public class SaveSystem : MonoBehaviour
@@ -92,6 +93,7 @@ public class SaveSystem : MonoBehaviour
             connection.CreateTable<StaminaData>();
             connection.CreateTable<SubtitleData>();
             connection.CreateTable<IntroData>();
+            connection.CreateTable<AIPositionData>();
 
             // Existing saves created before IsTriggered was added need this column.
             try { connection.Execute("ALTER TABLE SubtitleData ADD COLUMN IsTriggered INTEGER NOT NULL DEFAULT 0"); }
@@ -579,6 +581,8 @@ public class SaveSystem : MonoBehaviour
             }
 
             // ── SAVE INVENTORY ──
+            SaveAIPositions();
+
             connection.DeleteAll<InventoryData>();
             if (Inventory.Instance != null)
             {
@@ -1007,6 +1011,84 @@ public class SaveSystem : MonoBehaviour
         isSaving = false;
     }
 
+    private void SaveAIPositions()
+    {
+        connection.DeleteAll<AIPositionData>();
+
+        string sceneName = SceneManager.GetActiveScene().name;
+        foreach (Component ai in FindSaveableAI())
+        {
+            if (ai == null) continue;
+
+            Transform enemy = ai.transform;
+            connection.Insert(new AIPositionData
+            {
+                AIId = GenerateAIId(ai),
+                SceneName = sceneName,
+                PosX = enemy.position.x,
+                PosY = enemy.position.y,
+                PosZ = enemy.position.z,
+                RotX = enemy.rotation.x,
+                RotY = enemy.rotation.y,
+                RotZ = enemy.rotation.z,
+                RotW = enemy.rotation.w
+            });
+        }
+    }
+
+    private void RestoreAIPositions()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        Dictionary<string, AIPositionData> savedPositions = connection.Table<AIPositionData>()
+            .Where(data => data.SceneName == sceneName)
+            .ToDictionary(data => data.AIId, data => data);
+
+        foreach (Component ai in FindSaveableAI())
+        {
+            if (ai == null) continue;
+
+            AIPositionData savedPosition;
+            if (!savedPositions.TryGetValue(GenerateAIId(ai), out savedPosition))
+                continue;
+
+            Transform enemy = ai.transform;
+            Vector3 position = new Vector3(savedPosition.PosX, savedPosition.PosY, savedPosition.PosZ);
+            Quaternion rotation = new Quaternion(
+                savedPosition.RotX, savedPosition.RotY, savedPosition.RotZ, savedPosition.RotW);
+
+            NavMeshAgent navAgent = enemy.GetComponent<NavMeshAgent>();
+            if (navAgent != null && navAgent.enabled && navAgent.isOnNavMesh)
+                navAgent.Warp(position);
+            else
+                enemy.position = position;
+
+            enemy.rotation = rotation;
+        }
+    }
+
+    private IEnumerable<Component> FindSaveableAI()
+    {
+        foreach (MonsterAI_New ai in Object.FindObjectsOfType<MonsterAI_New>())
+            yield return ai;
+        foreach (MutantAI ai in Object.FindObjectsOfType<MutantAI>())
+            yield return ai;
+        foreach (TikbalangAI ai in Object.FindObjectsOfType<TikbalangAI>())
+            yield return ai;
+    }
+
+    private string GenerateAIId(Component ai)
+    {
+        Transform current = ai.transform;
+        string path = current.name + "[" + current.GetSiblingIndex() + "]";
+
+        while (current.parent != null)
+        {
+            current = current.parent;
+            path = current.name + "[" + current.GetSiblingIndex() + "]/" + path;
+        }
+
+        return ai.GetType().Name + ":" + path;
+    }
     private string GenerateDoorId(DoorInteraction door)
     {
         Vector3 pos = door.transform.position;
@@ -1088,6 +1170,8 @@ public class SaveSystem : MonoBehaviour
             StaminaData staminaData = connection.Table<StaminaData>().FirstOrDefault();
             if (stamina != null && staminaData != null)
                 stamina.RestoreStamina(staminaData.CurrentStamina);
+
+            RestoreAIPositions();
 
             // ── RESTORE DOORS ──
             var doorDataList = connection.Table<DoorData>().ToList();
@@ -2011,6 +2095,8 @@ public class SaveSystem : MonoBehaviour
         try
         {
             connection.DeleteAll<PlayerData>();
+            SaveAIPositions();
+
             connection.DeleteAll<InventoryData>();
             connection.DeleteAll<DoorData>();
             connection.DeleteAll<RitualData>();
@@ -2069,6 +2155,21 @@ public class SaveSystem : MonoBehaviour
 
 // ── SQLITE DATA MODELS ──
 
+[Table("AIPositionData")]
+public class AIPositionData
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public string AIId { get; set; }
+    public string SceneName { get; set; }
+    public float PosX { get; set; }
+    public float PosY { get; set; }
+    public float PosZ { get; set; }
+    public float RotX { get; set; }
+    public float RotY { get; set; }
+    public float RotZ { get; set; }
+    public float RotW { get; set; }
+}
 [Table("PlayerData")]
 public class PlayerData
 {

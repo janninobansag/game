@@ -40,11 +40,9 @@ public static class HardModeForestTerrainGenerator
             return;
         }
 
-        TerrainData normalTerrain = AssetDatabase.LoadAssetAtPath<TerrainData>(NormalTerrainPath);
-        if (normalTerrain == null)
-            normalTerrain = terrain.terrainData;
-
-        TerrainData hardTerrain = GetOrCreateHardTerrain(normalTerrain);
+        // Keep the Terrain Data currently assigned to Chapter 2. Only create a
+        // separate asset if this scene is still using the Chapter 1 terrain asset.
+        TerrainData hardTerrain = GetOrCreateHardTerrain(terrain.terrainData);
         if (hardTerrain == null)
             return;
 
@@ -63,7 +61,6 @@ public static class HardModeForestTerrainGenerator
             EditorUtility.DisplayDialog("Building Clearings Not Found", "The generator could not find all building clearings, so it stopped before changing the terrain.", "OK");
             return;
         }
-        GenerateHeights(hardTerrain, normalTerrain, terrain.transform, protectedAreas);
         PaintForestGround(hardTerrain);
         ConfigureForestAtmosphere();
         PlantForest(hardTerrain, terrain.transform, protectedAreas);
@@ -75,17 +72,23 @@ public static class HardModeForestTerrainGenerator
         EditorUtility.DisplayDialog("Forest Terrain Ready", "The terrain was regenerated with full building clearings. Your Normal terrain asset remains unchanged.", "OK");
     }
 
-    private static TerrainData GetOrCreateHardTerrain(TerrainData normalTerrain)
+    private static TerrainData GetOrCreateHardTerrain(TerrainData currentTerrain)
     {
-        TerrainData existing = AssetDatabase.LoadAssetAtPath<TerrainData>(HardTerrainPath);
-        if (existing != null)
-            return existing;
+        string currentPath = AssetDatabase.GetAssetPath(currentTerrain);
+
+        // Chapter 2 already has independent Terrain Data. Never replace it with
+        // the old generated asset or copy Chapter 1's heights over it.
+        if (!string.IsNullOrEmpty(currentPath) && currentPath != NormalTerrainPath)
+            return currentTerrain;
 
         if (!AssetDatabase.IsValidFolder(HardTerrainFolder))
             AssetDatabase.CreateFolder("Assets", "HardMode");
 
-        string sourcePath = AssetDatabase.GetAssetPath(normalTerrain);
-        if (string.IsNullOrEmpty(sourcePath) || !AssetDatabase.CopyAsset(sourcePath, HardTerrainPath))
+        TerrainData existing = AssetDatabase.LoadAssetAtPath<TerrainData>(HardTerrainPath);
+        if (existing != null)
+            return existing;
+
+        if (string.IsNullOrEmpty(currentPath) || !AssetDatabase.CopyAsset(currentPath, HardTerrainPath))
         {
             EditorUtility.DisplayDialog("Could Not Copy Terrain", "Unity could not create the separate Hard Mode terrain asset.", "OK");
             return null;
@@ -93,7 +96,6 @@ public static class HardModeForestTerrainGenerator
 
         return AssetDatabase.LoadAssetAtPath<TerrainData>(HardTerrainPath);
     }
-
     private static List<ProtectedArea> FindProtectedAreas(Transform terrainTransform)
     {
         var roots = new HashSet<Transform>();
@@ -101,7 +103,7 @@ public static class HardModeForestTerrainGenerator
         {
             string name = item.name.ToLowerInvariant();
             bool isBuilding = name == "house 1" || name == "house 2" || name == "house 3" ||
-                              name == "church" || name == "guardhouse" || name.StartsWith("house_prefab");
+                              name == "church" || name == "guardhouse" || name.StartsWith("house_prefab") || name.Contains("mansion");
             if (isBuilding || item.CompareTag("Player"))
                 roots.Add(item);
         }
@@ -141,62 +143,6 @@ public static class HardModeForestTerrainGenerator
         }
 
         return areas;
-    }
-
-private static void GenerateHeights(TerrainData data, TerrainData normalTerrain, Transform terrainTransform, List<ProtectedArea> protectedAreas)
-    {
-        int resolution = data.heightmapResolution;
-        float[,] original = normalTerrain.GetHeights(0, 0, resolution, resolution);
-        float[,] heights = new float[resolution, resolution];
-        Vector3 size = data.size;
-        Vector2[] mountainCenters =
-        {
-            new Vector2(0.12f, 0.18f), new Vector2(0.84f, 0.17f),
-            new Vector2(0.18f, 0.84f), new Vector2(0.83f, 0.82f)
-        };
-        float mountainHeight = Mathf.Clamp(42f / Mathf.Max(1f, size.y), 0.02f, 0.09f);
-        float mountainRadius = 0.16f;
-
-        for (int z = 0; z < resolution; z++)
-        {
-            float nz = z / (float)(resolution - 1);
-            for (int x = 0; x < resolution; x++)
-            {
-                float nx = x / (float)(resolution - 1);
-                float mountain = 0f;
-                foreach (Vector2 center in mountainCenters)
-                {
-                    float distance = Vector2.Distance(new Vector2(nx, nz), center);
-                    mountain += Mathf.Exp(-(distance * distance) / (2f * mountainRadius * mountainRadius)) * mountainHeight;
-                }
-                float detail = (Mathf.PerlinNoise(nx * 7f + 19f, nz * 7f + 37f) - 0.5f) * 0.006f;
-                heights[z, x] = Mathf.Clamp01(original[z, x] + mountain + detail);
-            }
-        }
-
-        // Restore the original height under the complete footprint of every important building.
-        foreach (ProtectedArea area in protectedAreas)
-        {
-            Vector3 local = terrainTransform.InverseTransformPoint(area.center);
-            int centerX = Mathf.RoundToInt(Mathf.Clamp01(local.x / size.x) * (resolution - 1));
-            int centerZ = Mathf.RoundToInt(Mathf.Clamp01(local.z / size.z) * (resolution - 1));
-            int extentX = Mathf.CeilToInt(area.halfSize.x / size.x * (resolution - 1));
-            int extentZ = Mathf.CeilToInt(area.halfSize.y / size.z * (resolution - 1));
-
-            for (int z = Mathf.Max(0, centerZ - extentZ); z <= Mathf.Min(resolution - 1, centerZ + extentZ); z++)
-            {
-                for (int x = Mathf.Max(0, centerX - extentX); x <= Mathf.Min(resolution - 1, centerX + extentX); x++)
-                {
-                    float dx = ((x / (float)(resolution - 1) * size.x) - local.x) / area.halfSize.x;
-                    float dz = ((z / (float)(resolution - 1) * size.z) - local.z) / area.halfSize.y;
-                    float distance = Mathf.Sqrt(dx * dx + dz * dz);
-                    float blend = 1f - Mathf.SmoothStep(0.68f, 1f, distance);
-                    heights[z, x] = Mathf.Lerp(heights[z, x], original[z, x], blend);
-                }
-            }
-        }
-
-        data.SetHeights(0, 0, heights);
     }
 
     private static void ConfigureForestAtmosphere()
