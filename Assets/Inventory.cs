@@ -404,6 +404,14 @@ public class Inventory : MonoBehaviour
             SetItemHeld(items[selectedIndex], true);
     }
 
+    public void RemoveWithoutDestroy(GameObject item)
+    {
+        int index = items.IndexOf(item);
+        if (index < 0) return;
+        items.RemoveAt(index);
+        selectedIndex = items.Count > 0 ? Mathf.Min(index, items.Count - 1) : -1;
+        if (selectedIndex >= 0) SetItemHeld(items[selectedIndex], true);
+    }
     public void RemoveItem(GameObject item)
     {
         if (item == null) return;

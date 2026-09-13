@@ -15,9 +15,6 @@ public class SaveSystem : MonoBehaviour
     public string saveFileName = "gameSave.db";
     public bool autoSaveOnQuit = true;
 
-    [Header("Gas Database Debug - Chapter 2 Only")]
-    [Tooltip("Prints Gas save/load details in the Unity Console.")]
-    [SerializeField] private bool debugGasDatabase = true;
     private const string GasRecordId = "Gas";
 
     private string savePath;
@@ -215,6 +212,18 @@ public class SaveSystem : MonoBehaviour
         {
             return false;
         }
+    }
+    public void ClearGeneratorState(string saveId)
+    {
+        if (string.IsNullOrEmpty(saveId)) return;
+        EnsureDatabaseReady();
+        if (!isDatabaseReady) return;
+        try
+        {
+            GeneratorCoverData data = connection.Table<GeneratorCoverData>().Where(item => item.CoverId == saveId).FirstOrDefault();
+            if (data != null) connection.Delete(data);
+        }
+        catch (System.Exception) { }
     }
     public void MarkKeyAsUsed(string keyName)
     {
@@ -1189,27 +1198,13 @@ public class SaveSystem : MonoBehaviour
                pickup.gameObject.scene == SceneManager.GetActiveScene();
     }
 
-    private void LogGasDatabase(string stage)
-    {
-        if (!debugGasDatabase) return;
-
-        PickupItem[] gasObjects = Resources.FindObjectsOfTypeAll<PickupItem>().Where(IsGas).ToArray();
-        string details = string.Join("\n", gasObjects.Select(g =>
-            $"  name={g.name}, scene={g.gameObject.scene.name}, enabled={g.enabled}, hidden={g.gameObject.hideFlags}, " +
-            $"held={g.isHeld}, dropped={g.wasDropped}, pos={g.transform.position}, parent=" +
-            (g.transform.parent != null ? g.transform.parent.name : "none")));
-        Debug.Log($"[Gas DB Debug] {stage} | Gas objects found: {gasObjects.Length}\n{details}", this);
-    }
-
     private void SaveGasState()
     {
-        LogGasDatabase("Before saving GasData");
         connection.DeleteAll<GasData>();
 
         PickupItem gas = Object.FindObjectsOfType<PickupItem>(true).FirstOrDefault(IsActiveSceneGas);
         if (gas == null)
         {
-            Debug.LogWarning("[Gas DB Debug] No enabled Gas was found in the active scene. GasData was not saved.", this);
             return;
         }
 
@@ -1220,24 +1215,20 @@ public class SaveSystem : MonoBehaviour
             PosX = item.position.x, PosY = item.position.y, PosZ = item.position.z,
             RotX = item.rotation.x, RotY = item.rotation.y, RotZ = item.rotation.z, RotW = item.rotation.w
         });
-        Debug.Log($"[Gas DB Debug] Saved GasData: id={GasRecordId}, held={gas.isHeld}, dropped={gas.wasDropped}, pos={item.position}.", this);
     }
 
     private void RestoreGasState()
     {
-        LogGasDatabase("Before restoring GasData");
         GasData savedGas = connection.Table<GasData>().FirstOrDefault(g => g.GasId == GasRecordId) ??
                            connection.Table<GasData>().FirstOrDefault(g => g.GasId == "Chapter2Gas");
         if (savedGas == null)
         {
-            Debug.Log("[Gas DB Debug] No GasData row exists yet.", this);
             return;
         }
 
         PickupItem gas = Resources.FindObjectsOfTypeAll<PickupItem>().FirstOrDefault(IsActiveSceneGas);
         if (gas == null)
         {
-            Debug.LogWarning("[Gas DB Debug] GasData exists, but no enabled Gas was found in the active scene.", this);
             return;
         }
 
@@ -1252,7 +1243,6 @@ public class SaveSystem : MonoBehaviour
         gas.ResetItem();
         gas.wasDropped = true;
         gas.isHeld = false;
-        LogGasDatabase("After restoring dropped GasData");
     }
     private void SaveAIPositions()
     {
