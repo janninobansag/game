@@ -28,6 +28,7 @@ public class RitualManager : MonoBehaviour
 
     private bool ritualComplete = false;
     private bool checkingRitual = false;
+    private bool candleLightsTurnedOff = false;
     private AudioSource audioSource;
 
     void Start()
@@ -41,11 +42,33 @@ public class RitualManager : MonoBehaviour
     {
         if (ritualComplete) return;
 
+        // The four ritual candles go out as soon as both required candles are placed.
+        // The Bible and Cross are still required for the later ritual/enemy sequence.
+        if (!candleLightsTurnedOff && BothCandlesPlaced())
+        {
+            candleLightsTurnedOff = true;
+            StartCoroutine(TurnOffCandleLightsAfterDelay());
+        }
+
         if (AllItemsPlaced() && !checkingRitual)
         {
             checkingRitual = true;
             StartCoroutine(RitualSequence());
         }
+    }
+
+    bool BothCandlesPlaced()
+    {
+        return candleHolder1 != null && candleHolder1.HasCandle() &&
+               candleHolder2 != null && candleHolder2.HasCandle();
+    }
+
+    IEnumerator TurnOffCandleLightsAfterDelay()
+    {
+        if (delayBeforeLightsOff > 0f)
+            yield return new WaitForSeconds(delayBeforeLightsOff);
+
+        yield return StartCoroutine(FadeOutAllLights());
     }
 
     bool AllItemsPlaced()
@@ -73,8 +96,13 @@ public class RitualManager : MonoBehaviour
         if (ritualCompleteSound != null)
             audioSource.PlayOneShot(ritualCompleteSound);
 
-        // Fade out all candle lights
-        StartCoroutine(FadeOutAllLights());
+        // The lights already go out after the two candles are placed. This fallback
+        // keeps the ritual safe if a scene has no candle holders assigned.
+        if (!candleLightsTurnedOff)
+        {
+            candleLightsTurnedOff = true;
+            StartCoroutine(FadeOutAllLights());
+        }
 
         // Trigger objective
         if (objectiveTrigger != null)

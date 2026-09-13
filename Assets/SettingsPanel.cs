@@ -544,7 +544,10 @@ public class SettingsPanel : MonoBehaviour
     private void ApplyBrightness(float value)
     {
         RenderSettings.ambientIntensity = value;
-        RenderSettings.reflectionIntensity = value;
+
+        // Reflections are disabled in Medium and High to keep the game performant.
+        // Low can still use the brightness-controlled reflection intensity.
+        RenderSettings.reflectionIntensity = QualitySettings.GetQualityLevel() >= 1 ? 0f : value;
     }
 
     private void PlayClickSound()

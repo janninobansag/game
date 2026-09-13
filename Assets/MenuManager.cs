@@ -206,7 +206,7 @@ public class MenuManager : MonoBehaviour
                 return Mathf.RoundToInt(percent);
             }
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
         }
 
@@ -355,6 +355,7 @@ public class MenuManager : MonoBehaviour
         if (SaveSystem.Instance != null)
         {
             SaveSystem.Instance.ReinitializeDatabase();
+            SaveSystem.Instance.ClearNewGameWorldState();
             SaveSystem.Instance.ClearProgressionData();
             SaveSystem.Instance.ClearStoryIntroData();
             SaveSystem.Instance.ClearSubtitleData();
@@ -406,6 +407,7 @@ public class MenuManager : MonoBehaviour
         if (SaveSystem.Instance != null)
         {
             SaveSystem.Instance.ReinitializeDatabase();
+            SaveSystem.Instance.ClearNewGameWorldState();
             SaveSystem.Instance.ClearProgressionData();
             SaveSystem.Instance.ClearStoryIntroData();
             SaveSystem.Instance.ClearSubtitleData();
@@ -429,10 +431,23 @@ public class MenuManager : MonoBehaviour
         {
             using (var connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite))
             {
+                connection.CreateTable<AIPositionData>();
                 connection.DeleteAll<ProgressionData>();
+                connection.DeleteAll<AIPositionData>();
+                connection.DeleteAll<DroppedItemData>();
+
+                if (fileName == "gameSave_Hard.db")
+                {
+                    connection.CreateTable<WrenchData>();
+                    connection.CreateTable<GeneratorCoverData>();
+                    connection.CreateTable<GasData>();
+                    connection.DeleteAll<WrenchData>();
+                    connection.DeleteAll<GeneratorCoverData>();
+                    connection.DeleteAll<GasData>();
+                }
             }
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
         }
     }

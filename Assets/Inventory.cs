@@ -67,6 +67,9 @@ public class Inventory : MonoBehaviour
 
         CandleItem ci = item.GetComponent<CandleItem>();
         if (ci != null) ci.SetHeld(held);
+        PickupItem pickupItem = item.GetComponent<PickupItem>();
+        if (pickupItem != null)
+            pickupItem.isHeld = held;
 
         // ── NEW: Update BatteryPickup isHeld state ──
         BatteryPickup bp = item.GetComponent<BatteryPickup>();
@@ -131,6 +134,8 @@ public class Inventory : MonoBehaviour
         if (pickup != null)
         {
             pickup.itemName = cleanName;
+            pickup.isPickedUp = true;
+            pickup.wasDropped = false;
         }
 
         Key key = item.GetComponent<Key>();
@@ -230,6 +235,14 @@ public class Inventory : MonoBehaviour
                     fpNew.wasDropped = true;
                     fpNew.SetHeld(false);
                 }
+                PickupItem droppedPickup = droppedItem.GetComponent<PickupItem>();
+                if (droppedPickup != null)
+                {
+                    droppedPickup.isPickedUp = false;
+                    droppedPickup.isHeld = false;
+                    droppedPickup.wasDropped = true;
+                }
+
 
                 BatteryPickup bpNew = droppedItem.GetComponent<BatteryPickup>();
                 if (bpNew != null)
@@ -311,7 +324,12 @@ public class Inventory : MonoBehaviour
         }
 
         PickupItem pi = item.GetComponent<PickupItem>();
-        if (pi != null) pi.ResetItem();
+        if (pi != null)
+        {
+            pi.ResetItem();
+            pi.isHeld = false;
+            pi.wasDropped = true;
+        }
 
         BatteryPickup bp = item.GetComponent<BatteryPickup>();
         if (bp != null)

@@ -211,6 +211,8 @@ MonoBehaviour:
   heldPositionOffset: {x: 0.3, y: -0.2, z: 0.5}
   heldRotation: {x: 90, y: 0, z: 0}
   isPickedUp: 0
+  isHeld: 0
+  wasDropped: 0
 --- !u!114 &473504567831199772
 MonoBehaviour:
   m_ObjectHideFlags: 0
