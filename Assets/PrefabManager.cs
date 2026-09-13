@@ -168,6 +168,8 @@ public class PrefabManager : MonoBehaviour
             if (pickup != null)
             {
                 pickup.isPickedUp = false;
+                pickup.isHeld = false;
+                pickup.wasDropped = true;
             }
 
             foreach (Collider c in newItem.GetComponentsInChildren<Collider>())

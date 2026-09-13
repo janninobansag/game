@@ -10,8 +10,39 @@ public class PickupItem : MonoBehaviour
     public Vector3 heldRotation = new Vector3(90f, 0f, 0f);
 
     public bool isPickedUp = false;
+    public bool isHeld = false;
+    public bool wasDropped = false;
     private bool showPrompt = false;
     private Camera playerCamera;
+
+    private static readonly Vector3 GasHeldPosition = new Vector3(0.42f, -0.55f, 1.35f);
+    private static readonly Vector3 GasHeldRotation = new Vector3(90f, 0f, 0f);
+
+    void Awake()
+    {
+        ApplyGasHeldPoseIfNeeded();
+    }
+
+    void OnValidate()
+    {
+        ApplyGasHeldPoseIfNeeded();
+    }
+
+    private void ApplyGasHeldPoseIfNeeded()
+    {
+        // Gas exists only in Chapter 2. Replace the generic small-item pose once,
+        // while still allowing a manually customized pose to be kept.
+        if (!string.Equals(itemName, "Gas", System.StringComparison.OrdinalIgnoreCase))
+            return;
+
+        Vector3 genericPosition = new Vector3(0.3f, -0.2f, 0.5f);
+        Vector3 genericRotation = new Vector3(90f, 0f, 0f);
+        if (heldPositionOffset == genericPosition && heldRotation == genericRotation)
+        {
+            heldPositionOffset = GasHeldPosition;
+            heldRotation = GasHeldRotation;
+        }
+    }
 
     void Start()
     {
@@ -52,6 +83,8 @@ public class PickupItem : MonoBehaviour
             RemoveGlowLight();
 
             isPickedUp = true;
+            isHeld = true;
+            wasDropped = false;
             showPrompt = false;
 
             FlashlightPickup flashlight = GetComponent<FlashlightPickup>();
@@ -91,6 +124,7 @@ public class PickupItem : MonoBehaviour
     public void ResetItem()
     {
         isPickedUp = false;
+        isHeld = false;
         
         RemoveGlowLight();
         

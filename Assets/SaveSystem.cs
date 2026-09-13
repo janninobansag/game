@@ -15,6 +15,11 @@ public class SaveSystem : MonoBehaviour
     public string saveFileName = "gameSave.db";
     public bool autoSaveOnQuit = true;
 
+    [Header("Gas Database Debug - Chapter 2 Only")]
+    [Tooltip("Prints Gas save/load details in the Unity Console.")]
+    [SerializeField] private bool debugGasDatabase = true;
+    private const string GasRecordId = "Gas";
+
     private string savePath;
     private bool isLoading = false;
     private bool isSaving = false;
@@ -42,6 +47,11 @@ public class SaveSystem : MonoBehaviour
         }
 
         return PlayerPrefs.GetString("GameDifficulty", "Normal");
+    }
+
+    private bool IsHardModeDatabase()
+    {
+        return GetCurrentDifficulty() == "Hard";
     }
 
     void Awake()
@@ -95,11 +105,30 @@ public class SaveSystem : MonoBehaviour
             connection.CreateTable<IntroData>();
             connection.CreateTable<AIPositionData>();
 
+            if (IsHardModeDatabase())
+            {
+                connection.CreateTable<GeneratorCoverData>();
+                connection.CreateTable<WrenchData>();
+                connection.CreateTable<GasData>();
+            }
+            else
+            {
+                // These systems exist only in Chapter 2 Hard mode.
+                connection.Execute("DROP TABLE IF EXISTS GeneratorCoverData");
+                connection.Execute("DROP TABLE IF EXISTS WrenchData");
+                connection.Execute("DROP TABLE IF EXISTS GasData");
+            }
+
             // Existing saves created before IsTriggered was added need this column.
             try { connection.Execute("ALTER TABLE SubtitleData ADD COLUMN IsTriggered INTEGER NOT NULL DEFAULT 0"); }
             catch (System.Exception) { }
             // ── NEW: ProgressionData table ──
             connection.CreateTable<ProgressionData>();
+            // Added fields for generic dropped items. Older databases may already have them.
+            try { connection.Execute("ALTER TABLE DroppedItemData ADD COLUMN IsHeld INTEGER NOT NULL DEFAULT 0"); }
+            catch (System.Exception) { }
+            try { connection.Execute("ALTER TABLE DroppedItemData ADD COLUMN IsDropped INTEGER NOT NULL DEFAULT 1"); }
+            catch (System.Exception) { }
 
             isDatabaseReady = true;
 
@@ -144,6 +173,49 @@ public class SaveSystem : MonoBehaviour
         return PlayerPrefs.GetString("GameDifficulty", "Normal");
     }
 
+    public void MarkGeneratorCoverRemoved(string coverId)
+    {
+        if (string.IsNullOrEmpty(coverId))
+            return;
+
+        EnsureDatabaseReady();
+        if (!isDatabaseReady)
+            return;
+
+        try
+        {
+            connection.InsertOrReplace(new GeneratorCoverData
+            {
+                CoverId = coverId,
+                IsRemoved = true
+            });
+        }
+        catch (System.Exception)
+        {
+        }
+    }
+
+    public bool IsGeneratorCoverRemoved(string coverId)
+    {
+        if (string.IsNullOrEmpty(coverId))
+            return false;
+
+        EnsureDatabaseReady();
+        if (!isDatabaseReady)
+            return false;
+
+        try
+        {
+            GeneratorCoverData data = connection.Table<GeneratorCoverData>()
+                .Where(item => item.CoverId == coverId)
+                .FirstOrDefault();
+            return data != null && data.IsRemoved;
+        }
+        catch (System.Exception)
+        {
+            return false;
+        }
+    }
     public void MarkKeyAsUsed(string keyName)
     {
         EnsureDatabaseReady();
@@ -519,7 +591,7 @@ public class SaveSystem : MonoBehaviour
     {
         EnsureDatabaseReady();
         
-        if (isSaving || isQuitting) return;
+        if (isSaving) return;
 
         if (!isDatabaseReady)
         {
@@ -582,6 +654,11 @@ public class SaveSystem : MonoBehaviour
 
             // ── SAVE INVENTORY ──
             SaveAIPositions();
+            if (IsHardModeDatabase())
+            {
+                SaveWrenchState();
+                SaveGasState();
+            }
 
             connection.DeleteAll<InventoryData>();
             if (Inventory.Instance != null)
@@ -918,6 +995,13 @@ public class SaveSystem : MonoBehaviour
                 bool isDropped = false;
                 string cleanName = obj.name.Replace("(Clone)", "");
 
+                // Gas has its own Chapter 2 save record. Keeping it out of the
+                // generic drop table prevents the loader from making a second can.
+                if (IsHardModeDatabase() && pickup != null && IsGas(pickup))
+                {
+                    continue;
+                }
+
                 if (inventoryItemNames.Contains(cleanName))
                 {
                     continue;
@@ -956,6 +1040,11 @@ public class SaveSystem : MonoBehaviour
                     isDropped = true;
                 }
 
+                if (pickup != null && pickup.wasDropped && !pickup.isPickedUp)
+                {
+                    isDropped = true;
+                }
+
                 if (flashlight != null && flashlight.wasDropped)
                 {
                     bool isHeld = obj.transform.parent != null && obj.transform.parent.CompareTag("Player");
@@ -965,7 +1054,7 @@ public class SaveSystem : MonoBehaviour
                     }
                 }
 
-                if (pickup != null && !pickup.isPickedUp && key == null && flashlight == null && battery == null && candle == null)
+                if (pickup != null && !pickup.isPickedUp && !pickup.wasDropped && key == null && flashlight == null && battery == null && candle == null)
                 {
                     continue;
                 }
@@ -975,6 +1064,8 @@ public class SaveSystem : MonoBehaviour
                     DroppedItemData droppedData = new DroppedItemData
                     {
                         ItemName = cleanName,
+                        IsHeld = false,
+                        IsDropped = true,
                         PosX = obj.transform.position.x,
                         PosY = obj.transform.position.y,
                         PosZ = obj.transform.position.z,
@@ -1011,6 +1102,158 @@ public class SaveSystem : MonoBehaviour
         isSaving = false;
     }
 
+    private PickupItem FindScenePickupByName(string itemName)
+    {
+        foreach (PickupItem pickup in Resources.FindObjectsOfTypeAll<PickupItem>())
+        {
+            if (pickup == null || !pickup.enabled ||
+                pickup.gameObject.scene != SceneManager.GetActiveScene() ||
+                pickup.gameObject.hideFlags != HideFlags.None ||
+                pickup.GetComponent<Key>() != null || pickup.GetComponent<FlashlightPickup>() != null ||
+                pickup.GetComponent<BatteryPickup>() != null || pickup.GetComponent<CandleItem>() != null)
+                continue;
+
+            string cleanObjectName = pickup.name.Replace("(Clone)", "");
+            if (pickup.itemName == itemName || cleanObjectName == itemName)
+                return pickup;
+        }
+        return null;
+    }
+    private void SaveWrenchState()
+    {
+        connection.DeleteAll<WrenchData>();
+
+        foreach (PickupItem wrench in Object.FindObjectsOfType<PickupItem>(true))
+        {
+            if (wrench == null || !IsWrench(wrench))
+                continue;
+
+            Transform item = wrench.transform;
+            connection.Insert(new WrenchData
+            {
+                WrenchId = GenerateAIId(wrench),
+                IsHeld = wrench.isHeld,
+                IsDropped = wrench.wasDropped,
+                PosX = item.position.x,
+                PosY = item.position.y,
+                PosZ = item.position.z,
+                RotX = item.rotation.x,
+                RotY = item.rotation.y,
+                RotZ = item.rotation.z,
+                RotW = item.rotation.w
+            });
+        }
+    }
+
+    private void RestoreWrenchState()
+    {
+        foreach (WrenchData savedWrench in connection.Table<WrenchData>().ToList())
+        {
+            foreach (PickupItem wrench in Resources.FindObjectsOfTypeAll<PickupItem>())
+            {
+                if (wrench == null || !wrench.gameObject.scene.IsValid() || GenerateAIId(wrench) != savedWrench.WrenchId)
+                    continue;
+
+                wrench.wasDropped = savedWrench.IsDropped;
+                wrench.isHeld = savedWrench.IsHeld;
+
+                if (savedWrench.IsDropped)
+                {
+                    wrench.transform.position = new Vector3(savedWrench.PosX, savedWrench.PosY, savedWrench.PosZ);
+                    wrench.transform.rotation = new Quaternion(
+                        savedWrench.RotX, savedWrench.RotY, savedWrench.RotZ, savedWrench.RotW);
+                    wrench.ResetItem();
+                    wrench.wasDropped = true;
+                    wrench.isHeld = false;
+                }
+                break;
+            }
+        }
+    }
+    private static bool IsWrench(PickupItem pickup)
+    {
+        return pickup.itemName.ToLowerInvariant().Contains("wrench") ||
+               pickup.name.ToLowerInvariant().Contains("wrench");
+    }
+
+    private static bool IsGas(PickupItem pickup)
+    {
+        return pickup != null && string.Equals(pickup.itemName, "Gas", System.StringComparison.OrdinalIgnoreCase);
+    }
+
+    // Preview models live in DontDestroyOnLoad and have their scripts disabled.
+    // Only the enabled Gas object belonging to the active Chapter 2 scene may be saved or restored.
+    private static bool IsActiveSceneGas(PickupItem pickup)
+    {
+        return IsGas(pickup) && pickup.enabled && pickup.gameObject.hideFlags == HideFlags.None &&
+               pickup.gameObject.scene == SceneManager.GetActiveScene();
+    }
+
+    private void LogGasDatabase(string stage)
+    {
+        if (!debugGasDatabase) return;
+
+        PickupItem[] gasObjects = Resources.FindObjectsOfTypeAll<PickupItem>().Where(IsGas).ToArray();
+        string details = string.Join("\n", gasObjects.Select(g =>
+            $"  name={g.name}, scene={g.gameObject.scene.name}, enabled={g.enabled}, hidden={g.gameObject.hideFlags}, " +
+            $"held={g.isHeld}, dropped={g.wasDropped}, pos={g.transform.position}, parent=" +
+            (g.transform.parent != null ? g.transform.parent.name : "none")));
+        Debug.Log($"[Gas DB Debug] {stage} | Gas objects found: {gasObjects.Length}\n{details}", this);
+    }
+
+    private void SaveGasState()
+    {
+        LogGasDatabase("Before saving GasData");
+        connection.DeleteAll<GasData>();
+
+        PickupItem gas = Object.FindObjectsOfType<PickupItem>(true).FirstOrDefault(IsActiveSceneGas);
+        if (gas == null)
+        {
+            Debug.LogWarning("[Gas DB Debug] No enabled Gas was found in the active scene. GasData was not saved.", this);
+            return;
+        }
+
+        Transform item = gas.transform;
+        connection.Insert(new GasData
+        {
+            GasId = GasRecordId, IsHeld = gas.isHeld, IsDropped = gas.wasDropped,
+            PosX = item.position.x, PosY = item.position.y, PosZ = item.position.z,
+            RotX = item.rotation.x, RotY = item.rotation.y, RotZ = item.rotation.z, RotW = item.rotation.w
+        });
+        Debug.Log($"[Gas DB Debug] Saved GasData: id={GasRecordId}, held={gas.isHeld}, dropped={gas.wasDropped}, pos={item.position}.", this);
+    }
+
+    private void RestoreGasState()
+    {
+        LogGasDatabase("Before restoring GasData");
+        GasData savedGas = connection.Table<GasData>().FirstOrDefault(g => g.GasId == GasRecordId) ??
+                           connection.Table<GasData>().FirstOrDefault(g => g.GasId == "Chapter2Gas");
+        if (savedGas == null)
+        {
+            Debug.Log("[Gas DB Debug] No GasData row exists yet.", this);
+            return;
+        }
+
+        PickupItem gas = Resources.FindObjectsOfTypeAll<PickupItem>().FirstOrDefault(IsActiveSceneGas);
+        if (gas == null)
+        {
+            Debug.LogWarning("[Gas DB Debug] GasData exists, but no enabled Gas was found in the active scene.", this);
+            return;
+        }
+
+        Debug.Log($"[Gas DB Debug] Restoring GasData id={savedGas.GasId} to active-scene Gas at {gas.transform.position}. " +
+                  $"Saved held={savedGas.IsHeld}, dropped={savedGas.IsDropped}, saved position=({savedGas.PosX}, {savedGas.PosY}, {savedGas.PosZ}).", this);
+        gas.wasDropped = savedGas.IsDropped;
+        gas.isHeld = savedGas.IsHeld;
+        if (!savedGas.IsDropped) return;
+
+        gas.transform.position = new Vector3(savedGas.PosX, savedGas.PosY, savedGas.PosZ);
+        gas.transform.rotation = new Quaternion(savedGas.RotX, savedGas.RotY, savedGas.RotZ, savedGas.RotW);
+        gas.ResetItem();
+        gas.wasDropped = true;
+        gas.isHeld = false;
+        LogGasDatabase("After restoring dropped GasData");
+    }
     private void SaveAIPositions()
     {
         connection.DeleteAll<AIPositionData>();
@@ -1172,6 +1415,11 @@ public class SaveSystem : MonoBehaviour
                 stamina.RestoreStamina(staminaData.CurrentStamina);
 
             RestoreAIPositions();
+            if (IsHardModeDatabase())
+            {
+                RestoreWrenchState();
+                RestoreGasState();
+            }
 
             // ── RESTORE DOORS ──
             var doorDataList = connection.Table<DoorData>().ToList();
@@ -1242,13 +1490,18 @@ public class SaveSystem : MonoBehaviour
 
             // ── Get data from database ──
             var inventoryItems = connection.Table<InventoryData>().ToList();
-            List<string> inventoryItemNames = new List<string>();
+List<string> inventoryItemNames = new List<string>();
             foreach (InventoryData invData in inventoryItems)
             {
                 inventoryItemNames.Add(invData.ItemName);
             }
 
             var droppedItems = connection.Table<DroppedItemData>().ToList();
+            // Gas uses the dedicated Hard-mode table, not a generic drop record.
+            if (IsHardModeDatabase())
+            {
+                droppedItems.RemoveAll(item => string.Equals(item.ItemName, "Gas", System.StringComparison.OrdinalIgnoreCase));
+            }
             List<string> droppedItemNames = new List<string>();
             foreach (DroppedItemData droppedData in droppedItems)
             {
@@ -1609,7 +1862,14 @@ public class SaveSystem : MonoBehaviour
                 {
                     bool isDroppedVersion = false;
 
-                    if (key != null && key.wasDropped && !key.IsPickedUp)
+                    // Hard Mode special pickups restore their original scene object.
+                    // Do not destroy them before their saved dropped state is applied.
+                    if (pickup != null && pickup.wasDropped && !pickup.isPickedUp &&
+                        IsHardModeDatabase() && IsWrench(pickup))
+                    {
+                        isDroppedVersion = true;
+                    }
+                    else if (key != null && key.wasDropped && !key.IsPickedUp)
                     {
                         isDroppedVersion = true;
                     }
@@ -1897,11 +2157,22 @@ public class SaveSystem : MonoBehaviour
                     continue;
                 }
 
+                Vector3 position = new Vector3(droppedData.PosX, droppedData.PosY, droppedData.PosZ);
+                Quaternion rotation = new Quaternion(droppedData.RotX, droppedData.RotY, droppedData.RotZ, droppedData.RotW);
+
+                PickupItem scenePickup = FindScenePickupByName(droppedData.ItemName);
+                if (scenePickup != null)
+                {
+                    scenePickup.transform.position = position;
+                    scenePickup.transform.rotation = rotation;
+                    scenePickup.ResetItem();
+                    scenePickup.wasDropped = true;
+                    scenePickup.isHeld = false;
+                    continue;
+                }
+
                 if (PrefabManager.Instance != null)
                 {
-                    Vector3 position = new Vector3(droppedData.PosX, droppedData.PosY, droppedData.PosZ);
-                    Quaternion rotation = new Quaternion(droppedData.RotX, droppedData.RotY, droppedData.RotZ, droppedData.RotW);
-
                     GameObject spawnedItem = PrefabManager.Instance.SpawnDroppedItem(droppedData.ItemName, position, rotation);
 
                     if (spawnedItem != null)
@@ -1972,6 +2243,29 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
+    public void ClearNewGameWorldState()
+    {
+        EnsureDatabaseReady();
+        if (!isDatabaseReady)
+            return;
+
+        try
+        {
+            connection.DeleteAll<AIPositionData>();
+            connection.DeleteAll<DroppedItemData>();
+
+            if (IsHardModeDatabase())
+            {
+                connection.DeleteAll<WrenchData>();
+                connection.DeleteAll<GeneratorCoverData>();
+                connection.DeleteAll<GasData>();
+            }
+            connection.DeleteAll<GeneratorCoverData>();
+        }
+        catch (System.Exception)
+        {
+        }
+    }
     public void ClearProgressionData()
     {
         EnsureDatabaseReady();
@@ -2095,7 +2389,13 @@ public class SaveSystem : MonoBehaviour
         try
         {
             connection.DeleteAll<PlayerData>();
-            SaveAIPositions();
+            connection.DeleteAll<AIPositionData>();
+            if (IsHardModeDatabase())
+            {
+                connection.DeleteAll<WrenchData>();
+                connection.DeleteAll<GeneratorCoverData>();
+                connection.DeleteAll<GasData>();
+            }
 
             connection.DeleteAll<InventoryData>();
             connection.DeleteAll<DoorData>();
@@ -2154,7 +2454,43 @@ public class SaveSystem : MonoBehaviour
 }
 
 // ── SQLITE DATA MODELS ──
-
+[Table("WrenchData")]
+public class WrenchData
+{
+    [PrimaryKey]
+    public string WrenchId { get; set; }
+    public bool IsHeld { get; set; }
+    public bool IsDropped { get; set; }
+    public float PosX { get; set; }
+    public float PosY { get; set; }
+    public float PosZ { get; set; }
+    public float RotX { get; set; }
+    public float RotY { get; set; }
+    public float RotZ { get; set; }
+    public float RotW { get; set; }
+}
+[Table("GasData")]
+public class GasData
+{
+    [PrimaryKey]
+    public string GasId { get; set; }
+    public bool IsHeld { get; set; }
+    public bool IsDropped { get; set; }
+    public float PosX { get; set; }
+    public float PosY { get; set; }
+    public float PosZ { get; set; }
+    public float RotX { get; set; }
+    public float RotY { get; set; }
+    public float RotZ { get; set; }
+    public float RotW { get; set; }
+}
+[Table("GeneratorCoverData")]
+public class GeneratorCoverData
+{
+    [PrimaryKey]
+    public string CoverId { get; set; }
+    public bool IsRemoved { get; set; }
+}
 [Table("AIPositionData")]
 public class AIPositionData
 {
@@ -2245,6 +2581,8 @@ public class DroppedItemData
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
     public string ItemName { get; set; }
+    public bool IsHeld { get; set; }
+    public bool IsDropped { get; set; }
     public float PosX { get; set; }
     public float PosY { get; set; }
     public float PosZ { get; set; }
