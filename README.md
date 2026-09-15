@@ -70,6 +70,7 @@ Then use **File -> Build Settings**, choose the platform, click **Switch Platfor
 
 - [Game Story](Assets/Documentation/GAME%20STORY.md)
 - [Database Guide](Assets/Documentation/DATABASE_README.md)
+- [Database Design](Assets/Documentation/DATABASE_DESIGN.md)
 - [Normal Mode ERD](Assets/Documentation/CHAPTER_1_DATABASE_ERD.dbml)
 - [Hard Mode ERD](Assets/Documentation/DATABASE_ERD.dbml)
 - [Settings ERD](Assets/Documentation/SETTINGS_DATABASE_ERD.dbml)
