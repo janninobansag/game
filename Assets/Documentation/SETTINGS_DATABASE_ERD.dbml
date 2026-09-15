@@ -1,0 +1,12 @@
+// VAREN settings database ERD: settings.db
+// Paste this file into https://dbdiagram.io to view the diagram.
+// Source: Assets/SettingsDatabase.cs
+
+Table SettingsData {
+  Id integer [pk, note: 'Always saved as 1; the game stores one settings row']
+  Volume float
+  Sensitivity float
+  Brightness float
+  QualityLevel integer
+  Language integer
+}

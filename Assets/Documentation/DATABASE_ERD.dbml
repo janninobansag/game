@@ -1,0 +1,189 @@
+// VAREN Chapter 2 Hard save database ERD: gameSave_Hard.db
+// Paste this file into https://dbdiagram.io to view the diagram.
+// Source: Assets/SaveSystem.cs
+//
+// Important: the SQLite database currently has no declared foreign keys.
+// The "logical relationship" notes in DATABASE_SCHEMA.md describe how
+// game systems match rows using names, IDs, and the current scene.
+
+Table PlayerData {
+  Id integer [pk, increment]
+  PosX float
+  PosY float
+  PosZ float
+  RotX float
+  RotY float
+  RotZ float
+  RotW float
+  Health float
+  MaxHealth float
+  Sensitivity float
+  CurrentScene varchar
+}
+
+Table InventoryData {
+  Id integer [pk, increment]
+  ItemName varchar
+  Quantity integer
+  IsEquipped boolean
+}
+
+Table DoorData {
+  Id integer [pk, increment]
+  DoorId varchar
+  DoorName varchar
+  IsUnlocked boolean
+  IsOpen boolean
+  RotX float
+  RotY float
+  RotZ float
+  RotW float
+}
+
+Table RitualData {
+  Id integer [pk, increment]
+  IsComplete boolean
+}
+
+Table NoteData {
+  Id integer [pk, increment]
+  NoteTitle varchar
+  IsRead boolean
+}
+
+Table GameStateData {
+  Id integer [pk, increment]
+  Key varchar
+  Value varchar
+}
+
+Table DroppedItemData {
+  Id integer [pk, increment]
+  ItemName varchar
+  IsHeld boolean
+  IsDropped boolean
+  PosX float
+  PosY float
+  PosZ float
+  RotX float
+  RotY float
+  RotZ float
+  RotW float
+}
+
+Table FlashlightData {
+  Id integer [pk, increment]
+  FlashlightName varchar
+  BatteryLife float
+  CurrentBattery float
+  IsHeld boolean
+  WasDropped boolean
+  PosX float
+  PosY float
+  PosZ float
+}
+
+Table KeyData {
+  Id integer [pk, increment]
+  KeyName varchar
+  WasUsed boolean
+}
+
+Table BatteryData {
+  Id integer [pk, increment]
+  BatteryName varchar
+  RechargeAmount float
+  IsHeld boolean
+  IsDropped boolean
+  IsUsed boolean
+  PosX float
+  PosY float
+  PosZ float
+  RotX float
+  RotY float
+  RotZ float
+  RotW float
+}
+
+Table RitualItemData {
+  Id integer [pk, increment]
+  ItemName varchar
+  IsRevealed boolean
+  IsPlaced boolean
+  IsDropped boolean
+  PosX float
+  PosY float
+  PosZ float
+  RotX float
+  RotY float
+  RotZ float
+  RotW float
+}
+
+Table ProgressionData {
+  Id integer [pk, increment]
+  ProgressValue integer
+  TotalPoints integer
+}
+
+Table SubtitleData {
+  SubtitleId varchar [pk]
+  IsTriggered boolean
+}
+
+Table StaminaData {
+  Id integer [pk, increment]
+  CurrentStamina float
+}
+
+Table IntroData {
+  Id integer [pk]
+  SectionIndex integer
+  LineIndex integer
+  IsComplete boolean
+}
+
+Table AIPositionData {
+  Id integer [pk, increment]
+  AIId varchar
+  SceneName varchar
+  PosX float
+  PosY float
+  PosZ float
+  RotX float
+  RotY float
+  RotZ float
+  RotW float
+}
+
+// Chapter 2 Hard Mode only
+Table WrenchData {
+  WrenchId varchar [pk]
+  IsHeld boolean
+  IsDropped boolean
+  PosX float
+  PosY float
+  PosZ float
+  RotX float
+  RotY float
+  RotZ float
+  RotW float
+}
+
+Table GasData {
+  GasId varchar [pk]
+  IsHeld boolean
+  IsDropped boolean
+  PosX float
+  PosY float
+  PosZ float
+  RotX float
+  RotY float
+  RotZ float
+  RotW float
+}
+
+Table GeneratorCoverData {
+  CoverId varchar [pk]
+  IsRemoved boolean
+}
