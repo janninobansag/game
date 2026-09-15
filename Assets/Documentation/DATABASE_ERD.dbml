@@ -1,4 +1,4 @@
-// VAREN Chapter 2 Hard save database ERD: gameSave_Hard.db
+// VAREN Chapter 2 Hard save database ERD: gameSave_Hard_v2.db
 // Paste this file into https://dbdiagram.io to view the diagram.
 // Source: Assets/SaveSystem.cs
 //
@@ -6,8 +6,16 @@
 // The "logical relationship" notes in DATABASE_SCHEMA.md describe how
 // game systems match rows using names, IDs, and the current scene.
 
+Table SaveProfileData {
+  Id integer [pk]
+  SaveName varchar
+  Difficulty varchar
+  SchemaVersion integer
+}
+
 Table PlayerData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   PosX float
   PosY float
   PosZ float
@@ -23,6 +31,7 @@ Table PlayerData {
 
 Table InventoryData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   ItemName varchar
   Quantity integer
   IsEquipped boolean
@@ -30,6 +39,7 @@ Table InventoryData {
 
 Table DoorData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   DoorId varchar
   DoorName varchar
   IsUnlocked boolean
@@ -42,23 +52,27 @@ Table DoorData {
 
 Table RitualData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   IsComplete boolean
 }
 
 Table NoteData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   NoteTitle varchar
   IsRead boolean
 }
 
 Table GameStateData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   Key varchar
   Value varchar
 }
 
 Table DroppedItemData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   ItemName varchar
   IsHeld boolean
   IsDropped boolean
@@ -73,9 +87,11 @@ Table DroppedItemData {
 
 Table FlashlightData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   FlashlightName varchar
   BatteryLife float
   CurrentBattery float
+  IsOn boolean
   IsHeld boolean
   WasDropped boolean
   PosX float
@@ -85,12 +101,14 @@ Table FlashlightData {
 
 Table KeyData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   KeyName varchar
   WasUsed boolean
 }
 
 Table BatteryData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   BatteryName varchar
   RechargeAmount float
   IsHeld boolean
@@ -107,6 +125,7 @@ Table BatteryData {
 
 Table RitualItemData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   ItemName varchar
   IsRevealed boolean
   IsPlaced boolean
@@ -122,22 +141,26 @@ Table RitualItemData {
 
 Table ProgressionData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   ProgressValue integer
   TotalPoints integer
 }
 
 Table SubtitleData {
   SubtitleId varchar [pk]
+  SaveProfileId integer [not null]
   IsTriggered boolean
 }
 
 Table StaminaData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   CurrentStamina float
 }
 
 Table IntroData {
   Id integer [pk]
+  SaveProfileId integer [not null]
   SectionIndex integer
   LineIndex integer
   IsComplete boolean
@@ -145,6 +168,7 @@ Table IntroData {
 
 Table AIPositionData {
   Id integer [pk, increment]
+  SaveProfileId integer [not null]
   AIId varchar
   SceneName varchar
   PosX float
@@ -159,6 +183,7 @@ Table AIPositionData {
 // Chapter 2 Hard Mode only
 Table WrenchData {
   WrenchId varchar [pk]
+  SaveProfileId integer [not null]
   IsHeld boolean
   IsDropped boolean
   PosX float
@@ -172,6 +197,7 @@ Table WrenchData {
 
 Table GasData {
   GasId varchar [pk]
+  SaveProfileId integer [not null]
   IsHeld boolean
   IsDropped boolean
   PosX float
@@ -185,5 +211,27 @@ Table GasData {
 
 Table GeneratorCoverData {
   CoverId varchar [pk]
+  SaveProfileId integer [not null]
   IsRemoved boolean
 }
+
+// Real foreign-key relationships
+Ref: SaveProfileData.Id < PlayerData.SaveProfileId
+Ref: SaveProfileData.Id < InventoryData.SaveProfileId
+Ref: SaveProfileData.Id < DoorData.SaveProfileId
+Ref: SaveProfileData.Id < RitualData.SaveProfileId
+Ref: SaveProfileData.Id < NoteData.SaveProfileId
+Ref: SaveProfileData.Id < GameStateData.SaveProfileId
+Ref: SaveProfileData.Id < DroppedItemData.SaveProfileId
+Ref: SaveProfileData.Id < FlashlightData.SaveProfileId
+Ref: SaveProfileData.Id < KeyData.SaveProfileId
+Ref: SaveProfileData.Id < BatteryData.SaveProfileId
+Ref: SaveProfileData.Id < RitualItemData.SaveProfileId
+Ref: SaveProfileData.Id < ProgressionData.SaveProfileId
+Ref: SaveProfileData.Id < SubtitleData.SaveProfileId
+Ref: SaveProfileData.Id < StaminaData.SaveProfileId
+Ref: SaveProfileData.Id < IntroData.SaveProfileId
+Ref: SaveProfileData.Id < AIPositionData.SaveProfileId
+Ref: SaveProfileData.Id < WrenchData.SaveProfileId
+Ref: SaveProfileData.Id < GasData.SaveProfileId
+Ref: SaveProfileData.Id < GeneratorCoverData.SaveProfileId

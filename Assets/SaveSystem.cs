@@ -12,7 +12,7 @@ public class SaveSystem : MonoBehaviour
     public static SaveSystem Instance;
 
     [Header("Save Settings")]
-    public string saveFileName = "gameSave.db";
+    public string saveFileName = "gameSave_v2.db";
     public bool autoSaveOnQuit = true;
 
     private const string GasRecordId = "Gas";
@@ -66,7 +66,7 @@ public class SaveSystem : MonoBehaviour
         // ── FIX: Don't create database immediately ──
         // Just set the path based on difficulty, but don't initialize yet
         string difficulty = GetDifficultyForActiveScene();
-        string fileName = difficulty == "Hard" ? "gameSave_Hard.db" : "gameSave.db";
+        string fileName = difficulty == "Hard" ? "gameSave_Hard_v2.db" : "gameSave_v2.db";
         savePath = Path.Combine(Application.persistentDataPath, fileName);
 
         // ── Don't call InitializeDatabase() here ──
@@ -85,6 +85,7 @@ public class SaveSystem : MonoBehaviour
         try
         {
             connection = new SQLiteConnection(savePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
+            RelationalSaveSchema.Create(connection, IsHardModeDatabase());
 
             connection.CreateTable<PlayerData>();
             connection.CreateTable<InventoryData>();
@@ -119,6 +120,8 @@ public class SaveSystem : MonoBehaviour
             // Existing saves created before IsTriggered was added need this column.
             try { connection.Execute("ALTER TABLE SubtitleData ADD COLUMN IsTriggered INTEGER NOT NULL DEFAULT 0"); }
             catch (System.Exception) { }
+            try { connection.Execute("ALTER TABLE FlashlightData ADD COLUMN IsOn INTEGER NOT NULL DEFAULT 0"); }
+            catch (System.Exception) { }
             // ── NEW: ProgressionData table ──
             connection.CreateTable<ProgressionData>();
             // Added fields for generic dropped items. Older databases may already have them.
@@ -136,6 +139,7 @@ public class SaveSystem : MonoBehaviour
         catch (System.Exception e)
         {
             isDatabaseReady = false;
+            Debug.LogError("[SaveSystem] Could not initialize the relational save database at " + savePath + ": " + e.Message);
         }
     }
 
@@ -152,7 +156,7 @@ public class SaveSystem : MonoBehaviour
 
         // ── Use different database files for different difficulties ──
         string difficulty = GetDifficultyForActiveScene();
-        string fileName = difficulty == "Hard" ? "gameSave_Hard.db" : "gameSave.db";
+        string fileName = difficulty == "Hard" ? "gameSave_Hard_v2.db" : "gameSave_v2.db";
         savePath = Path.Combine(Application.persistentDataPath, fileName);
 
         // We'll initialize on the next operation
@@ -645,7 +649,6 @@ public class SaveSystem : MonoBehaviour
                 connection.Insert(playerData);
 
                 connection.DeleteAll<StaminaData>();
-            connection.DeleteAll<SubtitleData>();
                 StaminaController stamina = player.GetComponent<StaminaController>();
                 if (stamina != null && stamina.IsHardMode)
                 {
@@ -860,6 +863,7 @@ public class SaveSystem : MonoBehaviour
                         FlashlightName = flashlight.gameObject.name.Replace("(Clone)", ""),
                         BatteryLife = flashlight.batteryLife,
                         CurrentBattery = flashlight.GetBatteryPercent() * flashlight.batteryLife,
+                        IsOn = flashlight.IsOn,
                         IsHeld = flashlight.gameObject.transform.parent != null && 
                                  flashlight.gameObject.transform.parent.CompareTag("Player"),
                         WasDropped = flashlight.wasDropped,
@@ -926,7 +930,7 @@ public class SaveSystem : MonoBehaviour
             }
 
             // -- SAVE ONE-TIME SUBTITLES --
-            connection.DeleteAll<SubtitleData>();
+            // Keep records already stored for picked-up or destroyed items.
             foreach (ItemSubtitleTrigger trigger in Resources.FindObjectsOfTypeAll<ItemSubtitleTrigger>())
             {
                 if (trigger != null && trigger.gameObject.scene.IsValid() && trigger.HasTriggered())
@@ -2081,10 +2085,11 @@ List<string> inventoryItemNames = new List<string>();
                             var savedFlashlight = flashlightData.FirstOrDefault(f => f.FlashlightName == invData.ItemName);
                             if (savedFlashlight != null)
                             {
-                                flashlight.SetBattery(savedFlashlight.CurrentBattery);
                                 flashlight.batteryLife = savedFlashlight.BatteryLife;
+                                flashlight.SetBattery(savedFlashlight.CurrentBattery);
                             }
                             flashlight.SetHeld(true);
+                            flashlight.SetLightOn(savedFlashlight != null && savedFlashlight.IsOn);
                             flashlight.ResetDroppedState();
                         }
 
@@ -2449,7 +2454,8 @@ public class WrenchData
 {
     [PrimaryKey]
     public string WrenchId { get; set; }
-    public bool IsHeld { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public bool IsHeld { get; set; }
     public bool IsDropped { get; set; }
     public float PosX { get; set; }
     public float PosY { get; set; }
@@ -2464,7 +2470,8 @@ public class GasData
 {
     [PrimaryKey]
     public string GasId { get; set; }
-    public bool IsHeld { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public bool IsHeld { get; set; }
     public bool IsDropped { get; set; }
     public float PosX { get; set; }
     public float PosY { get; set; }
@@ -2479,14 +2486,16 @@ public class GeneratorCoverData
 {
     [PrimaryKey]
     public string CoverId { get; set; }
-    public bool IsRemoved { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public bool IsRemoved { get; set; }
 }
 [Table("AIPositionData")]
 public class AIPositionData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string AIId { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string AIId { get; set; }
     public string SceneName { get; set; }
     public float PosX { get; set; }
     public float PosY { get; set; }
@@ -2501,7 +2510,8 @@ public class PlayerData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public float PosX { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public float PosX { get; set; }
     public float PosY { get; set; }
     public float PosZ { get; set; }
     public float RotX { get; set; }
@@ -2519,7 +2529,8 @@ public class InventoryData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string ItemName { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string ItemName { get; set; }
     public int Quantity { get; set; }
     public bool IsEquipped { get; set; }
 }
@@ -2529,7 +2540,8 @@ public class DoorData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string DoorId { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string DoorId { get; set; }
     public string DoorName { get; set; }
     public bool IsUnlocked { get; set; }
     public bool IsOpen { get; set; }
@@ -2544,7 +2556,8 @@ public class RitualData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public bool IsComplete { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public bool IsComplete { get; set; }
 }
 
 [Table("NoteData")]
@@ -2552,7 +2565,8 @@ public class NoteData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string NoteTitle { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string NoteTitle { get; set; }
     public bool IsRead { get; set; }
 }
 
@@ -2561,7 +2575,8 @@ public class GameStateData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string Key { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string Key { get; set; }
     public string Value { get; set; }
 }
 
@@ -2570,7 +2585,8 @@ public class DroppedItemData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string ItemName { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string ItemName { get; set; }
     public bool IsHeld { get; set; }
     public bool IsDropped { get; set; }
     public float PosX { get; set; }
@@ -2587,9 +2603,11 @@ public class FlashlightData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string FlashlightName { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string FlashlightName { get; set; }
     public float BatteryLife { get; set; }
     public float CurrentBattery { get; set; }
+    public bool IsOn { get; set; }
     public bool IsHeld { get; set; }
     public bool WasDropped { get; set; }
     public float PosX { get; set; }
@@ -2602,7 +2620,8 @@ public class KeyData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string KeyName { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string KeyName { get; set; }
     public bool WasUsed { get; set; }
 }
 
@@ -2611,7 +2630,8 @@ public class BatteryData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string BatteryName { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string BatteryName { get; set; }
     public float RechargeAmount { get; set; }
     public bool IsHeld { get; set; }
     public bool IsDropped { get; set; }
@@ -2630,7 +2650,8 @@ public class RitualItemData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string ItemName { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public string ItemName { get; set; }
     public bool IsRevealed { get; set; }
     public bool IsPlaced { get; set; }
     public bool IsDropped { get; set; }
@@ -2649,7 +2670,8 @@ public class ProgressionData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public int ProgressValue { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public int ProgressValue { get; set; }
     public int TotalPoints { get; set; }
 }
 
@@ -2658,14 +2680,16 @@ public class SubtitleData
 {
     [PrimaryKey]
     public string SubtitleId { get; set; }
-    public bool IsTriggered { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public bool IsTriggered { get; set; }
 }
 [Table("StaminaData")]
 public class StaminaData
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public float CurrentStamina { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public float CurrentStamina { get; set; }
 }
 
 [Table("IntroData")]
@@ -2673,7 +2697,67 @@ public class IntroData
 {
     [PrimaryKey]
     public int Id { get; set; }
-    public int SectionIndex { get; set; }
+        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+public int SectionIndex { get; set; }
     public int LineIndex { get; set; }
     public bool IsComplete { get; set; }
+}
+
+
+/// <summary>
+/// Creates the Version 2 local save schema. Each database file has one save
+/// profile (Id = 1); every game-state table is a child of that profile.
+/// </summary>
+public static class RelationalSaveSchema
+{
+    public const int LocalProfileId = 1;
+    public const int SchemaVersion = 2;
+
+    public static void Create(SQLiteConnection connection, bool isHardMode)
+    {
+        connection.Execute("PRAGMA foreign_keys = ON");
+        connection.Execute("CREATE TABLE IF NOT EXISTS SaveProfileData (" +
+                           "Id INTEGER PRIMARY KEY, " +
+                           "SaveName TEXT NOT NULL, " +
+                           "Difficulty TEXT NOT NULL, " +
+                           "SchemaVersion INTEGER NOT NULL)");
+
+        string difficulty = isHardMode ? "Hard" : "Normal";
+        connection.Execute("INSERT OR IGNORE INTO SaveProfileData " +
+                           "(Id, SaveName, Difficulty, SchemaVersion) VALUES " +
+                           "(1, 'Local Save', '" + difficulty + "', " + SchemaVersion + ")");
+
+        CreateChildTable(connection, "PlayerData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL, Health REAL, MaxHealth REAL, Sensitivity REAL, CurrentScene TEXT");
+        CreateChildTable(connection, "InventoryData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, Quantity INTEGER, IsEquipped INTEGER");
+        CreateChildTable(connection, "DoorData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "DoorId TEXT, DoorName TEXT, IsUnlocked INTEGER, IsOpen INTEGER, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "RitualData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "IsComplete INTEGER");
+        CreateChildTable(connection, "NoteData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "NoteTitle TEXT, IsRead INTEGER");
+        CreateChildTable(connection, "GameStateData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "Key TEXT, Value TEXT");
+        CreateChildTable(connection, "DroppedItemData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, IsHeld INTEGER NOT NULL DEFAULT 0, IsDropped INTEGER NOT NULL DEFAULT 1, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "FlashlightData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "FlashlightName TEXT, BatteryLife REAL, CurrentBattery REAL, IsOn INTEGER NOT NULL DEFAULT 0, IsHeld INTEGER, WasDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL");
+        CreateChildTable(connection, "KeyData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "KeyName TEXT, WasUsed INTEGER");
+        CreateChildTable(connection, "BatteryData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "BatteryName TEXT, RechargeAmount REAL, IsHeld INTEGER, IsDropped INTEGER, IsUsed INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "RitualItemData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, IsRevealed INTEGER, IsPlaced INTEGER, IsDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "ProgressionData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ProgressValue INTEGER, TotalPoints INTEGER");
+        CreateChildTable(connection, "SubtitleData", "SubtitleId TEXT PRIMARY KEY", "IsTriggered INTEGER NOT NULL DEFAULT 0");
+        CreateChildTable(connection, "StaminaData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "CurrentStamina REAL");
+        CreateChildTable(connection, "IntroData", "Id INTEGER PRIMARY KEY", "SectionIndex INTEGER, LineIndex INTEGER, IsComplete INTEGER");
+        CreateChildTable(connection, "AIPositionData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "AIId TEXT, SceneName TEXT, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+
+        if (!isHardMode)
+            return;
+
+        CreateChildTable(connection, "WrenchData", "WrenchId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "GasData", "GasId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "GeneratorCoverData", "CoverId TEXT PRIMARY KEY", "IsRemoved INTEGER");
+    }
+
+    private static void CreateChildTable(SQLiteConnection connection, string tableName, string primaryKey, string columns)
+    {
+        connection.Execute("CREATE TABLE IF NOT EXISTS " + tableName + " (" +
+                           primaryKey + ", " +
+                           "SaveProfileId INTEGER NOT NULL DEFAULT 1, " +
+                           columns + ", " +
+                           "FOREIGN KEY (SaveProfileId) REFERENCES SaveProfileData(Id) ON DELETE CASCADE)");
+    }
 }

@@ -6,8 +6,8 @@ The game uses SQLite database files in Unity's persistent-data folder. These fil
 
 | File | Purpose | Used by |
 | --- | --- | --- |
-| `gameSave.db` | Normal-mode player save | `SaveSystem.cs` |
-| `gameSave_Hard.db` | Hard-mode player save | `SaveSystem.cs` |
+| `gameSave_v2.db` | Normal-mode player save | `SaveSystem.cs` |
+| `gameSave_Hard_v2.db` | Hard-mode player save | `SaveSystem.cs` |
 | `settings.db` | Global menu settings for every difficulty | `SettingsDatabase.cs`, `SettingsPanel.cs` |
 
 `settings.db` is separate so changing menu settings cannot create, overwrite, or damage a Normal or Hard player save.
@@ -38,6 +38,8 @@ Older `PlayerPrefs` values are automatically copied into `SettingsData` the firs
 
 ## Player-save database tables
 
+Each Version 2 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
+
 Normal and Hard modes have the same table structure, but each mode has its own database file.
 
 | Table | What it stores | Main connection |
@@ -63,7 +65,7 @@ Normal and Hard modes have the same table structure, but each mode has its own d
 Player presses Save / game auto-saves
         -> SaveSystem.SaveGame()
         -> Writes player, inventory, item, ritual, stamina, subtitle, and progression data
-        -> gameSave.db or gameSave_Hard.db
+        -> gameSave_v2.db or gameSave_Hard_v2.db
 
 Player chooses Load Game
         -> MenuManager checks the correct database file and its ProgressionData
@@ -74,6 +76,6 @@ Player chooses Load Game
 ## Important rules
 
 - Do not manually delete individual tables or rows unless you have made a backup first.
-- `gameSave.db` and `gameSave_Hard.db` are different saves. Editing one does not edit the other.`r`n- Starting a New Game clears IntroData and SubtitleData only for the selected difficulty, so the story and one-time subtitles can play again.
+- `gameSave_v2.db` and `gameSave_Hard_v2.db` are different saves. Editing one does not edit the other.`r`n- Starting a New Game clears IntroData and SubtitleData only for the selected difficulty, so the story and one-time subtitles can play again.
 - `settings.db` is global: English, Korean, or Tagalog selection is shared by both difficulties.
 - The visual `SettingsPanel` can be inactive. Keep the separate `Setting pannel cs` manager active so it can load settings.

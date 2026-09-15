@@ -163,6 +163,15 @@ public class FlashlightPickup : MonoBehaviour
             flashlight.transform.rotation = cameraToFollow.transform.rotation;
     }
 
+    public void SetLightOn(bool shouldBeOn)
+    {
+        if (!isInitialized)
+            InitializeFlashlight();
+
+        isOn = shouldBeOn && isHeld && currentBattery > 0f;
+        if (flashlight != null)
+            flashlight.enabled = isOn;
+    }
     public void SetHeld(bool held)
     {
         isHeld = held;
