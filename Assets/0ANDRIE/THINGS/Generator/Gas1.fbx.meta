@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 27b5e5ae82d2e7b4095a414b518c6081
+guid: a593744de315707489b9b12764acf797
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: body
-    second: {fileID: 2100000, guid: b063d2dbf2a29d845b841ae8870ba2ff, type: 2}
+      name: gas body
+    second: {fileID: 2100000, guid: f64242e14eeb6614c9129dc1bf8ac17a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
