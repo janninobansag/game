@@ -142,13 +142,7 @@ public class RitualTree : MonoBehaviour
             mutant = GameObject.FindGameObjectWithTag("Mutant");
 
         if (mutant != null)
-        {
-            MutantAI mutantAI = mutant.GetComponent<MutantAI>();
-            if (mutantAI != null) mutantAI.enabled = false;
-
-            UnityEngine.AI.NavMeshAgent agent = mutant.GetComponent<UnityEngine.AI.NavMeshAgent>();
-            if (agent != null) agent.enabled = false;
-        }
+            StopVarenMovement(mutant);
 
         if (mutant != null)
             StartCoroutine(FadeMutant(mutant));
@@ -206,6 +200,30 @@ public class RitualTree : MonoBehaviour
         }
     }
 
+    // VAREN has used more than one AI controller during development. Stop the
+    // controller and every NavMeshAgent below its prefab so it cannot take one
+    // more movement step after the player completes the held ritual.
+    void StopVarenMovement(GameObject varen)
+    {
+        MutantAI mutantAI = varen.GetComponentInChildren<MutantAI>(true);
+        if (mutantAI != null)
+            mutantAI.enabled = false;
+
+        MonsterAI_New newerMutantAI = varen.GetComponentInChildren<MonsterAI_New>(true);
+        if (newerMutantAI != null)
+            newerMutantAI.enabled = false;
+
+        UnityEngine.AI.NavMeshAgent[] agents = varen.GetComponentsInChildren<UnityEngine.AI.NavMeshAgent>(true);
+        foreach (UnityEngine.AI.NavMeshAgent agent in agents)
+        {
+            if (agent == null || !agent.enabled)
+                continue;
+
+            agent.isStopped = true;
+            agent.ResetPath();
+            agent.enabled = false;
+        }
+    }
     IEnumerator FadeMutant(GameObject m)
     {
         if (m == null) yield break;

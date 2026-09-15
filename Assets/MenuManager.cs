@@ -74,8 +74,8 @@ public class MenuManager : MonoBehaviour
     // ── Check if ANY save file exists (Normal or Hard) ──
     private bool HasAnySaveFile()
     {
-        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave.db");
-        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard.db");
+        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
+        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
         
         bool normalExists = File.Exists(normalPath);
         bool hardExists = File.Exists(hardPath);
@@ -91,7 +91,7 @@ public class MenuManager : MonoBehaviour
     // ── Check if Normal save exists ──
     private bool HasNormalSave()
     {
-        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave.db");
+        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
         bool exists = File.Exists(normalPath);
         return exists;
     }
@@ -99,7 +99,7 @@ public class MenuManager : MonoBehaviour
     // ── Check if Hard save exists ──
     private bool HasHardSave()
     {
-        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard.db");
+        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
         bool exists = File.Exists(hardPath);
         return exists;
     }
@@ -109,11 +109,11 @@ public class MenuManager : MonoBehaviour
     {
         // Completed saves remain visible but cannot be selected.
         bool hasNormalSave = HasNormalSave();
-        bool canLoadNormalSave = CanLoadSave("gameSave.db");
+        bool canLoadNormalSave = CanLoadSave("gameSave_v2.db");
         
         // Check if Hard mode save exists
         bool hasHardSave = HasHardSave();
-        bool canLoadHardSave = CanLoadSave("gameSave_Hard.db");
+        bool canLoadHardSave = CanLoadSave("gameSave_Hard_v2.db");
 
         if (normalLoadButton != null)
         {
@@ -141,7 +141,7 @@ public class MenuManager : MonoBehaviour
         // ── Load Normal mode progression ──
         if (normalProgressText != null)
         {
-            string normalPath = Path.Combine(Application.persistentDataPath, "gameSave.db");
+            string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
             int normalProgress = GetProgressFromDatabase(normalPath);
             
             if (normalProgress >= 100)
@@ -164,7 +164,7 @@ public class MenuManager : MonoBehaviour
         // ── Load Hard mode progression ──
         if (hardProgressText != null)
         {
-            string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard.db");
+            string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
             int hardProgress = GetProgressFromDatabase(hardPath);
             
             if (hardProgress >= 100)
@@ -245,9 +245,9 @@ public class MenuManager : MonoBehaviour
     {
         PlayClickSound();
 
-        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave.db");
+        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
         
-        if (CanLoadSave("gameSave.db"))
+        if (CanLoadSave("gameSave_v2.db"))
         {
             
             // Set the difficulty so SaveSystem loads the correct database
@@ -278,9 +278,9 @@ public class MenuManager : MonoBehaviour
     {
         PlayClickSound();
 
-        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard.db");
+        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
         
-        if (CanLoadSave("gameSave_Hard.db"))
+        if (CanLoadSave("gameSave_Hard_v2.db"))
         {
             
             // Set the difficulty so SaveSystem loads the correct database
@@ -362,7 +362,7 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            ClearProgressionDataFromFile("gameSave.db");
+            ClearProgressionDataFromFile("gameSave_v2.db");
         }
         
         SceneFader.Instance.FadeToScene("chapter 1");
@@ -414,7 +414,7 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            ClearProgressionDataFromFile("gameSave_Hard.db");
+            ClearProgressionDataFromFile("gameSave_Hard_v2.db");
         }
         
         SceneFader.Instance.FadeToScene("chapter 2");
@@ -436,7 +436,7 @@ public class MenuManager : MonoBehaviour
                 connection.DeleteAll<AIPositionData>();
                 connection.DeleteAll<DroppedItemData>();
 
-                if (fileName == "gameSave_Hard.db")
+                if (fileName == "gameSave_Hard_v2.db")
                 {
                     connection.CreateTable<WrenchData>();
                     connection.CreateTable<GeneratorCoverData>();

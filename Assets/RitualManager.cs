@@ -23,7 +23,7 @@ public class RitualManager : MonoBehaviour
     public ObjectiveTrigger objectiveTrigger;
 
     [Header("Settings")]
-    public float delayBeforeLightsOff = 2f;
+    [Min(0f)] public float finalRitualDelay = 3f;
     public float lightFadeSpeed = 1.5f;
 
     private bool ritualComplete = false;
@@ -42,33 +42,11 @@ public class RitualManager : MonoBehaviour
     {
         if (ritualComplete) return;
 
-        // The four ritual candles go out as soon as both required candles are placed.
-        // The Bible and Cross are still required for the later ritual/enemy sequence.
-        if (!candleLightsTurnedOff && BothCandlesPlaced())
-        {
-            candleLightsTurnedOff = true;
-            StartCoroutine(TurnOffCandleLightsAfterDelay());
-        }
-
         if (AllItemsPlaced() && !checkingRitual)
         {
             checkingRitual = true;
             StartCoroutine(RitualSequence());
         }
-    }
-
-    bool BothCandlesPlaced()
-    {
-        return candleHolder1 != null && candleHolder1.HasCandle() &&
-               candleHolder2 != null && candleHolder2.HasCandle();
-    }
-
-    IEnumerator TurnOffCandleLightsAfterDelay()
-    {
-        if (delayBeforeLightsOff > 0f)
-            yield return new WaitForSeconds(delayBeforeLightsOff);
-
-        yield return StartCoroutine(FadeOutAllLights());
     }
 
     bool AllItemsPlaced()
@@ -84,38 +62,30 @@ public class RitualManager : MonoBehaviour
 
     IEnumerator RitualSequence()
     {
+        // Wait after the final ritual item is placed before the scare begins.
+        if (finalRitualDelay > 0f)
+            yield return new WaitForSeconds(finalRitualDelay);
 
-        // Play whisper
+        // The sounds, all candle lights fading out, and VAREN spawn begin together.
         if (whisperSound != null)
             audioSource.PlayOneShot(whisperSound);
-
-        // Wait before lights go out
-        yield return new WaitForSeconds(delayBeforeLightsOff);
-
-        // Play ritual sound
         if (ritualCompleteSound != null)
             audioSource.PlayOneShot(ritualCompleteSound);
 
-        // The lights already go out after the two candles are placed. This fallback
-        // keeps the ritual safe if a scene has no candle holders assigned.
         if (!candleLightsTurnedOff)
         {
             candleLightsTurnedOff = true;
             StartCoroutine(FadeOutAllLights());
         }
 
-        // Trigger objective
+        SpawnMutant();
+
         if (objectiveTrigger != null)
             objectiveTrigger.TriggerObjective();
 
-        // Wait then spawn mutant
-        yield return new WaitForSeconds(delayBeforeSpawn);
-
-        SpawnMutant();
-
         ritualComplete = true;
+        yield break;
     }
-
     void SpawnMutant()
     {
         if (mutantPrefab == null)
@@ -136,14 +106,28 @@ public class RitualManager : MonoBehaviour
 
     IEnumerator FadeOutAllLights()
     {
-        if (candleLights == null || candleLights.Length == 0)
+        // Keep manually assigned ritual lights, then also include every CandleItem light in the scene.
+        var lightsToFade = new System.Collections.Generic.List<Light>();
+        if (candleLights != null)
         {
-            CandleItem[] candles = FindObjectsOfType<CandleItem>();
-            candleLights = new Light[candles.Length];
-            for (int i = 0; i < candles.Length; i++)
-                candleLights[i] = candles[i].GetComponentInChildren<Light>();
+            foreach (Light light in candleLights)
+                if (light != null && !lightsToFade.Contains(light))
+                    lightsToFade.Add(light);
         }
 
+        foreach (CandleItem candle in FindObjectsOfType<CandleItem>())
+        {
+            Light candleLight = candle.GetComponentInChildren<Light>();
+            if (candleLight != null && !lightsToFade.Contains(candleLight))
+                lightsToFade.Add(candleLight);
+        }
+
+        candleLights = lightsToFade.ToArray();
+        if (candleLights.Length == 0)
+        {
+            Debug.LogWarning("[RitualManager] No candle lights are assigned. Add all four candle Light components to Candle Lights in the Inspector.");
+            yield break;
+        }
         float[] originalIntensities = new float[candleLights.Length];
         for (int i = 0; i < candleLights.Length; i++)
             if (candleLights[i] != null)
