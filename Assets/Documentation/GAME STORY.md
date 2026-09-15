@@ -1,123 +1,91 @@
 # VAREN - Game Story
 
-## 1. The Past
+## Canon Story: The Fall of Malawak Forest
 
-In 1969, three people disappeared in a Philippine forest. The last place they were seen was near an abandoned church.
+## 1. Malawak Forest in 1989
 
-No bodies were found. There was no blood, evidence, or sign of a struggle. The people simply vanished.
+In **1989**, Malawak Forest was not yet abandoned. It was a small, lively village hidden inside the forest, with a close community, three houses, a guard house, and a church.
 
-Over time, the nearby village became empty. The elders believed that an ancient spirit was responsible.
+Father Mateo was the village priest and the respected head of the community.
 
-They called the spirit **Varen**.
+The people living in Malawak Forest were:
 
-## 2. Varen
+- **House 1:** Laica and Shyna
+- **House 2:** Ann
+- **House 3:** Mil
+- **Guard house:** Jude, the village guard
 
-Varen is not an ordinary monster that hunts its victims immediately. It is a presence that waits and watches from the trees.
+They lived peacefully and trusted Father Mateo.
 
-Varen feeds on fear. The more people whisper its name, the stronger it becomes. When someone feels Varen watching them, it may already be too late.
+## 2. Father Mateo's Possession
 
-## 3. The Other Spirits
+A mysterious shadow had been watching Malawak Forest. Its name was **Varen**.
 
-The game has three supernatural AI characters:
+Varen possessed Father Mateo because Mateo held the highest position of trust in the village. Varen controlled Mateo's body while hiding its true identity.
 
-1. **Varen**
-2. **The White Lady**
-3. **The Tikbalang**
+Mil and Jude noticed that Father Mateo's movements and behavior were becoming unusual. They spoke privately about their concerns, but they were not sure whether he was truly possessed. Laica and Shyna were closest to Father Mateo and did not know that Varen was controlling him.
 
-The character called the “mutant” in the gameplay code is **Varen**. “Mutant” is only an old script and object name, not a separate character.
+## 3. The Secret Preparation
 
-### The White Lady
+Speaking through Father Mateo, Varen told Shyna and Laica to prepare candles, a cross, and a Bible in the church. They trusted him and followed his instructions.
 
-The White Lady appears at the edge of the forest. She stands still and watches those who enter.
+The next day, Father Mateo announced a prayer gathering at the church. The villagers believed it would be an ordinary prayer. In reality, Varen was preparing a ritual to permanently control Father Mateo's body and remain hidden in the village.
 
-According to the legend, anyone who looks into her eyes will see their own death.
+## 4. The Church Ritual
 
-### The Tikbalang
+On the day of the prayer, everyone gathered inside the church. At first, Father Mateo acted naturally and the prayer began normally.
 
-The Tikbalang is a half-man, half-horse creature. It misleads travelers, confuses them, and leads them into traps.
+Then he told everyone to form a circle. Shyna questioned the instruction because it was not a normal church practice. Father Mateo told them to follow him, so they did.
 
-If you hear its footsteps behind you, do not turn around.
+Minutes later, the real Father Mateo briefly broke through Varen's control. He shouted that he was possessed and begged everyone to stop the ritual. The villagers were shocked and stopped the prayer before the ritual could be completed.
 
-### The Voices and Shadows
+## 5. The Fall of the Village
 
-The forest is filled with whispers and moving shadows. The voices may sound like your mother, your friends, or even yourself.
+Because the ritual failed, Varen killed Father Mateo and revealed its true identity. It killed Ann, Laica, and Shyna during the church attack.
 
-The warning is simple:
+Mil and Jude were barely able to escape. Father Mateo had taught Mil how to seal an evil spirit, so Mil and Jude decided to purify the candles, Bible, and cross. Once purified, these sacred items could drive away or seal an evil spirit.
 
-> Do not answer.
+Jude guarded outside House 3 while Mil returned to the church to collect the items. Mil ran back to House 3 and successfully purified them.
 
-## 4. The Failed Ritual
+However, Varen was still hunting them.
 
-The elders tried to seal Varen at the heart of the forest. They performed a ritual, but it failed.
+Jude suddenly screamed outside. Mil went out to check on him, but he was too late: Jude had died. When Mil returned inside House 3, Varen was already waiting for him. Varen killed Mil as well.
 
-After the failure, the forest became cursed. People who enter are believed never to leave, and Varen continues to watch from the darkness.
+## 6. The Spirits Left Behind
 
-## 5. The Player's Goal
+Laica became the **White Lady** because she could not accept her death. Jude became the **Tikbalang** for the same reason.
 
-You enter the forest to uncover the truth behind the disappearances and the failed ritual.
+Both spirits remain trapped in Malawak Forest. The forest is also filled with shadows and voices that confuse and frighten anyone who enters.
 
-You may be the only person capable of discovering what happened, but Varen already knows that you are there.
+## 7. Present Day
 
-## 6. Gameplay Story Flow
+In the present day, the player is a normal adventurer who discovers Malawak Forest by chance. The player finds three houses, a guard house, and an abandoned church.
 
-### Exploration
+Out of curiosity, the player explores the forest and slowly discovers what happened to Father Mateo, the villagers, and Varen.
 
-You explore the abandoned area while searching for clues and useful objects. You can read books and notes, inspect picture frames, unlock doors, and search drawers.
+## 8. Player Goal
 
-### Collecting the Ritual Items
-
-You must find and place four items:
+The player must explore the village, survive Varen and the other spirits, collect the sacred ritual items, and return them to the ritual location:
 
 - Two candles
 - A Bible
 - A cross
 
-The items are placed in their correct holders at the ritual location.
+After placing all four items, Varen appears. The player must then reach the Ritual Tree and hold `E` to complete the final sealing ritual and stop Varen.
 
-### The Ritual Begins
+## 9. Character Reference
 
-When all four items are placed correctly:
+| Character | Role |
+| --- | --- |
+| Father Mateo | Village priest and leader; possessed by Varen. |
+| Varen | Shadow spirit and main antagonist. |
+| Mil | Resident of House 3; learned spirit-sealing knowledge from Father Mateo. |
+| Jude | Village guard; becomes the Tikbalang after death. |
+| Laica | Resident of House 1; becomes the White Lady after death. |
+| Shyna | Resident of House 1; prepares the sacred items with Laica. |
+| Ann | Resident of House 2; killed during the church attack. |
+| Player | Present-day adventurer who investigates Malawak Forest. |
 
-1. The ritual starts.
-2. The candle lights fade.
-3. Supernatural events occur.
-4. Varen appears.
+## 10. Development Naming Note
 
-### The Varen Encounter
-
-Varen hunts the player. If Varen catches you, a jumpscare begins and a question-and-answer challenge appears.
-
-- A correct answer allows you to survive and forces Varen away.
-- A wrong answer damages the player.
-- Failing to answer before the timer ends also causes a penalty.
-
-The other AI characters are frozen while the Q&A panel is active so they cannot interrupt the challenge.
-
-### The Final Sealing
-
-After continuing through the ritual, you reach the ritual tree. You must look at it and hold `E` to perform the final sealing.
-
-During the final ritual:
-
-1. The sealing progress increases while `E` is held.
-2. Varen is disabled or disappears.
-3. The lights fade.
-4. The game transitions to the outro scene.
-
-## 7. Story Details Still To Decide
-
-These details are not fully defined yet. They should be decided before adding them as confirmed story facts:
-
-- Who the player is.
-- Why the player entered the forest.
-- What happened to the three missing people.
-- Whether the White Lady is connected to Varen.
-- Whether the White Lady is a victim, servant, or separate spirit.
-- Why the Q&A challenge exists in the story.
-- What the final sealing does to Varen.
-
-## 8. Naming Note
-
-The story calls the ancient spirit **Varen**. Some gameplay code still uses the old name **MutantAI**, and the ritual UI currently contains the text **“Sealing Munduan...”**.
-
-For story consistency, use **Varen** as the character name. The `MutantAI` script name can remain temporarily because renaming a Unity script may break Inspector references. The `Munduan` text should eventually be changed to **Varen** if it is not an intentional alternate name.
+Some Unity scripts and objects still use older names such as `MutantAI`. In the story, this character is **Varen**. The script name can remain unchanged until a safe refactor is planned, because renaming Unity scripts can break Inspector references.
