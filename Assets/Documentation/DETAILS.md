@@ -82,12 +82,11 @@ The enabled build scenes are:
 
 ### Intro
 
-`IntroVideo.cs` plays the intro video, allows the player to skip it with any key, fades the screen, and loads the menu. The video and narration should be updated to tell the 1989 Malawak Forest story.
+`IntroVideo.cs` plays the intro video, allows the player to skip it with any key, fades the screen, and loads the menu.
 
-`StoryIntro.cs` and `IntroNarration.cs` still contain older 1969 lore. They must be rewritten before release so the in-game introduction matches the canonical 1989 Malawak Forest story above.
+`StoryIntro.cs` contains the current 1989 Malawak Forest story: Father Mateo, Varen, the interrupted church ritual, Mil and Jude, the sacred items, Laica as the White Lady, Jude as the Tikbalang, and the present-day adventurer.
 
-`IntroNarration.cs` contains an older narration about 1969, the three missing people, and the abandoned church. When loading a saved game, the intro can be skipped using the `SkipIntro` PlayerPrefs flag.
-
+`IntroNarration.cs` still contains an older 1969 narration. It should remain unused or be updated later if it is enabled in a scene. When loading a saved game, the story intro can be skipped using the `SkipIntro` PlayerPrefs flag.
 ### Menu
 
 `MainMenu.cs` provides the styled main menu, animated buttons, settings, and about panel.
