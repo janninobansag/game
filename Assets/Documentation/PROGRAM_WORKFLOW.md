@@ -4,6 +4,8 @@ This document describes the current implemented workflow of VAREN, from launch t
 
 See the [Activity Diagram](ACTIVITY_DIAGRAM.md) for a compact visual version of this workflow.
 
+See the [Use Case Diagram](USE_CASE_DIAGRAM.md) for the Player-facing system features.
+
 ## 1. System Overview
 
 ```mermaid
