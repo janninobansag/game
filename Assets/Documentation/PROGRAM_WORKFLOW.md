@@ -2,6 +2,8 @@
 
 This document describes the current implemented workflow of VAREN, from launch to game completion. It is based on the Unity scenes and C# scripts in this repository.
 
+See the [Activity Diagram](ACTIVITY_DIAGRAM.md) for a compact visual version of this workflow.
+
 ## 1. System Overview
 
 ```mermaid

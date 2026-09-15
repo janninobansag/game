@@ -74,6 +74,7 @@ Then use **File -> Build Settings**, choose the platform, click **Switch Platfor
 - [Hard Mode ERD](Assets/Documentation/DATABASE_ERD.dbml)
 - [Settings ERD](Assets/Documentation/SETTINGS_DATABASE_ERD.dbml)
 - [Complete Program Workflow](Assets/Documentation/PROGRAM_WORKFLOW.md)
+- [Game Activity Diagram](Assets/Documentation/ACTIVITY_DIAGRAM.md)
 
 ## Project Structure
 
