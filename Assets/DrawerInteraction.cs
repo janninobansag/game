@@ -160,6 +160,15 @@ public class DrawerInteraction : MonoBehaviour
     public void Unlock() => isLocked = false;
     public bool IsOpen() => isOpen;
 
+    /// <summary>Applies a saved drawer pose after its Start setup has completed.</summary>
+    public void RestoreSavedState(bool open, Vector3 savedLocalPosition)
+    {
+        StopAllCoroutines();
+        isAnimating = false;
+        isOpen = open;
+        transform.localPosition = savedLocalPosition;
+    }
+
     void OnDrawGizmosSelected()
     {
         Vector3 direction = GetDirectionVector();

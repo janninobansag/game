@@ -29,8 +29,15 @@ flowchart TD
     chapterOne --> explore[Explore and interact]
     chapterTwo --> explore
     explore --> encounter{Enemy encounter?}
-    encounter -->|Yes| survive[Chase, damage, or Q and A]
-    survive --> alive{Player survives?}
+    encounter -->|Tikbalang catches player| tikCatch[Lock movement, focus camera, play jumpscare]
+    tikCatch --> tikQuestion[Open Q&A and unlock cursor]
+    tikQuestion --> tikResult{Correct answer?}
+    tikResult -->|Yes| tikEscape[Teleport Tikbalang away]
+    tikResult -->|Wrong or timeout| tikDamage[Deal 40 damage by default]
+    tikDamage --> alive{Player survives?}
+    tikEscape --> explore
+    encounter -->|Other enemy| survive[Chase, damage, or Q and A]
+    survive --> alive
     alive -->|No| respawn[Checkpoint respawn or restart]
     respawn --> explore
     alive -->|Yes| explore
@@ -71,3 +78,8 @@ flowchart TD
 - The ritual route requires two candles, a Bible, and a cross.
 - Completing the Ritual Tree sequence stops VAREN, saves progression, loads the outro, and returns the player to the main menu.
 - Releasing `E`, looking away, or leaving interaction range before the final ritual duration is complete stops the current hold and allows the player to try again.
+### Tikbalang Encounter Notes
+
+- On first discovery, Tikbalang teleports in front of the player and plays its discovery sound; this is not a Q&A damage event.
+- When it later catches the player, movement locks, the camera focuses on Tikbalang, and the Q&A panel opens.
+- Wrong answers and timeouts deal 40 damage by default. After each result, Tikbalang teleports away and may catch the player again after its cooldown.

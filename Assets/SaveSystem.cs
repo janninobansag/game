@@ -26,6 +26,7 @@ public class SaveSystem : MonoBehaviour
     private SQLiteConnection connection;
     private bool isDatabaseReady = false;
 
+
     private static string GetDifficultyForActiveScene()
     {
         string sceneName = SceneManager.GetActiveScene().name;
@@ -90,6 +91,7 @@ public class SaveSystem : MonoBehaviour
             connection.CreateTable<PlayerData>();
             connection.CreateTable<InventoryData>();
             connection.CreateTable<DoorData>();
+            connection.CreateTable<DrawerData>();
             connection.CreateTable<RitualData>();
             connection.CreateTable<NoteData>();
             connection.CreateTable<GameStateData>();
@@ -179,6 +181,7 @@ public class SaveSystem : MonoBehaviour
         if (string.IsNullOrEmpty(coverId))
             return;
 
+
         EnsureDatabaseReady();
         if (!isDatabaseReady)
             return;
@@ -200,6 +203,7 @@ public class SaveSystem : MonoBehaviour
     {
         if (string.IsNullOrEmpty(coverId))
             return false;
+
 
         EnsureDatabaseReady();
         if (!isDatabaseReady)
@@ -877,6 +881,7 @@ public class SaveSystem : MonoBehaviour
 
             // ── SAVE DOORS WITH ROTATION ──
             connection.DeleteAll<DoorData>();
+            connection.DeleteAll<DrawerData>();
             DoorInteraction[] doors = Object.FindObjectsOfType<DoorInteraction>();
             int doorCount = 0;
 
@@ -901,6 +906,23 @@ public class SaveSystem : MonoBehaviour
                 doorCount++;
             }
 
+            // ── SAVE DRAWERS ──
+            connection.DeleteAll<DrawerData>();
+            foreach (DrawerInteraction drawer in Object.FindObjectsOfType<DrawerInteraction>())
+            {
+                if (drawer == null) continue;
+
+                Vector3 localPosition = drawer.transform.localPosition;
+                connection.Insert(new DrawerData
+                {
+                    DrawerId = GenerateDrawerId(drawer),
+                    DrawerName = drawer.name,
+                    IsOpen = drawer.IsOpen(),
+                    LocalPosX = localPosition.x,
+                    LocalPosY = localPosition.y,
+                    LocalPosZ = localPosition.z
+                });
+            }
             // ── SAVE RITUAL ──
             connection.DeleteAll<RitualData>();
             RitualManager ritual = Object.FindObjectsOfType<RitualManager>().FirstOrDefault();
@@ -1326,6 +1348,11 @@ public class SaveSystem : MonoBehaviour
 
         return ai.GetType().Name + ":" + path;
     }
+    private string GenerateDrawerId(DrawerInteraction drawer)
+    {
+        return GenerateAIId(drawer);
+    }
+
     private string GenerateDoorId(DoorInteraction door)
     {
         Vector3 pos = door.transform.position;
@@ -1482,6 +1509,27 @@ public class SaveSystem : MonoBehaviour
                 }
             }
 
+            // ── RESTORE DRAWERS ──
+            Dictionary<string, DrawerInteraction> drawerLookup = new Dictionary<string, DrawerInteraction>();
+            foreach (DrawerInteraction drawer in Object.FindObjectsOfType<DrawerInteraction>())
+            {
+                if (drawer == null) continue;
+                string drawerId = GenerateDrawerId(drawer);
+                if (!drawerLookup.ContainsKey(drawerId))
+                    drawerLookup.Add(drawerId, drawer);
+            }
+
+            foreach (DrawerData drawerData in connection.Table<DrawerData>().ToList())
+            {
+                DrawerInteraction drawer;
+                if (!drawerLookup.TryGetValue(drawerData.DrawerId, out drawer))
+                    continue;
+
+                drawer.RestoreSavedState(drawerData.IsOpen, new Vector3(
+                    drawerData.LocalPosX,
+                    drawerData.LocalPosY,
+                    drawerData.LocalPosZ));
+            }
             // ── Get data from database ──
             var inventoryItems = connection.Table<InventoryData>().ToList();
 List<string> inventoryItemNames = new List<string>();
@@ -2342,6 +2390,7 @@ List<string> inventoryItemNames = new List<string>();
     {
         if (string.IsNullOrEmpty(subtitleId)) return false;
 
+
         EnsureDatabaseReady();
         if (!isDatabaseReady) return false;
 
@@ -2394,6 +2443,7 @@ List<string> inventoryItemNames = new List<string>();
 
             connection.DeleteAll<InventoryData>();
             connection.DeleteAll<DoorData>();
+            connection.DeleteAll<DrawerData>();
             connection.DeleteAll<RitualData>();
             connection.DeleteAll<NoteData>();
             connection.DeleteAll<GameStateData>();
@@ -2551,6 +2601,19 @@ public string DoorId { get; set; }
     public float RotW { get; set; }
 }
 
+[Table("DrawerData")]
+public class DrawerData
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+    public string DrawerId { get; set; }
+    public string DrawerName { get; set; }
+    public bool IsOpen { get; set; }
+    public float LocalPosX { get; set; }
+    public float LocalPosY { get; set; }
+    public float LocalPosZ { get; set; }
+}
 [Table("RitualData")]
 public class RitualData
 {
@@ -2705,13 +2768,13 @@ public int SectionIndex { get; set; }
 
 
 /// <summary>
-/// Creates the Version 2 local save schema. Each database file has one save
+/// Creates the Version 3 local save schema. Each database file has one save
 /// profile (Id = 1); every game-state table is a child of that profile.
 /// </summary>
 public static class RelationalSaveSchema
 {
     public const int LocalProfileId = 1;
-    public const int SchemaVersion = 2;
+    public const int SchemaVersion = 3;
 
     public static void Create(SQLiteConnection connection, bool isHardMode)
     {
@@ -2726,10 +2789,12 @@ public static class RelationalSaveSchema
         connection.Execute("INSERT OR IGNORE INTO SaveProfileData " +
                            "(Id, SaveName, Difficulty, SchemaVersion) VALUES " +
                            "(1, 'Local Save', '" + difficulty + "', " + SchemaVersion + ")");
+        connection.Execute("UPDATE SaveProfileData SET Difficulty = '" + difficulty + "', SchemaVersion = " + SchemaVersion + " WHERE Id = " + LocalProfileId);
 
         CreateChildTable(connection, "PlayerData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL, Health REAL, MaxHealth REAL, Sensitivity REAL, CurrentScene TEXT");
         CreateChildTable(connection, "InventoryData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, Quantity INTEGER, IsEquipped INTEGER");
         CreateChildTable(connection, "DoorData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "DoorId TEXT, DoorName TEXT, IsUnlocked INTEGER, IsOpen INTEGER, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "DrawerData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "DrawerId TEXT, DrawerName TEXT, IsOpen INTEGER, LocalPosX REAL, LocalPosY REAL, LocalPosZ REAL");
         CreateChildTable(connection, "RitualData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "IsComplete INTEGER");
         CreateChildTable(connection, "NoteData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "NoteTitle TEXT, IsRead INTEGER");
         CreateChildTable(connection, "GameStateData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "Key TEXT, Value TEXT");

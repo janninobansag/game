@@ -349,6 +349,11 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.SetString("SavedScene", "chapter 1");
         PlayerPrefs.SetString("SaveTime", System.DateTime.Now.ToString("MM/dd/yyyy HH:mm"));
         PlayerPrefs.DeleteKey("GameProgress");
+        // A fresh game must choose a new Mansion key location.
+        PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Normal");
+        PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
+        PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
+        PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
         PlayerPrefs.Save();
         
         // Force SaveSystem to use Normal database
@@ -401,6 +406,11 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.SetString("SavedScene", "chapter 2");
         PlayerPrefs.SetString("SaveTime", System.DateTime.Now.ToString("MM/dd/yyyy HH:mm"));
         PlayerPrefs.DeleteKey("GameProgress");
+        // A fresh game must choose a new Mansion key location.
+        PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Normal");
+        PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
+        PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
+        PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
         PlayerPrefs.Save();
         
         // Force SaveSystem to use Hard database
@@ -435,6 +445,7 @@ public class MenuManager : MonoBehaviour
                 connection.DeleteAll<ProgressionData>();
                 connection.DeleteAll<AIPositionData>();
                 connection.DeleteAll<DroppedItemData>();
+                connection.DeleteAll<DrawerData>();
 
                 if (fileName == "gameSave_Hard_v2.db")
                 {

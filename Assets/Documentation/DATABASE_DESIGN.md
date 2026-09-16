@@ -28,6 +28,7 @@ SaveProfileData (parent)
         +-- PlayerData
         +-- InventoryData
         +-- DoorData
+        +-- DrawerData
         +-- RitualData
         +-- NoteData
         +-- GameStateData
@@ -58,6 +59,7 @@ SaveProfileData (parent)
 | `PlayerData` | `Id` | Player position, rotation, health, sensitivity, and current scene. |
 | `InventoryData` | `Id` | Items in the three-slot inventory, their quantities, and equipped state. |
 | `DoorData` | `Id` | Door identity, lock/open state, and rotation. |
+| `DrawerData` | `Id` | Drawer identity, open/closed state, and exact local position. |
 | `DroppedItemData` | `Id` | Generic dropped item state, location, rotation, and held/dropped flags. |
 | `FlashlightData` | `Id` | Flashlight battery, held/dropped state, location, and whether the light is on. |
 | `BatteryData` | `Id` | Battery state, charge amount, use state, and world transform. |
@@ -88,6 +90,7 @@ The following tables exist only in `gameSave_Hard_v2.db` because they belong to 
 | `SaveProfileData` | `PlayerData` | One-to-many | A profile can have player-state records; the game normally saves one current player row. |
 | `SaveProfileData` | `InventoryData` | One-to-many | A profile owns multiple inventory item rows. |
 | `SaveProfileData` | `DoorData` | One-to-many | A profile owns multiple saved door states. |
+| `SaveProfileData` | `DrawerData` | One-to-many | A profile owns multiple saved drawer states. `DrawerData.SaveProfileId` is the foreign key to `SaveProfileData.Id`. |
 | `SaveProfileData` | item, ritual, AI, subtitle, and progression tables | One-to-many | Each row belongs to one selected save profile. |
 | `SettingsData` | none | Standalone single row | Settings are global, not owned by a Normal or Hard save profile. |
 
@@ -100,13 +103,13 @@ Foreign keys use `ON DELETE CASCADE`. If a save profile is removed, its dependen
 - A new player-save database creates a default `SaveProfileData` row with `Id = 1`.
 - Normal and Hard mode never share a game-save database file.
 - Settings do not reference a save profile because they are shared globally.
-- Stable names and IDs such as `DoorId`, `AIId`, `GasId`, and `SubtitleId` allow Unity scene objects to locate their matching saved state.
+- Stable names and IDs such as `DoorId`, `DrawerId`, `AIId`, `GasId`, and `SubtitleId` allow Unity scene objects to locate their matching saved state.
 
 ## 8. Save and Load Data Flow
 
 ```text
 Game action changes state
-        -> SaveSystem gathers player, inventory, item, ritual, AI, subtitle, and progression values
+        -> SaveSystem gathers player, inventory, door, drawer, item, ritual, AI, subtitle, and progression values
         -> SaveSystem selects Normal or Hard database
         -> SaveSystem writes rows using SaveProfileId = 1
         -> SQLite save file persists in Application.persistentDataPath
@@ -114,7 +117,7 @@ Game action changes state
 Player selects Load Game
         -> MenuManager selects the saved difficulty and scene
         -> SaveSystem reads rows for SaveProfileId = 1
-        -> Unity restores the player, world objects, UI state, and progression
+        -> Unity restores the player, world objects (including drawer positions), UI state, and progression
 ```
 
 ## 9. Design Rationale

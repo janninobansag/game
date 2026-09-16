@@ -43,9 +43,17 @@ public class StaminaController : MonoBehaviour
             return;
         }
 
+        bool isHoldingShift = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+
         if (isSprinting && currentStamina > 0f)
         {
             currentStamina = Mathf.Max(0f, currentStamina - sprintDrainPerSecond * Time.deltaTime);
+            recoveryTimer = 0f;
+        }
+        // Holding Shift means the player is still trying to sprint. Do not let
+        // stamina recover until they release it, including when stamina is empty.
+        else if (isHoldingShift)
+        {
             recoveryTimer = 0f;
         }
         else

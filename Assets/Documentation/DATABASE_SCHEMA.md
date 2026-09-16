@@ -24,6 +24,7 @@ following tables exist in both modes:
 | Player transform, health, sensitivity, scene | `PlayerData` |
 | Inventory entries | `InventoryData` |
 | Doors | `DoorData` |
+| Drawer open state and local position | `DrawerData` |
 | Ritual completion | `RitualData` |
 | Notes read by the player | `NoteData` |
 | General key/value state | `GameStateData` |
@@ -37,6 +38,11 @@ following tables exist in both modes:
 | Player stamina | `StaminaData` |
 | Intro/cutscene progress | `IntroData` |
 | AI transforms per scene | `AIPositionData` |
+
+`DrawerData` contains `Id` (primary key), `SaveProfileId` (foreign key to
+`SaveProfileData.Id`), `DrawerId`, `DrawerName`, `IsOpen`, and `LocalPosX`,
+`LocalPosY`, `LocalPosZ`. `DrawerId` is the stable Unity scene identifier used to
+restore the correct drawer; it is not a foreign key.
 
 These tables are **Hard Chapter 2 only**. They are never created in the normal
 Chapter 1 database:

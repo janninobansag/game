@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c6251230881e3d428c45d4a25d1141c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeInDuration: 0.5
+  fadeOutDuration: 1
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!328 &471025834
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -160,7 +163,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 471025832}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 179a3bc5ae14b5c418801e820b3ced3d, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: e100f245d93bcf9409458eaf2bb7c6a4, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}

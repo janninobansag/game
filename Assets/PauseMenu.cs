@@ -37,6 +37,8 @@ public class PauseMenu : MonoBehaviour
     [Range(0f, 1f)] public float hoverVolume = 0.6f;
 
     public bool isPaused = false;
+    [Header("Debug")]
+    public bool logPauseMenuActions = true;
     private float currentVolume;
     private float currentSensitivity;
     private float currentBrightness;
@@ -107,6 +109,8 @@ public class PauseMenu : MonoBehaviour
             UpdateSettingsSliderDrag();
         }
 
+        // These legacy pause panels use the cursor-based handler because their buttons are not driven by an EventSystem.
+        // The Settings BACK event is explicitly wired to CloseSettings in each gameplay scene.
         if (isPaused && Input.GetMouseButtonUp(0))
             ClickPauseMenuButtonAtCursor();
 
@@ -237,6 +241,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void Pause()
     {
+        LogPause("Pause opened.");
         isPaused = true;
         Time.timeScale = 0f;
         
@@ -265,6 +270,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        LogPause("Resume requested.");
         isPaused = false;
         Time.timeScale = 1f;
         
@@ -456,6 +462,12 @@ public class PauseMenu : MonoBehaviour
         UpdateVolumeLabel(currentVolume);
         UpdateSensitivityLabel(currentSensitivity);
         UpdateBrightnessLabel(currentBrightness);
+    }
+
+    private void LogPause(string message)
+    {
+        if (logPauseMenuActions)
+            Debug.Log($"[PauseMenu] {message}", this);
     }
 
     private void UpdateVolumeLabel(float value)

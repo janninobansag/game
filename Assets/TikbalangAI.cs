@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class TikbalangAI : MonoBehaviour
@@ -22,6 +24,25 @@ public class TikbalangAI : MonoBehaviour
     [Tooltip("Distance in front of the player where Tikbalang appears after the first jumpscare.")]
     [Min(1f)] public float firstEncounterFrontDistance = 4f;
 
+    [Header("Question & Answer Settings")]
+    [Tooltip("Drag the scene QnAPanel here. The game can find it automatically if left empty.")]
+    public GameObject qnaPanel;
+    [Min(1f)] public float questionDisplayTime = 30f;
+    [Min(0f)] public float wrongAnswerDamage = 40f;
+
+    [Header("Q&A Questions")]
+    public QnAEntry[] questions;
+
+    [Header("Catch Jumpscare")]
+    [Tooltip("Tikbalang catches the player and starts the Q&A jumpscare within this distance.")]
+    [Min(0.1f)] public float catchRange = 1.4f;
+    [Tooltip("Prevents an immediate second catch after Tikbalang teleports away.")]
+    [Min(0f)] public float catchCooldown = 3f;
+    [Tooltip("Optional. Leave empty to use the Main Camera.")]
+    public Transform jumpscareCamera;
+    [Min(0f)] public float cameraLookDuration = 0.3f;
+    [Min(0f)] public float cameraReturnDuration = 0.25f;
+    [Min(0f)] public float tikbalangFaceHeight = 1.5f;
     [Header("Chase After First Encounter")]
     [Min(0.1f)] public float walkSpeed = 3.25f;
     [Min(0f)] public float stoppingDistance = 1.2f;
@@ -37,7 +58,16 @@ public class TikbalangAI : MonoBehaviour
     private int lastSpawnPointIndex = -1;
     private bool hasAwakened;
     private bool isFirstEncounterPlaying;
-
+    private bool isCatchSequencePlaying;
+    private float nextCatchTime;
+    private Quaternion cameraRotationBeforeCatch;
+    private PlayerController playerController;
+    private QnAEntry currentQuestion;
+    private bool waitingForAnswer;
+    private bool answerReceived;
+    private bool isQuestionPanelOpen;
+    private bool wasPlayerControllerEnabled;
+    private readonly System.Collections.Generic.List<Button> qnaButtons = new System.Collections.Generic.List<Button>();
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -50,6 +80,9 @@ public class TikbalangAI : MonoBehaviour
     {
         agent.speed = walkSpeed;
         agent.stoppingDistance = stoppingDistance;
+        playerController = player != null ? player.GetComponent<PlayerController>() : null;
+        FindAndPrepareQnAPanel();
+        if (jumpscareCamera == null && Camera.main != null) jumpscareCamera = Camera.main.transform;
         PlaceOnNavMeshIfNeeded();
         SetDormantState();
     }
@@ -67,32 +100,281 @@ public class TikbalangAI : MonoBehaviour
             return;
         }
 
+        if (isCatchSequencePlaying)
+            return;
+
+        if (Time.time >= nextCatchTime && Vector3.Distance(transform.position, player.position) <= catchRange)
+        {
+            StartCoroutine(PlayCatchJumpscare());
+            return;
+        }
+
         ChasePlayer();
     }
 
+    private void LateUpdate()
+    {
+        // PlayerController and other gameplay scripts normally lock the cursor.
+        // Keep Q&A clickable regardless of script execution order.
+        if (!isQuestionPanelOpen)
+            return;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
     private IEnumerator PlayFirstEncounter()
     {
         isFirstEncounterPlaying = true;
         agent.isStopped = true;
-
-        // Appear in front of the player first, then begin the animation and shout
-        // in the same frame. It no longer teleports after the jumpscare.
-        TeleportInFrontOfPlayer();
         SetMovementAnimation(false);
+
+        // First reveal: appear in front of the player, but do not start the Q&A yet.
+        TeleportInFrontOfPlayer();
+        // The first sighting only wakes Tikbalang. Jumpscares happen when it catches the player.
+        if (audioSource != null && discoveryShout != null)
+            audioSource.PlayOneShot(discoveryShout);
+
+        yield return new WaitForSeconds(0.15f);
+        hasAwakened = true;
+        isFirstEncounterPlaying = false;
+    }
+
+    private IEnumerator PlayCatchJumpscare()
+    {
+        isCatchSequencePlaying = true;
+        if (agent.enabled && agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+
+        SetMovementAnimation(false);
+        SetPlayerQuestionLock(true);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        yield return StartCoroutine(FocusCameraOnTikbalang());
         SetAnimatorTriggerIfPresent("jumpscare");
 
         if (audioSource != null && discoveryShout != null)
             audioSource.PlayOneShot(discoveryShout);
 
         yield return new WaitForSeconds(jumpscareBeforeTeleportDelay);
+        yield return StartCoroutine(ShowJumpscareQuestion(false));
 
-        // After the reveal animation, disappear to a random enemy spawn point
-        // before beginning the permanent chase.
         TeleportToSpawnPoint(true);
-        hasAwakened = true;
-        isFirstEncounterPlaying = false;
+yield return StartCoroutine(RestoreCameraAfterJumpscare());
+        SetPlayerQuestionLock(false);
+        nextCatchTime = Time.time + catchCooldown;
+        isCatchSequencePlaying = false;
     }
 
+    private IEnumerator FocusCameraOnTikbalang()
+    {
+        if (jumpscareCamera == null && Camera.main != null)
+            jumpscareCamera = Camera.main.transform;
+        if (jumpscareCamera == null)
+            yield break;
+
+        cameraRotationBeforeCatch = jumpscareCamera.rotation;
+        Vector3 targetPosition = transform.position + Vector3.up * tikbalangFaceHeight;
+        Quaternion targetRotation = Quaternion.LookRotation((targetPosition - jumpscareCamera.position).normalized);
+        float elapsed = 0f;
+
+        while (elapsed < cameraLookDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            jumpscareCamera.rotation = Quaternion.Slerp(cameraRotationBeforeCatch, targetRotation,
+                cameraLookDuration <= 0f ? 1f : elapsed / cameraLookDuration);
+            yield return null;
+        }
+
+        jumpscareCamera.rotation = targetRotation;
+    }
+
+    private IEnumerator RestoreCameraAfterJumpscare()
+    {
+        if (jumpscareCamera == null)
+            yield break;
+
+        Quaternion startRotation = jumpscareCamera.rotation;
+        float elapsed = 0f;
+        while (elapsed < cameraReturnDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            jumpscareCamera.rotation = Quaternion.Slerp(startRotation, cameraRotationBeforeCatch,
+                cameraReturnDuration <= 0f ? 1f : elapsed / cameraReturnDuration);
+            yield return null;
+        }
+
+        jumpscareCamera.rotation = cameraRotationBeforeCatch;
+    }
+    private void FindAndPrepareQnAPanel()
+    {
+        if (qnaPanel == null)
+        {
+            foreach (Transform candidate in Resources.FindObjectsOfTypeAll<Transform>())
+            {
+                if (candidate != null && candidate.name == "QnAPanel" && candidate.gameObject.scene.IsValid())
+                {
+                    qnaPanel = candidate.gameObject;
+                    break;
+                }
+            }
+        }
+
+        if (qnaPanel == null)
+        {
+            Debug.LogWarning("[Tikbalang Q&A] QnAPanel was not found. Assign it in the Tikbalang AI Inspector.", this);
+            return;
+        }
+
+        qnaPanel.SetActive(false);
+        WireAnswerButton("OptionA", 0);
+        WireAnswerButton("OptionB", 1);
+        WireAnswerButton("OptionC", 2);
+        WireAnswerButton("OptionD", 3);
+    }
+
+    private IEnumerator ShowJumpscareQuestion(bool unlockPlayerAfterQuestion = true)
+    {
+        if (qnaPanel == null)
+            yield break;
+
+        if (questions == null || questions.Length == 0)
+        {
+            questions = new[]
+            {
+                new QnAEntry
+                {
+                    question = "What Philippine mythical creature is half-human and half-horse?",
+                    options = new[] { "Tikbalang", "Aswang", "Kapre", "Manananggal" },
+                    correctAnswerIndex = 0
+                }
+            };
+        }
+
+        currentQuestion = questions[Random.Range(0, questions.Length)];
+        if (currentQuestion == null || currentQuestion.options == null || currentQuestion.options.Length < 4)
+        {
+            Debug.LogWarning("[Tikbalang Q&A] A question needs four answer options.", this);
+            yield break;
+        }
+
+        SetPlayerQuestionLock(true);
+        PopulateQuestionUI();
+        qnaPanel.SetActive(true);
+        isQuestionPanelOpen = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SetAnswerButtonsInteractable(true);
+
+        waitingForAnswer = true;
+        answerReceived = false;
+        float elapsed = 0f;
+        while (waitingForAnswer && elapsed < questionDisplayTime)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            elapsed += Time.unscaledDeltaTime;
+            SetText("TimerText", "Time: " + Mathf.Max(0f, questionDisplayTime - elapsed).ToString("F1") + "s");
+            yield return null;
+        }
+
+        bool correct = answerReceived && currentQuestion != null && selectedAnswerIndex == currentQuestion.correctAnswerIndex;
+        if (correct)
+        {
+            SetFeedback("Correct!", Color.green);
+        }
+        else
+        {
+            SetFeedback("Wrong!", Color.red);
+            PlayerHealth health = player != null ? player.GetComponent<PlayerHealth>() : null;
+            if (health != null)
+                health.TakeDamage(wrongAnswerDamage);
+        }
+
+        yield return new WaitForSecondsRealtime(0.8f);
+        isQuestionPanelOpen = false;
+        qnaPanel.SetActive(false);
+        SetPlayerQuestionLock(false);
+    }
+
+    private int selectedAnswerIndex = -1;
+
+    private void WireAnswerButton(string buttonName, int answerIndex)
+    {
+        Transform option = qnaPanel.transform.Find(buttonName);
+        Button button = option != null ? option.GetComponentInChildren<Button>(true) : null;
+        if (button == null) return;
+
+        button.onClick.AddListener(() => SelectAnswer(answerIndex));
+        qnaButtons.Add(button);
+    }
+
+    private void SelectAnswer(int answerIndex)
+    {
+        if (!waitingForAnswer || answerReceived) return;
+        selectedAnswerIndex = answerIndex;
+        answerReceived = true;
+        waitingForAnswer = false;
+        SetAnswerButtonsInteractable(false);
+    }
+
+    private void PopulateQuestionUI()
+    {
+        selectedAnswerIndex = -1;
+        SetText("QuestionText", currentQuestion.question);
+        SetText("OptionA/Text (TMP)", "A. " + currentQuestion.options[0]);
+        SetText("OptionB/Text (TMP)", "B. " + currentQuestion.options[1]);
+        SetText("OptionC/Text (TMP)", "C. " + currentQuestion.options[2]);
+        SetText("OptionD/Text (TMP)", "D. " + currentQuestion.options[3]);
+        SetFeedback(string.Empty, Color.white);
+    }
+
+    private void SetText(string path, string value)
+    {
+        Transform textTransform = qnaPanel.transform.Find(path);
+        TextMeshProUGUI text = textTransform != null ? textTransform.GetComponent<TextMeshProUGUI>() : null;
+        if (text != null) text.text = value;
+    }
+
+    private void SetFeedback(string message, Color color)
+    {
+        Transform feedbackTransform = qnaPanel.transform.Find("FeedbackText");
+        TextMeshProUGUI feedback = feedbackTransform != null ? feedbackTransform.GetComponent<TextMeshProUGUI>() : null;
+        if (feedback != null)
+        {
+            feedback.text = message;
+            feedback.color = color;
+        }
+    }
+
+    private void SetAnswerButtonsInteractable(bool value)
+    {
+        foreach (Button button in qnaButtons)
+            if (button != null) button.interactable = value;
+    }
+
+    private void SetPlayerQuestionLock(bool locked)
+    {
+        if (playerController == null && player != null)
+            playerController = player.GetComponent<PlayerController>();
+
+        if (playerController == null) return;
+
+        if (locked)
+        {
+            if (playerController.enabled)
+                wasPlayerControllerEnabled = true;
+            playerController.enabled = false;
+        }
+        else if (wasPlayerControllerEnabled)
+        {
+            playerController.enabled = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
     private void ChasePlayer()
     {
         if (!agent.enabled || !agent.isOnNavMesh)

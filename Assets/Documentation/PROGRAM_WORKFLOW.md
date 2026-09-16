@@ -167,6 +167,27 @@ flowchart TD
 - The White Lady and Tikbalang use their configured AI and trigger scripts.
 - `MonsterAI_New` can run a Q-and-A sequence after an encounter. Correct answers restore gameplay; wrong answers or timeout apply penalties.
 - `PlayerHealth` applies damage, controls the health UI and blood effect, and works with `CheckpointTrigger` for respawn.
+### Tikbalang Catch and Q&A Workflow
+
+```mermaid
+flowchart TD
+    A[Player enters awakening radius] --> B[Tikbalang teleports in front and plays discovery sound]
+    B --> C[Tikbalang chases player]
+    C --> D{Inside Catch Range?}
+    D -->|No| C
+    D -->|Yes| E[Lock player movement and focus camera on Tikbalang]
+    E --> F[Play jumpscare]
+    F --> G[Open Q&A panel and unlock cursor]
+    G --> H{Correct answer before timeout?}
+    H -->|Yes| I[No damage]
+    H -->|Wrong or timeout| J[Deal 40 damage by default]
+    I --> K[Teleport Tikbalang away, return camera, restore movement]
+    J --> K
+    K --> L[Wait catch cooldown]
+    L --> C
+```
+
+`TikbalangAI.cs` owns this Chapter 2 encounter. Its Inspector allows the developer to assign the `QnAPanel`, edit each question and its four answer options, choose the correct answer index, and tune catch, camera, Q&A, and damage values.
 
 ## 9. Chapter 2 Generator Workflow
 

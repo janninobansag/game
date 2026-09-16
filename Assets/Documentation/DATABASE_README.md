@@ -38,7 +38,7 @@ Older `PlayerPrefs` values are automatically copied into `SettingsData` the firs
 
 ## Player-save database tables
 
-Each Version 2 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
+Each Version 3 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
 
 Normal and Hard modes have the same table structure, but each mode has its own database file.
 
@@ -47,6 +47,7 @@ Normal and Hard modes have the same table structure, but each mode has its own d
 | `PlayerData` | Player position, rotation, scene, health, max health, sensitivity. | `SaveSystem.cs`, `PlayerHealth.cs`, `PlayerController.cs` |
 | `InventoryData` | Items currently in the three-slot inventory. | `SaveSystem.cs`, `Inventory.cs` |
 | `DoorData` | Door unlock/open state and rotation. | `SaveSystem.cs`, door scripts |
+| `DrawerData` | Drawer identity, open/closed state, and exact local position. `SaveProfileId` is a foreign key to `SaveProfileData.Id`; `DrawerId` identifies the matching Unity drawer object. | `SaveSystem.cs`, `DrawerInteraction.cs` |
 | `RitualData` | Ritual completion state. | `SaveSystem.cs`, ritual scripts |
 | `NoteData` | Notes that have been read. | `SaveSystem.cs`, note scripts |
 | `GameStateData` | General named game-state values. | `SaveSystem.cs` and gameplay scripts |
@@ -56,7 +57,8 @@ Normal and Hard modes have the same table structure, but each mode has its own d
 | `BatteryData` | Battery amount, used/held/dropped state, position, rotation. | `SaveSystem.cs`, `BatteryPickup.cs` |
 | `RitualItemData` | Candle, cross, Bible, and other ritual-item reveal/place/drop state. | `SaveSystem.cs`, ritual item scripts |
 | `StaminaData` | Current Hard-mode stamina. | `SaveSystem.cs`, `StaminaController.cs` |
-| `SubtitleData` | Whether one-time subtitles have already triggered. | `SaveSystem.cs`, subtitle trigger scripts |`r`n| `IntroData` | Story intro section, sentence, and completion state. | `SaveSystem.cs`, `StoryIntro.cs` |
+| `SubtitleData` | Whether one-time subtitles have already triggered. | `SaveSystem.cs`, subtitle trigger scripts |
+| `IntroData` | Story intro section, sentence, and completion state. | `SaveSystem.cs`, `StoryIntro.cs` |
 | `ProgressionData` | Current progress points and total points used for the load-panel percentage. | `SaveSystem.cs`, `ProgressionSystem.cs`, `MenuManager.cs` |
 
 ## Save and load flow
@@ -64,18 +66,19 @@ Normal and Hard modes have the same table structure, but each mode has its own d
 ```text
 Player presses Save / game auto-saves
         -> SaveSystem.SaveGame()
-        -> Writes player, inventory, item, ritual, stamina, subtitle, and progression data
+        -> Writes player, inventory, door, drawer, item, ritual, stamina, subtitle, and progression data
         -> gameSave_v2.db or gameSave_Hard_v2.db
 
 Player chooses Load Game
         -> MenuManager checks the correct database file and its ProgressionData
         -> SaveSystem.LoadGame()
-        -> Restores the player, items, UI-related state, stamina, subtitles, and progress
+        -> Restores the player, items, drawer positions, UI-related state, stamina, subtitles, and progress
 ```
 
 ## Important rules
 
 - Do not manually delete individual tables or rows unless you have made a backup first.
-- `gameSave_v2.db` and `gameSave_Hard_v2.db` are different saves. Editing one does not edit the other.`r`n- Starting a New Game clears IntroData and SubtitleData only for the selected difficulty, so the story and one-time subtitles can play again.
+- `gameSave_v2.db` and `gameSave_Hard_v2.db` are different saves. Editing one does not edit the other.
+- Starting a New Game clears IntroData and SubtitleData only for the selected difficulty, so the story and one-time subtitles can play again.
 - `settings.db` is global: English, Korean, or Tagalog selection is shared by both difficulties.
 - The visual `SettingsPanel` can be inactive. Keep the separate `Setting pannel cs` manager active so it can load settings.

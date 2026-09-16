@@ -18,8 +18,8 @@ public class BagUI : MonoBehaviour
     [Header("Equipped Item Name UI")]
     [SerializeField] private GameObject equippedItemNamePanel;
     [SerializeField] private TextMeshProUGUI equippedItemNameText;
-    [SerializeField] private Texture2D[] itemIcons = new Texture2D[6];
-    private static readonly string[] ItemIconResourceNames = { "Battery", "Candle", "Key", "Flashlight", "Cross", "Bible" };
+    [SerializeField] private Texture2D[] itemIcons = new Texture2D[8];
+    private static readonly string[] ItemIconResourceNames = { "Battery", "Candle", "Key", "Flashlight", "Cross", "Bible", "Wrench", "Gas" };
     [SerializeField] private int displayedCapacity = -1;
     private const int CurrentLayoutVersion = 9;
     [SerializeField] private int builtLayoutVersion = -1;
@@ -277,13 +277,18 @@ public class BagUI : MonoBehaviour
     {
         if (item == null) return -1;
 
-        string itemName = item.name.ToLowerInvariant();
+        PickupItem pickup = item.GetComponent<PickupItem>();
+        string itemName = pickup != null && !string.IsNullOrEmpty(pickup.itemName)
+            ? pickup.itemName.ToLowerInvariant()
+            : item.name.ToLowerInvariant();
         if (item.GetComponent<BatteryPickup>() != null || itemName.Contains("battery")) return 0;
         if (item.GetComponent<CandleItem>() != null || itemName.Contains("candle")) return 1;
         if (item.GetComponent<Key>() != null || item.GetComponent<KeyUse>() != null || itemName.Contains("key")) return 2;
         if (item.GetComponent<FlashlightPickup>() != null || itemName.Contains("flashlight")) return 3;
         if (itemName.Contains("cross")) return 4;
         if (itemName.Contains("bible") || itemName.Contains("book")) return 5;
+        if (itemName.Contains("wrench")) return 6;
+        if (itemName == "gas" || itemName.Contains("gas can") || itemName.Contains("gascan")) return 7;
         return -1;
     }
 
