@@ -2347,7 +2347,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1, y: -1}
-  m_SizeDelta: {x: 580, y: 52}
+  m_SizeDelta: {x: 796, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &173638453
 MonoBehaviour:
@@ -10072,7 +10072,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 4, y: 0}
-  m_SizeDelta: {x: 4, y: 52}
+  m_SizeDelta: {x: 4, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &670180405
 MonoBehaviour:
@@ -11964,7 +11964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 1711101173}
+  m_Material: {fileID: 1950706961}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -14994,7 +14994,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: a593744de315707489b9b12764acf797,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.662613
+      value: -4.58
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a593744de315707489b9b12764acf797,
         type: 3}
@@ -16458,7 +16458,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 308}
-  m_SizeDelta: {x: 620, y: 60}
+  m_SizeDelta: {x: 840, y: 68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1005157520
 MonoBehaviour:
@@ -19535,7 +19535,7 @@ MonoBehaviour:
   ritualCompleteSound: {fileID: 8300000, guid: 2a0787d9f5c97cb4c9d2fb56bdcf8b29, type: 3}
   whisperSound: {fileID: 8300000, guid: 1d2cd61e33175264e890c278323846d5, type: 3}
   objectiveTrigger: {fileID: 0}
-  delayBeforeLightsOff: 2
+  finalRitualDelay: 3
   lightFadeSpeed: 1.5
 --- !u!4 &1204030804
 Transform:
@@ -27016,45 +27016,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &1711101173
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &1712077675
 GameObject:
   m_ObjectHideFlags: 0
@@ -31264,6 +31225,45 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+--- !u!21 &1950706961
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1950877987
 GameObject:
   m_ObjectHideFlags: 0
@@ -31299,7 +31299,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 580, y: 52}
+  m_SizeDelta: {x: 796, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1950877989
 MonoBehaviour:
