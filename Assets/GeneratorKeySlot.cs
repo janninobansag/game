@@ -9,6 +9,10 @@ public class GeneratorKeySlot : MonoBehaviour
     public GeneratorFuelInteraction fuelInteraction;
     public Transform keyInsertPoint;
     public Light generatorLight1;
+    [Tooltip("Optional second generator light. Both lights turn on and off together.")]
+    public Light generatorLight2;
+    [Tooltip("Add every other duplicated generator light here. All assigned lights turn on and off together.")]
+    public Light[] additionalGeneratorLights;
 
     [Header("Key")]
     public string requiredKeyName = "Generator key";
@@ -33,7 +37,9 @@ public class GeneratorKeySlot : MonoBehaviour
     private void Start()
     {
         playerCamera = Camera.main;
-        if (generatorLight1 != null) generatorLight1.enabled = false;
+        // The generator area starts lit. A separate GeneratorLightsOffTrigger
+        // handles the scripted blink and blackout when the player reaches it.
+        SetGeneratorLights(true);
         if (SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(keyInsertedSaveId))
             RestoreInsertedKey();
     }
@@ -107,13 +113,27 @@ public class GeneratorKeySlot : MonoBehaviour
     {
         isRunning = true;
         showPrompt = false;
-        if (generatorLight1 != null) generatorLight1.enabled = true;
+        SetGeneratorLights(true);
         if (insertedKey != null) insertedKey.transform.localRotation = insertedRotation * Quaternion.Euler(turnRotation);
         yield return new WaitForSeconds(runningSeconds);
-        if (generatorLight1 != null) generatorLight1.enabled = false;
+        SetGeneratorLights(false);
         if (insertedKey != null) insertedKey.transform.localRotation = insertedRotation;
         if (fuelInteraction != null) fuelInteraction.ConsumeFuel();
         isRunning = false;
+    }
+
+    private void SetGeneratorLights(bool enabled)
+    {
+        SetLightState(generatorLight1, enabled);
+        SetLightState(generatorLight2, enabled);
+        if (additionalGeneratorLights == null) return;
+        foreach (Light light in additionalGeneratorLights)
+            SetLightState(light, enabled);
+    }
+
+    private static void SetLightState(Light light, bool enabled)
+    {
+        if (light != null) light.enabled = enabled;
     }
 
     private void RestoreInsertedKey()

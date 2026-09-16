@@ -62,7 +62,19 @@ A separate `WhiteLady.cs` implementation was not found among the current top-lev
 
 The Tikbalang is Jude's spirit. Varen killed Jude outside House 3, and he became trapped in the forest because he could not accept his death. The Tikbalang is a half-man, half-horse creature that misleads travelers, confuses them, and leads them into traps. If its footsteps are heard behind the player, the player should not turn around.
 
-A separate `Tikbalang.cs` implementation was not found among the current top-level scripts.
+`TikbalangAI.cs` controls the active Chapter 2 Tikbalang encounter. On first discovery, Tikbalang teleports in front of the player and plays its discovery sound. It then chases using a `NavMeshAgent`.
+
+When Tikbalang reaches the configurable **Catch Range** (default `1.4`), it starts a repeatable catch sequence:
+
+1. Player movement locks and the camera smoothly turns toward Tikbalang.
+2. Tikbalang plays its jumpscare animation and sound.
+3. The Q&A panel opens with a randomly selected Inspector-configured question.
+4. The cursor is unlocked and remains visible while the player answers.
+5. A correct answer causes no damage. A wrong answer or timeout deals `40` damage by default.
+6. Tikbalang teleports to a configured enemy spawn point, the camera returns, and player movement resumes.
+7. After the configurable **Catch Cooldown** (default `3` seconds), Tikbalang can catch the player again.
+
+The `TikbalangAI` Inspector exposes the Q&A panel, questions, answer options, correct-answer index, timing, wrong-answer damage, catch range, cooldown, and optional jumpscare camera settings.
 
 ### Shadows And Voices
 
@@ -368,8 +380,9 @@ Visual and atmosphere systems include:
 ## AI Script Ownership
 
 - **Varen** uses `MutantAI.cs`.
-- **White Lady** and **Tikbalang** share `MonsterAI_New.cs`.
-- Future Varen behaviour changes must be made in `MutantAI.cs`; changes to `MonsterAI_New.cs` affect White Lady and Tikbalang.
+- **White Lady** uses its configured scene/prefab behavior, including `MonsterAI_New.cs` where assigned.
+- **Tikbalang** uses the dedicated `TikbalangAI.cs` controller for its first reveal, chase, repeatable catch jumpscare, camera focus, and Q&A.
+- Future Varen behaviour changes must be made in `MutantAI.cs`; Tikbalang changes belong in `TikbalangAI.cs`.
 
 
 ## Varen Catch Damage and Respawn

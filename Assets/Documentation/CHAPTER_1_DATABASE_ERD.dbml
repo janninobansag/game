@@ -47,6 +47,17 @@ Table DoorData {
   RotW float
 }
 
+Table DrawerData {
+  Id integer [pk, increment]
+  SaveProfileId integer [not null]
+  DrawerId varchar
+  DrawerName varchar
+  IsOpen boolean
+  LocalPosX float
+  LocalPosY float
+  LocalPosZ float
+}
+
 Table RitualData {
   Id integer [pk, increment]
   SaveProfileId integer [not null]
@@ -181,6 +192,7 @@ Table AIPositionData {
 Ref: SaveProfileData.Id < PlayerData.SaveProfileId
 Ref: SaveProfileData.Id < InventoryData.SaveProfileId
 Ref: SaveProfileData.Id < DoorData.SaveProfileId
+Ref: SaveProfileData.Id < DrawerData.SaveProfileId
 Ref: SaveProfileData.Id < RitualData.SaveProfileId
 Ref: SaveProfileData.Id < NoteData.SaveProfileId
 Ref: SaveProfileData.Id < GameStateData.SaveProfileId

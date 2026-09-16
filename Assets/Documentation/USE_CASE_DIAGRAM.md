@@ -30,6 +30,7 @@ flowchart LR
             unlockArea([Unlock Doors and Search Drawers])
             encounter([Survive Enemy Encounters])
             answerQuestions([Answer Q and A Challenge])
+            tikbalangCatch([Survive Tikbalang Catch and Q and A])
             generator([Operate Generator in Hard Mode])
             placeRitual([Place Ritual Items])
             sealVaren([Seal VAREN at Ritual Tree])
@@ -48,6 +49,7 @@ flowchart LR
     player --> readContent
     player --> unlockArea
     player --> encounter
+    player --> tikbalangCatch
     player --> generator
     player --> placeRitual
     player --> sealVaren
@@ -57,6 +59,7 @@ flowchart LR
     interact -.->|includes| readContent
     manageItems -.->|includes| useFlashlight
     encounter -.->|may include| answerQuestions
+    tikbalangCatch -.->|includes| answerQuestions
     placeRitual -.->|leads to| sealVaren
     pauseQuit -.->|includes| saveGame
 
@@ -80,7 +83,7 @@ flowchart LR
 | Game access | Start a Normal or Hard game, load progress, change settings, pause, or quit. |
 | Exploration | Move through locations, inspect objects, read notes/books, unlock doors, and open drawers. |
 | Inventory | Pick up, select, drop, and use items including keys, batteries, flashlight, gas, and ritual items. |
-| Survival | Avoid enemies, receive damage, respawn at checkpoints, and complete the Q-and-A sequence when it is triggered. |
+| Survival | Avoid enemies, receive damage, respawn at checkpoints, and complete Q&A sequences when triggered. A Tikbalang catch locks player movement, focuses the camera on the creature, and presents a Q&A challenge. |
 | Hard mode | Open the generator cover with the wrench, pour gas, insert the Generator key, and run the generator. |
 | Ritual progression | Place two candles, a Bible, and a cross; then hold `E` at the Ritual Tree to seal VAREN. |
 | Persistence | Save and load player progress, world state, inventory, rituals, settings, subtitles, and progression. |
