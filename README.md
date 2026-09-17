@@ -77,6 +77,7 @@ Then use **File -> Build Settings**, choose the platform, click **Switch Platfor
 - [Complete Program Workflow](Assets/Documentation/PROGRAM_WORKFLOW.md)
 - [Game Activity Diagram](Assets/Documentation/ACTIVITY_DIAGRAM.md)
 - [Game Use Case Diagram](Assets/Documentation/USE_CASE_DIAGRAM.md)
+- [Player Guide: Linux and macOS](Assets/Documentation/PLAYING_ON_LINUX_AND_MAC.md)
 
 ## Project Structure
 
