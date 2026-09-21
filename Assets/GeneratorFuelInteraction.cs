@@ -163,7 +163,6 @@ public class GeneratorFuelInteraction : MonoBehaviour
     {
         if (!debugInteraction || lastDebugState == message) return;
         lastDebugState = message;
-        Debug.Log("[Generator Fuel Debug] " + message, this);
     }
 
     private void OnGUI()

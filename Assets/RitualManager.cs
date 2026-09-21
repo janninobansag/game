@@ -125,7 +125,6 @@ public class RitualManager : MonoBehaviour
         candleLights = lightsToFade.ToArray();
         if (candleLights.Length == 0)
         {
-            Debug.LogWarning("[RitualManager] No candle lights are assigned. Add all four candle Light components to Candle Lights in the Inspector.");
             yield break;
         }
         float[] originalIntensities = new float[candleLights.Length];

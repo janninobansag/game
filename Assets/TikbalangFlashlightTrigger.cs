@@ -44,6 +44,11 @@ public class TikbalangFlashlightTrigger : MonoBehaviour
 
         TikbalangAI target = other.GetComponentInParent<TikbalangAI>();
         if (target == null) target = tikbalang;
-        if (target != null) target.TeleportToSpawnPoint();
+
+        // Do not move Tikbalang during the first encounter or any jumpscare sequence.
+        // Flashlight teleports are allowed only while Tikbalang is actively chasing the player.
+        if (target == null || !target.IsChasingPlayer) return;
+
+        target.TeleportToSpawnPoint();
     }
 }

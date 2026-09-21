@@ -43,8 +43,6 @@ public static class PlayAsNewGameInEditor
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
         PlayerPrefs.Save();
-
-        Debug.Log("[Editor Play] Deleted game-save databases and started " + sceneName + " as a new game.");
     }
 
     private static void DeleteGameSaveDatabases()

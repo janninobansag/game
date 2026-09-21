@@ -1257,9 +1257,6 @@ public class SaveSystem : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log($"[Gas DB Debug] Restoring GasData id={savedGas.GasId} to active-scene Gas at {gas.transform.position}. " +
-                  $"Saved held={savedGas.IsHeld}, dropped={savedGas.IsDropped}, saved position=({savedGas.PosX}, {savedGas.PosY}, {savedGas.PosZ}).", this);
         gas.wasDropped = savedGas.IsDropped;
         gas.isHeld = savedGas.IsHeld;
         if (!savedGas.IsDropped) return;

@@ -27,7 +27,7 @@ public class BookUIController : MonoBehaviour
         instance = FindObjectOfType<BookUIController>();
         if (instance != null) return instance;
         Canvas canvas = FindObjectOfType<Canvas>();
-        if (canvas == null) { Debug.LogWarning("Book UI needs a Canvas in the scene."); return null; }
+        if (canvas == null) { return null; }
         GameObject controller = new GameObject("Book UI Controller", typeof(BookUIController));
         controller.transform.SetParent(canvas.transform, false);
         instance = controller.GetComponent<BookUIController>();
