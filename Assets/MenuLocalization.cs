@@ -118,5 +118,8 @@ public static class MenuLocalization
                     label.font = original.font;
             }
         }
+
+        foreach (MenuManager menuManager in Object.FindObjectsOfType<MenuManager>(true))
+            menuManager.RefreshAboutLocalization();
     }
 }
