@@ -41,8 +41,6 @@ public class GeneratorLightsOffTrigger : MonoBehaviour
             return;
 
         hasTriggered = true;
-        if (logTrigger)
-            Debug.Log("[Generator Lights] Player entered blackout trigger.", this);
         StartCoroutine(BlinkThenTurnOff());
     }
 

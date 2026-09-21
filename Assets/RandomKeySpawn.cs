@@ -32,7 +32,6 @@ public class RandomKeySpawn : MonoBehaviour
 
         if (validCount == 0)
         {
-            Debug.LogWarning("[Random Key Spawn] No spawn points assigned for " + name + ".", this);
             return;
         }
 
@@ -43,12 +42,6 @@ public class RandomKeySpawn : MonoBehaviour
             index = GetRandomValidIndex();
             PlayerPrefs.SetInt(profileKey, index);
             PlayerPrefs.Save();
-            if (logSpawnChoice)
-                Debug.Log("[Random Key Spawn] New game chose " + spawnPoints[index].name + " for " + name + ".", this);
-        }
-        else if (logSpawnChoice)
-        {
-            Debug.Log("[Random Key Spawn] Restored " + spawnPoints[index].name + " for " + name + ".", this);
         }
 
         Transform pointToUse = spawnPoints[index];

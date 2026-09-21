@@ -154,7 +154,6 @@ public class GeneratorKeySlot : MonoBehaviour
     {
         if (!debugKeySlot || lastDebugState == message) return;
         lastDebugState = message;
-        Debug.Log("[Generator Key Debug] " + message, this);
     }
     private void OnGUI()
     {

@@ -7,6 +7,9 @@ using TMPro;
 [RequireComponent(typeof(NavMeshAgent))]
 public class TikbalangAI : MonoBehaviour
 {
+    [Header("Trigger Debug")]
+    [Tooltip("Shows why Tikbalang was asked to teleport. Disable after testing.")]
+    public bool debugTrigger = true;
     [Header("References")]
     public Transform player;
     public Animator animator;
@@ -14,9 +17,6 @@ public class TikbalangAI : MonoBehaviour
     [Tooltip("Assign the spawn point children from TELEPORTER FOR ENEMY here.")]
     public Transform[] teleportSpawnPoints;
 
-    [Header("First Encounter")]
-    [Tooltip("Tikbalang stays still until the player enters this radius for the first time.")]
-    [Min(0.1f)] public float awakeningRadius = 10f;
     [Tooltip("Sound played when Tikbalang is first discovered.")]
     public AudioClip discoveryShout;
     [Tooltip("How long to show the jumpscare animation before teleporting.")]
@@ -57,6 +57,8 @@ public class TikbalangAI : MonoBehaviour
     private float nextTeleportTime;
     private int lastSpawnPointIndex = -1;
     private bool hasAwakened;
+    public bool HasFirstEncounterStarted => hasAwakened;
+    public bool IsChasingPlayer => hasAwakened && !isFirstEncounterPlaying && !isCatchSequencePlaying;
     private bool isFirstEncounterPlaying;
     private bool isCatchSequencePlaying;
     private float nextCatchTime;
@@ -92,13 +94,9 @@ public class TikbalangAI : MonoBehaviour
         FindPlayerIfNeeded();
         if (player == null) return;
 
-        // First time the player finds Tikbalang: reveal, shout, teleport, then chase forever.
+        // Tikbalang remains dormant until TikbalangJumpscareTrigger starts the first encounter.
         if (!hasAwakened)
-        {
-            if (!isFirstEncounterPlaying && Vector3.Distance(transform.position, player.position) <= awakeningRadius)
-                StartCoroutine(PlayFirstEncounter());
             return;
-        }
 
         if (isCatchSequencePlaying)
             return;
@@ -122,23 +120,45 @@ public class TikbalangAI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-    private IEnumerator PlayFirstEncounter()
+    // Called by TikbalangJumpscareTrigger when the player enters its detector collider.
+    public bool TriggerDetectionJumpscare(TikbalangJumpscareTrigger triggerSource)
     {
-        isFirstEncounterPlaying = true;
-        agent.isStopped = true;
-        SetMovementAnimation(false);
+        FindPlayerIfNeeded();
+        string sourceName = triggerSource != null ? triggerSource.name : "unknown source";
 
-        // First reveal: appear in front of the player, but do not start the Q&A yet.
-        TeleportInFrontOfPlayer();
-        // The first sighting only wakes Tikbalang. Jumpscares happen when it catches the player.
-        if (audioSource != null && discoveryShout != null)
-            audioSource.PlayOneShot(discoveryShout);
+        if (player == null)
+        {
+            LogTriggerDebug($"Rejected teleport request from '{sourceName}': Player reference was not found.");
+            return false;
+        }
 
-        yield return new WaitForSeconds(0.15f);
-        hasAwakened = true;
-        isFirstEncounterPlaying = false;
+        if (isFirstEncounterPlaying || isCatchSequencePlaying)
+        {
+            LogTriggerDebug($"Rejected teleport request from '{sourceName}': a Tikbalang sequence is already running.");
+            return false;
+        }
+
+        LogTriggerDebug($"Accepted teleport request from detector '{sourceName}'.");
+        StartCoroutine(PlayDetectionJumpscare());
+        return true;
     }
 
+    private IEnumerator PlayDetectionJumpscare()
+    {
+        isFirstEncounterPlaying = true;
+        hasAwakened = true;
+
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+
+        SetMovementAnimation(false);
+        TeleportInFrontOfPlayer();
+        yield return StartCoroutine(PlayCatchJumpscare());
+        isFirstEncounterPlaying = false;
+    }
     private IEnumerator PlayCatchJumpscare()
     {
         isCatchSequencePlaying = true;
@@ -166,6 +186,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         SetPlayerQuestionLock(false);
         nextCatchTime = Time.time + catchCooldown;
         isCatchSequencePlaying = false;
+        ResumeChaseAfterEncounter();
     }
 
     private IEnumerator FocusCameraOnTikbalang()
@@ -224,7 +245,6 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
 
         if (qnaPanel == null)
         {
-            Debug.LogWarning("[Tikbalang Q&A] QnAPanel was not found. Assign it in the Tikbalang AI Inspector.", this);
             return;
         }
 
@@ -256,7 +276,6 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         currentQuestion = questions[Random.Range(0, questions.Length)];
         if (currentQuestion == null || currentQuestion.options == null || currentQuestion.options.Length < 4)
         {
-            Debug.LogWarning("[Tikbalang Q&A] A question needs four answer options.", this);
             yield break;
         }
 
@@ -374,6 +393,20 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+    }
+    private void ResumeChaseAfterEncounter()
+    {
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh || player == null)
+        {
+            LogTriggerDebug("First encounter finished, but Tikbalang could not resume chase because the agent or player is unavailable.");
+            return;
+        }
+
+        nextDestinationUpdate = 0f;
+        agent.isStopped = false;
+        agent.SetDestination(player.position);
+        SetMovementAnimation(true);
+        LogTriggerDebug("First encounter finished. Tikbalang is now chasing the player.");
     }
     private void ChasePlayer()
     {
@@ -536,4 +569,9 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
                 return;
             }
     }
-}
+
+    private void LogTriggerDebug(string message)
+    {
+        if (debugTrigger)
+            Debug.Log($"[Tikbalang Trigger Debug] {message}", this);
+    }}
