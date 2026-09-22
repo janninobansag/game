@@ -22142,7 +22142,7 @@ MonoBehaviour:
   interactRange: 2
   interactKey: 101
   itemNameRequired: Cross
-  promptMessage: Press E to place Bible
+  promptMessage: Press E to place Cross
   objectiveTrigger: {fileID: 0}
   audioTrigger: {fileID: 0}
 --- !u!21 &1188905391
@@ -22694,7 +22694,7 @@ MonoBehaviour:
   candleHolder1: {fileID: 1893285070}
   candleHolder2: {fileID: 741629655}
   bibleHolder: {fileID: 1187089299}
-  crossHolder: {fileID: 1187089299}
+  crossHolder: {fileID: 1187089301}
   candleLights:
   - {fileID: 1810422995}
   - {fileID: 1051810608}

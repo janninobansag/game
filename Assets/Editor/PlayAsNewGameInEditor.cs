@@ -42,6 +42,7 @@ public static class PlayAsNewGameInEditor
         PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
+        ObjectiveTrigger.ClearSavedStates();
         PlayerPrefs.Save();
     }
 
