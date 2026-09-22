@@ -22,6 +22,8 @@ public class JumpscareSystemNEW : MonoBehaviour
     public LayerMask teleportLayerMask = -1;
 
     private bool isJumpscaring = false;
+    private bool awaitingExternalRelease = false;
+    private Transform lockedMonster;
     private Transform playerCamera;
     private Transform playerTransform;
     private PlayerController playerController;
@@ -102,13 +104,13 @@ public class JumpscareSystemNEW : MonoBehaviour
         }
     }
 
-    public void TriggerJumpscare(GameObject monster)
+    public void TriggerJumpscare(GameObject monster, bool holdCameraUntilReleased = false)
     {
         if (isJumpscaring) return;
-        StartCoroutine(JumpscareSequence(monster));
+        StartCoroutine(JumpscareSequence(monster, holdCameraUntilReleased));
     }
 
-    IEnumerator JumpscareSequence(GameObject monster)
+    IEnumerator JumpscareSequence(GameObject monster, bool holdCameraUntilReleased)
     {
         isJumpscaring = true;
 
@@ -166,13 +168,40 @@ public class JumpscareSystemNEW : MonoBehaviour
         // ── HOLD JUMPSCARE ──
         yield return new WaitForSeconds(jumpscareDuration);
 
-        // ── TELEPORT MONSTER ──
+        // White Lady Q&A keeps the player looking at her until it finishes.
+        if (holdCameraUntilReleased)
+        {
+            lockedMonster = monsterTransform;
+            awaitingExternalRelease = true;
+            yield break;
+        }
+
         Vector3 randomPos = GetRandomTeleportPosition();
         monsterTransform.position = randomPos;
+        yield return StartCoroutine(RestoreCameraAndPlayerControl());
+        isJumpscaring = false;
+    }
 
-        // ── RESET CAMERA ──
-        elapsed = 0f;
-        float resetDuration = 0.5f;
+    public void ReleaseJumpscareLock()
+    {
+        if (!awaitingExternalRelease)
+            return;
+
+        StartCoroutine(ReleaseJumpscareLockRoutine());
+    }
+
+    private IEnumerator ReleaseJumpscareLockRoutine()
+    {
+        awaitingExternalRelease = false;
+        lockedMonster = null;
+        yield return StartCoroutine(RestoreCameraAndPlayerControl());
+        isJumpscaring = false;
+    }
+
+    private IEnumerator RestoreCameraAndPlayerControl()
+    {
+        float elapsed = 0f;
+        const float resetDuration = 0.5f;
         Quaternion startRot = playerCamera.rotation;
         Quaternion endRot = originalCameraRot;
 
@@ -185,17 +214,21 @@ public class JumpscareSystemNEW : MonoBehaviour
         }
         playerCamera.rotation = endRot;
 
-        // ── RE-ENABLE PLAYER CONTROL ──
         if (playerController != null)
             playerController.enabled = true;
 
-        // ── START BREATHING AFTER JUMPSCARE (if not already started) ──
         if (!startBreathingDuringJumpscare)
-        {
             StartBreathing();
-        }
+    }
 
-        isJumpscaring = false;
+    void LateUpdate()
+    {
+        if (!awaitingExternalRelease || lockedMonster == null || playerCamera == null)
+            return;
+
+        Vector3 lookDirection = lockedMonster.position + Vector3.up * 1.5f - playerCamera.position;
+        if (lookDirection.sqrMagnitude > 0.001f)
+            playerCamera.rotation = Quaternion.LookRotation(lookDirection);
     }
 
     Vector3 GetRandomTeleportPosition()
