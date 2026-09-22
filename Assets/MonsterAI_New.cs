@@ -62,6 +62,7 @@ public class MonsterAI_New : MonoBehaviour
     private bool playerInSight = false;
     
     private bool isJumpscaring = false;
+    private bool isWaitingForQnA = false;
     private float jumpscareAnimTimer = 0f;
     private Vector3 jumpscareLockPosition;
     private bool hasTriggeredJumpscare = false;
@@ -69,6 +70,7 @@ public class MonsterAI_New : MonoBehaviour
     // ── Q&A State ──
     private bool isQnAActive = false;
     private bool isClosingQnA = false;
+    private bool isResolvingQnA = false;
     private QnAEntry currentQuestion;
     private int currentQuestionIndex = -1;
     private List<int> usedQuestionIndices = new List<int>();
@@ -219,7 +221,7 @@ public class MonsterAI_New : MonoBehaviour
         if (isJumpscaring)
         {
             jumpscareAnimTimer -= Time.deltaTime;
-            if (jumpscareAnimTimer <= 0f)
+            if (jumpscareAnimTimer <= 0f && !isWaitingForQnA)
             {
                 isJumpscaring = false;
                 agent.enabled = true;
@@ -235,7 +237,8 @@ public class MonsterAI_New : MonoBehaviour
 
         if (isQnAActive || currentState == State.QnA)
         {
-            agent.isStopped = true;
+            if (agent != null && agent.enabled && agent.isOnNavMesh)
+                agent.isStopped = true;
             if (playerController != null && playerController.enabled)
             {
                 playerController.enabled = false;
@@ -329,7 +332,7 @@ public class MonsterAI_New : MonoBehaviour
 
     public void TriggerQnA()
     {
-        if (isQnAActive) return;
+        if (isQnAActive || isResolvingQnA) return;
         if (questions == null || questions.Length == 0)
         {
             return;
@@ -342,12 +345,17 @@ public class MonsterAI_New : MonoBehaviour
     {
         isQnAActive = true;
         isClosingQnA = false;
+        isResolvingQnA = false;
         isQnAComplete = false;
         hasUnlockedAfterQnA = false;
         currentState = State.QnA;
         isWaitingForAnswer = false;
         hasAnswered = false;
-        agent.isStopped = true;
+        SetQnAIdleAnimation();
+        if (audioSource != null && audioSource.isPlaying && audioSource.clip == chaseSound)
+            audioSource.Stop();
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+            agent.isStopped = true;
         isPlayerLocked = true;
 
         LockAllPlayerControls(true);
@@ -410,14 +418,19 @@ public class MonsterAI_New : MonoBehaviour
             yield return StartCoroutine(WrongAnswerSequence());
         }
 
-        yield return new WaitForSeconds(0.5f);
-        
-        if (!isClosingQnA)
-        {
-            CloseQnA();
-        }
+        // Answer/timeout sequences close Q&A only after the White Lady teleports.
+        // Do not unlock the player here; that would allow another jumpscare first.
     }
 
+    private void SetQnAIdleAnimation()
+    {
+        if (animator == null)
+            return;
+
+        animator.ResetTrigger("jumpscare");
+        animator.SetBool("walking", false);
+        animator.SetBool("run", false);
+    }
     void LockAllPlayerControls(bool lockControls)
     {
         if (playerController != null)
@@ -614,6 +627,7 @@ public class MonsterAI_New : MonoBehaviour
         if (!isWaitingForAnswer || hasAnswered) return;
         hasAnswered = true;
         isWaitingForAnswer = false;
+        isResolvingQnA = true;
 
         if (currentQuestion == null) return;
 
@@ -631,10 +645,12 @@ public class MonsterAI_New : MonoBehaviour
 
     IEnumerator CorrectAnswerSequence()
     {
+        isResolvingQnA = true;
         ShowFeedback("Correct!", Color.green);
         yield return new WaitForSeconds(0.8f);
 
         TeleportMonsterAway();
+        JumpscareSystemNEW.Instance?.ReleaseJumpscareLock();
         
         yield return new WaitForSeconds(0.2f);
         CloseQnA();
@@ -642,6 +658,7 @@ public class MonsterAI_New : MonoBehaviour
 
     IEnumerator WrongAnswerSequence()
     {
+        isResolvingQnA = true;
         ShowFeedback("Wrong!", Color.red);
         yield return new WaitForSeconds(0.8f);
 
@@ -655,6 +672,7 @@ public class MonsterAI_New : MonoBehaviour
         }
 
         TeleportMonsterAway();
+        JumpscareSystemNEW.Instance?.ReleaseJumpscareLock();
         
         yield return new WaitForSeconds(0.2f);
         CloseQnA();
@@ -684,6 +702,9 @@ public class MonsterAI_New : MonoBehaviour
             transform.rotation = spawnPoint.rotation;
 
         currentState = State.Patrol;
+        isJumpscaring = false;
+        isWaitingForQnA = false;
+        jumpscareTimer = Mathf.Max(jumpscareTimer, jumpscareCooldown);
         hasTriggeredJumpscare = false;
         isChasing = false;
         isIdle = false;
@@ -795,6 +816,7 @@ public class MonsterAI_New : MonoBehaviour
         isClosingQnA = true;
 
         isQnAActive = false;
+        isResolvingQnA = false;
         qnaPanelHiddenForPause = false;
         isWaitingForAnswer = false;
         hasAnswered = false;
@@ -1012,11 +1034,20 @@ public class MonsterAI_New : MonoBehaviour
         if (hasTriggeredJumpscare) return;
         hasTriggeredJumpscare = true;
 
-        if (jumpscareSound != null && audioSource != null)
+        // The jumpscare and chase use this same AudioSource. Stop the looping chase
+        // before playing the one-shot so the two sounds never overlap.
+        isChasing = false;
+        if (audioSource != null)
         {
-            audioSource.PlayOneShot(jumpscareSound, 0.8f);
-        }
+            if (audioSource.isPlaying)
+                audioSource.Stop();
 
+            audioSource.clip = null;
+            audioSource.loop = false;
+
+            if (jumpscareSound != null)
+                audioSource.PlayOneShot(jumpscareSound, 0.8f);
+        }
         if (animator != null)
         {
             animator.SetTrigger("jumpscare");
@@ -1024,10 +1055,11 @@ public class MonsterAI_New : MonoBehaviour
 
         if (JumpscareSystemNEW.Instance != null)
         {
-            JumpscareSystemNEW.Instance.TriggerJumpscare(gameObject);
+            JumpscareSystemNEW.Instance.TriggerJumpscare(gameObject, true);
         }
 
         isJumpscaring = true;
+        isWaitingForQnA = true;
         jumpscareAnimTimer = 2.23f;
         jumpscareLockPosition = transform.position;
         agent.enabled = false;
@@ -1050,6 +1082,7 @@ public class MonsterAI_New : MonoBehaviour
             else
             {
                 isJumpscaring = false;
+                isWaitingForQnA = false;
                 agent.enabled = true;
                 hasTriggeredJumpscare = false;
                 currentState = State.Patrol;
