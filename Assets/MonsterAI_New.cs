@@ -35,7 +35,11 @@ public class MonsterAI_New : MonoBehaviour
     public GameObject qnaPanel;           
     public float questionDisplayTime = 30f;
     public int wrongAnswerDamage = 15;
-    public float teleportRadius = 25f;
+
+    [Header("White Lady Teleport Spawns")]
+    [Tooltip("Assign the Whitelady spawn empty objects here. If left empty, child objects named 'Whitelady spawn' are found automatically.")]
+    public Transform[] whiteLadyTeleportSpawns;
+    [Min(0f)] public float spawnPointNavMeshSearchRadius = 3f;
 
     [Header("Q&A Questions")]
     public QnAEntry[] questions;
@@ -108,6 +112,7 @@ public class MonsterAI_New : MonoBehaviour
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
         
         startPosition = transform.position;
+        PopulateTeleportSpawnsIfNeeded();
         agent.speed = walkSpeed;
         agent.isStopped = false;
 
@@ -657,44 +662,73 @@ public class MonsterAI_New : MonoBehaviour
 
     void TeleportMonsterAway()
     {
-        Vector3 randomPos = GetRandomTeleportPosition();
-        
+        Transform spawnPoint = GetNextTeleportSpawn();
+        Vector3 destination = spawnPoint != null ? spawnPoint.position : startPosition;
+
+        if (NavMesh.SamplePosition(destination, out NavMeshHit hit, spawnPointNavMeshSearchRadius, NavMesh.AllAreas))
+            destination = hit.position;
+
         if (agent != null && agent.isOnNavMesh)
         {
-            agent.Warp(randomPos);
+            agent.Warp(destination);
             agent.ResetPath();
             agent.isStopped = false;
             agent.speed = walkSpeed;
         }
-        transform.position = randomPos;
-        
+        else
+        {
+            transform.position = destination;
+        }
+
+        if (spawnPoint != null)
+            transform.rotation = spawnPoint.rotation;
+
         currentState = State.Patrol;
         hasTriggeredJumpscare = false;
         isChasing = false;
         isIdle = false;
         playerInSight = false;
-        
+
         SetNewPatrolTarget();
     }
 
-    Vector3 GetRandomTeleportPosition()
+    private Transform GetNextTeleportSpawn()
     {
-        Vector3 randomDir = Random.insideUnitSphere * teleportRadius;
-        randomDir.y = 0f;
-        Vector3 targetPos = player.position + randomDir;
+        PopulateTeleportSpawnsIfNeeded();
 
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(targetPos, out hit, teleportRadius, NavMesh.AllAreas))
+        if (whiteLadyTeleportSpawns == null || whiteLadyTeleportSpawns.Length == 0)
         {
-            return hit.position;
+            Debug.LogWarning("White Lady has no teleport spawns assigned or found. Teleporting to her start position.", this);
+            return null;
         }
 
-        if (NavMesh.SamplePosition(startPosition, out hit, 10f, NavMesh.AllAreas))
+        List<Transform> validSpawns = new List<Transform>();
+        foreach (Transform spawn in whiteLadyTeleportSpawns)
         {
-            return hit.position;
+            if (spawn != null)
+                validSpawns.Add(spawn);
         }
 
-        return targetPos;
+        if (validSpawns.Count == 0)
+            return null;
+
+        return validSpawns[Random.Range(0, validSpawns.Count)];
+    }
+
+    private void PopulateTeleportSpawnsIfNeeded()
+    {
+        if (whiteLadyTeleportSpawns != null && whiteLadyTeleportSpawns.Length > 0)
+            return;
+
+        List<Transform> foundSpawns = new List<Transform>();
+        foreach (Transform child in GetComponentsInChildren<Transform>(true))
+        {
+            if (child != transform && child.name.StartsWith("Whitelady spawn", System.StringComparison.OrdinalIgnoreCase))
+                foundSpawns.Add(child);
+        }
+
+        if (foundSpawns.Count > 0)
+            whiteLadyTeleportSpawns = foundSpawns.ToArray();
     }
 
     void ShowFeedback(string message, Color color)

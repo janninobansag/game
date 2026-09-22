@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ObjectiveTrigger : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class ObjectiveTrigger : MonoBehaviour
     public float displayDuration = 4f;
     public bool triggerOnce = true;
     public string playerTag = "Player";
+
+    [Tooltip("Optional stable ID for this trigger. Leave empty to use its scene hierarchy path.")]
+    public string saveId;
 
     [Header("UI References")]
     public GameObject objectivePanel;        // The panel that holds the objective text
@@ -27,6 +31,12 @@ public class ObjectiveTrigger : MonoBehaviour
 
     void Start()
     {
+        RegisterSavedStateKey();
+
+        // A saved game must not replay objectives that were already shown.
+        if (triggerOnce && PlayerPrefs.GetInt(GetSavedStateKey(), 0) == 1)
+            hasTriggered = true;
+
         if (objectivePanel != null)
         {
             panelRect = objectivePanel.GetComponent<RectTransform>();
@@ -90,6 +100,13 @@ public class ObjectiveTrigger : MonoBehaviour
         if (triggerOnce && hasTriggered) return;
 
         hasTriggered = true;
+
+        if (triggerOnce)
+        {
+            PlayerPrefs.SetInt(GetSavedStateKey(), 1);
+            PlayerPrefs.Save();
+        }
+
         isShowing = true;
         displayTimer = displayDuration;
         currentAlpha = 0f;
@@ -127,5 +144,60 @@ public class ObjectiveTrigger : MonoBehaviour
     {
         if (!other.CompareTag(playerTag)) return;
         TriggerObjective();
+    }
+    private string GetSavedStateKey()
+    {
+        string difficulty = PlayerPrefs.GetString("GameDifficulty", "Normal");
+        return $"ObjectiveTrigger_{difficulty}_{GetTriggerId()}";
+    }
+
+    private string GetTriggerId()
+    {
+        if (!string.IsNullOrWhiteSpace(saveId))
+            return saveId.Trim();
+
+        // Stable unless this trigger is moved or renamed in the scene hierarchy.
+        string path = SceneManager.GetActiveScene().name;
+        Transform current = transform;
+        while (current != null)
+        {
+            path = current.name + "_" + current.GetSiblingIndex() + "/" + path;
+            current = current.parent;
+        }
+
+        return path;
+    }
+
+    private void RegisterSavedStateKey()
+    {
+        const string registryKey = "ObjectiveTriggerKeys";
+        string key = GetTriggerId();
+        string keys = PlayerPrefs.GetString(registryKey, "");
+
+        if (string.IsNullOrEmpty(keys))
+            keys = key;
+        else if (!System.Array.Exists(keys.Split('|'), entry => entry == key))
+            keys += "|" + key;
+
+        PlayerPrefs.SetString(registryKey, keys);
+        PlayerPrefs.Save();
+    }
+
+    public static void ClearSavedStates()
+    {
+        const string registryKey = "ObjectiveTriggerKeys";
+        string keys = PlayerPrefs.GetString(registryKey, "");
+
+        if (!string.IsNullOrEmpty(keys))
+        {
+            foreach (string key in keys.Split('|'))
+            {
+                PlayerPrefs.DeleteKey("ObjectiveTrigger_Normal_" + key);
+                PlayerPrefs.DeleteKey("ObjectiveTrigger_Hard_" + key);
+            }
+        }
+
+        PlayerPrefs.DeleteKey(registryKey);
+        PlayerPrefs.Save();
     }
 }

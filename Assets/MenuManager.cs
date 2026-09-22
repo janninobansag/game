@@ -342,6 +342,7 @@ public class MenuManager : MonoBehaviour
     {
         PlayClickSound();
         ProgressionTrigger.ClearSavedStates();
+        ObjectiveTrigger.ClearSavedStates();
         
         if (difficultyPanel != null)
             difficultyPanel.SetActive(false);
@@ -399,6 +400,7 @@ public class MenuManager : MonoBehaviour
     {
         PlayClickSound();
         ProgressionTrigger.ClearSavedStates();
+        ObjectiveTrigger.ClearSavedStates();
         
         if (difficultyPanel != null)
             difficultyPanel.SetActive(false);
