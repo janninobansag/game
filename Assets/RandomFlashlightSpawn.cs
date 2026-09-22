@@ -30,7 +30,6 @@ public class RandomFlashlightSpawn : MonoBehaviour
     {
         if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            Debug.LogWarning("[Random Flashlight Spawn] No spawn points are assigned for " + name + ".", this);
             return;
         }
 
@@ -42,19 +41,11 @@ public class RandomFlashlightSpawn : MonoBehaviour
             index = GetRandomValidIndex();
             if (index < 0)
             {
-                Debug.LogWarning("[Random Flashlight Spawn] All spawn-point entries are empty for " + name + ".", this);
                 return;
             }
 
             PlayerPrefs.SetInt(profileKey, index);
             PlayerPrefs.Save();
-
-            if (logSpawnChoice)
-                Debug.Log("[Random Flashlight Spawn] New game chose " + spawnPoints[index].name + " for " + name + ".", this);
-        }
-        else if (logSpawnChoice)
-        {
-            Debug.Log("[Random Flashlight Spawn] Restored " + spawnPoints[index].name + " for " + name + ".", this);
         }
 
         Transform selectedSpawn = spawnPoints[index];

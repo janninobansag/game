@@ -466,8 +466,6 @@ public class PauseMenu : MonoBehaviour
 
     private void LogPause(string message)
     {
-        if (logPauseMenuActions)
-            Debug.Log($"[PauseMenu] {message}", this);
     }
 
     private void UpdateVolumeLabel(float value)

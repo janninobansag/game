@@ -7,6 +7,9 @@ using TMPro;
 [RequireComponent(typeof(NavMeshAgent))]
 public class TikbalangAI : MonoBehaviour
 {
+    [Header("Trigger Debug")]
+    [Tooltip("Shows why Tikbalang was asked to teleport. Disable after testing.")]
+    public bool debugTrigger = true;
     [Header("References")]
     public Transform player;
     public Animator animator;
@@ -14,9 +17,6 @@ public class TikbalangAI : MonoBehaviour
     [Tooltip("Assign the spawn point children from TELEPORTER FOR ENEMY here.")]
     public Transform[] teleportSpawnPoints;
 
-    [Header("First Encounter")]
-    [Tooltip("Tikbalang stays still until the player enters this radius for the first time.")]
-    [Min(0.1f)] public float awakeningRadius = 10f;
     [Tooltip("Sound played when Tikbalang is first discovered.")]
     public AudioClip discoveryShout;
     [Tooltip("How long to show the jumpscare animation before teleporting.")]
@@ -36,6 +36,8 @@ public class TikbalangAI : MonoBehaviour
     [Header("Catch Jumpscare")]
     [Tooltip("Tikbalang catches the player and starts the Q&A jumpscare within this distance.")]
     [Min(0.1f)] public float catchRange = 1.4f;
+    [Tooltip("Catch distance used after Tikbalang has started running. Keep this larger than Catch Range so the running jumpscare is not too close.")]
+    [Min(0.1f)] public float runningCatchRange = 2.3f;
     [Tooltip("Prevents an immediate second catch after Tikbalang teleports away.")]
     [Min(0f)] public float catchCooldown = 3f;
     [Tooltip("Optional. Leave empty to use the Main Camera.")]
@@ -45,9 +47,21 @@ public class TikbalangAI : MonoBehaviour
     [Min(0f)] public float tikbalangFaceHeight = 1.5f;
     [Header("Chase After First Encounter")]
     [Min(0.1f)] public float walkSpeed = 3.25f;
+    [Min(0.1f)] public float runSpeed = 6f;
     [Min(0f)] public float stoppingDistance = 1.2f;
     [Min(0.02f)] public float destinationRefreshRate = 0.1f;
 
+    [Header("Chase Audio")]
+    [Tooltip("Looped only while Tikbalang is running after the player sees it.")]
+    public AudioClip chaseSound;
+    [Range(0f, 1f)] public float chaseVolume = 0.8f;
+
+    [Header("Player Sight Run Trigger")]
+    [Tooltip("Once the player camera gets a clear view of Tikbalang, he keeps running for the rest of that chase.")]
+    public bool runWhenPlayerSeesTikbalang = true;
+    [Tooltip("0 means unlimited distance. A wall or other collider blocks this sight check.")]
+    [Min(0f)] public float playerSightDistance = 0f;
+    public LayerMask playerSightObstacleMask = ~0;
     [Header("Flashlight Teleport")]
     [Min(0f)] public float teleportCooldown = 1f;
     [Min(0.1f)] public float spawnPointNavMeshSearchRadius = 3f;
@@ -57,8 +71,12 @@ public class TikbalangAI : MonoBehaviour
     private float nextTeleportTime;
     private int lastSpawnPointIndex = -1;
     private bool hasAwakened;
+    public bool HasFirstEncounterStarted => hasAwakened;
+    public bool IsChasingPlayer => hasAwakened && !isFirstEncounterPlaying && !isCatchSequencePlaying;
     private bool isFirstEncounterPlaying;
     private bool isCatchSequencePlaying;
+    private bool isPlayingChaseSound;
+    private bool hasBeenSeenByPlayer;
     private float nextCatchTime;
     private Quaternion cameraRotationBeforeCatch;
     private PlayerController playerController;
@@ -92,18 +110,15 @@ public class TikbalangAI : MonoBehaviour
         FindPlayerIfNeeded();
         if (player == null) return;
 
-        // First time the player finds Tikbalang: reveal, shout, teleport, then chase forever.
+        // Tikbalang remains dormant until TikbalangJumpscareTrigger starts the first encounter.
         if (!hasAwakened)
-        {
-            if (!isFirstEncounterPlaying && Vector3.Distance(transform.position, player.position) <= awakeningRadius)
-                StartCoroutine(PlayFirstEncounter());
             return;
-        }
 
         if (isCatchSequencePlaying)
             return;
 
-        if (Time.time >= nextCatchTime && Vector3.Distance(transform.position, player.position) <= catchRange)
+        float activeCatchRange = hasBeenSeenByPlayer ? Mathf.Max(catchRange, runningCatchRange) : catchRange;
+        if (Time.time >= nextCatchTime && Vector3.Distance(transform.position, player.position) <= activeCatchRange)
         {
             StartCoroutine(PlayCatchJumpscare());
             return;
@@ -122,23 +137,45 @@ public class TikbalangAI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-    private IEnumerator PlayFirstEncounter()
+    // Called by TikbalangJumpscareTrigger when the player enters its detector collider.
+    public bool TriggerDetectionJumpscare(TikbalangJumpscareTrigger triggerSource)
     {
-        isFirstEncounterPlaying = true;
-        agent.isStopped = true;
-        SetMovementAnimation(false);
+        FindPlayerIfNeeded();
+        string sourceName = triggerSource != null ? triggerSource.name : "unknown source";
 
-        // First reveal: appear in front of the player, but do not start the Q&A yet.
-        TeleportInFrontOfPlayer();
-        // The first sighting only wakes Tikbalang. Jumpscares happen when it catches the player.
-        if (audioSource != null && discoveryShout != null)
-            audioSource.PlayOneShot(discoveryShout);
+        if (player == null)
+        {
+            LogTriggerDebug($"Rejected teleport request from '{sourceName}': Player reference was not found.");
+            return false;
+        }
 
-        yield return new WaitForSeconds(0.15f);
-        hasAwakened = true;
-        isFirstEncounterPlaying = false;
+        if (isFirstEncounterPlaying || isCatchSequencePlaying)
+        {
+            LogTriggerDebug($"Rejected teleport request from '{sourceName}': a Tikbalang sequence is already running.");
+            return false;
+        }
+
+        LogTriggerDebug($"Accepted teleport request from detector '{sourceName}'.");
+        StartCoroutine(PlayDetectionJumpscare());
+        return true;
     }
 
+    private IEnumerator PlayDetectionJumpscare()
+    {
+        isFirstEncounterPlaying = true;
+        hasAwakened = true;
+
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+
+        SetMovementAnimation(false);
+        TeleportInFrontOfPlayer();
+        yield return StartCoroutine(PlayCatchJumpscare());
+        isFirstEncounterPlaying = false;
+    }
     private IEnumerator PlayCatchJumpscare()
     {
         isCatchSequencePlaying = true;
@@ -149,6 +186,7 @@ public class TikbalangAI : MonoBehaviour
         }
 
         SetMovementAnimation(false);
+        StopChaseSound();
         SetPlayerQuestionLock(true);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -166,6 +204,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         SetPlayerQuestionLock(false);
         nextCatchTime = Time.time + catchCooldown;
         isCatchSequencePlaying = false;
+        ResumeChaseAfterEncounter();
     }
 
     private IEnumerator FocusCameraOnTikbalang()
@@ -224,7 +263,6 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
 
         if (qnaPanel == null)
         {
-            Debug.LogWarning("[Tikbalang Q&A] QnAPanel was not found. Assign it in the Tikbalang AI Inspector.", this);
             return;
         }
 
@@ -256,7 +294,6 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         currentQuestion = questions[Random.Range(0, questions.Length)];
         if (currentQuestion == null || currentQuestion.options == null || currentQuestion.options.Length < 4)
         {
-            Debug.LogWarning("[Tikbalang Q&A] A question needs four answer options.", this);
             yield break;
         }
 
@@ -288,12 +325,20 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         else
         {
             SetFeedback("Wrong!", Color.red);
+        }
+
+        // Keep the feedback visible first. Applying damage afterward lets the shared
+        // PlayerHealth blood/vignette effect remain visible as the Q&A panel closes.
+        yield return new WaitForSecondsRealtime(0.8f);
+
+        if (!correct)
+        {
             PlayerHealth health = player != null ? player.GetComponent<PlayerHealth>() : null;
             if (health != null)
                 health.TakeDamage(wrongAnswerDamage);
-        }
 
-        yield return new WaitForSecondsRealtime(0.8f);
+            yield return new WaitForSecondsRealtime(0.2f);
+        }
         isQuestionPanelOpen = false;
         qnaPanel.SetActive(false);
         SetPlayerQuestionLock(false);
@@ -375,6 +420,20 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             Cursor.visible = false;
         }
     }
+    private void ResumeChaseAfterEncounter()
+    {
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh || player == null)
+        {
+            LogTriggerDebug("First encounter finished, but Tikbalang could not resume chase because the agent or player is unavailable.");
+            return;
+        }
+
+        nextDestinationUpdate = 0f;
+        agent.isStopped = false;
+        agent.SetDestination(player.position);
+        SetMovementAnimation(true);
+        LogTriggerDebug("First encounter finished. Tikbalang is now chasing the player.");
+    }
     private void ChasePlayer()
     {
         if (!agent.enabled || !agent.isOnNavMesh)
@@ -383,7 +442,12 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             return;
         }
 
-        agent.speed = walkSpeed;
+        if (runWhenPlayerSeesTikbalang && !hasBeenSeenByPlayer && CanPlayerSeeTikbalang())
+            hasBeenSeenByPlayer = true;
+
+        // Seeing Tikbalang once starts a persistent run; looking away does not cancel it.
+        bool shouldRun = runWhenPlayerSeesTikbalang && hasBeenSeenByPlayer;
+        agent.speed = shouldRun ? runSpeed : walkSpeed;
         agent.stoppingDistance = stoppingDistance;
         agent.isStopped = false;
 
@@ -393,8 +457,11 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             nextDestinationUpdate = Time.time + destinationRefreshRate;
         }
 
-        // Tikbalang uses the walk animation while chasing, never the run animation.
-        SetMovementAnimation(true);
+        SetMovementAnimation(true, shouldRun);
+        if (shouldRun)
+            PlayChaseSound();
+        else
+            StopChaseSound();
     }
 
     // Used only for the first encounter. Flashlight teleports continue to use spawn points.
@@ -451,6 +518,11 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
 
         transform.rotation = spawnPoint.rotation;
         lastSpawnPointIndex = spawnIndex;
+
+        // A teleport starts a fresh stalking phase. Tikbalang runs again only after
+        // the player gets another clear view of him.
+        hasBeenSeenByPlayer = false;
+        StopChaseSound();
         nextTeleportTime = Time.time + teleportCooldown;
         return true;
     }
@@ -496,14 +568,66 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             agent.Warp(hit.position);
     }
 
-    private void SetMovementAnimation(bool walking)
+    private bool CanPlayerSeeTikbalang()
+    {
+        Camera playerCamera = Camera.main;
+        if (playerCamera == null)
+            return false;
+
+        Vector3 targetPosition = transform.position + Vector3.up * tikbalangFaceHeight;
+        Vector3 viewportPosition = playerCamera.WorldToViewportPoint(targetPosition);
+        if (viewportPosition.z <= 0f || viewportPosition.x < 0f || viewportPosition.x > 1f ||
+            viewportPosition.y < 0f || viewportPosition.y > 1f)
+            return false;
+
+        Vector3 direction = targetPosition - playerCamera.transform.position;
+        float distance = direction.magnitude;
+        if (playerSightDistance > 0f && distance > playerSightDistance)
+            return false;
+        if (distance <= 0.001f)
+            return true;
+
+        if (Physics.Raycast(playerCamera.transform.position, direction / distance, out RaycastHit hit,
+            distance, playerSightObstacleMask, QueryTriggerInteraction.Ignore))
+        {
+            return hit.collider.GetComponentInParent<TikbalangAI>() == this;
+        }
+
+        // If Tikbalang has no collider, the camera-frustum test is still a valid fallback.
+        return true;
+    }
+
+    private void SetMovementAnimation(bool moving, bool running = false)
     {
         if (animator == null) return;
+        bool walking = moving && !running;
         SetAnimatorBoolIfPresent("walking", walking);
-        SetAnimatorBoolIfPresent("run", false);
+        SetAnimatorBoolIfPresent("run", running);
         SetAnimatorBoolIfPresent("isWalking", walking);
-        SetAnimatorBoolIfPresent("isRunning", false);
-        SetAnimatorFloatIfPresent("Speed", walking ? walkSpeed : 0f);
+        SetAnimatorBoolIfPresent("isRunning", running);
+        SetAnimatorFloatIfPresent("Speed", running ? runSpeed : (walking ? walkSpeed : 0f));
+    }
+
+    private void PlayChaseSound()
+    {
+        if (isPlayingChaseSound || audioSource == null || chaseSound == null)
+            return;
+
+        audioSource.clip = chaseSound;
+        audioSource.volume = chaseVolume;
+        audioSource.loop = true;
+        audioSource.Play();
+        isPlayingChaseSound = true;
+    }
+
+    private void StopChaseSound()
+    {
+        if (!isPlayingChaseSound || audioSource == null)
+            return;
+
+        if (audioSource.clip == chaseSound)
+            audioSource.Stop();
+        isPlayingChaseSound = false;
     }
 
     private void SetAnimatorTriggerIfPresent(string parameterName)
@@ -536,4 +660,9 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
                 return;
             }
     }
-}
+
+    private void LogTriggerDebug(string message)
+    {
+        if (debugTrigger)
+            Debug.Log($"[Tikbalang Trigger Debug] {message}", this);
+    }}

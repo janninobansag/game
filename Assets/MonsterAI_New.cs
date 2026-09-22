@@ -35,7 +35,11 @@ public class MonsterAI_New : MonoBehaviour
     public GameObject qnaPanel;           
     public float questionDisplayTime = 30f;
     public int wrongAnswerDamage = 15;
-    public float teleportRadius = 25f;
+
+    [Header("White Lady Teleport Spawns")]
+    [Tooltip("Assign the Whitelady spawn empty objects here. If left empty, child objects named 'Whitelady spawn' are found automatically.")]
+    public Transform[] whiteLadyTeleportSpawns;
+    [Min(0f)] public float spawnPointNavMeshSearchRadius = 3f;
 
     [Header("Q&A Questions")]
     public QnAEntry[] questions;
@@ -58,6 +62,7 @@ public class MonsterAI_New : MonoBehaviour
     private bool playerInSight = false;
     
     private bool isJumpscaring = false;
+    private bool isWaitingForQnA = false;
     private float jumpscareAnimTimer = 0f;
     private Vector3 jumpscareLockPosition;
     private bool hasTriggeredJumpscare = false;
@@ -65,6 +70,7 @@ public class MonsterAI_New : MonoBehaviour
     // ── Q&A State ──
     private bool isQnAActive = false;
     private bool isClosingQnA = false;
+    private bool isResolvingQnA = false;
     private QnAEntry currentQuestion;
     private int currentQuestionIndex = -1;
     private List<int> usedQuestionIndices = new List<int>();
@@ -108,6 +114,7 @@ public class MonsterAI_New : MonoBehaviour
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
         
         startPosition = transform.position;
+        PopulateTeleportSpawnsIfNeeded();
         agent.speed = walkSpeed;
         agent.isStopped = false;
 
@@ -214,7 +221,7 @@ public class MonsterAI_New : MonoBehaviour
         if (isJumpscaring)
         {
             jumpscareAnimTimer -= Time.deltaTime;
-            if (jumpscareAnimTimer <= 0f)
+            if (jumpscareAnimTimer <= 0f && !isWaitingForQnA)
             {
                 isJumpscaring = false;
                 agent.enabled = true;
@@ -230,7 +237,8 @@ public class MonsterAI_New : MonoBehaviour
 
         if (isQnAActive || currentState == State.QnA)
         {
-            agent.isStopped = true;
+            if (agent != null && agent.enabled && agent.isOnNavMesh)
+                agent.isStopped = true;
             if (playerController != null && playerController.enabled)
             {
                 playerController.enabled = false;
@@ -324,7 +332,7 @@ public class MonsterAI_New : MonoBehaviour
 
     public void TriggerQnA()
     {
-        if (isQnAActive) return;
+        if (isQnAActive || isResolvingQnA) return;
         if (questions == null || questions.Length == 0)
         {
             return;
@@ -337,12 +345,17 @@ public class MonsterAI_New : MonoBehaviour
     {
         isQnAActive = true;
         isClosingQnA = false;
+        isResolvingQnA = false;
         isQnAComplete = false;
         hasUnlockedAfterQnA = false;
         currentState = State.QnA;
         isWaitingForAnswer = false;
         hasAnswered = false;
-        agent.isStopped = true;
+        SetQnAIdleAnimation();
+        if (audioSource != null && audioSource.isPlaying && audioSource.clip == chaseSound)
+            audioSource.Stop();
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+            agent.isStopped = true;
         isPlayerLocked = true;
 
         LockAllPlayerControls(true);
@@ -405,14 +418,19 @@ public class MonsterAI_New : MonoBehaviour
             yield return StartCoroutine(WrongAnswerSequence());
         }
 
-        yield return new WaitForSeconds(0.5f);
-        
-        if (!isClosingQnA)
-        {
-            CloseQnA();
-        }
+        // Answer/timeout sequences close Q&A only after the White Lady teleports.
+        // Do not unlock the player here; that would allow another jumpscare first.
     }
 
+    private void SetQnAIdleAnimation()
+    {
+        if (animator == null)
+            return;
+
+        animator.ResetTrigger("jumpscare");
+        animator.SetBool("walking", false);
+        animator.SetBool("run", false);
+    }
     void LockAllPlayerControls(bool lockControls)
     {
         if (playerController != null)
@@ -609,6 +627,7 @@ public class MonsterAI_New : MonoBehaviour
         if (!isWaitingForAnswer || hasAnswered) return;
         hasAnswered = true;
         isWaitingForAnswer = false;
+        isResolvingQnA = true;
 
         if (currentQuestion == null) return;
 
@@ -626,10 +645,12 @@ public class MonsterAI_New : MonoBehaviour
 
     IEnumerator CorrectAnswerSequence()
     {
+        isResolvingQnA = true;
         ShowFeedback("Correct!", Color.green);
         yield return new WaitForSeconds(0.8f);
 
         TeleportMonsterAway();
+        JumpscareSystemNEW.Instance?.ReleaseJumpscareLock();
         
         yield return new WaitForSeconds(0.2f);
         CloseQnA();
@@ -637,6 +658,7 @@ public class MonsterAI_New : MonoBehaviour
 
     IEnumerator WrongAnswerSequence()
     {
+        isResolvingQnA = true;
         ShowFeedback("Wrong!", Color.red);
         yield return new WaitForSeconds(0.8f);
 
@@ -650,6 +672,7 @@ public class MonsterAI_New : MonoBehaviour
         }
 
         TeleportMonsterAway();
+        JumpscareSystemNEW.Instance?.ReleaseJumpscareLock();
         
         yield return new WaitForSeconds(0.2f);
         CloseQnA();
@@ -657,44 +680,76 @@ public class MonsterAI_New : MonoBehaviour
 
     void TeleportMonsterAway()
     {
-        Vector3 randomPos = GetRandomTeleportPosition();
-        
+        Transform spawnPoint = GetNextTeleportSpawn();
+        Vector3 destination = spawnPoint != null ? spawnPoint.position : startPosition;
+
+        if (NavMesh.SamplePosition(destination, out NavMeshHit hit, spawnPointNavMeshSearchRadius, NavMesh.AllAreas))
+            destination = hit.position;
+
         if (agent != null && agent.isOnNavMesh)
         {
-            agent.Warp(randomPos);
+            agent.Warp(destination);
             agent.ResetPath();
             agent.isStopped = false;
             agent.speed = walkSpeed;
         }
-        transform.position = randomPos;
-        
+        else
+        {
+            transform.position = destination;
+        }
+
+        if (spawnPoint != null)
+            transform.rotation = spawnPoint.rotation;
+
         currentState = State.Patrol;
+        isJumpscaring = false;
+        isWaitingForQnA = false;
+        jumpscareTimer = Mathf.Max(jumpscareTimer, jumpscareCooldown);
         hasTriggeredJumpscare = false;
         isChasing = false;
         isIdle = false;
         playerInSight = false;
-        
+
         SetNewPatrolTarget();
     }
 
-    Vector3 GetRandomTeleportPosition()
+    private Transform GetNextTeleportSpawn()
     {
-        Vector3 randomDir = Random.insideUnitSphere * teleportRadius;
-        randomDir.y = 0f;
-        Vector3 targetPos = player.position + randomDir;
+        PopulateTeleportSpawnsIfNeeded();
 
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(targetPos, out hit, teleportRadius, NavMesh.AllAreas))
+        if (whiteLadyTeleportSpawns == null || whiteLadyTeleportSpawns.Length == 0)
         {
-            return hit.position;
+            Debug.LogWarning("White Lady has no teleport spawns assigned or found. Teleporting to her start position.", this);
+            return null;
         }
 
-        if (NavMesh.SamplePosition(startPosition, out hit, 10f, NavMesh.AllAreas))
+        List<Transform> validSpawns = new List<Transform>();
+        foreach (Transform spawn in whiteLadyTeleportSpawns)
         {
-            return hit.position;
+            if (spawn != null)
+                validSpawns.Add(spawn);
         }
 
-        return targetPos;
+        if (validSpawns.Count == 0)
+            return null;
+
+        return validSpawns[Random.Range(0, validSpawns.Count)];
+    }
+
+    private void PopulateTeleportSpawnsIfNeeded()
+    {
+        if (whiteLadyTeleportSpawns != null && whiteLadyTeleportSpawns.Length > 0)
+            return;
+
+        List<Transform> foundSpawns = new List<Transform>();
+        foreach (Transform child in GetComponentsInChildren<Transform>(true))
+        {
+            if (child != transform && child.name.StartsWith("Whitelady spawn", System.StringComparison.OrdinalIgnoreCase))
+                foundSpawns.Add(child);
+        }
+
+        if (foundSpawns.Count > 0)
+            whiteLadyTeleportSpawns = foundSpawns.ToArray();
     }
 
     void ShowFeedback(string message, Color color)
@@ -761,6 +816,7 @@ public class MonsterAI_New : MonoBehaviour
         isClosingQnA = true;
 
         isQnAActive = false;
+        isResolvingQnA = false;
         qnaPanelHiddenForPause = false;
         isWaitingForAnswer = false;
         hasAnswered = false;
@@ -978,11 +1034,20 @@ public class MonsterAI_New : MonoBehaviour
         if (hasTriggeredJumpscare) return;
         hasTriggeredJumpscare = true;
 
-        if (jumpscareSound != null && audioSource != null)
+        // The jumpscare and chase use this same AudioSource. Stop the looping chase
+        // before playing the one-shot so the two sounds never overlap.
+        isChasing = false;
+        if (audioSource != null)
         {
-            audioSource.PlayOneShot(jumpscareSound, 0.8f);
-        }
+            if (audioSource.isPlaying)
+                audioSource.Stop();
 
+            audioSource.clip = null;
+            audioSource.loop = false;
+
+            if (jumpscareSound != null)
+                audioSource.PlayOneShot(jumpscareSound, 0.8f);
+        }
         if (animator != null)
         {
             animator.SetTrigger("jumpscare");
@@ -990,10 +1055,11 @@ public class MonsterAI_New : MonoBehaviour
 
         if (JumpscareSystemNEW.Instance != null)
         {
-            JumpscareSystemNEW.Instance.TriggerJumpscare(gameObject);
+            JumpscareSystemNEW.Instance.TriggerJumpscare(gameObject, true);
         }
 
         isJumpscaring = true;
+        isWaitingForQnA = true;
         jumpscareAnimTimer = 2.23f;
         jumpscareLockPosition = transform.position;
         agent.enabled = false;
@@ -1016,6 +1082,7 @@ public class MonsterAI_New : MonoBehaviour
             else
             {
                 isJumpscaring = false;
+                isWaitingForQnA = false;
                 agent.enabled = true;
                 hasTriggeredJumpscare = false;
                 currentState = State.Patrol;
