@@ -1,3 +1,4 @@
+// PURPOSE: Tracks battery pickup, dropped, and used states and provides the battery recharge value.
 using UnityEngine;
 
 public class BatteryPickup : MonoBehaviour

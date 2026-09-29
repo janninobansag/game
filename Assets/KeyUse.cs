@@ -1,3 +1,4 @@
+// PURPOSE: Updates the held state of a key item used by the inventory system.
 using UnityEngine;
 
 public class KeyUse : MonoBehaviour

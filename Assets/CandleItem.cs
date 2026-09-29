@@ -1,3 +1,4 @@
+// PURPOSE: Represents a candle inventory item and updates its held state for the player.
 using UnityEngine;
 
 public class CandleItem : MonoBehaviour

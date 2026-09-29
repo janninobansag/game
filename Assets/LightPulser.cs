@@ -1,3 +1,4 @@
+// PURPOSE: Continuously varies a light intensity between configured minimum and maximum values.
 using UnityEngine;
 
 public class LightPulser : MonoBehaviour

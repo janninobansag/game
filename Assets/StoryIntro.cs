@@ -1,3 +1,4 @@
+// PURPOSE: Displays the chapter story introduction with timed text, fades, and skip behavior.
 using System.Collections;
 using UnityEngine;
 

@@ -1,3 +1,4 @@
+// PURPOSE: Highlights nearby items with a configurable pulsing visual effect.
 using UnityEngine;
 
 public class ItemHighlight : MonoBehaviour

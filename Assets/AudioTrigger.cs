@@ -1,3 +1,4 @@
+// PURPOSE: Plays a configured audio clip when activated, with options for looping, fades, and one-time use.
 using System.Collections;
 using UnityEngine;
 

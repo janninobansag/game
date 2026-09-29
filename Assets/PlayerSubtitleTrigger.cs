@@ -1,3 +1,4 @@
+// PURPOSE: Displays a configured subtitle after the player enters and saves whether it has triggered.
 using System.Collections;
 using UnityEngine;
 

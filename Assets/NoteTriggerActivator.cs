@@ -1,3 +1,4 @@
+// PURPOSE: Enables a linked trigger after the configured note has been read.
 using UnityEngine;
 
 public class NoteTriggerActivator : MonoBehaviour

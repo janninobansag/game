@@ -1,3 +1,4 @@
+// PURPOSE: Coordinates the jumpscare sequence, audio, enemy positioning, and optional death or reload behavior.
 using System.Collections;
 using UnityEngine;
 

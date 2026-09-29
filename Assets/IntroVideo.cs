@@ -1,3 +1,4 @@
+// PURPOSE: Plays the opening video with screen fades and supports skipping or continuing afterward.
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;

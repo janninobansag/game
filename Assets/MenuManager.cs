@@ -1,3 +1,4 @@
+// PURPOSE: Handles menu actions for starting or loading Normal and Hard games and configuring menu flow.
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -377,6 +378,8 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
+        PlayerPrefs.DeleteKey("WrenchSpawnIndex_Normal");
+        PlayerPrefs.DeleteKey("WrenchSpawnIndex_Hard");
         PlayerPrefs.Save();
         
         // Force SaveSystem to use Normal database
@@ -435,6 +438,8 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
+        PlayerPrefs.DeleteKey("WrenchSpawnIndex_Normal");
+        PlayerPrefs.DeleteKey("WrenchSpawnIndex_Hard");
         PlayerPrefs.Save();
         
         // Force SaveSystem to use Hard database

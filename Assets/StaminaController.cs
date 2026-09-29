@@ -1,3 +1,4 @@
+// PURPOSE: Tracks sprint stamina, restores it, and updates the stamina bar for the active difficulty.
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;

@@ -1,3 +1,4 @@
+// PURPOSE: Fades the screen during scene transitions and then loads the requested scene.
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;

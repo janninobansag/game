@@ -1,3 +1,4 @@
+// PURPOSE: Plays the ending video with fades and returns to the menu when it finishes.
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;

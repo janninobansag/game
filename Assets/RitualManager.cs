@@ -1,3 +1,4 @@
+// PURPOSE: Checks ritual item placements and coordinates completion effects, lights, and mutant spawning.
 using System.Collections;
 using UnityEngine;
 

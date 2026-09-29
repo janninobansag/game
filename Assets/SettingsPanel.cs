@@ -1,3 +1,4 @@
+// PURPOSE: Connects settings and controls UI to saved audio, sensitivity, brightness, quality, and language options.
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;

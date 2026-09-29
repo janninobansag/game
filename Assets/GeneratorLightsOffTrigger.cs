@@ -18,6 +18,13 @@ public class GeneratorLightsOffTrigger : MonoBehaviour
     [Min(0.02f)] public float blinkInterval = 0.12f;
     [Min(0f)] public float finalOffDelay = 0.15f;
 
+    [Header("Blink Sound")]
+    [Tooltip("Played once when the player enters and the generator lights start blinking.")]
+    public AudioClip blinkSound;
+    [Range(0f, 1f)] public float blinkSoundVolume = 1f;
+    [Tooltip("Optional AudioSource for custom spatial audio settings. If empty, the sound plays at this trigger.")]
+    public AudioSource blinkAudioSource;
+
     [Header("Debug")]
     public bool logTrigger = true;
 
@@ -41,7 +48,20 @@ public class GeneratorLightsOffTrigger : MonoBehaviour
             return;
 
         hasTriggered = true;
+        PlayBlinkSound();
         StartCoroutine(BlinkThenTurnOff());
+    }
+
+    private void PlayBlinkSound()
+    {
+        if (blinkSound == null)
+            return;
+
+        float volume = Mathf.Clamp01(blinkSoundVolume);
+        if (blinkAudioSource != null)
+            blinkAudioSource.PlayOneShot(blinkSound, volume);
+        else
+            AudioSource.PlayClipAtPoint(blinkSound, transform.position, volume);
     }
 
     private IEnumerator BlinkThenTurnOff()

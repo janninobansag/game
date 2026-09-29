@@ -1,3 +1,4 @@
+// PURPOSE: Lets the player place a required item on a table point and optionally triggers objective audio.
 using UnityEngine;
 
 public class TableHolder : MonoBehaviour

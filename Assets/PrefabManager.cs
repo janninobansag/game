@@ -1,3 +1,4 @@
+// PURPOSE: Provides shared references to reusable item prefabs for gameplay systems.
 using UnityEngine;
 using System.Collections.Generic;
 

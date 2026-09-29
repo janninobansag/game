@@ -1,3 +1,4 @@
+// PURPOSE: Tracks player health and handles damage, invulnerability, death, and damage UI effects.
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;

@@ -1,3 +1,4 @@
+// PURPOSE: Provides translated gameplay subtitle text and helpers for supported game languages.
 using System.Collections.Generic;
 using UnityEngine;
 

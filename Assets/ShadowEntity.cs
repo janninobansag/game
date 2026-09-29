@@ -1,3 +1,4 @@
+// PURPOSE: Controls the shadow entity route, visibility, flicker, and disappearance behavior.
 using System.Collections;
 using UnityEngine;
 

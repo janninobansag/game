@@ -1,3 +1,4 @@
+// PURPOSE: Waits for a configured item or trigger condition, then activates the linked object or objective.
 using UnityEngine;
 using System.Collections;
 

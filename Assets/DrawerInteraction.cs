@@ -1,3 +1,4 @@
+// PURPOSE: Opens, closes, and locks a drawer with animation and sound while respecting item interactions.
 using UnityEngine;
 
 public class DrawerInteraction : MonoBehaviour

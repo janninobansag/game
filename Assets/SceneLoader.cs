@@ -1,3 +1,4 @@
+// PURPOSE: Provides a shared scene-loading entry point for menus and gameplay systems.
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;

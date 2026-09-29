@@ -1,3 +1,4 @@
+// PURPOSE: Handles key pickup, use, and unlock-target state for doors or other locked objects.
 using UnityEngine;
 
 public class Key : MonoBehaviour

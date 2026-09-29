@@ -1,3 +1,4 @@
+// PURPOSE: Chooses and plays footsteps based on movement speed and the surface under the player.
 using UnityEngine;
 
 public class FootstepSound : MonoBehaviour

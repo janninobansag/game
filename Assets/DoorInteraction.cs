@@ -1,3 +1,4 @@
+// PURPOSE: Handles door opening, closing, locks, audio, and requests to open the door for an enemy.
 using System.Collections;
 using UnityEngine;
 

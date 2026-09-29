@@ -1,3 +1,4 @@
+// PURPOSE: Runs the ritual interaction sequence, effects, objective update, and ending transition.
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;

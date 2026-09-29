@@ -1,3 +1,4 @@
+// PURPOSE: Runs the newer jumpscare sequence, including camera focus, breathing audio, and monster teleporting.
 using System.Collections;
 using UnityEngine;
 

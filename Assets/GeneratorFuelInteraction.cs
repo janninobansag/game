@@ -1,3 +1,4 @@
+// PURPOSE: Lets the player pour Gas into the generator after its cover is opened and records the fuel state.
 using System.Collections;
 using UnityEngine;
 

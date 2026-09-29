@@ -1,3 +1,4 @@
+// PURPOSE: Spawns a shadow entity at a configured point when the player enters the trigger.
 using UnityEngine;
 
 public class ShadowTrigger : MonoBehaviour

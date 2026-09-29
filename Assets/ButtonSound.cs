@@ -1,3 +1,4 @@
+// PURPOSE: Plays configured hover and click sounds for UI buttons.
 using UnityEngine;
 using UnityEngine.EventSystems;
 

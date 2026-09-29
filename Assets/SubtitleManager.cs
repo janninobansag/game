@@ -1,3 +1,4 @@
+// PURPOSE: Creates subtitle UI and displays, animates, and hides timed subtitle messages.
 using System.Collections;
 using TMPro;
 using UnityEngine;
