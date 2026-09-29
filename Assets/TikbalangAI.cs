@@ -51,6 +51,16 @@ public class TikbalangAI : MonoBehaviour
     [Min(0f)] public float stoppingDistance = 1.2f;
     [Min(0.02f)] public float destinationRefreshRate = 0.1f;
 
+    [Header("Door Interaction")]
+    [Tooltip("How far ahead Tikbalang checks for a door while chasing.")]
+    [Min(0.1f)] public float doorDetectionDistance = 1.75f;
+    [Tooltip("Height above Tikbalang's position where the forward door check begins.")]
+    [Min(0f)] public float doorDetectionHeight = 1f;
+    [Tooltip("Layers that can contain doors. Include the door collider's layer.")]
+    public LayerMask doorDetectionMask = ~0;
+    [Tooltip("How long Tikbalang waits after a door finishes opening.")]
+    [Min(0f)] public float doorPauseAfterOpening = 2f;
+
     [Header("Chase Audio")]
     [Tooltip("Looped only while Tikbalang is running after the player sees it.")]
     public AudioClip chaseSound;
@@ -68,6 +78,8 @@ public class TikbalangAI : MonoBehaviour
 
     private NavMeshAgent agent;
     private float nextDestinationUpdate;
+    private float nextDoorCheckTime;
+    private float doorPauseUntil;
     private float nextTeleportTime;
     private int lastSpawnPointIndex = -1;
     private bool hasAwakened;
@@ -77,6 +89,7 @@ public class TikbalangAI : MonoBehaviour
     private bool isCatchSequencePlaying;
     private bool isPlayingChaseSound;
     private bool hasBeenSeenByPlayer;
+    private DoorInteraction doorBlockingPath;
     private float nextCatchTime;
     private Quaternion cameraRotationBeforeCatch;
     private PlayerController playerController;
@@ -449,6 +462,14 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         bool shouldRun = runWhenPlayerSeesTikbalang && hasBeenSeenByPlayer;
         agent.speed = shouldRun ? runSpeed : walkSpeed;
         agent.stoppingDistance = stoppingDistance;
+
+        if (HandleDoorAhead())
+        {
+            SetMovementAnimation(false);
+            StopChaseSound();
+            return;
+        }
+
         agent.isStopped = false;
 
         if (Time.time >= nextDestinationUpdate)
@@ -462,6 +483,47 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             PlayChaseSound();
         else
             StopChaseSound();
+    }
+
+    private bool HandleDoorAhead()
+    {
+        if (Time.time < doorPauseUntil)
+        {
+            agent.isStopped = true;
+            return true;
+        }
+
+        if (doorBlockingPath != null)
+        {
+            if (doorBlockingPath.TryOpenForEnemy())
+            {
+                doorBlockingPath = null;
+                doorPauseUntil = Time.time + doorPauseAfterOpening;
+                agent.isStopped = true;
+                nextDestinationUpdate = 0f;
+                return true;
+            }
+
+            agent.isStopped = true;
+            return true;
+        }
+
+        if (Time.time < nextDoorCheckTime)
+            return false;
+
+        nextDoorCheckTime = Time.time + 0.15f;
+        Vector3 origin = transform.position + Vector3.up * doorDetectionHeight;
+        if (!Physics.Raycast(origin, transform.forward, out RaycastHit hit,
+                doorDetectionDistance, doorDetectionMask, QueryTriggerInteraction.Ignore))
+            return false;
+
+        DoorInteraction door = hit.collider.GetComponentInParent<DoorInteraction>();
+        if (door == null || door.TryOpenForEnemy())
+            return false;
+
+        doorBlockingPath = door;
+        agent.isStopped = true;
+        return true;
     }
 
     // Used only for the first encounter. Flashlight teleports continue to use spawn points.

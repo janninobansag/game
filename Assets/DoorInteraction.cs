@@ -137,6 +137,23 @@ public class DoorInteraction : MonoBehaviour
     public bool IsLocked() => isLocked;
     public bool IsOpen() => isOpen;
 
+    public bool TryOpenForEnemy()
+    {
+        if (isLocked)
+            return false;
+
+        if (isOpen)
+            return !isAnimating;
+
+        if (!isAnimating)
+        {
+            StartCoroutine(AnimateDoor(closedRotation, openRotation));
+            isOpen = true;
+        }
+
+        return false;
+    }
+
     // ── NEW: Lock method ──
     public void Lock()
     {
