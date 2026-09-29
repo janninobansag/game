@@ -1,3 +1,4 @@
+// PURPOSE: Records a checkpoint when the player enters and coordinates checkpoint respawning.
 using System.Collections;
 using UnityEngine;
 

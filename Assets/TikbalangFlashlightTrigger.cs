@@ -1,3 +1,4 @@
+// PURPOSE: Checks the player flashlight inside a trigger and requests Tikbalang behavior when its condition is met.
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]

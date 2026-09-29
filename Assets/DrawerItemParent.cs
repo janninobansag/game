@@ -1,3 +1,4 @@
+// PURPOSE: Periodically keeps configured item objects associated with their drawer parent.
 using UnityEngine;
 
 public class DrawerItemParent : MonoBehaviour

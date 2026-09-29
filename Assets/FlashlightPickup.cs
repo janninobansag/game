@@ -1,3 +1,4 @@
+// PURPOSE: Manages flashlight pickup, battery drain, beam behavior, and dropped or held state.
 using UnityEngine;
 
 public class FlashlightPickup : MonoBehaviour

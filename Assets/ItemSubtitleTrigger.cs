@@ -1,3 +1,4 @@
+// PURPOSE: Displays and saves a subtitle when its associated item is picked up.
 using UnityEngine;
 
 public class ItemSubtitleTrigger : MonoBehaviour

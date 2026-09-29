@@ -1,3 +1,4 @@
+// PURPOSE: Controls mutant roaming, player detection, chasing, attacks, audio, and hit effects.
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;

@@ -1,3 +1,4 @@
+// PURPOSE: Stores carried items, enforces bag capacity, selects items, and handles item drops.
 using System.Collections.Generic;
 using UnityEngine;
 

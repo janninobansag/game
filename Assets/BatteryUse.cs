@@ -1,3 +1,4 @@
+// PURPOSE: Applies a battery item to recharge the flashlight by its configured amount.
 using UnityEngine;
 
 public class BatteryUse : MonoBehaviour

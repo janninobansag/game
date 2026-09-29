@@ -1,3 +1,4 @@
+// PURPOSE: Tracks, calculates, and saves game progression points and completion percentage.
 using UnityEngine;
 using System.Collections.Generic;
 

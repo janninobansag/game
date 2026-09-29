@@ -1,3 +1,4 @@
+// PURPOSE: Creates and controls the in-world note interface and its interaction prompt.
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

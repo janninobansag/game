@@ -1,3 +1,4 @@
+// PURPOSE: Lets the player place a candle at a ritual holder and updates the linked objective.
 using UnityEngine;
 
 public class CandleHolder : MonoBehaviour

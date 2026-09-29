@@ -1,3 +1,4 @@
+// PURPOSE: Handles generic item pickup, inventory transfer, held and dropped states, and the pickup prompt.
 using UnityEngine;
 
 public class PickupItem : MonoBehaviour

@@ -1,3 +1,4 @@
+// PURPOSE: Spawns the configured mutant prefab at a spawn point when the player enters.
 using System.Collections;
 using UnityEngine;
 

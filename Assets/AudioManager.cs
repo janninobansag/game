@@ -1,3 +1,4 @@
+// PURPOSE: Stores and applies shared audio, sensitivity, and brightness settings across scenes.
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour

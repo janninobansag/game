@@ -1,3 +1,4 @@
+// PURPOSE: Builds and refreshes the player inventory bag interface and its item slots.
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;

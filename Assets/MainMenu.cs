@@ -1,3 +1,4 @@
+// PURPOSE: Handles main-menu button interactions and their hover, click, and open sounds.
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;

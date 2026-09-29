@@ -1,3 +1,4 @@
+// PURPOSE: Creates and updates the HUD indicator for the flashlight battery level.
 using UnityEngine;
 using UnityEngine.UI;
 

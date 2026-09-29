@@ -1,3 +1,4 @@
+// PURPOSE: Awards configured progression points when the player activates this trigger.
 using UnityEngine;
 using UnityEngine.Events;
 

@@ -1,3 +1,4 @@
+// PURPOSE: Activates a configured objective trigger when the required item is available.
 using UnityEngine;
 
 public class ObjectiveTriggerActivator : MonoBehaviour

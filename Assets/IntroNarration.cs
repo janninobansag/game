@@ -1,3 +1,4 @@
+// PURPOSE: Runs the opening narration sequence and can disable player control while it plays.
 using System.Collections;
 using UnityEngine;
 

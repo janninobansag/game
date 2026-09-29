@@ -1,3 +1,4 @@
+// PURPOSE: Starts selected horror effects on the player when its trigger conditions are met.
 using System.Collections;
 using UnityEngine;
 

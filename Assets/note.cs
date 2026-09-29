@@ -1,3 +1,4 @@
+// PURPOSE: Lets the player open and read a note while temporarily locking and restoring player movement.
 using UnityEngine;
 
 public class Note : MonoBehaviour

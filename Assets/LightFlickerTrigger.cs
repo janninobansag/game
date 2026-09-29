@@ -1,3 +1,4 @@
+// PURPOSE: Starts configured light flickering and audio when the player enters its trigger.
 using System.Collections;
 using UnityEngine;
 

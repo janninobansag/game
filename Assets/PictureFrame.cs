@@ -1,3 +1,4 @@
+// PURPOSE: Lets the player inspect an in-world picture and read its optional description.
 using UnityEngine;
 
 public class PictureFrame : MonoBehaviour

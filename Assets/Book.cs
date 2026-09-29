@@ -1,3 +1,4 @@
+// PURPOSE: Lets the player open and read a multi-page in-world book with page and open-close sounds.
 using UnityEngine;
 
 public class Book : MonoBehaviour

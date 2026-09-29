@@ -1,3 +1,4 @@
+// PURPOSE: Shows and hides the map and converts world positions into map display coordinates.
 using UnityEngine;
 
 public class MapSystem : MonoBehaviour

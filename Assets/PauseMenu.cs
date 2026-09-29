@@ -1,3 +1,4 @@
+// PURPOSE: Controls pausing, resuming, settings, saving, and quitting from the pause interface.
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

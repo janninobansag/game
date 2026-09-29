@@ -1,3 +1,4 @@
+// PURPOSE: Draws configurable screen overlays such as scanlines and a vignette.
 using UnityEngine;
 
 public class ScreenEffects : MonoBehaviour

@@ -1,3 +1,4 @@
+// PURPOSE: Handles first-person player movement, camera input, and movement actions such as sprinting and crouching.
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]

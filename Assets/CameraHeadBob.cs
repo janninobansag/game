@@ -1,3 +1,4 @@
+// PURPOSE: Adds movement-based camera bob, held-item sway, and external camera shake.
 using UnityEngine;
 
 public class CameraHeadBob : MonoBehaviour

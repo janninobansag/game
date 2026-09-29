@@ -1,3 +1,4 @@
+// PURPOSE: Displays an objective when activated and saves one-time trigger state.
 using System.Collections;
 using UnityEngine;
 using TMPro;

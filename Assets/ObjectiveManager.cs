@@ -1,3 +1,4 @@
+// PURPOSE: Provides shared methods for setting, clearing, and displaying the current objective.
 using UnityEngine;
 using System.Collections;
 

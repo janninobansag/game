@@ -1,3 +1,4 @@
+// PURPOSE: Saves and restores game progress and player state using the selected difficulty database.
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
