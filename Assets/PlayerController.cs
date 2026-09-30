@@ -15,9 +15,14 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float sprintSpeed = 9f;      
-    public float sprintFOVIncrease = 10f; 
-    public float gravity = -9.81f;
+    public float sprintFOVIncrease = 4f;
+    public float gravity = -20f;
     [Range(30f, 75f)] public float maxWalkableSlope = 55f;
+
+    [Header("Movement Feel")]
+    [Range(0f, 50f)] public float groundAcceleration = 20f;
+    [Range(0f, 60f)] public float groundDeceleration = 26f;
+    [Range(0f, 30f)] public float airAcceleration = 8f;
 
     private bool isSprinting = false;
     private bool wasSprintingBeforeJump = false;
@@ -43,8 +48,12 @@ public class PlayerController : MonoBehaviour
     private CharacterController cc;
     private StaminaController staminaController;
     private Vector3 velocity;
+    private Vector3 horizontalVelocity;
     private bool isGrounded;
     private bool isCrouching;
+    public bool IsGrounded => isGrounded;
+    public bool IsSprinting => isSprinting;
+    public bool IsCrouching => isCrouching;
 
     void Awake()
     {
@@ -65,10 +74,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        horizontalVelocity = Vector3.zero;
+    }
     void Update()
     {
         if (IsReadingDocument)
         {
+            horizontalVelocity = Vector3.zero;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             return;
@@ -129,33 +143,29 @@ public class PlayerController : MonoBehaviour
 
     void HandleMove()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        Vector2 input = Vector2.ClampMagnitude(
+            new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")), 1f);
 
-        Vector3 moveDir = transform.right * h + transform.forward * v;
-        if (moveDir.magnitude > 1f) 
-            moveDir.Normalize();
-
-        bool wantsToSprint = Input.GetKey(KeyCode.LeftShift) && v > 0f && !isCrouching;
+        Vector3 moveDir = transform.right * input.x + transform.forward * input.y;
+        bool wantsToSprint = Input.GetKey(KeyCode.LeftShift) && input.y > 0.05f && !isCrouching;
         bool canSprint = staminaController == null || staminaController.CanSprint;
-        
-        if (isGrounded)
-        {
-            isSprinting = wantsToSprint && canSprint;
-        }
-        else
-        {
-            if (wantsToSprint && canSprint)
-                isSprinting = true;
-            else if ((!wantsToSprint || !canSprint) && isSprinting)
-                isSprinting = false;
-        }
+
+        isSprinting = wantsToSprint && canSprint;
 
         float speed = isSprinting ? sprintSpeed
             : isCrouching ? moveSpeed * crouchSpeedMultiplier
             : moveSpeed;
 
-        cc.Move(moveDir * speed * Time.deltaTime);
+        Vector3 targetVelocity = moveDir * speed;
+        if (!isGrounded && input.sqrMagnitude <= 0.001f)
+            targetVelocity = horizontalVelocity;
+
+        float acceleration = isGrounded
+            ? (input.sqrMagnitude > 0.001f ? groundAcceleration : groundDeceleration)
+            : (input.sqrMagnitude > 0.001f ? airAcceleration : 0f);
+
+        horizontalVelocity = Vector3.MoveTowards(
+            horizontalVelocity, targetVelocity, acceleration * Time.deltaTime);
 
         if (staminaController != null)
             staminaController.UpdateStamina(isSprinting);
@@ -173,7 +183,11 @@ public class PlayerController : MonoBehaviour
     void ApplyGravity()
     {
         velocity.y += gravity * Time.deltaTime;
-        cc.Move(velocity * Time.deltaTime);
+        CollisionFlags collisionFlags = cc.Move((horizontalVelocity + velocity) * Time.deltaTime);
+
+        // Stop upward jump momentum immediately when the character hits a ceiling.
+        if ((collisionFlags & CollisionFlags.Above) != 0 && velocity.y > 0f)
+            velocity.y = 0f;
     }
 
     void HandleCrouch()

@@ -182,11 +182,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4532cbbe49006984b9ac44bbda5f337d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkBobSpeed: 8.05
-  walkBobAmount: 0.05
-  crouchBobSpeed: 8
-  crouchBobAmount: 0.025
-  smoothSpeed: 15
+  walkBobSpeed: 8.5
+  walkBobAmount: 0.022
+  crouchBobSpeed: 6
+  crouchBobAmount: 0.012
+  smoothSpeed: 14
 --- !u!114 &6082916486870130916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  gravity: -43.4
+  gravity: -20
   jumpHeight: 1.5
   groundCheck: {fileID: 4136967812821381229}
   groundCheckRadius: 0.3

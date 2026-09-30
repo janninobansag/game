@@ -826,7 +826,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 680, y: 510}
+  m_SizeDelta: {x: 661.2, y: 495.90002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &60942647
 MonoBehaviour:
@@ -2242,7 +2242,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1, y: -1}
-  m_SizeDelta: {x: 796, y: 58}
+  m_SizeDelta: {x: 582.4, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &173638453
 MonoBehaviour:
@@ -10048,6 +10048,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681042267}
   m_CullTransparentMesh: 1
+--- !u!4 &683911993 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
+    type: 3}
+  m_PrefabInstance: {fileID: 8319522320320211979}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &687905427
 GameObject:
   m_ObjectHideFlags: 0
@@ -11505,7 +11511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 1057931779}
+  m_Material: {fileID: 942693709}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -14432,6 +14438,45 @@ Transform:
   - {fileID: 709685909}
   m_Father: {fileID: 456368831}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &942693709
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &943898938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15793,7 +15838,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 308}
-  m_SizeDelta: {x: 840, y: 68}
+  m_SizeDelta: {x: 626.4, y: 68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1005157520
 MonoBehaviour:
@@ -16797,45 +16842,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!21 &1057931779
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &1060815448
 GameObject:
   m_ObjectHideFlags: 0
@@ -17372,6 +17378,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1082813434}
   m_CullTransparentMesh: 1
+--- !u!4 &1088002111 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5564313635064430396, guid: 9c459b753d9ab134f8114057339f27d7,
+    type: 3}
+  m_PrefabInstance: {fileID: 8319522320320211979}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1092079924
 GameObject:
   m_ObjectHideFlags: 0
@@ -28585,7 +28597,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 796, y: 58}
+  m_SizeDelta: {x: 582.4, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1950877989
 MonoBehaviour:
@@ -54461,22 +54473,22 @@ PrefabInstance:
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 134.18
+      value: 126.71
       objectReference: {fileID: 0}
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.64
+      value: 2.85
       objectReference: {fileID: 0}
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -47.21
+      value: -76.2
       objectReference: {fileID: 0}
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.80067915
       objectReference: {fileID: 0}
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
@@ -54486,7 +54498,7 @@ PrefabInstance:
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.5990935
       objectReference: {fileID: 0}
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
@@ -54501,7 +54513,7 @@ PrefabInstance:
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 73.61
       objectReference: {fileID: 0}
     - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
         type: 3}
@@ -54552,6 +54564,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
+        type: 3}
+      propertyPath: gravity
+      value: -35
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
+        type: 3}
+      propertyPath: groundCheck
+      value: 
+      objectReference: {fileID: 1088002111}
+    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
+        type: 3}
+      propertyPath: cameraHolder
+      value: 
+      objectReference: {fileID: 683911993}
+    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
+        type: 3}
+      propertyPath: mouseSensitivity
+      value: 1.804105
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
+        type: 3}
+      propertyPath: sprintFOVIncrease
+      value: 20.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
