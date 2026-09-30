@@ -53,6 +53,13 @@ public class RandomWrenchSpawn : MonoBehaviour
         }
 
         Transform selectedSpawn = spawnPoints[index];
+        DrawerInteraction drawer = selectedSpawn.GetComponentInParent<DrawerInteraction>();
+        if (drawer != null)
+        {
+            // Keep the wrench in the drawer's local space so it moves with the drawer.
+            transform.SetParent(drawer.transform, true);
+        }
+
         transform.position = selectedSpawn.position;
         if (useSpawnRotation)
             transform.rotation = selectedSpawn.rotation;
