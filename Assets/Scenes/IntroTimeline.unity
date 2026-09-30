@@ -27516,21 +27516,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4532cbbe49006984b9ac44bbda5f337d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkBobSpeed: 0
-  walkBobAmount: 0
-  sprintBobSpeed: 17
-  sprintBobAmount: -0.09
-  crouchBobSpeed: 8
-  crouchBobAmount: 0.025
-  smoothSpeed: 15
-  itemWalkBobSpeed: 12
-  itemWalkBobAmount: 0.04
-  itemSprintBobSpeed: 18
-  itemSprintBobAmount: 0.08
+  walkBobSpeed: 8.5
+  walkBobAmount: 0.022
+  sprintBobSpeed: 12
+  sprintBobAmount: 0.04
+  crouchBobSpeed: 6
+  crouchBobAmount: 0.012
+  smoothSpeed: 14
+  itemWalkBobSpeed: 10
+  itemWalkBobAmount: 0.025
+  itemSprintBobSpeed: 15
+  itemSprintBobAmount: 0.045
   itemBobSmooth: 8
-  swayAmount: 0.02
+  swayAmount: 0.012
   swaySmooth: 6
-  swayClamp: 0.1
+  swayClamp: 0.08
   externalShakeAmount: 0
 --- !u!23 &754862093613500409
 MeshRenderer:
@@ -50785,8 +50785,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   sprintSpeed: 5.86
-  sprintFOVIncrease: 10
-  gravity: -43.4
+  sprintFOVIncrease: 4
+  gravity: -20
   jumpHeight: 1.5
   groundCheck: {fileID: 8059257559180024285}
   groundCheckRadius: 0.3

@@ -1,173 +1,196 @@
-// PURPOSE: Adds movement-based camera bob, held-item sway, and external camera shake.
+// PURPOSE: Adds smooth movement-based camera bob, held-item sway, and external camera shake.
 using UnityEngine;
 
 public class CameraHeadBob : MonoBehaviour
 {
     [Header("Head Bob Settings")]
-    public float walkBobSpeed = 14f;
-    public float walkBobAmount = 0.05f;
-    public float sprintBobSpeed = 20f;
-    public float sprintBobAmount = 0.09f;
-    public float crouchBobSpeed = 8f;
-    public float crouchBobAmount = 0.025f;
+    public float walkBobSpeed = 8.5f;
+    public float walkBobAmount = 0.022f;
+    public float sprintBobSpeed = 12f;
+    public float sprintBobAmount = 0.04f;
+    public float crouchBobSpeed = 6f;
+    public float crouchBobAmount = 0.012f;
 
     [Header("Smoothing")]
-    public float smoothSpeed = 10f;
+    public float smoothSpeed = 14f;
+    public float bobFadeInSpeed = 7f;
+    public float bobFadeOutSpeed = 10f;
 
     [Header("Item Bob Settings")]
-    public float itemWalkBobSpeed = 12f;
-    public float itemWalkBobAmount = 0.04f;
-    public float itemSprintBobSpeed = 18f;
-    public float itemSprintBobAmount = 0.08f;
+    public float itemWalkBobSpeed = 10f;
+    public float itemWalkBobAmount = 0.025f;
+    public float itemSprintBobSpeed = 15f;
+    public float itemSprintBobAmount = 0.045f;
     public float itemBobSmooth = 8f;
 
-    // Item sway
     [Header("Item Sway Settings")]
-    public float swayAmount = 0.02f;
+    public float swayAmount = 0.012f;
     public float swaySmooth = 6f;
-    public float swayClamp = 0.1f;
+    public float swayClamp = 0.08f;
 
     [Header("External Shake")]
     public float externalShakeAmount = 0f;
 
-    private float bobTimer = 0f;
-    private float itemBobTimer = 0f;
+    private float bobTimer;
+    private float itemBobTimer;
+    private float bobBlend;
     private Vector3 defaultPos;
-    private CharacterController cc;
+    private CharacterController characterController;
+    private PlayerController playerController;
     private StaminaController staminaController;
-
-    // Item reference
     private Transform currentItem;
     private Vector3 itemDefaultPos;
     private Quaternion itemDefaultRot;
-    private float lastMouseX;
-    private float lastMouseY;
     private Camera cam;
     private float defaultFOV;
 
-    void Start()
+    private void Start()
     {
         defaultPos = transform.localPosition;
-        cc = GetComponentInParent<CharacterController>();
+        characterController = GetComponentInParent<CharacterController>();
+        playerController = GetComponentInParent<PlayerController>();
         staminaController = GetComponentInParent<StaminaController>();
         cam = GetComponent<Camera>();
-        if (cam != null) defaultFOV = cam.fieldOfView;
+        if (cam != null)
+            defaultFOV = cam.fieldOfView;
     }
 
-    void Update()
+    private void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        bool isMoving = (h != 0 || v != 0) && cc.isGrounded;
-        bool isCrouching = Input.GetKey(KeyCode.LeftControl);
-        // Shift alone is not sprinting when Hard-mode stamina has run out.
+        bool isCrouching = playerController != null
+            ? playerController.IsCrouching
+            : Input.GetKey(KeyCode.LeftControl);
         bool canSprint = staminaController == null || staminaController.CanSprint;
-        bool isSprinting = Input.GetKey(KeyCode.LeftShift) && v > 0f && canSprint;
+        bool isSprinting = playerController != null
+            ? playerController.IsSprinting
+            : Input.GetKey(KeyCode.LeftShift) && Input.GetAxisRaw("Vertical") > 0f && canSprint;
+        bool playerCanMove = playerController == null || playerController.enabled;
+        bool paused = PauseMenu.Instance != null && PauseMenu.Instance.isPaused;
+        bool grounded = characterController == null || characterController.isGrounded;
 
-        // ── CAMERA BOB ──
-        if (isMoving)
+        float movementAmount = 0f;
+        if (playerCanMove && !paused && !PlayerController.IsReadingDocument && grounded)
         {
-            float speed = isCrouching ? crouchBobSpeed
+            if (characterController != null && playerController != null)
+            {
+                Vector3 horizontalVelocity = characterController.velocity;
+                horizontalVelocity.y = 0f;
+                float topSpeed = isCrouching
+                    ? playerController.moveSpeed * playerController.crouchSpeedMultiplier
+                    : isSprinting ? playerController.sprintSpeed : playerController.moveSpeed;
+                movementAmount = topSpeed > 0f
+                    ? Mathf.Clamp01(horizontalVelocity.magnitude / topSpeed)
+                    : 0f;
+            }
+            else
+            {
+                Vector2 input = Vector2.ClampMagnitude(
+                    new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")), 1f);
+                movementAmount = input.magnitude;
+            }
+        }
+
+        float blendSpeed = movementAmount > bobBlend ? bobFadeInSpeed : bobFadeOutSpeed;
+        bobBlend = Mathf.MoveTowards(bobBlend, movementAmount, Time.deltaTime * blendSpeed);
+
+        if (bobBlend > 0.01f)
+        {
+            float bobSpeed = isCrouching ? crouchBobSpeed
                 : isSprinting ? sprintBobSpeed
                 : walkBobSpeed;
 
-            float amount = isCrouching ? crouchBobAmount
-                : isSprinting ? sprintBobAmount
-                : walkBobAmount;
-
-            bobTimer += Time.deltaTime * speed;
-            float bobY = Mathf.Sin(bobTimer) * amount;
-            float bobX = Mathf.Cos(bobTimer / 2f) * amount * 0.5f;
-            
-            Vector3 shake = externalShakeAmount > 0f ? Random.insideUnitSphere * externalShakeAmount : Vector3.zero;
-            transform.localPosition = defaultPos + new Vector3(bobX, bobY, 0f) + shake;
+            bobTimer += Time.deltaTime * bobSpeed * Mathf.Lerp(0.65f, 1f, bobBlend);
         }
         else
         {
-            bobTimer = Mathf.Lerp(bobTimer, 0f, Time.deltaTime * 5f);
-            
-            Vector3 shake = externalShakeAmount > 0f ? Random.insideUnitSphere * externalShakeAmount : Vector3.zero;
-
-            transform.localPosition = Vector3.Lerp(
-                transform.localPosition, defaultPos,
-                Time.deltaTime * smoothSpeed) + shake;
+            bobTimer = Mathf.MoveTowards(bobTimer, 0f, Time.deltaTime * 5f);
         }
 
-        // FOV Distortion (Simulate blur/dizziness)
+        float bobY = Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount
+            : isSprinting ? sprintBobAmount
+            : walkBobAmount) * bobBlend;
+        float bobX = Mathf.Cos(bobTimer * 0.5f) * (isCrouching ? crouchBobAmount
+            : isSprinting ? sprintBobAmount
+            : walkBobAmount) * 0.35f * bobBlend;
+
+        Vector3 shake = externalShakeAmount > 0f
+            ? Random.insideUnitSphere * externalShakeAmount
+            : Vector3.zero;
+        Vector3 targetPosition = defaultPos + new Vector3(bobX, bobY, 0f) + shake;
+        float positionBlend = 1f - Mathf.Exp(-Mathf.Max(0.01f, smoothSpeed) * Time.deltaTime);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, positionBlend);
+
         if (cam != null)
         {
+            float targetFOV = defaultFOV;
+            if (isSprinting && playerCanMove && !paused && playerController != null)
+                targetFOV += playerController.sprintFOVIncrease;
             if (externalShakeAmount > 0f)
-                cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, defaultFOV + Mathf.Sin(Time.time * 25f) * (externalShakeAmount * 5f), Time.deltaTime * 5f);
-            else
-                cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, defaultFOV, Time.deltaTime * 5f);
+                targetFOV += Mathf.Sin(Time.time * 25f) * (externalShakeAmount * 5f);
+
+            float fovBlend = 1f - Mathf.Exp(-5f * Time.deltaTime);
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, fovBlend);
         }
 
-        // ── ITEM BOB + SWAY ──
-        UpdateHeldItem(isMoving, isSprinting, isCrouching);
+        UpdateHeldItem(bobBlend > 0.05f, isSprinting, isCrouching);
     }
 
-    void UpdateHeldItem(bool isMoving, bool isSprinting, bool isCrouching)
+    private void UpdateHeldItem(bool isMoving, bool isSprinting, bool isCrouching)
     {
-        // Find current held item from inventory
-        if (Inventory.Instance == null) return;
+        if (Inventory.Instance == null)
+            return;
 
         var items = Inventory.Instance.GetItems();
         int selected = Inventory.Instance.GetSelectedIndex();
-
         if (selected < 0 || selected >= items.Count)
         {
             currentItem = null;
             return;
         }
 
-        GameObject heldObj = items[selected];
-        if (heldObj == null) return;
+        GameObject heldObject = items[selected];
+        if (heldObject == null)
+            return;
 
-        // Track item reference
-        if (currentItem != heldObj.transform)
+        if (currentItem != heldObject.transform)
         {
-            currentItem = heldObj.transform;
+            currentItem = heldObject.transform;
             itemDefaultPos = currentItem.localPosition;
             itemDefaultRot = currentItem.localRotation;
             itemBobTimer = 0f;
         }
 
-        // ── ITEM BOB ──
         if (isMoving)
         {
-            float speed = isSprinting ? itemSprintBobSpeed : itemWalkBobSpeed;
-            float amount = isSprinting ? itemSprintBobAmount : itemWalkBobAmount;
-
+            float speed = isCrouching ? itemWalkBobSpeed * 0.7f
+                : isSprinting ? itemSprintBobSpeed : itemWalkBobSpeed;
+            float amount = isCrouching ? itemWalkBobAmount * 0.5f
+                : isSprinting ? itemSprintBobAmount : itemWalkBobAmount;
             itemBobTimer += Time.deltaTime * speed;
 
-            float bobY = Mathf.Sin(itemBobTimer) * amount;
-            float bobX = Mathf.Cos(itemBobTimer / 2f) * amount * 0.6f;
-            float bobZ = Mathf.Sin(itemBobTimer / 2f) * amount * 0.3f;
-
-            Vector3 targetPos = itemDefaultPos + new Vector3(bobX, bobY, bobZ);
+            Vector3 bobOffset = new Vector3(
+                Mathf.Cos(itemBobTimer * 0.5f) * amount * 0.45f,
+                Mathf.Sin(itemBobTimer) * amount,
+                Mathf.Sin(itemBobTimer * 0.5f) * amount * 0.2f);
+            Vector3 targetPosition = itemDefaultPos + bobOffset;
             currentItem.localPosition = Vector3.Lerp(
-                currentItem.localPosition, targetPos,
-                Time.deltaTime * itemBobSmooth);
+                currentItem.localPosition, targetPosition, Time.deltaTime * itemBobSmooth);
         }
         else
         {
-            itemBobTimer = Mathf.Lerp(itemBobTimer, 0f, Time.deltaTime * 5f);
+            itemBobTimer = Mathf.MoveTowards(itemBobTimer, 0f, Time.deltaTime * 5f);
             currentItem.localPosition = Vector3.Lerp(
-                currentItem.localPosition, itemDefaultPos,
-                Time.deltaTime * itemBobSmooth);
+                currentItem.localPosition, itemDefaultPos, Time.deltaTime * itemBobSmooth);
         }
 
-        // ── ITEM SWAY (mouse movement) ──
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
-
         float swayX = Mathf.Clamp(-mouseX * swayAmount, -swayClamp, swayClamp);
         float swayY = Mathf.Clamp(-mouseY * swayAmount, -swayClamp, swayClamp);
-
-        Quaternion swayRot = Quaternion.Euler(swayY * 20f, swayX * 20f, swayX * 10f);
+        Quaternion swayRotation = Quaternion.Euler(swayY * 20f, swayX * 20f, swayX * 10f);
         currentItem.localRotation = Quaternion.Slerp(
             currentItem.localRotation,
-            itemDefaultRot * swayRot,
+            itemDefaultRot * swayRotation,
             Time.deltaTime * swaySmooth);
     }
 }
