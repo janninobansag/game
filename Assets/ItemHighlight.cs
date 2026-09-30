@@ -1,4 +1,5 @@
-// PURPOSE: Highlights nearby items with a configurable pulsing visual effect.
+// PURPOSE: Highlights the item under the player's crosshair with a configurable pulse.
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemHighlight : MonoBehaviour
@@ -11,110 +12,230 @@ public class ItemHighlight : MonoBehaviour
     public float pulseMaxIntensity = 1.2f;
     public float outlineWidth = 1.03f;
 
-    private Camera playerCamera;
-    private Renderer[] renderers;
-    private Material[] originalMaterials;
-    private Material[] highlightMaterials;
-    private bool isHighlighted = false;
-    private float pulseTimer = 0f;
+    private const float ScanInterval = 0.05f;
+    private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
+    private static readonly List<ItemHighlight> activeItems = new List<ItemHighlight>();
+    private static ItemHighlight scanner;
+    private static ItemHighlight currentTarget;
+    private static float nextScanTime;
 
-    void Start()
+    private Camera playerCamera;
+    private PickupItem pickupItem;
+    private BatteryPickup batteryPickup;
+    private Key keyItem;
+    private Renderer[] renderers;
+    private Material[][] originalMaterials;
+    private Material[][] highlightMaterials;
+    private bool isHighlighted;
+    private float pulseTimer;
+
+    private void Awake()
     {
         playerCamera = Camera.main;
+        pickupItem = GetComponent<PickupItem>();
+        batteryPickup = GetComponent<BatteryPickup>();
+        keyItem = GetComponent<Key>();
         renderers = GetComponentsInChildren<Renderer>();
 
-        // Store original materials
-        originalMaterials = new Material[renderers.Length];
-        highlightMaterials = new Material[renderers.Length];
-
+        originalMaterials = new Material[renderers.Length][];
+        highlightMaterials = new Material[renderers.Length][];
         for (int i = 0; i < renderers.Length; i++)
-        {
-            originalMaterials[i] = renderers[i].material;
-
-            // Create highlight material based on original
-            highlightMaterials[i] = new Material(renderers[i].material);
-            highlightMaterials[i].EnableKeyword("_EMISSION");
-            highlightMaterials[i].SetColor("_EmissionColor",
-                highlightColor * pulseMinIntensity);
-        }
+            originalMaterials[i] = renderers[i].sharedMaterials;
     }
 
-    void Update()
+    private void OnEnable()
     {
-        // Check if picked up — disable highlight
-        PickupItem pi = GetComponent<PickupItem>();
-        BatteryPickup bp = GetComponent<BatteryPickup>();
-        Key k = GetComponent<Key>();
+        activeItems.Add(this);
+        if (scanner == null || !scanner.isActiveAndEnabled)
+            scanner = this;
+    }
 
-        bool pickedUp = (pi != null && pi.isPickedUp) ||
-                        (bp != null && !bp.enabled) ||
-                        (k != null && !k.enabled);
+    private void OnDisable()
+    {
+        activeItems.Remove(this);
 
-        if (pickedUp)
+        if (currentTarget == this)
         {
             SetHighlight(false);
-            return;
+            currentTarget = null;
         }
 
-        // Raycast check
-        bool shouldHighlight = false;
-        Ray ray = playerCamera.ScreenPointToRay(
-            new Vector3(Screen.width / 2, Screen.height / 2));
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, highlightRange))
+        if (scanner == this)
         {
-            if (hit.collider.gameObject == gameObject ||
-                hit.collider.transform.IsChildOf(transform))
+            scanner = null;
+            for (int i = 0; i < activeItems.Count; i++)
             {
-                shouldHighlight = true;
-            }
-        }
-
-        SetHighlight(shouldHighlight);
-
-        // Pulse emission when highlighted
-        if (isHighlighted)
-        {
-            pulseTimer += Time.deltaTime * pulseSpeed;
-            float pulse = Mathf.Lerp(pulseMinIntensity, pulseMaxIntensity,
-                (Mathf.Sin(pulseTimer) + 1f) / 2f);
-
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                if (renderers[i] != null)
+                if (activeItems[i] != null && activeItems[i].isActiveAndEnabled)
                 {
-                    highlightMaterials[i].SetColor("_EmissionColor",
-                        highlightColor * pulse);
+                    scanner = activeItems[i];
+                    break;
                 }
             }
         }
     }
 
-    void SetHighlight(bool highlight)
+    private void Update()
     {
-        if (isHighlighted == highlight) return;
+        if (scanner != this)
+            return;
+
+        if (Time.unscaledTime >= nextScanTime)
+        {
+            nextScanTime = Time.unscaledTime + ScanInterval;
+            ScanForTarget();
+        }
+
+        if (currentTarget != null && currentTarget.isHighlighted)
+            currentTarget.UpdatePulse(Time.deltaTime);
+    }
+
+    private void ScanForTarget()
+    {
+        float maxRange = 0f;
+        for (int i = 0; i < activeItems.Count; i++)
+        {
+            ItemHighlight item = activeItems[i];
+            if (item != null && item.isActiveAndEnabled)
+                maxRange = Mathf.Max(maxRange, item.highlightRange);
+        }
+
+        if (maxRange <= 0f)
+        {
+            SetCurrentTarget(null);
+            return;
+        }
+
+        if (playerCamera == null)
+            playerCamera = Camera.main;
+        if (playerCamera == null)
+        {
+            SetCurrentTarget(null);
+            return;
+        }
+
+        Ray ray = playerCamera.ScreenPointToRay(
+            new Vector3(Screen.width * 0.5f, Screen.height * 0.5f));
+
+        ItemHighlight target = null;
+        if (Physics.Raycast(ray, out RaycastHit hit, maxRange))
+        {
+            ItemHighlight candidate = hit.collider.GetComponentInParent<ItemHighlight>();
+            if (candidate != null && candidate.CanBeHighlighted() &&
+                hit.distance <= candidate.highlightRange)
+            {
+                target = candidate;
+            }
+        }
+
+        SetCurrentTarget(target);
+    }
+
+    private bool CanBeHighlighted()
+    {
+        return isActiveAndEnabled &&
+               !(pickupItem != null && pickupItem.isPickedUp) &&
+               !(batteryPickup != null && !batteryPickup.enabled) &&
+               !(keyItem != null && !keyItem.enabled);
+    }
+
+    private static void SetCurrentTarget(ItemHighlight target)
+    {
+        if (currentTarget == target)
+            return;
+
+        if (currentTarget != null)
+            currentTarget.SetHighlight(false);
+
+        currentTarget = target;
+        if (currentTarget != null)
+            currentTarget.SetHighlight(true);
+    }
+
+    private void SetHighlight(bool highlight)
+    {
+        if (isHighlighted == highlight)
+            return;
+
         isHighlighted = highlight;
+        if (highlight)
+        {
+            pulseTimer = 0f;
+            CreateHighlightMaterialsIfNeeded();
+        }
 
         for (int i = 0; i < renderers.Length; i++)
         {
-            if (renderers[i] == null) continue;
+            if (renderers[i] == null)
+                continue;
 
-            if (highlight)
-                renderers[i].material = highlightMaterials[i];
-            else
-                renderers[i].material = originalMaterials[i];
+            Material[] materials = highlight ? highlightMaterials[i] : originalMaterials[i];
+            if (materials != null)
+                renderers[i].sharedMaterials = materials;
         }
     }
 
-   void OnDestroy()
-{
-    if (highlightMaterials == null) return;
-
-    for (int i = 0; i < highlightMaterials.Length; i++)
+    private void CreateHighlightMaterialsIfNeeded()
     {
-        if (highlightMaterials[i] != null)
-            Destroy(highlightMaterials[i]);
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (highlightMaterials[i] != null)
+                continue;
+
+            Material[] sourceMaterials = originalMaterials[i];
+            Material[] copies = new Material[sourceMaterials.Length];
+            for (int j = 0; j < sourceMaterials.Length; j++)
+            {
+                Material source = sourceMaterials[j];
+                if (source == null)
+                    continue;
+
+                Material copy = new Material(source);
+                copy.EnableKeyword("_EMISSION");
+                if (copy.HasProperty(EmissionColorId))
+                    copy.SetColor(EmissionColorId, highlightColor * pulseMinIntensity);
+                copies[j] = copy;
+            }
+
+            highlightMaterials[i] = copies;
+        }
     }
-}
+
+    private void UpdatePulse(float deltaTime)
+    {
+        pulseTimer += deltaTime * pulseSpeed;
+        float pulse = Mathf.Lerp(pulseMinIntensity, pulseMaxIntensity,
+            (Mathf.Sin(pulseTimer) + 1f) * 0.5f);
+
+        for (int i = 0; i < highlightMaterials.Length; i++)
+        {
+            Material[] materials = highlightMaterials[i];
+            if (materials == null)
+                continue;
+
+            for (int j = 0; j < materials.Length; j++)
+            {
+                if (materials[j] != null && materials[j].HasProperty(EmissionColorId))
+                    materials[j].SetColor(EmissionColorId, highlightColor * pulse);
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (highlightMaterials == null)
+            return;
+
+        for (int i = 0; i < highlightMaterials.Length; i++)
+        {
+            Material[] materials = highlightMaterials[i];
+            if (materials == null)
+                continue;
+
+            for (int j = 0; j < materials.Length; j++)
+            {
+                if (materials[j] != null)
+                    Destroy(materials[j]);
+            }
+        }
+    }
 }

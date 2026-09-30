@@ -84,7 +84,9 @@ public class TikbalangAI : MonoBehaviour
     private float nextTeleportTime;
     private int lastSpawnPointIndex = -1;
     private bool hasAwakened;
+    // Reports whether Tikbalang first encounter has begun.
     public bool HasFirstEncounterStarted => hasAwakened;
+    // Reports whether Tikbalang is actively chasing outside a jumpscare sequence.
     public bool IsChasingPlayer => hasAwakened && !isFirstEncounterPlaying && !isCatchSequencePlaying;
     private bool isFirstEncounterPlaying;
     private bool isCatchSequencePlaying;
@@ -100,6 +102,7 @@ public class TikbalangAI : MonoBehaviour
     private bool isQuestionPanelOpen;
     private bool wasPlayerControllerEnabled;
     private readonly System.Collections.Generic.List<Button> qnaButtons = new System.Collections.Generic.List<Button>();
+    // Gets the NavMesh agent and finds the player, animator, and audio source if needed.
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -108,6 +111,7 @@ public class TikbalangAI : MonoBehaviour
         FindPlayerIfNeeded();
     }
 
+    // Sets movement defaults, prepares the Q and A panel, and leaves Tikbalang dormant.
     private void Start()
     {
         agent.speed = walkSpeed;
@@ -119,6 +123,7 @@ public class TikbalangAI : MonoBehaviour
         SetDormantState();
     }
 
+    // Waits for the first encounter, checks whether Tikbalang caught the player, and chases.
     private void Update()
     {
         FindPlayerIfNeeded();
@@ -141,6 +146,7 @@ public class TikbalangAI : MonoBehaviour
         ChasePlayer();
     }
 
+    // Keeps the cursor visible and unlocked while the Q and A panel is open.
     private void LateUpdate()
     {
         // PlayerController and other gameplay scripts normally lock the cursor.
@@ -152,6 +158,7 @@ public class TikbalangAI : MonoBehaviour
         Cursor.visible = true;
     }
     // Called by TikbalangJumpscareTrigger when the player enters its detector collider.
+    // Rejects invalid requests and starts the first encounter sequence when valid.
     public bool TriggerDetectionJumpscare(TikbalangJumpscareTrigger triggerSource)
     {
         FindPlayerIfNeeded();
@@ -174,6 +181,7 @@ public class TikbalangAI : MonoBehaviour
         return true;
     }
 
+    // Stops Tikbalang, teleports him in front of the player, and starts the catch sequence.
     private IEnumerator PlayDetectionJumpscare()
     {
         isFirstEncounterPlaying = true;
@@ -190,6 +198,7 @@ public class TikbalangAI : MonoBehaviour
         yield return StartCoroutine(PlayCatchJumpscare());
         isFirstEncounterPlaying = false;
     }
+    // Runs the jumpscare, Q and A, teleport, camera restoration, and chase resume sequence.
     private IEnumerator PlayCatchJumpscare()
     {
         isCatchSequencePlaying = true;
@@ -221,6 +230,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         ResumeChaseAfterEncounter();
     }
 
+    // Smoothly turns the jumpscare camera toward Tikbalang face.
     private IEnumerator FocusCameraOnTikbalang()
     {
         if (jumpscareCamera == null && Camera.main != null)
@@ -244,6 +254,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         jumpscareCamera.rotation = targetRotation;
     }
 
+    // Smoothly returns the camera to its rotation from before the jumpscare.
     private IEnumerator RestoreCameraAfterJumpscare()
     {
         if (jumpscareCamera == null)
@@ -261,6 +272,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
 
         jumpscareCamera.rotation = cameraRotationBeforeCatch;
     }
+    // Finds and hides the Q and A panel, then connects its answer buttons.
     private void FindAndPrepareQnAPanel()
     {
         if (qnaPanel == null)
@@ -287,6 +299,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         WireAnswerButton("OptionD", 3);
     }
 
+    // Displays a random question, waits for an answer or timeout, then applies damage if wrong.
     private IEnumerator ShowJumpscareQuestion(bool unlockPlayerAfterQuestion = true)
     {
         if (qnaPanel == null)
@@ -360,6 +373,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
 
     private int selectedAnswerIndex = -1;
 
+    // Finds an answer button and connects it to the corresponding answer index.
     private void WireAnswerButton(string buttonName, int answerIndex)
     {
         Transform option = qnaPanel.transform.Find(buttonName);
@@ -370,6 +384,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         qnaButtons.Add(button);
     }
 
+    // Records the selected answer and disables the answer buttons.
     private void SelectAnswer(int answerIndex)
     {
         if (!waitingForAnswer || answerReceived) return;
@@ -379,6 +394,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         SetAnswerButtonsInteractable(false);
     }
 
+    // Fills the question, answer choices, and feedback text in the Q and A panel.
     private void PopulateQuestionUI()
     {
         selectedAnswerIndex = -1;
@@ -390,6 +406,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         SetFeedback(string.Empty, Color.white);
     }
 
+    // Sets a TextMeshPro label beneath the Q and A panel using its transform path.
     private void SetText(string path, string value)
     {
         Transform textTransform = qnaPanel.transform.Find(path);
@@ -397,6 +414,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         if (text != null) text.text = value;
     }
 
+    // Updates the Q and A feedback message and its display color.
     private void SetFeedback(string message, Color color)
     {
         Transform feedbackTransform = qnaPanel.transform.Find("FeedbackText");
@@ -408,12 +426,14 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         }
     }
 
+    // Enables or disables every answer button connected to the Q and A panel.
     private void SetAnswerButtonsInteractable(bool value)
     {
         foreach (Button button in qnaButtons)
             if (button != null) button.interactable = value;
     }
 
+    // Disables player controls during Q and A and restores them when the lock is released.
     private void SetPlayerQuestionLock(bool locked)
     {
         if (playerController == null && player != null)
@@ -434,6 +454,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             Cursor.visible = false;
         }
     }
+    // Resumes Tikbalang NavMesh chase toward the player after an encounter.
     private void ResumeChaseAfterEncounter()
     {
         if (agent == null || !agent.enabled || !agent.isOnNavMesh || player == null)
@@ -448,6 +469,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         SetMovementAnimation(true);
         LogTriggerDebug("First encounter finished. Tikbalang is now chasing the player.");
     }
+    // Chooses walking or running, handles doors, updates the chase destination, and audio.
     private void ChasePlayer()
     {
         if (!agent.enabled || !agent.isOnNavMesh)
@@ -486,6 +508,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             StopChaseSound();
     }
 
+    // Detects a door ahead, asks it to open, and pauses Tikbalang while it opens.
     private bool HandleDoorAhead()
     {
         if (Time.time < doorPauseUntil)
@@ -528,6 +551,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
     }
 
     // Used only for the first encounter. Flashlight teleports continue to use spawn points.
+    // Places Tikbalang on the NavMesh in front of the player and turns him toward them.
     private void TeleportInFrontOfPlayer()
     {
         if (player == null)
@@ -556,11 +580,13 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 
+    // Teleports Tikbalang to a spawn point, with optional cooldown bypass.
     public bool TeleportToSpawnPoint()
     {
         return TeleportToSpawnPoint(false);
     }
 
+    // Teleports Tikbalang to a spawn point, with optional cooldown bypass.
     private bool TeleportToSpawnPoint(bool bypassCooldown)
     {
         if ((!bypassCooldown && Time.time < nextTeleportTime) || teleportSpawnPoints == null || teleportSpawnPoints.Length == 0)
@@ -590,6 +616,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         return true;
     }
 
+    // Picks a valid spawn point, avoiding the previous point when another is available.
     private int ChooseSpawnPointIndex()
     {
         int validCount = 0;
@@ -612,12 +639,14 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         return -1;
     }
 
+    // Stops Tikbalang and disables movement animation before the first encounter.
     private void SetDormantState()
     {
         if (agent.enabled) agent.isStopped = true;
         SetMovementAnimation(false);
     }
 
+    // Finds and stores the GameObject tagged Player if no player was assigned.
     private void FindPlayerIfNeeded()
     {
         if (player != null) return;
@@ -625,12 +654,14 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         if (playerObject != null) player = playerObject.transform;
     }
 
+    // Warps the agent to the nearest walkable location if it starts off the NavMesh.
     private void PlaceOnNavMeshIfNeeded()
     {
         if (!agent.isOnNavMesh && NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5f, NavMesh.AllAreas))
             agent.Warp(hit.position);
     }
 
+    // Checks whether the player camera can see Tikbalang within the configured view and range.
     private bool CanPlayerSeeTikbalang()
     {
         Camera playerCamera = Camera.main;
@@ -660,6 +691,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         return true;
     }
 
+    // Sets available animator parameters for walking, running, and movement speed.
     private void SetMovementAnimation(bool moving, bool running = false)
     {
         if (animator == null) return;
@@ -671,6 +703,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         SetAnimatorFloatIfPresent("Speed", running ? runSpeed : (walking ? walkSpeed : 0f));
     }
 
+    // Starts Tikbalang looping chase sound if it is not already playing.
     private void PlayChaseSound()
     {
         if (isPlayingChaseSound || audioSource == null || chaseSound == null)
@@ -683,6 +716,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         isPlayingChaseSound = true;
     }
 
+    // Stops the looping chase sound when Tikbalang is no longer running.
     private void StopChaseSound()
     {
         if (!isPlayingChaseSound || audioSource == null)
@@ -693,6 +727,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         isPlayingChaseSound = false;
     }
 
+    // Sets an animator trigger only if a matching trigger parameter exists.
     private void SetAnimatorTriggerIfPresent(string parameterName)
     {
         if (animator == null) return;
@@ -704,6 +739,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             }
     }
 
+    // Sets an animator bool only if a matching bool parameter exists.
     private void SetAnimatorBoolIfPresent(string parameterName, bool value)
     {
         foreach (AnimatorControllerParameter parameter in animator.parameters)
@@ -714,6 +750,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             }
     }
 
+    // Sets an animator float only if a matching float parameter exists.
     private void SetAnimatorFloatIfPresent(string parameterName, float value)
     {
         foreach (AnimatorControllerParameter parameter in animator.parameters)
@@ -724,6 +761,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             }
     }
 
+    // Writes diagnostic messages to the Console when trigger debugging is enabled.
     private void LogTriggerDebug(string message)
     {
         if (debugTrigger)
