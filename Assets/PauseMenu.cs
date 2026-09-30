@@ -118,15 +118,30 @@ public class PauseMenu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
             if (isPaused)
+            {
+                RestoreUnsavedSettings();
                 Resume();
+            }
             else
+            {
                 Pause();
+            }
         }
     }
 
 
 
 
+    private void RestoreUnsavedSettings()
+    {
+        SettingsPanel settingsManager = FindObjectOfType<SettingsPanel>();
+        if (settingsManager != null)
+            settingsManager.RestoreSavedSettings();
+
+        // The pause menu owns the live audio, sensitivity, and brightness sliders.
+        LoadSettings();
+        RefreshSettingsUi();
+    }
     private void UpdateSettingsSliderDrag()
     {
         if (settingsPanel == null || !settingsPanel.activeInHierarchy)
@@ -400,6 +415,10 @@ public class PauseMenu : MonoBehaviour
 
     void SaveSettings()
     {
+        // Commit the shared settings panel too, including previewed graphics quality and language.
+        SettingsPanel settingsManager = FindObjectOfType<SettingsPanel>();
+        if (settingsManager != null)
+            settingsManager.SaveSettings();
         // Preserve graphics quality and language already stored by SettingsPanel.
         SettingsData existingSettings;
         bool hasDatabaseSettings = SettingsDatabase.TryLoad(out existingSettings);
@@ -428,6 +447,9 @@ public class PauseMenu : MonoBehaviour
         AudioListener.volume = currentVolume / 100f;
         ApplySensitivity(currentSensitivity);
         ApplyBrightness(currentBrightness);
+
+        // Saving from the pause settings also closes the pause menu and resumes play.
+        Resume();
     }
 
     void OnVolumeChanged(float value)
@@ -495,11 +517,7 @@ public class PauseMenu : MonoBehaviour
 
     private void ApplyBrightness(float value)
     {
-        RenderSettings.ambientIntensity = value;
-
-        // Reflections are disabled in Medium and High to keep the game performant.
-        // Low can still use the brightness-controlled reflection intensity.
-        RenderSettings.reflectionIntensity = QualitySettings.GetQualityLevel() >= 1 ? 0f : value;
+        ScreenBrightnessController.Apply(value);
     }
 
     void OnDestroy()
