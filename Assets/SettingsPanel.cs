@@ -131,6 +131,29 @@ public class SettingsPanel : MonoBehaviour
             brightnessSlider.onValueChanged.AddListener(OnBrightnessChanged);
     }
 
+    public void RestoreSavedSettings()
+    {
+        SettingsData savedSettings;
+        if (SettingsDatabase.TryLoad(out savedSettings))
+        {
+            currentVolume = savedSettings.Volume;
+            currentSensitivity = savedSettings.Sensitivity;
+            currentBrightness = savedSettings.Brightness;
+            currentQuality = savedSettings.QualityLevel;
+            currentLanguage = Mathf.Clamp(savedSettings.Language, 0, 2);
+        }
+        else
+        {
+            // Older installs may only have the legacy PlayerPrefs values.
+            LoadLegacyPlayerPrefs();
+        }
+
+        RefreshUI();
+        UpdateLanguageButtonsHighlight();
+        ApplyAllSettings();
+        ApplyFrameRateCap();
+        ApplySelectedLanguage();
+    }
     private void LoadLegacyPlayerPrefs()
     {
         RepairLegacyZeroSettings();
@@ -463,8 +486,13 @@ public class SettingsPanel : MonoBehaviour
     {
         CaptureCurrentSliderValues();
         currentLanguage = Mathf.Clamp(languageIndex, 0, 2);
-        SaveSettingsToDatabase();
-        SyncPlayerPrefsCache();
+        // Pause settings are a preview until the player presses Save. The main menu
+        // keeps its existing immediate language-save behavior.
+        if (PauseMenu.Instance == null || !PauseMenu.Instance.isPaused)
+        {
+            SaveSettingsToDatabase();
+            SyncPlayerPrefsCache();
+        }
         UpdateLanguageButtonsHighlight();
         ApplySelectedLanguage();
     }
@@ -544,11 +572,7 @@ public class SettingsPanel : MonoBehaviour
 
     private void ApplyBrightness(float value)
     {
-        RenderSettings.ambientIntensity = value;
-
-        // Reflections are disabled in Medium and High to keep the game performant.
-        // Low can still use the brightness-controlled reflection intensity.
-        RenderSettings.reflectionIntensity = QualitySettings.GetQualityLevel() >= 1 ? 0f : value;
+        ScreenBrightnessController.Apply(value);
     }
 
     private void PlayClickSound()
