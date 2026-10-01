@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class ScreenBrightnessController : MonoBehaviour
 {
     private const float MinimumExposure = -2f;
-    private const float MaximumExposure = 2f;
+    private const float MaximumExposure = 0f;
     private static ScreenBrightnessController instance;
 
     private Volume brightnessVolume;

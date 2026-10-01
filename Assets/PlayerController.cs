@@ -152,6 +152,18 @@ public class PlayerController : MonoBehaviour
 
         isSprinting = wantsToSprint && canSprint;
 
+        // Do not retain movement momentum while crouching after the player
+        // releases the movement keys. This must not depend on the ground check.
+        if (isCrouching && input.sqrMagnitude <= 0.001f)
+        {
+            horizontalVelocity = Vector3.zero;
+
+            if (staminaController != null)
+                staminaController.UpdateStamina(false);
+
+            return;
+        }
+
         float speed = isSprinting ? sprintSpeed
             : isCrouching ? moveSpeed * crouchSpeedMultiplier
             : moveSpeed;
@@ -192,7 +204,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleCrouch()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.LeftControl))
             StartCrouch();
 
         if (Input.GetKeyUp(KeyCode.LeftControl))
@@ -202,6 +214,8 @@ public class PlayerController : MonoBehaviour
     void StartCrouch()
     {
         isCrouching = true;
+        isSprinting = false;
+        horizontalVelocity = Vector3.zero;
         cc.height = crouchHeight;
         cc.center = new Vector3(cc.center.x, crouchCenterY, cc.center.z);
     }
