@@ -376,6 +376,8 @@ public class MenuManager : MonoBehaviour
         // A fresh game must choose a new Mansion key location.
         PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Normal");
         PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
+        PlayerPrefs.DeleteKey("WaitingRoomKeySpawnIndex_Normal");
+        PlayerPrefs.DeleteKey("WaitingRoomKeySpawnIndex_Hard");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
         PlayerPrefs.DeleteKey("WrenchSpawnIndex_Normal");
@@ -436,6 +438,8 @@ public class MenuManager : MonoBehaviour
         // A fresh game must choose a new Mansion key location.
         PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Normal");
         PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
+        PlayerPrefs.DeleteKey("WaitingRoomKeySpawnIndex_Normal");
+        PlayerPrefs.DeleteKey("WaitingRoomKeySpawnIndex_Hard");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
         PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
         PlayerPrefs.DeleteKey("WrenchSpawnIndex_Normal");
