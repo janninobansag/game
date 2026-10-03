@@ -23,6 +23,11 @@ public class DoorInteraction : MonoBehaviour
     public KeyCode interactKey = KeyCode.E;
     public string doorTag = "Door";
 
+    [Header("Locked Prompt")]
+    [TextArea]
+    public string lockedDoorText = "This door is locked!";
+    public float lockedPromptDuration = 2f;
+
     private bool isOpen = false;
     private bool isAnimating = false;
     private Quaternion closedRotation;
@@ -67,7 +72,7 @@ public class DoorInteraction : MonoBehaviour
                     if (isLocked)
                     {
                         showLockedPrompt = true;
-                        lockedPromptTimer = 2f;
+                        lockedPromptTimer = lockedPromptDuration;
                         return;
                     }
 
@@ -225,10 +230,10 @@ public class DoorInteraction : MonoBehaviour
 
             GUI.Label(new Rect(Screen.width / 2 - 199,
                 Screen.height / 2 + 51, 400, 40),
-                "This door is locked!", shadow);
+                lockedDoorText, shadow);
             GUI.Label(new Rect(Screen.width / 2 - 200,
                 Screen.height / 2 + 50, 400, 40),
-                "This door is locked!", style);
+                lockedDoorText, style);
         }
     }
 }
