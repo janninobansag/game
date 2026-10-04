@@ -10,6 +10,8 @@ public class GeneratorFuelInteraction : MonoBehaviour
     public string coverSaveId = "GeneratorGasTankCover";
 
     [Header("Interaction")]
+    [Tooltip("Generator root to recognize when aiming at any of its visible parts. Leave empty to use this object only.")]
+    public Transform interactionRoot;
     public string requiredItemName = "Gas";
     public KeyCode interactKey = KeyCode.E;
     [Min(0.1f)] public float interactRange = 2.5f;
@@ -21,56 +23,63 @@ public class GeneratorFuelInteraction : MonoBehaviour
     public GameObject fueledEffect;
 
     [Header("Debug")]
-    [Tooltip("Prints a message only when the interaction state changes.")]
+    [Tooltip("Log cover state only when the cover is removed or Gas is aimed at the generator.")]
     public bool debugInteraction = true;
 
     private Camera playerCamera;
     private bool isPouring;
     private bool isFueled;
+    private bool coverRemovedThisSession;
+    private bool coverOpenFromSave;
+    private bool coverMissingFromGenerator;
     private bool showPrompt;
+    private bool showClosedCoverPrompt;
+    private float pourProgress;
     private string lastDebugState;
 
     private void Start()
     {
         playerCamera = Camera.main;
         isFueled = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(fuelSaveId);
+        coverOpenFromSave = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(coverSaveId);
         if (fueledEffect != null) fueledEffect.SetActive(isFueled);
         if (isFueled) DestroyActiveSceneGas();
-        ReportDebug(isFueled ? "Generator is already fueled." : "Waiting for cover to open. Cover Save Id=" + coverSaveId);
     }
 
     private void Update()
     {
-        if (isFueled)
-        {
-            ReportDebug("Generator is already fueled.");
-            return;
-        }
-        if (isPouring)
-        {
-            ReportDebug("Gas is pouring.");
-            return;
-        }
+        if (isFueled || isPouring) return;
 
-        bool coverIsOpen = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(coverSaveId);
-        bool lookingAtGenerator = coverIsOpen && IsLookingAtGenerator();
+        if (!coverOpenFromSave && !coverRemovedThisSession && SaveSystem.Instance != null)
+            coverOpenFromSave = SaveSystem.Instance.IsGeneratorCoverRemoved(coverSaveId);
+        // The cover is detached from this generator when it is opened. This also
+        // handles an already-detached cover when scripts reload during Play Mode.
+        if (!coverMissingFromGenerator && interactionRoot != null)
+            coverMissingFromGenerator = interactionRoot.GetComponentInChildren<GeneratorGasTankCover>(true) == null;
+        bool coverIsOpen = coverRemovedThisSession || coverOpenFromSave || coverMissingFromGenerator;
+        bool lookingAtGenerator = IsLookingAtGenerator();
         GameObject gas = GetSelectedGas();
-        showPrompt = lookingAtGenerator && gas != null;
+        showPrompt = coverIsOpen && lookingAtGenerator && gas != null;
+        showClosedCoverPrompt = !coverIsOpen && lookingAtGenerator && gas != null;
 
-        if (!coverIsOpen)
-            ReportDebug("Blocked: cover is not recorded open. Expected Cover Save Id=" + coverSaveId);
-        else if (gas == null)
-            ReportDebug("Blocked: select an item whose Pickup Item Name is " + requiredItemName + ".");
-        else if (!lookingAtGenerator)
-            ReportDebug("Blocked: aim at this object's non-trigger collider within " + interactRange + " meters.");
+        if (lookingAtGenerator && gas != null)
+            ReportDebug("Gas aimed at Generator. Cover event=" + coverRemovedThisSession +
+                ", cover detached=" + coverMissingFromGenerator +
+                ", saved cover=" + coverOpenFromSave + ", can pour=" + showPrompt + ".");
         else
-            ReportDebug("Ready: press " + interactKey + " to pour Gas.");
+            lastDebugState = null;
 
         if (showPrompt && Input.GetKeyDown(interactKey))
-        {
-            ReportDebug("Pour started.");
             StartCoroutine(PourGas(gas));
-        }
+    }
+
+    public void NotifyCoverRemoved(string removedCoverId)
+    {
+        if (!string.Equals(removedCoverId, coverSaveId, System.StringComparison.Ordinal)) return;
+        coverRemovedThisSession = true;
+        coverOpenFromSave = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(coverSaveId);
+        ReportDebug("Cover removal received. SaveSystem present=" + (SaveSystem.Instance != null) +
+            ", saved cover=" + coverOpenFromSave + ".");
     }
 
     private bool IsLookingAtGenerator()
@@ -79,7 +88,8 @@ public class GeneratorFuelInteraction : MonoBehaviour
         if (playerCamera == null) return false;
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f));
         if (!Physics.Raycast(ray, out RaycastHit hit, interactRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)) return false;
-        return hit.collider.transform == transform || hit.collider.transform.IsChildOf(transform);
+        Transform root = interactionRoot != null ? interactionRoot : transform;
+        return hit.collider.transform == root || hit.collider.transform.IsChildOf(root);
     }
 
     private GameObject GetSelectedGas()
@@ -106,7 +116,7 @@ public class GeneratorFuelInteraction : MonoBehaviour
         if (gas == null) yield break;
         isPouring = true;
         showPrompt = false;
-        ReportDebug("Moving Gas to pour point.");
+        showClosedCoverPrompt = false;
 
         PickupItem pickup = gas.GetComponent<PickupItem>();
         if (pickup != null) { pickup.isHeld = false; pickup.enabled = false; }
@@ -122,8 +132,15 @@ public class GeneratorFuelInteraction : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < pourDuration && gas != null)
         {
+            if (!Input.GetKey(interactKey))
+            {
+                CancelPouring(gas);
+                yield break;
+            }
+
             elapsed += Time.deltaTime;
-            float progress = Mathf.SmoothStep(0f, 1f, elapsed / pourDuration);
+            pourProgress = Mathf.Clamp01(elapsed / pourDuration);
+            float progress = Mathf.SmoothStep(0f, 1f, pourProgress);
             gas.transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
             gas.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, progress);
             yield return null;
@@ -131,11 +148,43 @@ public class GeneratorFuelInteraction : MonoBehaviour
 
         if (gas != null && Inventory.Instance != null) Inventory.Instance.RemoveAndDestroy(gas);
         else if (gas != null) Destroy(gas);
+        pourProgress = 1f;
         isFueled = true;
         isPouring = false;
         if (SaveSystem.Instance != null) SaveSystem.Instance.MarkGeneratorCoverRemoved(fuelSaveId);
         if (fueledEffect != null) fueledEffect.SetActive(true);
-        ReportDebug("Pour complete: Gas was consumed and generator state was saved.");
+    }
+
+    private void CancelPouring(GameObject gas)
+    {
+        isPouring = false;
+        pourProgress = 0f;
+
+        if (gas == null) return;
+
+        PickupItem pickup = gas.GetComponent<PickupItem>();
+        if (pickup != null)
+        {
+            pickup.enabled = true;
+            pickup.isPickedUp = true;
+            pickup.isHeld = true;
+            pickup.wasDropped = false;
+        }
+
+        foreach (Collider itemCollider in gas.GetComponentsInChildren<Collider>())
+            itemCollider.enabled = false;
+
+        Rigidbody body = gas.GetComponent<Rigidbody>();
+        if (body != null)
+        {
+            body.isKinematic = true;
+            body.useGravity = false;
+            body.velocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+        }
+
+        if (Inventory.Instance != null && Inventory.Instance.GetItems().Contains(gas))
+            Inventory.Instance.SetItemHeld(gas, true);
     }
 
     public bool HasFuel() => isFueled;
@@ -146,7 +195,6 @@ public class GeneratorFuelInteraction : MonoBehaviour
         isFueled = false;
         if (SaveSystem.Instance != null) SaveSystem.Instance.ClearGeneratorState(fuelSaveId);
         if (fueledEffect != null) fueledEffect.SetActive(false);
-        ReportDebug("Fuel consumed. Refill Gas to run the generator again.");
     }
     private void DestroyActiveSceneGas()
     {
@@ -164,16 +212,26 @@ public class GeneratorFuelInteraction : MonoBehaviour
     {
         if (!debugInteraction || lastDebugState == message) return;
         lastDebugState = message;
+        Debug.Log("Generator fuel: " + message, this);
     }
 
     private void OnGUI()
     {
-        if (!showPrompt || isPouring || isFueled) return;
+        if (isFueled) return;
         GUIStyle shadow = new GUIStyle { fontSize = 22, alignment = TextAnchor.MiddleCenter };
         shadow.normal.textColor = Color.black;
         GUIStyle text = new GUIStyle(shadow); text.normal.textColor = Color.white;
         Rect rect = new Rect(Screen.width * 0.5f - 200f, Screen.height * 0.5f + 50f, 400f, 35f);
-        GUI.Label(new Rect(rect.x + 1f, rect.y + 1f, rect.width, rect.height), "Press E to pour Gas into Generator", shadow);
-        GUI.Label(rect, "Press E to pour Gas into Generator", text);
+        string message;
+        if (isPouring)
+            message = "Hold " + interactKey + " to pour Gas: " + Mathf.RoundToInt(pourProgress * 100f) + "%";
+        else if (showClosedCoverPrompt)
+            message = "Remove the gas tank cover first";
+        else if (showPrompt)
+            message = "Hold " + interactKey + " to pour Gas";
+        else
+            return;
+        GUI.Label(new Rect(rect.x + 1f, rect.y + 1f, rect.width, rect.height), message, shadow);
+        GUI.Label(rect, message, text);
     }
 }

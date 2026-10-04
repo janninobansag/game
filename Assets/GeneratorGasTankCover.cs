@@ -133,6 +133,14 @@ public class GeneratorGasTankCover : MonoBehaviour
         if (SaveSystem.Instance != null)
             SaveSystem.Instance.MarkGeneratorCoverRemoved(saveId);
 
+        // The cover is already open in this play session even if saving fails.
+        // Tell the fuel interaction before this cover leaves the generator hierarchy.
+        GeneratorFuelInteraction fuelInteraction = transform.parent != null
+            ? transform.parent.GetComponentInChildren<GeneratorFuelInteraction>(true)
+            : null;
+        if (fuelInteraction != null)
+            fuelInteraction.NotifyCoverRemoved(saveId);
+
         // Detach first so the cover is no longer moved by the generator hierarchy.
         transform.SetParent(null, true);
 

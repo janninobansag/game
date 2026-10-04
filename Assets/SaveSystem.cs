@@ -185,7 +185,10 @@ public class SaveSystem : MonoBehaviour
 
         EnsureDatabaseReady();
         if (!isDatabaseReady)
+        {
+            Debug.LogWarning("[GeneratorCover] Could not save '" + coverId + "': save database is unavailable.");
             return;
+        }
 
         try
         {
@@ -195,8 +198,9 @@ public class SaveSystem : MonoBehaviour
                 IsRemoved = true
             });
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            Debug.LogWarning("[GeneratorCover] Could not save '" + coverId + "': " + e.Message);
         }
     }
 
@@ -2106,23 +2110,6 @@ List<string> inventoryItemNames = new List<string>();
                         {
                             rb.isKinematic = true;
                             rb.useGravity = false;
-                        }
-
-                        Camera cam = Camera.main;
-                        if (cam != null)
-                        {
-                            itemObject.transform.SetParent(cam.transform);
-
-                            if (pickup != null)
-                            {
-                                itemObject.transform.localPosition = pickup.heldPositionOffset;
-                                itemObject.transform.localRotation = Quaternion.Euler(pickup.heldRotation);
-                            }
-                            else
-                            {
-                                itemObject.transform.localPosition = new Vector3(0.3f, -0.2f, 0.5f);
-                                itemObject.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-                            }
                         }
 
                         FlashlightPickup flashlight = itemObject.GetComponent<FlashlightPickup>();

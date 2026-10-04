@@ -9,6 +9,24 @@ public class Inventory : MonoBehaviour
     [Header("Bag Settings")]
     public int maxCapacity = 3;
 
+    [Header("Drop Position")]
+    [Tooltip("How far in front of the player an item is placed when dropped.")]
+    [Min(0.25f)] public float dropDistance = 1.5f;
+    [Tooltip("Height relative to the camera where a dropped item begins. A small negative value keeps it below the crosshair.")]
+    public float dropStartHeightOffset = 0f;
+    [Tooltip("Minimum space left between a dropped item and a wall in front of the player.")]
+    [Min(0.05f)] public float dropWallClearance = 0.25f;
+
+    [Header("Drop Throw")]
+    [Tooltip("Forward speed applied when an item is dropped.")]
+    [Min(0f)] public float dropThrowSpeed = 2.5f;
+    [Tooltip("Small upward speed so the item feels tossed instead of placed.")]
+    [Min(0f)] public float dropThrowUpwardSpeed = 1.5f;
+    [Tooltip("Rotation speed applied while the dropped item is in the air.")]
+    [Min(0f)] public float dropSpinSpeed = 3f;
+    [Tooltip("How much a dropped item bounces when it hits a wall or floor.")]
+    [Range(0f, 1f)] public float dropBounce = 0.25f;
+
     [Header("Drop Item Light (Optional)")]
     public bool enableDropLight = true;
     public Color dropLightColor = new Color(1f, 0.7f, 0.3f);
@@ -18,6 +36,7 @@ public class Inventory : MonoBehaviour
 
     private List<GameObject> items = new List<GameObject>();
     private int selectedIndex = -1;
+    private PhysicMaterial dropPhysicsMaterial;
 
     void Awake()
     {
@@ -86,21 +105,36 @@ public class Inventory : MonoBehaviour
         if (held)
         {
             Camera cam = Camera.main;
-            if (item.transform.parent != cam.transform)
-            {
-                item.transform.SetParent(cam.transform);
+            if (cam == null) return;
 
-                PickupItem pi = item.GetComponent<PickupItem>();
-                if (pi != null)
-                {
-                    item.transform.localPosition = pi.heldPositionOffset;
-                    item.transform.localRotation = Quaternion.Euler(pi.heldRotation);
-                }
-                else
-                {
-                    item.transform.localPosition = new Vector3(0.3f, -0.2f, 0.5f);
-                    item.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-                }
+            // A held item follows the camera directly. It must not remain a
+            // simulated Rigidbody after it was previously dropped.
+            Vector3 worldScaleBeforePickup = item.transform.lossyScale;
+            item.transform.SetParent(cam.transform, false);
+            item.transform.localScale = GetLocalScaleForWorldScale(
+                worldScaleBeforePickup,
+                cam.transform.lossyScale);
+
+            PickupItem pi = item.GetComponent<PickupItem>();
+            if (pi != null)
+            {
+                item.transform.localPosition = pi.heldPositionOffset;
+                item.transform.localRotation = Quaternion.Euler(pi.heldRotation);
+            }
+            else
+            {
+                item.transform.localPosition = new Vector3(0.3f, -0.2f, 0.5f);
+                item.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            }
+
+            Rigidbody rb = item.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                rb.interpolation = RigidbodyInterpolation.None;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
 
             foreach (Renderer r in item.GetComponentsInChildren<Renderer>())
@@ -114,6 +148,19 @@ public class Inventory : MonoBehaviour
             foreach (Renderer r in item.GetComponentsInChildren<Renderer>())
                 r.enabled = false;
         }
+    }
+
+    private static Vector3 GetLocalScaleForWorldScale(Vector3 worldScale, Vector3 parentWorldScale)
+    {
+        return new Vector3(
+            SafeScaleDivision(worldScale.x, parentWorldScale.x),
+            SafeScaleDivision(worldScale.y, parentWorldScale.y),
+            SafeScaleDivision(worldScale.z, parentWorldScale.z));
+    }
+
+    private static float SafeScaleDivision(float worldScale, float parentScale)
+    {
+        return Mathf.Abs(parentScale) > 0.0001f ? worldScale / parentScale : worldScale;
     }
 
     public bool AddItem(GameObject item)
@@ -203,21 +250,10 @@ public class Inventory : MonoBehaviour
 
         if (PrefabManager.Instance != null)
         {
-            Camera cam = Camera.main;
-            Vector3 dropPos = cam.transform.position + cam.transform.forward * 0.8f;
-
-            Vector3 playerFeet = new Vector3(dropPos.x, cam.transform.position.y - 1.5f, dropPos.z);
-            RaycastHit groundHit;
-            if (Physics.Raycast(playerFeet + Vector3.up * 0.5f, Vector3.down, out groundHit, 5f))
-            {
-                dropPos.y = groundHit.point.y + 0.15f;
-            }
-            else
-            {
-                dropPos.y = cam.transform.position.y - 1.2f;
-            }
-
-            GameObject droppedItem = PrefabManager.Instance.SpawnDroppedItem(cleanName, dropPos, Quaternion.identity, batteryValue);
+            Vector3 dropPos = GetDropPosition(item, out bool wallIsTooClose);
+            GameObject droppedItem = PrefabManager.Instance.HasExactPrefab(cleanName)
+                ? PrefabManager.Instance.SpawnDroppedItem(cleanName, dropPos, Quaternion.identity, batteryValue)
+                : null;
 
             if (droppedItem != null)
             {
@@ -252,31 +288,22 @@ public class Inventory : MonoBehaviour
                     bpNew.isHeld = false;
                 }
 
-                if (enableDropLight)
+                if (enableDropLight && ShouldUseDropLight(droppedItem))
                 {
                     AddDropLight(droppedItem);
                 }
+
+                ApplyDropThrow(droppedItem, wallIsTooClose);
             }
             else
             {
-                DropItemFallback(item, dropPos, batteryValue);
+                DropItemFallback(item, dropPos, batteryValue, wallIsTooClose);
             }
         }
         else
         {
-            Camera cam = Camera.main;
-            Vector3 dropPos = cam.transform.position + cam.transform.forward * 0.8f;
-            Vector3 playerFeet = new Vector3(dropPos.x, cam.transform.position.y - 1.5f, dropPos.z);
-            RaycastHit groundHit;
-            if (Physics.Raycast(playerFeet + Vector3.up * 0.5f, Vector3.down, out groundHit, 5f))
-            {
-                dropPos.y = groundHit.point.y + 0.15f;
-            }
-            else
-            {
-                dropPos.y = cam.transform.position.y - 1.2f;
-            }
-            DropItemFallback(item, dropPos, batteryValue);
+            Vector3 dropPos = GetDropPosition(item, out bool wallIsTooClose);
+            DropItemFallback(item, dropPos, batteryValue, wallIsTooClose);
         }
 
         selectedIndex = items.Count > 0 ? 0 : -1;
@@ -285,7 +312,110 @@ public class Inventory : MonoBehaviour
             SetItemHeld(items[selectedIndex], true);
     }
 
-    private void DropItemFallback(GameObject item, Vector3 dropPos, float batteryValue = -1f)
+    private Vector3 GetDropPosition(GameObject item, out bool wallIsTooClose)
+    {
+        wallIsTooClose = false;
+        Camera cam = Camera.main;
+        if (cam == null)
+            return transform.position + transform.forward * dropDistance;
+
+        Vector3 dropDirection = GetDropDirection();
+        float distanceToDrop = dropDistance;
+        float itemRadius = GetDropCollisionRadius(item);
+        float castDistance = dropDistance + itemRadius + dropWallClearance;
+        if (Physics.SphereCast(cam.transform.position, itemRadius, dropDirection, out RaycastHit obstacleHit, castDistance))
+        {
+            float safeDistance = obstacleHit.distance - itemRadius - dropWallClearance;
+            // Do not apply a forward throw when any wall is inside the
+            // requested drop distance. This keeps the item on this side even
+            // if the wall has a thin collider.
+            wallIsTooClose = safeDistance < dropDistance;
+
+            // A wall is directly against the player. Put the item behind the
+            // camera, on the player's side of the wall, and do not throw it
+            // forward into the obstacle.
+            distanceToDrop = safeDistance > 0f
+                ? Mathf.Min(dropDistance, safeDistance)
+                : -(itemRadius + dropWallClearance);
+        }
+
+        return cam.transform.position + dropDirection * distanceToDrop + Vector3.up * dropStartHeightOffset;
+    }
+
+    private float GetDropCollisionRadius(GameObject item)
+    {
+        float radius = dropWallClearance;
+        if (item == null) return radius;
+
+        foreach (Collider collider in item.GetComponentsInChildren<Collider>(true))
+        {
+            if (collider is BoxCollider box)
+            {
+                Vector3 scaledSize = Vector3.Scale(box.size, box.transform.lossyScale);
+                radius = Mathf.Max(radius, Mathf.Max(scaledSize.x, scaledSize.z) * 0.5f);
+            }
+            else if (collider is SphereCollider sphere)
+            {
+                Vector3 scale = boxSafeAbs(collider.transform.lossyScale);
+                radius = Mathf.Max(radius, sphere.radius * Mathf.Max(scale.x, scale.y, scale.z));
+            }
+            else
+            {
+                Bounds bounds = collider.bounds;
+                radius = Mathf.Max(radius, Mathf.Max(bounds.extents.x, bounds.extents.z));
+            }
+        }
+
+        return radius;
+    }
+
+    private static Vector3 boxSafeAbs(Vector3 value)
+    {
+        return new Vector3(Mathf.Abs(value.x), Mathf.Abs(value.y), Mathf.Abs(value.z));
+    }
+
+    private Vector3 GetDropDirection()
+    {
+        Camera cam = Camera.main;
+        Vector3 forward = cam != null ? cam.transform.forward : transform.forward;
+        Vector3 forwardOnGround = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
+        return forwardOnGround.sqrMagnitude >= 0.001f ? forwardOnGround : transform.forward;
+    }
+
+    private void ApplyDropThrow(GameObject item, bool wallIsTooClose = false)
+    {
+        Rigidbody rb = item.GetComponent<Rigidbody>();
+        if (rb == null) return;
+
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        if (dropBounce > 0f)
+        {
+            if (dropPhysicsMaterial == null)
+                dropPhysicsMaterial = new PhysicMaterial("Dropped Item Bounce");
+
+            dropPhysicsMaterial.bounciness = dropBounce;
+            dropPhysicsMaterial.bounceCombine = PhysicMaterialCombine.Maximum;
+            dropPhysicsMaterial.dynamicFriction = 0.4f;
+            dropPhysicsMaterial.staticFriction = 0.4f;
+
+            foreach (Collider collider in item.GetComponentsInChildren<Collider>())
+                collider.material = dropPhysicsMaterial;
+        }
+
+        float forwardSpeed = wallIsTooClose ? 0f : dropThrowSpeed;
+        rb.AddForce(GetDropDirection() * forwardSpeed + Vector3.up * dropThrowUpwardSpeed, ForceMode.VelocityChange);
+        if (dropSpinSpeed > 0f)
+            rb.AddTorque(Random.insideUnitSphere * dropSpinSpeed, ForceMode.VelocityChange);
+
+    }
+
+    private void DropItemFallback(GameObject item, Vector3 dropPos, float batteryValue = -1f, bool wallIsTooClose = false)
     {
         if (item == null) return;
 
@@ -308,7 +438,7 @@ public class Inventory : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        if (enableDropLight)
+        if (enableDropLight && ShouldUseDropLight(item))
         {
             AddDropLight(item);
         }
@@ -348,6 +478,8 @@ public class Inventory : MonoBehaviour
 
         KeyUse ku = item.GetComponent<KeyUse>();
         if (ku != null) ku.SetHeld(false);
+
+        ApplyDropThrow(item, wallIsTooClose);
     }
 
     public void CleanupNullItems()
@@ -376,6 +508,18 @@ public class Inventory : MonoBehaviour
         pulser.minIntensity = 0f;
         pulser.maxIntensity = dropLightIntensity;
         pulser.pulseSpeed = pulseSpeed;
+    }
+
+    private static bool ShouldUseDropLight(GameObject item)
+    {
+        if (item == null) return false;
+
+        PickupItem pickup = item.GetComponent<PickupItem>();
+        string itemName = pickup != null && !string.IsNullOrEmpty(pickup.itemName)
+            ? pickup.itemName
+            : item.name;
+
+        return !string.Equals(itemName.Replace("(Clone)", "").Trim(), "Gas", System.StringComparison.OrdinalIgnoreCase);
     }
 
     private void RemoveDropLight(GameObject item)
