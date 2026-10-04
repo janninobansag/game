@@ -136,6 +136,19 @@ public class PrefabManager : MonoBehaviour
         return null;
     }
 
+    // Returns true only when the item's name has an explicit prefab registration.
+    // This prevents custom-renamed scene items from being replaced by an unrelated
+    // prefab through GetPrefab's legacy fuzzy matching.
+    public bool HasExactPrefab(string itemName)
+    {
+        if (string.IsNullOrEmpty(itemName))
+            return false;
+
+        string lowerName = itemName.ToLower();
+        return prefabDictionary.ContainsKey(lowerName) ||
+               prefabDictionary.ContainsKey(lowerName.Replace(" ", ""));
+    }
+
     public GameObject SpawnDroppedItem(string itemName, Vector3 position, Quaternion rotation, float batteryValue = -1f)
     {
         if (string.IsNullOrEmpty(itemName))

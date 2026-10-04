@@ -112,6 +112,12 @@ public class DrawerInteraction : MonoBehaviour
 
         isOpen = !isOpen;
 
+        // Lock every stored pickup to the drawer before it moves. This keeps
+        // item positions synchronized during both opening and closing.
+        DrawerItemParent drawerStorage = GetComponent<DrawerItemParent>();
+        if (drawerStorage != null)
+            drawerStorage.StoreItemsInside();
+
         if (isOpen)
         {
             Vector3 direction = GetDirectionVector();
@@ -137,15 +143,21 @@ public class DrawerInteraction : MonoBehaviour
 
         Vector3 startPosition = transform.localPosition;
         float elapsed = 0f;
+        DrawerItemParent drawerStorage = GetComponent<DrawerItemParent>();
 
         while (elapsed < 1f)
         {
             elapsed += Time.deltaTime * animationSpeed;
             transform.localPosition = Vector3.Lerp(startPosition, targetPosition, elapsed);
+            if (drawerStorage != null)
+                drawerStorage.SyncStoredItems();
             yield return null;
         }
 
         transform.localPosition = targetPosition;
+        if (drawerStorage != null)
+            drawerStorage.SyncStoredItems();
+        Physics.SyncTransforms();
         isAnimating = false;
     }
 

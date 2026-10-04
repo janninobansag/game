@@ -16,8 +16,8 @@ public class PickupItem : MonoBehaviour
     private bool showPrompt = false;
     private Camera playerCamera;
 
-    private static readonly Vector3 GasHeldPosition = new Vector3(0.42f, -0.55f, 1.35f);
-    private static readonly Vector3 GasHeldRotation = new Vector3(90f, 0f, 0f);
+    private static readonly Vector3 GasHeldPosition = new Vector3(0.6f, -1.1f, 1.05f);
+    private static readonly Vector3 GasHeldRotation = new Vector3(15.5f, 0f, 0f);
 
     void Awake()
     {
