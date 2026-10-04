@@ -73,6 +73,13 @@ public class TikbalangAI : MonoBehaviour
     [Tooltip("0 means unlimited distance. A wall or other collider blocks this sight check.")]
     [Min(0f)] public float playerSightDistance = 0f;
     public LayerMask playerSightObstacleMask = ~0;
+
+    [Header("Generator Light Run Block")]
+    [Tooltip("Tikbalang walks instead of running while any assigned generator light is on.")]
+    public bool preventRunningWhenGeneratorLightsOn = true;
+    [Tooltip("Leave empty to find the active Generator Key Slot automatically.")]
+    public GeneratorKeySlot generatorKeySlot;
+
     [Header("Flashlight Teleport")]
     [Min(0f)] public float teleportCooldown = 1f;
     [Min(0.1f)] public float spawnPointNavMeshSearchRadius = 3f;
@@ -108,6 +115,7 @@ public class TikbalangAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         if (animator == null) animator = GetComponentInChildren<Animator>();
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        if (generatorKeySlot == null) generatorKeySlot = FindObjectOfType<GeneratorKeySlot>();
         FindPlayerIfNeeded();
     }
 
@@ -482,7 +490,11 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             hasBeenSeenByPlayer = true;
 
         // Seeing Tikbalang once starts a persistent run; looking away does not cancel it.
-        bool shouldRun = runWhenPlayerSeesTikbalang && hasBeenSeenByPlayer;
+        // Generator light temporarily makes Tikbalang walk, even after he has been seen.
+        bool generatorLightsOn = preventRunningWhenGeneratorLightsOn &&
+                                 generatorKeySlot != null &&
+                                 generatorKeySlot.AreAnyGeneratorLightsOn;
+        bool shouldRun = runWhenPlayerSeesTikbalang && hasBeenSeenByPlayer && !generatorLightsOn;
         agent.speed = shouldRun ? runSpeed : walkSpeed;
         agent.stoppingDistance = stoppingDistance;
 
