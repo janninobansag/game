@@ -24,6 +24,17 @@ public class GeneratorKeySlot : MonoBehaviour
     [Tooltip("Local scale after insertion. Generatorbox is scaled to 100, so 0.01 keeps the key normal-sized.")]
     public Vector3 insertedKeyLocalScale = new Vector3(0.01f, 0.01f, 0.01f);
 
+    [Header("Gas Respawn After Shutdown")]
+    [Tooltip("Creates one fresh Gas can when this generator finishes and its lights turn off.")]
+    public bool respawnGasWhenLightsTurnOff = true;
+    [Tooltip("Optional. Drag the Gas object here. If left empty, the script finds the active Pickup Item named Gas at scene start.")]
+    public GameObject gasPrefab;
+    [Tooltip("Drag your gas spawn point objects here. If empty, objects named 'gas spawn point' are found automatically.")]
+    public Transform[] gasSpawnPoints;
+    [Min(0f)]
+    [Tooltip("Small upward offset so the spawned Gas does not begin inside the floor.")]
+    public float gasSpawnHeightOffset = 0.1f;
+
     [Header("Debug")]
     public bool debugKeySlot = true;
 
@@ -33,6 +44,25 @@ public class GeneratorKeySlot : MonoBehaviour
     private bool isRunning;
     private bool showPrompt;
     private string lastDebugState;
+    private GameObject gasRespawnTemplate;
+
+    /// <summary>True while at least one generator light assigned to this slot is enabled.</summary>
+    public bool AreAnyGeneratorLightsOn
+    {
+        get
+        {
+            if (IsLightOn(generatorLight1) || IsLightOn(generatorLight2))
+                return true;
+
+            if (additionalGeneratorLights == null)
+                return false;
+
+            foreach (Light light in additionalGeneratorLights)
+                if (IsLightOn(light)) return true;
+
+            return false;
+        }
+    }
 
     private void Start()
     {
@@ -40,6 +70,7 @@ public class GeneratorKeySlot : MonoBehaviour
         // The generator area starts lit. A separate GeneratorLightsOffTrigger
         // handles the scripted blink and blackout when the player reaches it.
         SetGeneratorLights(true);
+        PrepareGasRespawnTemplate();
         if (SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(keyInsertedSaveId))
             RestoreInsertedKey();
     }
@@ -119,6 +150,7 @@ public class GeneratorKeySlot : MonoBehaviour
         SetGeneratorLights(false);
         if (insertedKey != null) insertedKey.transform.localRotation = insertedRotation;
         if (fuelInteraction != null) fuelInteraction.ConsumeFuel();
+        SpawnGasAtRandomPoint();
         isRunning = false;
     }
 
@@ -134,6 +166,118 @@ public class GeneratorKeySlot : MonoBehaviour
     private static void SetLightState(Light light, bool enabled)
     {
         if (light != null) light.enabled = enabled;
+    }
+
+    private static bool IsLightOn(Light light)
+    {
+        return light != null && light.enabled && light.gameObject.activeInHierarchy;
+    }
+
+    private void PrepareGasRespawnTemplate()
+    {
+        if (!respawnGasWhenLightsTurnOff || gasRespawnTemplate != null)
+            return;
+
+        GameObject source = gasPrefab != null ? gasPrefab : FindSceneGas();
+        if (source == null)
+        {
+            Debug.LogWarning("Generator Key Slot: Gas respawn needs a Gas prefab or an active Pickup Item named Gas in this scene.", this);
+            return;
+        }
+
+        gasRespawnTemplate = Instantiate(source, transform);
+        gasRespawnTemplate.name = source.name + " Respawn Template";
+        gasRespawnTemplate.SetActive(false);
+    }
+
+    private void SpawnGasAtRandomPoint()
+    {
+        if (!respawnGasWhenLightsTurnOff)
+            return;
+
+        if (gasRespawnTemplate == null)
+            PrepareGasRespawnTemplate();
+        if (gasRespawnTemplate == null || HasActiveGas())
+            return;
+
+        FindGasSpawnPointsIfNeeded();
+        Transform spawnPoint = GetRandomGasSpawnPoint();
+        if (spawnPoint == null)
+        {
+            Debug.LogWarning("Generator Key Slot: Assign Gas Spawn Points or name them 'gas spawn point'.", this);
+            return;
+        }
+
+        Vector3 position = spawnPoint.position + Vector3.up * gasSpawnHeightOffset;
+        GameObject gas = Instantiate(gasRespawnTemplate, position, spawnPoint.rotation);
+        gas.name = "Gas";
+        gas.SetActive(true);
+
+        PickupItem pickup = gas.GetComponent<PickupItem>();
+        if (pickup != null)
+        {
+            pickup.enabled = true;
+            pickup.isPickedUp = false;
+            pickup.isHeld = false;
+            pickup.wasDropped = false;
+        }
+
+        foreach (Collider itemCollider in gas.GetComponentsInChildren<Collider>(true))
+            itemCollider.enabled = true;
+
+        Rigidbody body = gas.GetComponent<Rigidbody>();
+        if (body != null)
+        {
+            body.isKinematic = false;
+            body.useGravity = true;
+            body.velocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+        }
+    }
+
+    private GameObject FindSceneGas()
+    {
+        foreach (PickupItem pickup in Resources.FindObjectsOfTypeAll<PickupItem>())
+        {
+            if (pickup == null || pickup.gameObject.scene != gameObject.scene || !pickup.gameObject.activeInHierarchy)
+                continue;
+            if (string.Equals(pickup.itemName, "Gas", System.StringComparison.OrdinalIgnoreCase))
+                return pickup.gameObject;
+        }
+        return null;
+    }
+
+    private bool HasActiveGas()
+    {
+        return FindSceneGas() != null;
+    }
+
+    private void FindGasSpawnPointsIfNeeded()
+    {
+        if (gasSpawnPoints != null && gasSpawnPoints.Length > 0)
+            return;
+
+        var foundPoints = new System.Collections.Generic.List<Transform>();
+        foreach (Transform sceneTransform in Resources.FindObjectsOfTypeAll<Transform>())
+        {
+            if (sceneTransform == null || sceneTransform.gameObject.scene != gameObject.scene)
+                continue;
+            if (sceneTransform.name.StartsWith("gas spawn point", System.StringComparison.OrdinalIgnoreCase))
+                foundPoints.Add(sceneTransform);
+        }
+        gasSpawnPoints = foundPoints.ToArray();
+    }
+
+    private Transform GetRandomGasSpawnPoint()
+    {
+        if (gasSpawnPoints == null || gasSpawnPoints.Length == 0)
+            return null;
+
+        var validPoints = new System.Collections.Generic.List<Transform>();
+        foreach (Transform point in gasSpawnPoints)
+            if (point != null) validPoints.Add(point);
+
+        return validPoints.Count == 0 ? null : validPoints[Random.Range(0, validPoints.Count)];
     }
 
     private void RestoreInsertedKey()
