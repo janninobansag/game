@@ -1,4 +1,4 @@
-// PURPOSE: Shows and hides the map and converts world positions into map display coordinates.
+// PURPOSE: Shows and hides the map after it has been unlocked by a MapPickup.
 using UnityEngine;
 
 public class MapSystem : MonoBehaviour
@@ -6,6 +6,11 @@ public class MapSystem : MonoBehaviour
     [Header("Map Settings")]
     public KeyCode mapKey = KeyCode.M;
     public Texture2D mapTexture; // drag your map image here
+
+    [Header("Map Unlock")]
+    [Tooltip("When disabled, a MapPickup must unlock this Map System before the M key can open it.")]
+    public bool mapStartsUnlocked = false;
+    [SerializeField] private bool hasMap;
 
     [Header("Map Boundaries — match your world")]
     public float worldMinX = -200f;
@@ -28,6 +33,8 @@ public class MapSystem : MonoBehaviour
     // Arrow points for player indicator
     private Vector2[] arrowPoints = new Vector2[3];
 
+    public bool HasMap => hasMap;
+
     void Start()
     {
         GameObject playerObj =
@@ -36,39 +43,54 @@ public class MapSystem : MonoBehaviour
             player = playerObj.transform;
 
         playerCamera = Camera.main;
+        hasMap = mapStartsUnlocked;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(mapKey))
+        if (!hasMap)
         {
-            isOpen = !isOpen;
-
-            // Lock/unlock cursor
-            if (isOpen)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = false;
-
-                // Disable player look
-                PlayerController pc =
-                    FindObjectOfType<PlayerController>();
-                if (pc != null) pc.enabled = false;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-
-                PlayerController pc =
-                    FindObjectOfType<PlayerController>();
-                if (pc != null) pc.enabled = true;
-            }
+            if (isOpen) SetMapOpen(false);
+            mapAlpha = Mathf.Lerp(mapAlpha, 0f, Time.deltaTime * 8f);
+            return;
         }
+
+        if (Input.GetKeyDown(mapKey))
+            SetMapOpen(!isOpen);
 
         // Animate alpha
         float target = isOpen ? 1f : 0f;
         mapAlpha = Mathf.Lerp(mapAlpha, target, Time.deltaTime * 8f);
+    }
+
+    /// <summary>Called by MapPickup after the player collects the physical Map.</summary>
+    public void UnlockMap()
+    {
+        hasMap = true;
+    }
+
+    private void SetMapOpen(bool open)
+    {
+        isOpen = open;
+
+        // Lock/unlock cursor
+        if (isOpen)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = false;
+
+            // Disable player look
+            PlayerController pc = FindObjectOfType<PlayerController>();
+            if (pc != null) pc.enabled = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            PlayerController pc = FindObjectOfType<PlayerController>();
+            if (pc != null) pc.enabled = true;
+        }
     }
 
     // Convert world position to map UI position
