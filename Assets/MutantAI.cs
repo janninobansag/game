@@ -5,20 +5,24 @@ using UnityEngine.AI;
 
 public class MutantAI : MonoBehaviour
 {
+    // Distances used to spot and attack the player.
     [Header("Detection")]
     public float detectionRange = 15f;
     public float attackRange = 1.8f;
 
+    // Speeds used while roaming and chasing.
     [Header("Movement")]
     public float roamSpeed = 1.5f;
     public float chaseSpeed = 5f;
     public float rotationSpeed = 6f;
 
+    // Random patrol area and pause timing when the mutant is not chasing.
     [Header("Roaming")]
     public float roamRadius = 20f;
     public float roamWaitMin = 2f;
     public float roamWaitMax = 5f;
 
+    // Damage and cooldown settings for close-range attacks.
     [Header("Attack")]
     public float attackDamage = 30f;
     public float attackCooldown = 1.5f;

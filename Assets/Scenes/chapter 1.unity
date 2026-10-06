@@ -25613,6 +25613,7 @@ MonoBehaviour:
   dropLightColor: {r: 1, g: 0.7, b: 0.3, a: 1}
   dropLightIntensity: 0.5
   dropLightRange: 2.5
+  dropLightHeight: 0.2
   pulseSpeed: 1.2
 --- !u!4 &1758960481
 Transform:

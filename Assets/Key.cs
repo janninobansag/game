@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Key : MonoBehaviour
 {
+    // Item label, target object name, and pickup settings for this world key.
     [Header("Key Settings")]
     public string itemName = "Key";
     public string unlocksTag = "DoorHinge4";
@@ -25,6 +26,7 @@ public class Key : MonoBehaviour
 
     void Update()
     {
+        // Keys only use their world pickup raycast before they enter Inventory.
         if (isPickedUp) return;
 
         showPrompt = false;
@@ -48,6 +50,7 @@ public class Key : MonoBehaviour
 
     void TryPickUp()
     {
+        // Disable world physics and place this key into the player's inventory.
         if (Inventory.Instance.IsFull())
         {
             return;

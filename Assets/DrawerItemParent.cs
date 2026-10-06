@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class DrawerItemParent : MonoBehaviour
 {
+    // Tags and pickup components that count as items stored by this drawer.
     [Header("Storage Settings")]
     [Tooltip("Tags accepted for items that do not use one of the pickup components.")]
     public string[] itemTags = { "Pickup", "Item" };
@@ -25,11 +26,13 @@ public class DrawerItemParent : MonoBehaviour
 
     private void Awake()
     {
+        // Cache every drawer collider so items are detected in all storage areas.
         drawerColliders = GetComponents<Collider>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        // Store an eligible item as soon as it enters the drawer trigger.
         StoreDroppedItem(other);
     }
 
@@ -47,6 +50,7 @@ public class DrawerItemParent : MonoBehaviour
     /// <summary>Stores every dropped item currently inside this drawer's collider.</summary>
     public void StoreItemsInside()
     {
+        // Scan every drawer collider for items already inside it.
         if (drawerColliders == null || drawerColliders.Length == 0)
             drawerColliders = GetComponents<Collider>();
 
@@ -124,6 +128,7 @@ public class DrawerItemParent : MonoBehaviour
 
     private void StoreDroppedItem(Collider other)
     {
+        // Parent a dropped item to the drawer so it follows when the drawer moves.
         if (other == null)
             return;
 
@@ -181,6 +186,7 @@ public class DrawerItemParent : MonoBehaviour
 
     public void SyncStoredItems()
     {
+        // Reapply the saved local poses after the drawer animation changes its position.
         for (int i = storedItems.Count - 1; i >= 0; i--)
         {
             StoredItemPose storedItem = storedItems[i];

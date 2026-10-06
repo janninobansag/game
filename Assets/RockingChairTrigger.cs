@@ -8,6 +8,7 @@ using UnityEditor;
 [RequireComponent(typeof(Collider))]
 public class RockingChairTrigger : MonoBehaviour
 {
+    // Chair transform and rotation settings used by the rocking animation.
     [Header("Chair")]
     [Tooltip("Drag the rocking chair's root Transform here. Its pivot should be at the chair's rocking point.")]
     public Transform rockingChair;
@@ -19,6 +20,7 @@ public class RockingChairTrigger : MonoBehaviour
     [Tooltip("The largest angle, in degrees, from the chair's resting rotation.")]
     public float rockAngle = 12f;
 
+    // Time for one complete back-and-forth rocking cycle.
     [Min(0.01f)]
     [Tooltip("How many forward-and-back rocks happen each second.")]
     public float rocksPerSecond = 1.2f;

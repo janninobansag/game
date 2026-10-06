@@ -6,10 +6,12 @@ public class JumpscareSystemNEW : MonoBehaviour
 {
     public static JumpscareSystemNEW Instance;
 
+    // Duration and camera focus speed for the newer jumpscare flow.
     [Header("Jumpscare Settings")]
     public float jumpscareDuration = 1.5f;
     public float lookSpeed = 5f;
 
+    // Optional breathing sound and shake while the player is locked in the jumpscare.
     [Header("Breathing Settings")]
     public float breathingDuration = 3f;
     public float breathingIntensity = 0.05f;
@@ -18,6 +20,7 @@ public class JumpscareSystemNEW : MonoBehaviour
     public float breathingVolume = 0.7f;
     public bool startBreathingDuringJumpscare = true;  // ← NEW
 
+    // Area used to move the monster away after a normal jumpscare completes.
     [Header("Monster Teleport")]
     public float teleportRadius = 20f;
     public LayerMask teleportLayerMask = -1;

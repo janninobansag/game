@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class movement : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // This is currently an empty placeholder. It has no movement code yet.
+
+    // Start runs once when this object is created.
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+    // Update runs every frame. Add future movement behavior here.
     void Update()
     {
         

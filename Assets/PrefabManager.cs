@@ -6,6 +6,7 @@ public class PrefabManager : MonoBehaviour
 {
     public static PrefabManager Instance;
 
+    // Reusable item prefabs used by systems that spawn dropped or restored items.
     [Header("Item Prefabs")]
     public GameObject batteryPrefab;
     public GameObject bedroomKeyPrefab;
@@ -19,6 +20,7 @@ public class PrefabManager : MonoBehaviour
     public GameObject house1KeyPrefab;
     public GameObject largeCandlePrefab;
 
+    // Older prefab references kept so existing scenes and saves still work.
     [Header("Legacy/Backward Compatible")]
     public GameObject keyPrefab;
     public GameObject candlePrefab;

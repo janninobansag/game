@@ -7,6 +7,7 @@ using UnityEngine.UI;
 [ExecuteAlways]
 public class NoteUIController : MonoBehaviour
 {
+    // Cached UI references for the shared note prompt and reader panel.
     private static NoteUIController instance;
     [SerializeField] private GameObject promptPanel;
     [SerializeField] private TextMeshProUGUI promptText;

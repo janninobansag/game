@@ -6,6 +6,7 @@ using UnityEngine;
 /// </summary>
 public class RandomKeySpawn : MonoBehaviour
 {
+    // Possible world positions; one is chosen and saved for each new game.
     [Header("Spawn Points")]
     [Tooltip("Assign the three Mansion key spawn transforms here.")]
     public Transform[] spawnPoints;
@@ -18,6 +19,7 @@ public class RandomKeySpawn : MonoBehaviour
 
     private void Awake()
     {
+        // Place this key using its saved choice, or create and save a new random choice.
         PlaceAtSavedOrRandomSpawn();
     }
 

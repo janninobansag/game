@@ -4170,6 +4170,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!4 &257938209
@@ -4754,6 +4755,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!33 &285217691
@@ -7303,6 +7305,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!205 &385912916
@@ -7415,6 +7418,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &401034325
@@ -8373,6 +8377,45 @@ Transform:
   - {fileID: 2083028581}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &459827371
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &463596616
 GameObject:
   m_ObjectHideFlags: 0
@@ -9000,6 +9043,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &508679046
@@ -9824,6 +9868,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &528647684
@@ -14048,7 +14093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 1735181479}
+  m_Material: {fileID: 459827371}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -15387,7 +15432,7 @@ MonoBehaviour:
     type: 3}
   bedroomKeyPrefab: {fileID: 3120904975514936307, guid: a1bb94e192563ce4aa9a34a0ad49d1fe,
     type: 3}
-  biblePrefab: {fileID: 2246611476886041536, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
+  biblePrefab: {fileID: 5822352272176013371, guid: ddc646880ccea7448b857809f4147192,
     type: 3}
   churchKeyPrefab: {fileID: 2246738150409341268, guid: 3a43f546e344d3c4fa4af8de85dba649,
     type: 3}
@@ -23925,6 +23970,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &1147311870
@@ -24090,7 +24136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   watchedItem: {fileID: 825243179}
-  objectToActivate: {fileID: 1793572857}
+  objectToActivate: {fileID: 0}
   setNewObjective: 0
   objectiveTrigger: {fileID: 0}
   checkInterval: 0.2
@@ -27410,6 +27456,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &1335649799
@@ -33858,6 +33905,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &1645713674
@@ -35417,45 +35465,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!21 &1735181479
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &1738307138
 GameObject:
   m_ObjectHideFlags: 0
@@ -35554,6 +35563,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &1746600483
@@ -35856,6 +35866,7 @@ MonoBehaviour:
   dropLightColor: {r: 1, g: 0.7, b: 0.3, a: 1}
   dropLightIntensity: 0.5
   dropLightRange: 2.5
+  dropLightHeight: 0.2
   pulseSpeed: 1.2
 --- !u!4 &1758960481
 Transform:
@@ -36380,7 +36391,7 @@ Transform:
   m_GameObject: {fileID: 1775934956}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.61271757, z: -0, w: 0.790302}
-  m_LocalPosition: {x: 122.045, y: 5.1866255, z: -50.22}
+  m_LocalPosition: {x: 81.99, y: 5.1866255, z: -59.299}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36919,12 +36930,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1785630737}
   m_Mesh: {fileID: 4300026, guid: fb4b189d2629f3341a839074d8cff2da, type: 3}
---- !u!1 &1793572857 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2246611476886041536, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-    type: 3}
-  m_PrefabInstance: {fileID: 6938874754765669768}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1796182234
 GameObject:
   m_ObjectHideFlags: 0
@@ -39739,31 +39744,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1936467815}
   m_CullTransparentMesh: 1
---- !u!114 &1938854457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643080499296156762}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
-  doorVolume: 1
-  openAngle: 90
-  animationSpeed: 2
-  invertDirection: 1
-  isLocked: 1
-  linkedDoor: {fileID: 0}
-  raycastRange: 3
-  interactKey: 101
-  doorTag: Door
-  lockedDoorText: This door is locked find vault key!
-  lockedPromptDuration: 2
 --- !u!64 &1938854460
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -39809,6 +39789,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &1946042688
@@ -41909,6 +41890,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &2110068496
@@ -43080,6 +43062,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!4 &4830976129468577
@@ -47960,6 +47943,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked, find the waiting room key.
   lockedPromptDuration: 2
 --- !u!65 &300510563818635477
@@ -52877,8 +52861,8 @@ GameObject:
   - component: {fileID: 4041580885954973291}
   - component: {fileID: 3344248967316242773}
   - component: {fileID: 9192175282939534462}
-  - component: {fileID: 1938854457}
   - component: {fileID: 1938854460}
+  - component: {fileID: 9192175282939534463}
   m_Layer: 3
   m_Name: vault door
   m_TagString: Door
@@ -54161,6 +54145,31 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7729609617349062191}
   m_Mesh: {fileID: 4300004, guid: cf186547dc2647147bc8703966249057, type: 3}
+--- !u!114 &730000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148992822517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3f8a0ce9b51472db9476a0b81d93e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vaultDoor: {fileID: 0}
+  vaultHandle: {fileID: 3406047190041582889}
+  vaultPin: {fileID: 7625865968750036493}
+  requiredKeyTarget: vault door
+  interactionDistance: 3
+  handleTurnDuration: 2
+  handleLocalRotationAxis: {x: 0, y: 0, z: 1}
+  resetHandleWhenReleased: 0
+  correctPin: 1234
+  pinLength: 4
+  unlockPrompt: Press E to unlock vault
+  lockedMessage: This vault is locked, find vault key!
+  lockedMessageDuration: 2
 --- !u!1 &734120859270680016
 GameObject:
   m_ObjectHideFlags: 0
@@ -58736,6 +58745,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450652662797903}
+  - component: {fileID: 730000000000000001}
   m_Layer: 3
   m_Name: Vault
   m_TagString: Untagged
@@ -61246,6 +61256,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &1070393279228749654
@@ -68688,6 +68699,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked, Find the Exit key!
   lockedPromptDuration: 2
 --- !u!205 &1483928525127159730
@@ -85951,6 +85963,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!23 &2357661338727619967
@@ -93651,7 +93664,7 @@ Transform:
   m_GameObject: {fileID: 8841746530532243556}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 106.34, y: 5.05, z: -62.27}
+  m_LocalPosition: {x: 68.76, y: 5.05, z: 30.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -117669,6 +117682,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!23 &4057426506452842399
@@ -122726,6 +122740,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!23 &4343393530019363639
@@ -124362,6 +124377,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked, find the the Office key.
   lockedPromptDuration: 2
 --- !u!1 &4474609423977236563
@@ -125023,6 +125039,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!65 &4499802713065374941
@@ -131634,6 +131651,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &4871848382891764017
@@ -137931,6 +137949,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &5260729613654012576
@@ -144246,6 +144265,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!4 &5615333303557796890
@@ -145331,6 +145351,74 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300006, guid: 5381912f22f2e044db439d7fe95c968d, type: 3}
+--- !u!1001 &5713393818494072753
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 61.26211
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.283157
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 35.873
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.49999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.50000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.50000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.49999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 217034357750631863, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5822352272176013371, guid: ddc646880ccea7448b857809f4147192,
+        type: 3}
+      propertyPath: m_Name
+      value: Bible
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ddc646880ccea7448b857809f4147192, type: 3}
 --- !u!65 &5715994055394351118
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -145714,6 +145802,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!222 &5738626894782923194
@@ -147021,6 +147110,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &5821553961691697755
@@ -162561,6 +162651,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!224 &6600415410863539974
@@ -168240,74 +168331,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &6938874754765669768
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 60.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 35.62
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 738623174826729112, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2246611476886041536, guid: 42fdbcdb94cf2904bb6ea040f4873be4,
-        type: 3}
-      propertyPath: m_Name
-      value: Bible
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 42fdbcdb94cf2904bb6ea040f4873be4, type: 3}
 --- !u!23 &6939578103308322726
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -169787,6 +169810,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!65 &7032054101681813446
@@ -173531,6 +173555,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!224 &7269939383663128653
@@ -178949,6 +178974,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!64 &7655733541164562652
@@ -182457,6 +182483,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!33 &7868081481430808073
@@ -185018,6 +185045,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &8020425279777107301
@@ -189848,6 +189876,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked, Find the Exit key!
   lockedPromptDuration: 2
 --- !u!1 &8245201431488764203
@@ -190850,6 +190879,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!23 &8345033689469952116
@@ -193573,6 +193603,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!33 &8460565254605841318
@@ -195612,6 +195643,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!23 &8565732599136470524
@@ -202438,6 +202470,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!23 &8900416392232888366
@@ -203992,6 +204025,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &9018361111689465339
@@ -204139,6 +204173,7 @@ MonoBehaviour:
   raycastRange: 3
   interactKey: 101
   doorTag: Door
+  interactionEnabled: 1
   lockedDoorText: This door is locked!
   lockedPromptDuration: 2
 --- !u!1 &9018910692631354296
@@ -206011,6 +206046,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &9192175282939534463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643080499296156762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  doorVolume: 1
+  openAngle: 90
+  animationSpeed: 2
+  invertDirection: 1
+  isLocked: 1
+  linkedDoor: {fileID: 0}
+  raycastRange: 3
+  interactKey: 101
+  doorTag: Door
+  interactionEnabled: 1
+  lockedDoorText: This door is locked!
+  lockedPromptDuration: 2
 --- !u!23 &9194509241968233695
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -206625,7 +206686,6 @@ SceneRoots:
   - {fileID: 1517574211}
   - {fileID: 1628117178}
   - {fileID: 1524420150}
-  - {fileID: 6938874754765669768}
   - {fileID: 2054404026845888439}
   - {fileID: 1352599093}
   - {fileID: 4830976129468577}
@@ -206666,3 +206726,4 @@ SceneRoots:
   - {fileID: 1457535537}
   - {fileID: 1265710989}
   - {fileID: 543450652662797903}
+  - {fileID: 5713393818494072753}

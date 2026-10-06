@@ -4,12 +4,14 @@ using UnityEngine.Events;
 
 public class ProgressionTrigger : MonoBehaviour
 {
+    // Points and one-time behavior for this progression event.
     [Header("Trigger Settings")]
     public string triggerName = "New Area";
     public int progressPoints = 5;
     public bool triggerOnce = true;
     public string playerTag = "Player";
 
+    // Optional Inspector event invoked after progression points are awarded.
     [Header("Events")]
     public UnityEvent OnTriggerActivated;
 

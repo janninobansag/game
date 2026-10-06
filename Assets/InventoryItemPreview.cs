@@ -6,11 +6,13 @@ using UnityEngine;
 /// </summary>
 public sealed class InventoryItemPreview : MonoBehaviour
 {
+    // Dedicated layer and texture size keep preview models separate from the game camera.
     private const int PreviewLayer = 31;
     private const int PreviewSize = 256;
 
     private sealed class PreviewSlot
     {
+        // One cached model and render texture for one inventory item.
         public GameObject source;
         public GameObject model;
         public RenderTexture texture;

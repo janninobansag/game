@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class FootstepSound : MonoBehaviour
 {
+    // Step timing and loudness for different movement speeds.
     [Header("Footstep Settings")]
     public float walkStepInterval = 0.5f;
     public float sprintStepInterval = 0.3f;
@@ -43,6 +44,7 @@ public class FootstepSound : MonoBehaviour
 
     void Update()
     {
+        // Measure movement input and choose the matching walking, sprinting, or crouching interval.
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         bool isMoving = (h != 0 || v != 0) && cc.isGrounded;
@@ -72,6 +74,7 @@ public class FootstepSound : MonoBehaviour
 
     void PlayFootstep()
     {
+        // Raycast below the player and play a random clip for the detected surface.
         AudioClip[] clips = GetSurfaceClips();
         if (clips == null || clips.Length == 0) return;
 

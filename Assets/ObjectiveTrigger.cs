@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class ObjectiveTrigger : MonoBehaviour
 {
+    // Text, timing, and one-time settings for this world objective trigger.
     [Header("Objective Settings")]
     public string objectiveText = "Search the guard house.";
     public float displayDuration = 4f;
@@ -15,6 +16,7 @@ public class ObjectiveTrigger : MonoBehaviour
     [Tooltip("Optional stable ID for this trigger. Leave empty to use its scene hierarchy path.")]
     public string saveId;
 
+    // Optional Canvas UI references used to show the objective.
     [Header("UI References")]
     public GameObject objectivePanel;        // The panel that holds the objective text
     public TextMeshProUGUI objectiveLabel;   // The text component for objective

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class FlashlightPickup : MonoBehaviour
 {
+    // Battery drain values while the flashlight is active.
     [Header("Flashlight Settings")]
     public float batteryLife = 100f;
     public float drainRate = 2f;
@@ -62,6 +63,7 @@ public class FlashlightPickup : MonoBehaviour
     // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ NEW: Separate initialization method ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     private void InitializeFlashlight()
     {
+        // Find the beam light and apply the Inspector beam settings.
         if (isInitialized) return;
 
         flashlight = GetComponentInChildren<Light>();
@@ -91,6 +93,7 @@ public class FlashlightPickup : MonoBehaviour
 
     void Update()
     {
+        // Toggle the held flashlight and drain battery while its beam is on.
         if (isHeld && Input.GetKeyDown(KeyCode.F))
         {
             if (!isOn && currentBattery <= 0f)
@@ -143,6 +146,7 @@ public class FlashlightPickup : MonoBehaviour
 
     private float GetNearObjectDimmingMultiplier()
     {
+        // Prevent an overly bright beam when a wall is very close to the player.
         if (!dimNearObjects || flashlight == null)
             return 1f;
 
@@ -185,6 +189,7 @@ public class FlashlightPickup : MonoBehaviour
 
     public void Recharge(float amount)
     {
+        // Increase battery life without allowing it to exceed the maximum.
         currentBattery = Mathf.Min(currentBattery + amount, batteryLife);
     }
 

@@ -62,6 +62,7 @@ public class BookUIController : MonoBehaviour
 
     private void BuildUI()
     {
+        // Build the reusable Canvas panels when the scene has none yet.
         EnsureEventSystem();
         promptPanel = CreatePanel("Book Prompt", transform, new Color(0f, 0f, 0f, 0.65f));
         RectTransform promptRect = promptPanel.GetComponent<RectTransform>();
@@ -106,6 +107,7 @@ public class BookUIController : MonoBehaviour
     public void Close(Book book) { if (openBook != book) return; openBook = null; if (readerPanel != null) readerPanel.SetActive(false); }
     public void Refresh(Book book)
     {
+        // Copy the active book's current page, title, and page number into the UI.
         if (book == null || book != openBook || book.PageCount == 0) return;
         titleText.text = book.CurrentPageTitle; contentText.text = book.CurrentPageText; pageNumberText.text = $"Page {book.CurrentPage + 1} of {book.PageCount}";
         previousButton.gameObject.SetActive(book.CurrentPage > 0); nextButton.gameObject.SetActive(book.CurrentPage < book.PageCount - 1);

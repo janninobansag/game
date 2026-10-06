@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CameraHeadBob : MonoBehaviour
 {
+    // Camera motion values for walking, sprinting, and crouching.
     [Header("Head Bob Settings")]
     public float walkBobSpeed = 8.5f;
     public float walkBobAmount = 0.022f;
@@ -57,6 +58,7 @@ public class CameraHeadBob : MonoBehaviour
 
     private void Update()
     {
+        // Calculate camera motion from the current player movement state.
         bool isCrouching = playerController != null
             ? playerController.IsCrouching
             : Input.GetKey(KeyCode.LeftControl);
@@ -137,6 +139,7 @@ public class CameraHeadBob : MonoBehaviour
 
     private void UpdateHeldItem(bool isMoving, bool isSprinting, bool isCrouching)
     {
+        // Apply matching bob and mouse sway to the currently selected inventory item.
         if (Inventory.Instance == null)
             return;
 

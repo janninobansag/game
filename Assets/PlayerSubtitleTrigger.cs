@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerSubtitleTrigger : MonoBehaviour
 {
+    // Player filter and one-time behavior for this subtitle trigger.
     [Header("Trigger Settings")]
     public string playerTag = "Player";
     [Tooltip("Kept for existing Inspector settings. Subtitles are now always shown only once per save.")]
     public bool triggerOnce = true;
 
+    // Text and timing shown after the player activates this trigger.
     [Header("Subtitle")]
     [TextArea(2, 4)]
     public string subtitleText = "";

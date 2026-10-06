@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class ObjectiveTriggerActivator : MonoBehaviour
 {
+    // Objective object that stays inactive until the required item is available.
     [Header("Target Objective Trigger")]
     public GameObject objectiveTriggerToActivate; // Drag your ObjectiveTrigger here
 
+    // Name of the inventory item this component watches for.
     [Header("Item Settings")]
     public string itemName = "Key"; // The name of the item that activates this
 

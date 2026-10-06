@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AudioTrigger : MonoBehaviour
 {
+    // Clip and playback options for this trigger.
     [Header("Audio Settings")]
     public AudioClip audioClip;
     public float volume = 1f;
@@ -42,6 +43,7 @@ public class AudioTrigger : MonoBehaviour
 }
     void OnTriggerEnter(Collider other)
     {
+        // Start audio only when the configured player enters this trigger.
         if (!other.CompareTag(playerTag)) return;
         if (playOnce && hasPlayed) return;
 
@@ -54,6 +56,7 @@ public class AudioTrigger : MonoBehaviour
 
     public void TriggerAudio()
     {
+        // Public method lets other scripts start this audio without a trigger collider.
         if (playOnce && hasPlayed) return;
 
         hasPlayed = true;
@@ -72,6 +75,7 @@ public class AudioTrigger : MonoBehaviour
 
     IEnumerator PlayAudio()
     {
+        // Handles optional fade-in and one-time playback.
         audioSource.clip = audioClip;
         audioSource.volume = fadeIn ? 0f : volume;
         audioSource.Play();

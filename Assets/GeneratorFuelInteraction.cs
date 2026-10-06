@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class GeneratorFuelInteraction : MonoBehaviour
 {
+    // Persistent identifiers used to restore fuel and gas-cover state after loading.
     [Header("Save")]
     public string fuelSaveId = "GeneratorFuel";
     public string coverSaveId = "GeneratorGasTankCover";
@@ -39,6 +40,7 @@ public class GeneratorFuelInteraction : MonoBehaviour
 
     private void Start()
     {
+        // Restore previously saved fuel and cover state for this generator.
         playerCamera = Camera.main;
         isFueled = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(fuelSaveId);
         coverOpenFromSave = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(coverSaveId);
@@ -48,6 +50,7 @@ public class GeneratorFuelInteraction : MonoBehaviour
 
     private void Update()
     {
+        // Start, continue, or cancel pouring based on the selected Gas item and held E key.
         if (isFueled || isPouring) return;
 
         if (!coverOpenFromSave && !coverRemovedThisSession && SaveSystem.Instance != null)
@@ -75,6 +78,7 @@ public class GeneratorFuelInteraction : MonoBehaviour
 
     public void NotifyCoverRemoved(string removedCoverId)
     {
+        // Called by the cover interaction so fuel cannot be poured while the cover is closed.
         if (!string.Equals(removedCoverId, coverSaveId, System.StringComparison.Ordinal)) return;
         coverRemovedThisSession = true;
         coverOpenFromSave = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(coverSaveId);
@@ -113,6 +117,7 @@ public class GeneratorFuelInteraction : MonoBehaviour
     }
     private IEnumerator PourGas(GameObject gas)
     {
+        // Tilt the selected gas can, show progress, then consume it after pouring finishes.
         if (gas == null) yield break;
         isPouring = true;
         showPrompt = false;
@@ -191,6 +196,7 @@ public class GeneratorFuelInteraction : MonoBehaviour
 
     public void ConsumeFuel()
     {
+        // Removes the fueled state when another system consumes generator fuel.
         if (!isFueled) return;
         isFueled = false;
         if (SaveSystem.Instance != null) SaveSystem.Instance.ClearGeneratorState(fuelSaveId);

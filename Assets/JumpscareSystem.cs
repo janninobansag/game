@@ -6,15 +6,18 @@ public class JumpscareSystem : MonoBehaviour
 {
     public static JumpscareSystem Instance;
 
+    // Audio and timing used for the active jumpscare sequence.
     [Header("Jumpscare Settings")]
     public AudioClip jumpscareSound;
     public AudioClip screamSound;
     public float jumpscareDuration = 3f;
 
+    // What happens after the jumpscare finishes.
     [Header("Death Settings")]
     public float deathDelay = 2f;
     public bool reloadSceneOnDeath = true;
 
+    // Positioning used to place the mutant in front of the player camera.
     [Header("Mutant Face Settings")]
     public float mutantFaceDistance = 0.8f;
     public float mutantMoveSpeed = 30f;

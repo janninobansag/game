@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class GeneratorKeySlot : MonoBehaviour
 {
+    // Generator parts that react after the correct key is inserted.
     [Header("References")]
     public GeneratorFuelInteraction fuelInteraction;
     public Transform keyInsertPoint;
@@ -14,6 +15,7 @@ public class GeneratorKeySlot : MonoBehaviour
     [Tooltip("Add every other duplicated generator light here. All assigned lights turn on and off together.")]
     public Light[] additionalGeneratorLights;
 
+    // The selected inventory key must match Required Key Name before it can be inserted.
     [Header("Key")]
     public string requiredKeyName = "Generator key";
     public string keyInsertedSaveId = "GeneratorKeyInserted";

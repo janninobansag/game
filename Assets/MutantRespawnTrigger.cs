@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class MutantRespawnTrigger : MonoBehaviour
 {
+    // Prefab and location used when this trigger creates a mutant.
     [Header("Mutant Settings")]
     public GameObject mutantPrefab;
     public Transform spawnPoint;
     public string playerTag = "Player";
 
+    // Determines whether this spawn trigger can run more than once.
     [Header("Trigger Settings")]
     public bool triggerOnce = true;
 
@@ -17,6 +19,7 @@ public class MutantRespawnTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        // Spawn only when the player enters and this trigger is still available.
         if (!other.CompareTag(playerTag)) return;
         if (triggerOnce && hasTriggered) return;
 

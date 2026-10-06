@@ -6,10 +6,12 @@ using UnityEngine.Video;
 
 public class OutroManager : MonoBehaviour
 {
+    // Video player and destination scene used by the ending sequence.
     [Header("Video Settings")]
     public VideoPlayer videoPlayer;
     public string menuSceneName = "menu";
 
+    // Fade timing and overlay color used before and after the outro video.
     [Header("Fade Settings")]
     public float fadeInDuration = 1f;
     public float fadeOutDuration = 1.5f;

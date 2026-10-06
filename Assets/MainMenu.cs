@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour
 {
+    // Clips and volumes used by main-menu button feedback.
     [Header("Audio")]
     public AudioClip hoverSound;
     [Range(0f, 1f)]
@@ -12,6 +13,7 @@ public class MainMenu : MonoBehaviour
     public AudioClip clickSound;
     public AudioClip openSound;
 
+    // Runtime state for active menu panels and asynchronous scene loading.
     private float masterVolume = 100f;
 
     private bool showAbout = false;

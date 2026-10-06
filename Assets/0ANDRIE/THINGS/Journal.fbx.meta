@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2ef592831b30f644287b6dd503959d91
+guid: 6b05690141d4fc242b1e5587163098a3
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Journal
-    second: {fileID: 2100000, guid: 0e5e3eb9bb2460341af8d61c29e98daa, type: 2}
+    second: {fileID: 2100000, guid: 3b47fd571a88fc241bcb274cd5c8f8dc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

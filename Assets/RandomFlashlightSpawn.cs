@@ -8,6 +8,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class RandomFlashlightSpawn : MonoBehaviour
 {
+    // Possible world positions; one is chosen and saved for each new game.
     [Header("Spawn Points")]
     [Tooltip("Assign each possible flashlight spawn transform here.")]
     public Transform[] spawnPoints;
@@ -18,6 +19,7 @@ public class RandomFlashlightSpawn : MonoBehaviour
     [Tooltip("Uses the selected spawn point's rotation as well as its position.")]
     public bool useSpawnRotation = true;
 
+    // Optional Console output that reports the selected spawn point.
     [Header("Debug")]
     public bool logSpawnChoice = true;
 

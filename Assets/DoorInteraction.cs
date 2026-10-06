@@ -4,25 +4,32 @@ using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour
 {
+    // Sounds played when this door opens or closes.
     [Header("Door Audio")]
     public AudioClip openSound;
     public AudioClip closeSound;
     public float doorVolume = 1f;
 
+    // Movement settings for the door hinge animation.
     private AudioSource audioSource;
     public float openAngle = 90f;
     public float animationSpeed = 2f;
     public bool invertDirection = false;
 
+    // A linked door unlocks together with this door, useful for double doors.
     [Header("Lock Settings")]
     public bool isLocked = false;
     public DoorInteraction linkedDoor;
 
+    // interactionEnabled is disabled by the vault until its PIN sequence is complete.
     [Header("Interaction")]
     public float raycastRange = 3f;
     public KeyCode interactKey = KeyCode.E;
     public string doorTag = "Door";
+    [Tooltip("Disable this when another interaction sequence controls when the door can open.")]
+    public bool interactionEnabled = true;
 
+    // Message shown after the player presses E on a locked door.
     [Header("Locked Prompt")]
     [TextArea]
     public string lockedDoorText = "This door is locked!";
@@ -39,6 +46,7 @@ public class DoorInteraction : MonoBehaviour
 
     void Start()
     {
+        // Store the initial rotation so the door can return to its closed position.
         closedRotation = transform.rotation;
         float angle = invertDirection ? -openAngle : openAngle;
         openRotation = Quaternion.Euler(
@@ -54,7 +62,11 @@ public class DoorInteraction : MonoBehaviour
 
     void Update()
     {
+        // Check whether the player is looking at this door from the centre of the screen.
         showPrompt = false;
+
+        if (!interactionEnabled)
+            return;
 
         Ray ray = Camera.main.ScreenPointToRay(
             new Vector3(Screen.width / 2, Screen.height / 2));
@@ -69,6 +81,7 @@ public class DoorInteraction : MonoBehaviour
 
                 if (Input.GetKeyDown(interactKey) && !isAnimating)
                 {
+                    // Locked doors show a message. Unlocked doors toggle open and closed.
                     if (isLocked)
                     {
                         showLockedPrompt = true;
@@ -108,36 +121,46 @@ public class DoorInteraction : MonoBehaviour
         }
     }
 
-    public void Unlock()
+    public void Unlock(bool openDoor = true)
     {
+        // The vault passes false so its key unlocks the door without opening it.
         isLocked = false;
         showLockedPrompt = false;
         lockedPromptTimer = 0f;
 
-        if (!isOpen && !isAnimating)
+        if (openDoor && !isOpen && !isAnimating)
         {
-            StartCoroutine(AnimateDoor(closedRotation, openRotation));
-            isOpen = true;
+            Open();
         }
 
         if (linkedDoor != null && !linkedDoor.isOpen)
         {
             linkedDoor.isLocked = false;
-            linkedDoor.UnlockSilent();
+            linkedDoor.UnlockSilent(openDoor);
         }
     }
 
-    public void UnlockSilent()
+    public void UnlockSilent(bool openDoor = true)
     {
+        // Used for linked doors so they receive the same unlocked state.
         isLocked = false;
         showLockedPrompt = false;
         lockedPromptTimer = 0f;
 
-        if (!isOpen && !isAnimating)
+        if (openDoor && !isOpen && !isAnimating)
         {
-            StartCoroutine(AnimateDoor(closedRotation, openRotation));
-            isOpen = true;
+            Open();
         }
+    }
+
+    public void Open()
+    {
+        // Start opening only when the door is unlocked and not already moving.
+        if (isLocked || isOpen || isAnimating)
+            return;
+
+        StartCoroutine(AnimateDoor(closedRotation, openRotation));
+        isOpen = true;
     }
 
     public bool IsLocked() => isLocked;
@@ -145,6 +168,7 @@ public class DoorInteraction : MonoBehaviour
 
     public bool TryOpenForEnemy()
     {
+        // Allows enemy AI to request opening without bypassing a lock.
         if (isLocked)
             return false;
 
@@ -168,6 +192,7 @@ public class DoorInteraction : MonoBehaviour
 
     IEnumerator AnimateDoor(Quaternion from, Quaternion to)
     {
+        // Smoothly rotate between the two door states.
         isAnimating = true;
         float elapsed = 0f;
 
@@ -195,6 +220,7 @@ public class DoorInteraction : MonoBehaviour
 
     void OnGUI()
     {
+        // Draw the normal interaction prompt or the locked message.
         if (showPrompt && !showLockedPrompt)
         {
             GUIStyle style = new GUIStyle();

@@ -5,6 +5,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
+    // Values used when the player has not saved settings yet.
     [Header("Default Settings")]
     public float defaultVolume = 100f;
     public float defaultSensitivity = 5f;
@@ -16,7 +17,7 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-        // Singleton pattern
+        // Keep exactly one manager alive while scenes change.
         if (Instance == null)
         {
             Instance = this;
@@ -35,6 +36,7 @@ public class AudioManager : MonoBehaviour
 
     public void LoadAndApplySettings()
     {
+        // Read saved options, then apply them to the current game session.
         // Use settings.db so this also works when a gameplay scene is launched directly.
         SettingsData savedSettings;
         if (SettingsDatabase.TryLoad(out savedSettings))

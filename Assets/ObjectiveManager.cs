@@ -6,11 +6,12 @@ public class ObjectiveManager : MonoBehaviour
 {
     public static ObjectiveManager Instance;
 
+    // Current and previous text are kept so the UI can animate objective changes.
     private string currentObjective = "";
     private string previousObjective = "";
     private bool showObjective = false;
 
-    // UI animation
+    // Alpha and flash values used by the OnGUI objective animation.
     private float objectiveAlpha = 0f;
     private float newObjectiveFlash = 0f;
     private bool isNew = false;

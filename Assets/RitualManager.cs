@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class RitualManager : MonoBehaviour
 {
+    // Required item holders checked before the ritual can finish.
     [Header("Ritual Holders")]
     public CandleHolder candleHolder1;
     public CandleHolder candleHolder2;
     public TableHolder bibleHolder;   // ← ADD THIS (for Bible)
     public TableHolder crossHolder;   // ← ADD THIS (for Cross)
 
+    // Lights disabled when the completed ritual changes the scene.
     [Header("Candle Lights to turn off")]
     public Light[] candleLights;
 
+    // Mutant prefab, location, and delay used after ritual completion.
     [Header("Mutant Spawn Settings")]
     public GameObject mutantPrefab;
     public Transform mutantSpawnPoint;

@@ -5,15 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class RitualTree : MonoBehaviour
 {
+    // Key, distance, and duration required for the player to perform the ritual.
     [Header("Ritual Settings")]
     public float ritualDuration = 15f;
     public float interactRange = 2f;
     public KeyCode ritualKey = KeyCode.E;
 
+    // Other gameplay objects controlled by the ritual sequence.
     [Header("References")]
     public RitualManager ritualManager;
     public GameObject mutant;
 
+    // Audio and light effects played while the ritual is active.
     [Header("Effects")]
     public AudioClip ritualLoopSound;
     public AudioClip ritualCompleteSound;

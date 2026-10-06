@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ItemSubtitleTrigger : MonoBehaviour
 {
+    // Text and timing shown only the first time this item is collected.
     [Header("Subtitle on Pickup")]
     [TextArea(2, 4)]
     public string subtitleText = "";
@@ -14,6 +15,7 @@ public class ItemSubtitleTrigger : MonoBehaviour
 
     void OnValidate()
     {
+        // Give this item a stable ID in the editor so its subtitle can be saved.
         EnsureSubtitleId();
     }
 
