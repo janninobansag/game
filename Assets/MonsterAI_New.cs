@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 public class MonsterAI_New : MonoBehaviour
 {
+    // White Lady speeds, patrol area, and idle timing.
     [Header("Movement Settings")]
     public float walkSpeed = 2f;
     public float chaseSpeed = 5f;
@@ -14,6 +15,7 @@ public class MonsterAI_New : MonoBehaviour
     public float idleTimeMin = 2f;
     public float idleTimeMax = 6f;
     
+    // Range and optional field-of-view settings used to notice the player.
     [Header("Detection Settings")]
     public float detectionRange = 15f;
     public float attackRange = 2f;

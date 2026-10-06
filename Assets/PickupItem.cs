@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PickupItem : MonoBehaviour
 {
+    // Name, pickup settings, and hand pose for this inventory item.
     [Header("Item Settings")]
     public string itemName = "Item";
     public float pickupRange = 2f;
@@ -16,6 +17,7 @@ public class PickupItem : MonoBehaviour
     private bool showPrompt = false;
     private Camera playerCamera;
 
+    // Gas uses a custom hold pose so it lines up with the player's hand.
     private static readonly Vector3 GasHeldPosition = new Vector3(0.6f, -1.1f, 1.05f);
     private static readonly Vector3 GasHeldRotation = new Vector3(15.5f, 0f, 0f);
 

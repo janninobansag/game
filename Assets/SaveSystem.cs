@@ -12,6 +12,7 @@ public class SaveSystem : MonoBehaviour
 {
     public static SaveSystem Instance;
 
+    // File name and automatic-save option used by this persistent game manager.
     [Header("Save Settings")]
     public string saveFileName = "gameSave_v2.db";
     public bool autoSaveOnQuit = true;
@@ -55,6 +56,7 @@ public class SaveSystem : MonoBehaviour
 
     void Awake()
     {
+        // Keep one save manager alive across scenes and prepare the selected database.
         if (Instance == null)
         {
             Instance = this;
@@ -84,6 +86,7 @@ public class SaveSystem : MonoBehaviour
 
     void InitializeDatabase()
     {
+        // Create missing tables and update the database structure before saving or loading.
         try
         {
             connection = new SQLiteConnection(savePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
@@ -611,6 +614,7 @@ public class SaveSystem : MonoBehaviour
 
     public void SaveGame()
     {
+        // Write player state, inventory, items, doors, drawers, AI, and progression to the database.
         EnsureDatabaseReady();
         
         if (isSaving) return;
@@ -1363,6 +1367,7 @@ public class SaveSystem : MonoBehaviour
 
     public bool LoadGame()
     {
+        // Restore the saved world after the active scene has finished loading.
         EnsureDatabaseReady();
         
         if (!isDatabaseReady)
@@ -2413,6 +2418,7 @@ List<string> inventoryItemNames = new List<string>();
 
     public void DeleteSave()
     {
+        // Delete the current save database and clear memory state for a new game.
         if (!isDatabaseReady) return;
 
         try

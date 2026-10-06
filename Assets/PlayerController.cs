@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
         IsReadingDocument = isReading;
     }
 
+    // Speeds, gravity, and slope limit used by the CharacterController.
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float sprintSpeed = 9f;      
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public float gravity = -20f;
     [Range(30f, 75f)] public float maxWalkableSlope = 55f;
 
+    // Acceleration and camera settings that control how movement feels.
     [Header("Movement Feel")]
     [Range(0f, 50f)] public float groundAcceleration = 20f;
     [Range(0f, 60f)] public float groundDeceleration = 26f;

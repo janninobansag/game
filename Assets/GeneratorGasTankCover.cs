@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class GeneratorGasTankCover : MonoBehaviour
 {
+    // Unique identifier used to remember that this cover was removed.
     [Header("Save")]
     [Tooltip("Must be unique if you add more than one generator cover in a chapter.")]
     public string saveId = "GeneratorGasTankCover";
@@ -18,6 +19,7 @@ public class GeneratorGasTankCover : MonoBehaviour
     [Min(0.1f)] public float holdDuration = 2f;
 
     [Header("Unscrewing Motion")]
+    // Visual rotation and lift applied while the player holds E with the wrench.
     [Min(0f)] public float spinDegrees = 1080f;
     [Min(0f)] public float liftDistance = 0.2f;
     public Vector3 localSpinAxis = Vector3.up;

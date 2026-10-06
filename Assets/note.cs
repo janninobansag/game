@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class Note : MonoBehaviour
 {
+    // Optional systems fired when this note opens or closes.
     public PlayerSubtitleTrigger linkedSubtitleTrigger;
     [Header("Objectives")] public ObjectiveTrigger onCloseObjective;
     [Header("On Close Audio")] public AudioTrigger onCloseAudio;
+    // Text and interaction distance for this readable note.
     [Header("Note Settings")]
     public string noteTitle = "Old Note";
     [TextArea(3, 10)] public string noteContent = "Write your note content here...";
@@ -13,6 +15,7 @@ public class Note : MonoBehaviour
     public KeyCode readKey = KeyCode.E;
 
     public bool IsReading => isReading;
+    // Other scripts use this to detect whether the player has already read the note.
     public bool HasBeenRead() => hasBeenRead;
 
     private static Note activeNote;

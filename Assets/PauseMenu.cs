@@ -8,11 +8,13 @@ public class PauseMenu : MonoBehaviour
 {
     public static PauseMenu Instance;
 
+    // Canvas panels and crosshair hidden or shown while the game is paused.
     [Header("Panel References")]
     public GameObject pausePanel;
     public GameObject settingsPanel;
     public GameObject crosshair;  // ← ADD THIS - Drag your Crosshair GameObject here
 
+    // Buttons whose click events are bound to pause-menu actions.
     [Header("Buttons")]
     public Button resumeButton;
     public Button settingsButton;

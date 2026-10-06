@@ -9,6 +9,7 @@ using TMPro;
 [DisallowMultipleComponent]
 public sealed class FrameInteractable : MonoBehaviour
 {
+    // Camera and raycast settings used to detect the framed picture.
     [Header("Interaction")]
     [SerializeField] private Camera playerCamera;
     [SerializeField] private KeyCode interactKey = KeyCode.E;
@@ -45,6 +46,7 @@ public sealed class FrameInteractable : MonoBehaviour
 
     private void Awake()
     {
+        // Ensure the popup starts hidden and has a camera reference.
         if (playerCamera == null)
             playerCamera = Camera.main;
 
@@ -54,6 +56,7 @@ public sealed class FrameInteractable : MonoBehaviour
 
     private void Update()
     {
+        // Only one frame popup can be open at a time.
         if (PauseMenu.Instance != null && PauseMenu.Instance.isPaused)
         {
             isLookingAtFrame = false;
@@ -117,6 +120,7 @@ public sealed class FrameInteractable : MonoBehaviour
 
     public void OpenPopup()
     {
+        // Fill the Canvas popup with this frame's image and text, then stop player movement.
         if (activePopup != null || popupRoot == null)
         {
             if (popupRoot == null)
@@ -192,6 +196,7 @@ public sealed class FrameInteractable : MonoBehaviour
 
     public void ClosePopup()
     {
+        // Hide the popup and restore the cursor, movement, and previous time scale.
         if (activePopup != this)
             return;
 

@@ -10,6 +10,7 @@ using UnityEngine.UI;
 [ExecuteAlways]
 public class MenuManager : MonoBehaviour
 {
+    // Sounds and UI references used by the main-menu controls.
     [Header("Audio")]
     public AudioClip hoverSound;
     [Range(0f, 1f)]

@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public static class MenuLocalization
 {
+    // Original text and fonts are cached so the menu can safely return to English.
     private sealed class OriginalTextState
     {
         public string text;
@@ -18,6 +19,7 @@ public static class MenuLocalization
     private static readonly Dictionary<TextMeshProUGUI, OriginalTextState> originals =
         new Dictionary<TextMeshProUGUI, OriginalTextState>();
 
+    // Each dictionary maps an English UI label to its translated replacement.
     private static readonly Dictionary<string, string> korean = new Dictionary<string, string>
     {
         { "NEWGAME", "\uC0C8 \uAC8C\uC784" },

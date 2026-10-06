@@ -4,11 +4,13 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class MapPickup : MonoBehaviour
 {
+    // World-object interaction settings for collecting the physical map.
     [Header("Pickup")]
     public string mapName = "Map";
     [Min(0.1f)] public float pickupRange = 2f;
     public KeyCode pickupKey = KeyCode.E;
 
+    // The player-attached system that becomes available after the map is collected.
     [Header("Map System")]
     [Tooltip("Drag the MapSystem component from the Player here. Leave empty to find it automatically.")]
     public MapSystem mapSystem;
@@ -19,6 +21,7 @@ public class MapPickup : MonoBehaviour
 
     private void Start()
     {
+        // Cache the player camera used by the centre-screen pickup raycast.
         playerCamera = Camera.main;
         FindMapSystemIfNeeded();
     }

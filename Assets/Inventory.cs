@@ -6,9 +6,11 @@ public class Inventory : MonoBehaviour
 {
     public static Inventory Instance;
 
+    // Maximum number of items the player can carry at one time.
     [Header("Bag Settings")]
     public int maxCapacity = 3;
 
+    // Position checks used to keep dropped items in front of the player and outside nearby walls.
     [Header("Drop Position")]
     [Tooltip("How far in front of the player an item is placed when dropped.")]
     [Min(0.25f)] public float dropDistance = 1.5f;
@@ -17,6 +19,7 @@ public class Inventory : MonoBehaviour
     [Tooltip("Minimum space left between a dropped item and a wall in front of the player.")]
     [Min(0.05f)] public float dropWallClearance = 0.25f;
 
+    // Physics force and spin applied to an item when the player presses G.
     [Header("Drop Throw")]
     [Tooltip("Forward speed applied when an item is dropped.")]
     [Min(0f)] public float dropThrowSpeed = 2.5f;
@@ -32,6 +35,8 @@ public class Inventory : MonoBehaviour
     public Color dropLightColor = new Color(1f, 0.7f, 0.3f);
     public float dropLightIntensity = 0.5f;
     public float dropLightRange = 2.5f;
+    [Tooltip("World-space height above a dropped item where its glow is placed.")]
+    [Min(0f)] public float dropLightHeight = 0.2f;
     public float pulseSpeed = 1.2f;
 
     private List<GameObject> items = new List<GameObject>();
@@ -495,13 +500,17 @@ public class Inventory : MonoBehaviour
 
         GameObject lightObj = new GameObject("DropLight");
         lightObj.transform.SetParent(item.transform);
-        lightObj.transform.localPosition = new Vector3(0f, 0.2f, 0f);
+
+        // The follower keeps the light near the item even when the item has an unusual scale.
+        DropItemLightFollower follower = lightObj.AddComponent<DropItemLightFollower>();
+        follower.targetItem = item.transform;
+        follower.worldOffset = Vector3.up * dropLightHeight;
 
         Light dropLight = lightObj.AddComponent<Light>();
         dropLight.type = LightType.Point;
         dropLight.color = dropLightColor;
         dropLight.intensity = dropLightIntensity;
-        dropLight.range = 1.5f;
+        dropLight.range = dropLightRange;
         dropLight.shadows = LightShadows.None;
 
         LightPulser pulser = lightObj.AddComponent<LightPulser>();

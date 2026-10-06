@@ -6,10 +6,12 @@ public class ProgressionSystem : MonoBehaviour
 {
     public static ProgressionSystem Instance;
 
+    // Total score and PlayerPrefs key used to calculate completion percentage.
     [Header("Progression Settings")]
     public int totalProgressPoints = 100;
     public string saveKey = "GameProgress";
 
+    // List of scene triggers that contribute points to progression.
     [Header("Progression Triggers")]
     public List<ProgressionTrigger> progressionTriggers = new List<ProgressionTrigger>();
 

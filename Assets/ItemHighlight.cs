@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ItemHighlight : MonoBehaviour
 {
+    // Appearance and scan distance of the crosshair item highlight.
     [Header("Highlight Settings")]
     public Color highlightColor = new Color(1f, 0.8f, 0.2f, 1f);
     public float highlightRange = 3f;
@@ -12,6 +13,7 @@ public class ItemHighlight : MonoBehaviour
     public float pulseMaxIntensity = 1.2f;
     public float outlineWidth = 1.03f;
 
+    // Limit crosshair scans so every highlight component does not raycast every frame.
     private const float ScanInterval = 0.05f;
     private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
     private static readonly List<ItemHighlight> activeItems = new List<ItemHighlight>();

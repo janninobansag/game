@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PathGuideIndicator : MonoBehaviour
 {
+    // Ordered destinations the arrow guides the player toward.
     [Header("Waypoint Locations")]
     [Tooltip("Leave empty to use this object's direct children in hierarchy order.")]
     public Transform[] indicatorLocations;
@@ -13,6 +14,7 @@ public class PathGuideIndicator : MonoBehaviour
     [Min(0.1f)] public float reachDistance = 2f;
     public bool loopLocations = false;
 
+    // Screen-edge arrow and label appearance settings.
     [Header("Display")]
     public bool showGuide = true;
     public bool showDistance = true;

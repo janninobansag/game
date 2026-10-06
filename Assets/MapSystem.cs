@@ -3,16 +3,19 @@ using UnityEngine;
 
 public class MapSystem : MonoBehaviour
 {
+    // Key and map texture used by the player-owned map display.
     [Header("Map Settings")]
     public KeyCode mapKey = KeyCode.M;
     public Texture2D mapTexture; // drag your map image here
 
+    // Controls whether M works immediately or only after MapPickup unlocks it.
     [Header("Map Unlock")]
     [Tooltip("When disabled, a MapPickup must unlock this Map System before the M key can open it.")]
     public bool mapStartsUnlocked = false;
     [SerializeField] private bool hasMap;
 
     [Header("Map Boundaries — match your world")]
+    // World coordinates used to convert the player position into the map marker position.
     public float worldMinX = -200f;
     public float worldMaxX = 200f;
     public float worldMinZ = -200f;

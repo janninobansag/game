@@ -4,9 +4,11 @@ using System.Collections;
 
 public class PickupTriggerSpawner : MonoBehaviour
 {
+    // Item state checked repeatedly until this spawner can activate its target.
     [Header("Watch This Item")]
     public PickupItem watchedItem;
 
+    // World object enabled once the watched condition is satisfied.
     [Header("Object to Activate")]
     public GameObject objectToActivate;
 
@@ -18,6 +20,7 @@ public class PickupTriggerSpawner : MonoBehaviour
     public float checkInterval = 0.2f;
     public float delayBeforeActivate = 0f;
 
+    // Save options keep this activation consistent after loading a game.
     [Header("Save Settings")]
     public bool persistThroughSaves = true;
     public string saveKey = "CandleOneRevealed";

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 [ExecuteAlways]
 public class BagUI : MonoBehaviour
 {
+    // Canvas references created and updated for the inventory display.
     [Header("Editor UI")]
     [Min(1)] public int editorSlotCount = 3;
     [SerializeField] private GameObject panel;
@@ -44,6 +45,7 @@ public class BagUI : MonoBehaviour
 
     private void CreatePanel(int max)
     {
+        // Build the bag panel and one visual slot for each inventory position.
         if (panel != null)
         {
             if (Application.isPlaying) Destroy(panel);
@@ -113,6 +115,7 @@ public class BagUI : MonoBehaviour
 
     private void Refresh()
     {
+        // Copy the current Inventory contents into the visible bag slots.
         int count = Inventory.Instance.GetCount();
         int max = Inventory.Instance.GetMax();
         int selected = Inventory.Instance.GetSelectedIndex();

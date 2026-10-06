@@ -7,10 +7,12 @@ using System.Collections;
 [ExecuteAlways]
 public class PlayerHealth : MonoBehaviour
 {
+    // Maximum and current health used by damage and healing methods.
     [Header("Health Settings")]
     public float maxHealth = 100f;
     public float currentHealth = 100f;
 
+    // Optional Canvas UI elements refreshed whenever health changes.
     [Header("UI References")]
     public Image healthBarFill;
     public TextMeshProUGUI healthText;

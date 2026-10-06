@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7560835652234002277
+--- !u!1 &2246611476886041536
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,50 +8,50 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 317036053049152998}
-  - component: {fileID: 5281998392756214998}
-  - component: {fileID: 2742528283709184115}
-  - component: {fileID: 3058416824815487441}
-  - component: {fileID: 4553472944966994193}
-  - component: {fileID: 334821160293891414}
-  - component: {fileID: 8422496074588318850}
+  - component: {fileID: 738623174826729112}
+  - component: {fileID: 5025116790100915164}
+  - component: {fileID: 2807076749111064822}
+  - component: {fileID: 7742295668048750658}
+  - component: {fileID: 6800753720801822604}
+  - component: {fileID: 4309141634827111785}
+  - component: {fileID: 4146367425021266158}
   m_Layer: 0
-  m_Name: Bible
+  m_Name: Bible1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &317036053049152998
+--- !u!4 &738623174826729112
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7560835652234002277}
+  m_GameObject: {fileID: 2246611476886041536}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.50000006, y: 0.50000006, z: -0.49999997, w: 0.49999997}
-  m_LocalPosition: {x: 61.26211, y: 1.283157, z: 35.873}
-  m_LocalScale: {x: 72.600006, y: 23.77737, z: 21.770443}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 60.65, y: 1.08, z: 35.62}
+  m_LocalScale: {x: 0.3401531, y: 0.04257199, z: 0.30119437}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5281998392756214998
+--- !u!33 &5025116790100915164
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7560835652234002277}
-  m_Mesh: {fileID: -5495902117074765545, guid: 26f820413b9c3ad4a975e949c6a69942, type: 3}
---- !u!23 &2742528283709184115
+  m_GameObject: {fileID: 2246611476886041536}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &2807076749111064822
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7560835652234002277}
+  m_GameObject: {fileID: 2246611476886041536}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5f4821aceebefb74e921229e91fac54a, type: 2}
+  - {fileID: 2100000, guid: 9875a245ac49007498213638a307faa1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -87,13 +87,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3058416824815487441
+--- !u!65 &7742295668048750658
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7560835652234002277}
+  m_GameObject: {fileID: 2246611476886041536}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -106,42 +106,56 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0013894758, y: 0.012204976, z: 0.016397998}
-  m_Center: {x: 0.0000000015716068, y: 0.000074093914, z: 0.000012219418}
---- !u!54 &4553472944966994193
-Rigidbody:
+  m_Size: {x: 1.53, y: 2.43, z: 1.94}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &6800753720801822604
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7560835652234002277}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 2246611476886041536}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &334821160293891414
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0.000030517578, y: -0.0000038146973, z: -0.0000076293945}
+--- !u!114 &4309141634827111785
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7560835652234002277}
+  m_GameObject: {fileID: 2246611476886041536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae9af52be1ab46644a93d8c40fdfed05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Bible
+  pickupRange: 2
+  pickupKey: 101
+  heldPositionOffset: {x: 0.3, y: -0.2, z: 0.5}
+  heldRotation: {x: 90, y: 0, z: 0}
+  isPickedUp: 0
+  isHeld: 0
+  wasDropped: 0
+--- !u!114 &4146367425021266158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2246611476886041536}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
@@ -153,23 +167,3 @@ MonoBehaviour:
   pulseMinIntensity: 0.3
   pulseMaxIntensity: 1.2
   outlineWidth: 1.03
---- !u!114 &8422496074588318850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7560835652234002277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae9af52be1ab46644a93d8c40fdfed05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemName: Bible
-  pickupRange: 2
-  pickupKey: 101
-  heldPositionOffset: {x: 0.3, y: -0.2, z: 0.5}
-  heldRotation: {x: 84.8, y: 0, z: 0}
-  isPickedUp: 0
-  isHeld: 0
-  wasDropped: 0

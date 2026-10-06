@@ -9,6 +9,7 @@ public class CheckpointTrigger : MonoBehaviour
     // ── ADDED: Public static variable for save system ──
     public static bool HasCheckpointSaved = false;
 
+    // Player tag and timing used when this checkpoint respawns the player.
     [Header("Settings")]
     public string playerTag = "Player";
     public float respawnDelay = 2f;
@@ -24,6 +25,7 @@ public class CheckpointTrigger : MonoBehaviour
 
     void Awake()
     {
+        // Record this checkpoint as the shared respawn controller.
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
@@ -38,6 +40,7 @@ public class CheckpointTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        // Save the player's current position the first time they enter the checkpoint.
         if (!other.CompareTag(playerTag)) return;
         if (triggeredOnce) return;
 
@@ -56,6 +59,7 @@ public class CheckpointTrigger : MonoBehaviour
 
     public void Respawn(bool restoreFullHealth = true)
     {
+        // Public entry point used after player death or a fail state.
         if (isRespawning) return;
         StartCoroutine(RespawnSequence(restoreFullHealth));
     }
@@ -64,6 +68,7 @@ public class CheckpointTrigger : MonoBehaviour
 
     IEnumerator RespawnSequence(bool restoreFullHealth)
     {
+        // Fade, move the player back to the checkpoint, then restore controls.
         isRespawning = true;
 
         // Fade to black

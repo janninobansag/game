@@ -11,6 +11,7 @@ public class BatteryUse : MonoBehaviour
 
     void Update()
     {
+        // Left-click uses this battery only while it is selected in the player's hand.
         if (!isHeld || isUsed) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -19,6 +20,7 @@ public class BatteryUse : MonoBehaviour
 
     void UseBattery()
     {
+        // Find the flashlight, recharge it, then remove this battery from Inventory.
         FlashlightPickup flashlight = null;
 
         foreach (GameObject item in Inventory.Instance.GetItems())
@@ -67,6 +69,7 @@ public class BatteryUse : MonoBehaviour
 
     public void SetHeld(bool held)
     {
+        // Called by Inventory when the player selects or switches away from this battery.
         isHeld = held;
     }
 

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class BatteryPickup : MonoBehaviour
 {
+    // Values used when this world battery is picked up and later used.
     [Header("Battery Settings")]
     public string itemName = "Battery";
     public float rechargeAmount = 50f;
@@ -24,6 +25,7 @@ public class BatteryPickup : MonoBehaviour
 
     void Update()
     {
+        // Show the pickup prompt only when the player looks directly at this battery.
         if (isPickedUp) return;
 
         showPrompt = false;
@@ -47,6 +49,7 @@ public class BatteryPickup : MonoBehaviour
 
     void TryPickUp()
     {
+        // Move this battery into Inventory if there is an empty slot.
         if (Inventory.Instance.IsFull())
         {
             return;
@@ -80,6 +83,7 @@ public class BatteryPickup : MonoBehaviour
 
     public void ResetItem()
     {
+        // Restore physics and visibility after the battery is dropped.
         isPickedUp = false;
         isHeld = false;
 

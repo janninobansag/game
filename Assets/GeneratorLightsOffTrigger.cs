@@ -8,11 +8,13 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class GeneratorLightsOffTrigger : MonoBehaviour
 {
+    // All light components controlled by this one-time trigger.
     [Header("Generator Lights")]
     [Tooltip("Drag every generator Light component here.")]
     public Light[] generatorLights;
     public bool turnLightsOnAtSceneStart = true;
 
+    // Timing for the warning flicker before the lights remain off.
     [Header("Blink")]
     [Min(1)] public int blinkCount = 3;
     [Min(0.02f)] public float blinkInterval = 0.12f;

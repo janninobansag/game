@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class IntroNarration : MonoBehaviour
 {
+    // Timing and player-control options for the opening text sequence.
     [Header("Settings")]
     public float textFadeSpeed = 1.5f;
     public float textHoldTime = 2.5f;
     public float blackFadeOutSpeed = 0.8f;
     public bool disablePlayerDuringIntro = true;
 
-    // Narration lines
+    // Narration lines are shown in order, using the currentLine value as the index.
     private string[] lines = new string[]
     {
         "in 1969...",

@@ -1,0 +1,273 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4026090227501701966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3037004299693135475}
+  - component: {fileID: 3153324076754962135}
+  - component: {fileID: 8562297818794151079}
+  - component: {fileID: 8318236938012785899}
+  - component: {fileID: 4202533513464160495}
+  - component: {fileID: 1996923006991595228}
+  - component: {fileID: 2476240437600395506}
+  - component: {fileID: 4992287418715671446}
+  m_Layer: 0
+  m_Name: Journal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3037004299693135475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090227501701966}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5005245, y: -0.4994752, z: -0.50052416, w: 0.49947515}
+  m_LocalPosition: {x: -0.0011711331, y: -0.00012765522, z: -0.00059446756}
+  m_LocalScale: {x: 0.4996684, y: 0.14237846, z: 0.20587657}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
+--- !u!33 &3153324076754962135
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090227501701966}
+  m_Mesh: {fileID: -5495902117074765545, guid: 6b05690141d4fc242b1e5587163098a3, type: 3}
+--- !u!23 &8562297818794151079
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090227501701966}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 3b47fd571a88fc241bcb274cd5c8f8dc, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8318236938012785899
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090227501701966}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0015920353, y: 0.014019005, z: 0.01539171}
+  m_Center: {x: 0, y: 0.000038286435, z: 0.000050683033}
+--- !u!114 &4202533513464160495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090227501701966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
+  highlightRange: 3
+  pulseSpeed: 2
+  pulseMinIntensity: 0.3
+  pulseMaxIntensity: 1.2
+  outlineWidth: 1.03
+--- !u!114 &1996923006991595228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090227501701966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  subtitleText: "They were trying to keep people out\u2026 why?"
+  displayDuration: 4
+  delayBeforeShow: 0.5
+  subtitleId: c2cab7cfb1ff41db9a66df281823068f
+--- !u!114 &2476240437600395506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090227501701966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveTriggerToActivate: {fileID: 0}
+  itemName: paper 2
+  disableAfterActivation: 1
+--- !u!114 &4992287418715671446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090227501701966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 310abf78a239ef44b9edb9c10961fbaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bookTitle: Old Book
+  readRange: 2
+  readKey: 101
+  nextPageKey: 101
+  prevPageKey: 113
+  pages:
+  - 'I''ve been stationed here for 30 years.
+
+    The villagers always warned me
+    about the forest.
+
+
+
+    They spoke of creatures from old stories.
+
+'
+  - 'WHITE LADY
+
+    The most feared spirit in these parts.
+
+    A woman in white
+    who appears at night.
+
+    Some say she died tragically,
+
+    others say she
+    guards the forest.
+
+    She is seen walking alone,
+
+    often near bridges and
+    crossroads.
+
+
+
+    If you see her...
+
+    Do not look back.
+
+    Do not call
+    her name.
+
+    She feeds on fear.
+
+'
+  - 'TIKBALANG
+
+    A creature with the head of a horse
+
+    and the body of a man.
+
+    It
+    stands taller than any man.
+
+    Its legs are long and powerful.
+
+
+
+    It is
+    said to be a guardian
+
+    of the mountains and forests.
+
+    It protects nature
+
+    but
+    will punish those who harm it.'
+  - 'I used to laugh at these stories.
+
+    Now... I''m not so sure.
+
+
+
+    I hear
+    things in the forest at night.
+
+    Footsteps that don''t belong.
+
+    Figures
+    in the dark.
+
+
+
+    If you''re reading this,
+
+    I''m probably not coming back.
+
+
+
+    -Guard
+    Jude'
+  pageTitles:
+  - OLD GUARD'S JOURNAL
+  - page 2
+  - page 3
+  - page 4
+  pageFlipSound: {fileID: 0}
+  openBookSound: {fileID: 0}
+  closeBookSound: {fileID: 0}
+  soundVolume: 0.7
+  playerTag: Player

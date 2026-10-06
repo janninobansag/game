@@ -5,6 +5,7 @@ using UnityEngine.Video;
 
 public class IntroVideo : MonoBehaviour
 {
+    // Screen fade settings used when the intro begins, skips, or ends.
     [Header("Fade Settings")]
     public float fadeInDuration = 0.5f;
     public float fadeOutDuration = 1f;
@@ -19,7 +20,7 @@ public class IntroVideo : MonoBehaviour
 
     void Start()
     {
-        // Create fade texture
+        // Create the solid texture used by OnGUI to draw the fade overlay.
         fadeTexture = new Texture2D(1, 1);
         fadeTexture.SetPixel(0, 0, fadeColor);
         fadeTexture.Apply();

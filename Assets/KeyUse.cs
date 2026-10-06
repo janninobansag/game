@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class KeyUse : MonoBehaviour
 {
+    // Managed by Inventory when this key is selected or consumed.
     private bool isHeld = false;
     private bool isUsed = false;
     private Key keyData;
@@ -10,12 +11,14 @@ public class KeyUse : MonoBehaviour
 
     void Start()
     {
+        // Key stores the name of the door or vault this key can unlock.
         keyData = GetComponent<Key>();
         playerCamera = Camera.main;
     }
 
     void Update()
     {
+        // A key only works while the player is holding it.
         if (!isHeld || isUsed) return;
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -24,16 +27,49 @@ public class KeyUse : MonoBehaviour
 
     void TryUnlockDoor()
     {
+        // Raycast from the screen centre so the player must look at the target.
         Ray ray = playerCamera.ScreenPointToRay(
             new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 3f))
         {
+            VaultDoorInteraction vault = hit.collider.GetComponentInParent<VaultDoorInteraction>();
+            if (vault != null)
+            {
+                // Vaults use their own controller because they have extra steps after the key.
+                if (!vault.MatchesKey(keyData.GetUnlocksTag()))
+                {
+                    ShowWrongKey();
+                    return;
+                }
+
+                if (vault.TryUnlockWithKey())
+                {
+                    // A correct key is consumed after it unlocks the vault's first stage.
+                    isUsed = true;
+                    string keyName = gameObject.name.Replace("(Clone)", "");
+
+                    if (SaveSystem.Instance != null)
+                        SaveSystem.Instance.MarkKeyAsUsed(keyName);
+
+                    if (keyData != null)
+                        keyData.MarkAsUsed();
+
+                    if (Inventory.Instance != null && Inventory.Instance.GetItems().Contains(gameObject))
+                        Inventory.Instance.RemoveItem(gameObject);
+
+                    Destroy(gameObject);
+                }
+
+                return;
+            }
+
             DoorInteraction door = hit.collider.GetComponentInParent<DoorInteraction>();
 
             if (door != null && door.gameObject.name == keyData.GetUnlocksTag())
             {
+                // Normal doors unlock and open immediately with their matching key.
                 if (!door.IsLocked())
                 {
                     return;
@@ -77,12 +113,14 @@ public class KeyUse : MonoBehaviour
 
     void ShowWrongKey()
     {
+        // Show a short warning when the player tries an incorrect key.
         showWrongKey = true;
         wrongKeyTimer = 2f;
     }
 
     public void SetHeld(bool held)
     {
+        // Called by Inventory when this key becomes the active hand item.
         isHeld = held;
 
         if (!held)
@@ -94,6 +132,7 @@ public class KeyUse : MonoBehaviour
 
     void OnGUI()
     {
+        // Draw prompts only while this key is held.
         if (!isHeld || isUsed) return;
 
         GUIStyle style = new GUIStyle();
@@ -112,9 +151,10 @@ public class KeyUse : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 3f))
         {
+            VaultDoorInteraction vault = hit.collider.GetComponentInParent<VaultDoorInteraction>();
             DoorInteraction door = hit.collider.GetComponentInParent<DoorInteraction>();
 
-            if (door != null && door.gameObject.name == keyData.GetUnlocksTag()
+            if (vault == null && door != null && door.gameObject.name == keyData.GetUnlocksTag()
                 && door.IsLocked())
             {
                 string msg = "Press E to unlock door";

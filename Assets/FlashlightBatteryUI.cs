@@ -5,6 +5,7 @@ using UnityEngine.UI;
 [ExecuteAlways]
 public class FlashlightBatteryUI : MonoBehaviour
 {
+    // Existing HUD controls. Missing controls are created under the Canvas automatically.
     [Header("UI References")]
     public Slider batteryBar;
     public Image batteryFill;
@@ -31,6 +32,7 @@ public class FlashlightBatteryUI : MonoBehaviour
 
     private void Refresh()
     {
+        // Read the held flashlight battery percentage and update the slider fill.
         FlashlightPickup flashlight = FlashlightPickup.HeldFlashlight;
         bool shouldShow = flashlight != null && flashlight.IsHeld;
 
@@ -56,6 +58,7 @@ public class FlashlightBatteryUI : MonoBehaviour
 
     private void CreateBatteryBarIfNeeded()
     {
+        // Create a simple HUD bar only when the scene does not already provide one.
         if (batteryBar != null)
             return;
 

@@ -3,12 +3,15 @@ using UnityEngine;
 
 public class NoteTriggerActivator : MonoBehaviour
 {
+    // The note that must be read before this progression action can run.
     [Header("Note Reference")]
     public Note targetNote; // drag the note object here
 
+    // Optional object enabled after the required note is read.
     [Header("Trigger to Activate")]
     public GameObject triggerToActivate; // drag the AudioTrigger object here
 
+    // Waypoints that become visible after the player reads the note.
     [Header("Waypoint Locations To Activate")]
     [Tooltip("Drag the indicator location GameObjects that should appear after this note is read.")]
     public GameObject[] waypointLocationsToActivate;

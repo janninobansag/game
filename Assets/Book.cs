@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Book : MonoBehaviour
 {
+    // Interaction keys and distance for opening this book in the world.
     [Header("Book Settings")]
     public string bookTitle = "Old Book";
     public float readRange = 2f;
@@ -51,6 +52,7 @@ public class Book : MonoBehaviour
 
     private void Update()
     {
+        // While open, E/Q turn pages. Otherwise E opens the book when targeted.
         if (PauseMenu.Instance != null && PauseMenu.Instance.isPaused) return;
 
         if (isReading)
@@ -83,6 +85,7 @@ public class Book : MonoBehaviour
 
     public void OpenBook()
     {
+        // Lock player movement and display this book through BookUIController.
         if (PageCount == 0 || isReading) return;
         if (activeBook != null && activeBook != this) activeBook.CloseBook();
         activeBook = this;
@@ -98,6 +101,7 @@ public class Book : MonoBehaviour
 
     public void CloseBook()
     {
+        // Hide the reader and restore player movement and cursor control.
         if (!isReading) return;
         isReading = false;
         if (activeBook == this) activeBook = null;

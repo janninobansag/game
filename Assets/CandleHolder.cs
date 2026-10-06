@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CandleHolder : MonoBehaviour
 {
+    // Position and interaction settings for placing one candle on this holder.
     [Header("Holder Settings")]
     public Transform placementPoint; // where candle will be placed
     public float interactRange = 2f;
@@ -34,6 +35,7 @@ public class CandleHolder : MonoBehaviour
 
     void Update()
     {
+        // Let the player place a held candle only while looking at this holder.
         if (hasCandle) return;
 
         showPrompt = false;
@@ -61,6 +63,7 @@ public class CandleHolder : MonoBehaviour
 
     bool IsHoldingCandle()
     {
+        // Check the selected inventory item instead of every item in the bag.
         if (Inventory.Instance == null) return false;
 
         var items = Inventory.Instance.GetItems();
@@ -83,6 +86,7 @@ public class CandleHolder : MonoBehaviour
 
     void PlaceCandle()
     {
+        // Remove the selected candle from Inventory and place it at the holder point.
         if (Inventory.Instance == null) return;
 
         var items = Inventory.Instance.GetItems();

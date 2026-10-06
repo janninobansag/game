@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DrawerInteraction : MonoBehaviour
 {
+    // Distance, speed, and lock options for this drawer.
     [Header("Drawer Settings")]
     public float openDistance = 0.1f;
     public float animationSpeed = 2f;
@@ -45,6 +46,7 @@ public class DrawerInteraction : MonoBehaviour
 
     void Start()
     {
+        // Store the closed position and calculate where the open position will be.
         closedPosition = transform.localPosition;
         Vector3 direction = GetDirectionVector();
         openPosition = closedPosition + direction * openDistance * distanceMultiplier;
@@ -57,6 +59,7 @@ public class DrawerInteraction : MonoBehaviour
 
     Vector3 GetDirectionVector()
     {
+        // Convert the Inspector direction selection into this drawer's local movement direction.
         switch (openDirection)
         {
             case Direction.Forward: return transform.forward;
@@ -71,6 +74,7 @@ public class DrawerInteraction : MonoBehaviour
 
     void Update()
     {
+        // Let the player toggle the drawer only while looking at it and it is not busy.
         if (isAnimating) return;
 
         if (Input.GetKeyDown(interactKey))
@@ -103,6 +107,7 @@ public class DrawerInteraction : MonoBehaviour
 
     public void ToggleDrawer()
     {
+        // Start the open or close animation from the drawer's current position.
         if (isAnimating || isBusy) return;
 
         if (isLocked)
@@ -134,6 +139,7 @@ public class DrawerInteraction : MonoBehaviour
 
     public void SetBusy(bool busy)
     {
+        // Other scripts use this to stop opening while an item is being picked up or stored.
         isBusy = busy;
     }
 

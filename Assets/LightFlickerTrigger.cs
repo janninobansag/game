@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class LightFlickerTrigger : MonoBehaviour
 {
+    // Determines who can activate this trigger and whether it can run again.
     [Header("Trigger Settings")]
     public string playerTag = "Player";
     public bool triggerOnce = true;
 
+    // Lights affected by the flicker sequence.
     [Header("Light Settings")]
     public Light[] lightsToFlicker;
     public bool flickerAllLights = false; // flicker ALL lights in scene
 
+    // Random on/off timing used while the effect is active.
     [Header("Flicker Pattern")]
     public float flickerDuration = 5f;
     public float minOnTime = 0.05f;

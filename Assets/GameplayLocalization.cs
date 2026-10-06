@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class GameplayLocalization
 {
+    // English source text is used as the lookup key for each available language.
     private static readonly Dictionary<string, string> koreanSubtitles = new Dictionary<string, string>
     {
         { "1989.", "1989\uB144." },
@@ -127,6 +128,7 @@ public static class GameplayLocalization
 
     public static string TranslateObjective(string english)
     {
+        // Return the original text when no translation exists for the selected language.
         if (string.IsNullOrEmpty(english)) return english;
 
         string key = english.Trim();
@@ -138,6 +140,7 @@ public static class GameplayLocalization
     }
     public static string TranslateSubtitle(string english)
     {
+        // Return a translated subtitle only when a supported language is active.
         if (string.IsNullOrEmpty(english)) return english;
 
         if (IsKorean)
