@@ -82,7 +82,11 @@ public class Inventory : MonoBehaviour
         if (item == null) return;
 
         FlashlightPickup fp = item.GetComponent<FlashlightPickup>();
-        if (fp != null) fp.SetHeld(held);
+        if (fp != null)
+        {
+            fp.SetHeld(held);
+            Debug.Log($"[Inventory] Flashlight {(held ? "equipped" : "unequipped")}: {item.name}", item);
+        }
 
         BatteryUse bu = item.GetComponent<BatteryUse>();
         if (bu != null) bu.SetHeld(held);
@@ -519,6 +523,17 @@ public class Inventory : MonoBehaviour
         pulser.pulseSpeed = pulseSpeed;
     }
 
+    /// <summary>
+    /// Recreates the runtime drop light after SaveSystem restores a dropped item.
+    /// </summary>
+    public void RestoreDropLight(GameObject item)
+    {
+        if (enableDropLight && ShouldUseDropLight(item))
+        {
+            AddDropLight(item);
+        }
+    }
+
     private static bool ShouldUseDropLight(GameObject item)
     {
         if (item == null) return false;
@@ -577,4 +592,19 @@ public class Inventory : MonoBehaviour
     public bool IsFull() => items.Count >= maxCapacity;
     public List<GameObject> GetItems() => items;
     public int GetSelectedIndex() => selectedIndex;
+
+    /// <summary>Selects one restored inventory item and applies its held state.</summary>
+    public void SelectItem(int index)
+    {
+        if (index < 0 || index >= items.Count || index == selectedIndex)
+            return;
+
+        if (selectedIndex >= 0 && selectedIndex < items.Count)
+        {
+            SetItemHeld(items[selectedIndex], false);
+        }
+
+        selectedIndex = index;
+        SetItemHeld(items[selectedIndex], true);
+    }
 }

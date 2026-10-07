@@ -72,6 +72,16 @@ public class MapSystem : MonoBehaviour
         hasMap = true;
     }
 
+    /// <summary>Restores map ownership from SaveSystem after a saved game loads.</summary>
+    public void RestoreMapOwnership(bool mapOwned)
+    {
+        hasMap = mapStartsUnlocked || mapOwned;
+        if (!hasMap && isOpen)
+        {
+            SetMapOpen(false);
+        }
+    }
+
     private void SetMapOpen(bool open)
     {
         isOpen = open;

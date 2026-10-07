@@ -60,6 +60,14 @@ public class MapPickup : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    /// <summary>Hides the world map after its collected state is restored from a save.</summary>
+    public void RestoreCollected()
+    {
+        isCollected = true;
+        showPickupPrompt = false;
+        gameObject.SetActive(false);
+    }
+
     private void FindMapSystemIfNeeded()
     {
         if (mapSystem == null)

@@ -169,7 +169,7 @@ MonoBehaviour:
   pickupRange: 2
   pickupKey: 101
   heldPositionOffset: {x: 0.3, y: -0.2, z: 0.5}
-  heldRotation: {x: 84.8, y: 0, z: 0}
+  heldRotation: {x: -90, y: -90, z: 90}
   isPickedUp: 0
   isHeld: 0
   wasDropped: 0
