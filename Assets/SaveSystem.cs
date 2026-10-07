@@ -17,6 +17,10 @@ public class SaveSystem : MonoBehaviour
     public string saveFileName = "gameSave_v2.db";
     public bool autoSaveOnQuit = true;
 
+    [Header("Debug")]
+    [Tooltip("Writes each drawer's saved and restored state to the Unity Console.")]
+    public bool logDrawerSaveLoad = true;
+
     private const string GasRecordId = "Gas";
 
     private string savePath;
@@ -300,15 +304,7 @@ public class SaveSystem : MonoBehaviour
                     BatteryName = cleanName,
                     RechargeAmount = 50f,
                     IsHeld = false,
-                    IsDropped = false,
-                    IsUsed = true,
-                    PosX = 0f,
-                    PosY = 0f,
-                    PosZ = 0f,
-                    RotX = 0f,
-                    RotY = 0f,
-                    RotZ = 0f,
-                    RotW = 1f
+                    IsUsed = true
                 };
                 connection.Insert(newBatteryData);
             }
@@ -316,7 +312,6 @@ public class SaveSystem : MonoBehaviour
             {
                 existing.IsUsed = true;
                 existing.IsHeld = false;
-                existing.IsDropped = false;
                 connection.Update(existing);
             }
         }
@@ -347,15 +342,7 @@ public class SaveSystem : MonoBehaviour
                 {
                     ItemName = cleanName,
                     IsRevealed = true,
-                    IsPlaced = false,
-                    IsDropped = false,
-                    PosX = 0f,
-                    PosY = 0f,
-                    PosZ = 0f,
-                    RotX = 0f,
-                    RotY = 0f,
-                    RotZ = 0f,
-                    RotW = 1f
+                    IsPlaced = false
                 };
                 connection.Insert(newItem);
             }
@@ -392,15 +379,7 @@ public class SaveSystem : MonoBehaviour
                 {
                     ItemName = cleanName,
                     IsRevealed = true,
-                    IsPlaced = true,
-                    IsDropped = false,
-                    PosX = position.x,
-                    PosY = position.y,
-                    PosZ = position.z,
-                    RotX = rotation.x,
-                    RotY = rotation.y,
-                    RotZ = rotation.z,
-                    RotW = rotation.w
+                    IsPlaced = true
                 };
                 connection.Insert(newItem);
             }
@@ -408,14 +387,6 @@ public class SaveSystem : MonoBehaviour
             {
                 existing.IsRevealed = true;
                 existing.IsPlaced = true;
-                existing.IsDropped = false;
-                existing.PosX = position.x;
-                existing.PosY = position.y;
-                existing.PosZ = position.z;
-                existing.RotX = rotation.x;
-                existing.RotY = rotation.y;
-                existing.RotZ = rotation.z;
-                existing.RotW = rotation.w;
                 connection.Update(existing);
             }
         }
@@ -446,15 +417,7 @@ public class SaveSystem : MonoBehaviour
                 {
                     ItemName = cleanName,
                     IsRevealed = true,
-                    IsPlaced = false,
-                    IsDropped = true,
-                    PosX = position.x,
-                    PosY = position.y,
-                    PosZ = position.z,
-                    RotX = rotation.x,
-                    RotY = rotation.y,
-                    RotZ = rotation.z,
-                    RotW = rotation.w
+                    IsPlaced = false
                 };
                 connection.Insert(newItem);
             }
@@ -462,14 +425,6 @@ public class SaveSystem : MonoBehaviour
             {
                 existing.IsRevealed = true;
                 existing.IsPlaced = false;
-                existing.IsDropped = true;
-                existing.PosX = position.x;
-                existing.PosY = position.y;
-                existing.PosZ = position.z;
-                existing.RotX = rotation.x;
-                existing.RotY = rotation.y;
-                existing.RotZ = rotation.z;
-                existing.RotW = rotation.w;
                 connection.Update(existing);
             }
         }
@@ -688,8 +643,11 @@ public class SaveSystem : MonoBehaviour
             connection.DeleteAll<InventoryData>();
             if (Inventory.Instance != null)
             {
-                foreach (GameObject item in Inventory.Instance.GetItems())
+                List<GameObject> inventoryItemsToSave = Inventory.Instance.GetItems();
+                int equippedInventoryIndex = Inventory.Instance.GetSelectedIndex();
+                for (int index = 0; index < inventoryItemsToSave.Count; index++)
                 {
+                    GameObject item = inventoryItemsToSave[index];
                     if (item != null)
                     {
                         string cleanName = item.name.Replace("(Clone)", "");
@@ -698,7 +656,7 @@ public class SaveSystem : MonoBehaviour
                         {
                             ItemName = cleanName,
                             Quantity = 1,
-                            IsEquipped = false
+                            IsEquipped = index == equippedInventoryIndex
                         };
                         connection.Insert(invData);
                     }
@@ -723,7 +681,6 @@ public class SaveSystem : MonoBehaviour
                     sceneBatteryNames.Add(cleanName);
 
                     bool isHeld = false;
-                    bool isDropped = false;
                     
                     if (Inventory.Instance != null)
                     {
@@ -737,26 +694,13 @@ public class SaveSystem : MonoBehaviour
                         }
                     }
 
-                    if (!isHeld)
-                    {
-                        isDropped = battery.wasDropped;
-                    }
-
                     var existing = existingBatteryData.FirstOrDefault(b => b.BatteryName == cleanName);
 
                     if (existing != null)
                     {
                         existing.RechargeAmount = battery.rechargeAmount;
                         existing.IsHeld = isHeld;
-                        existing.IsDropped = isDropped;
                         existing.IsUsed = false;
-                        existing.PosX = battery.transform.position.x;
-                        existing.PosY = battery.transform.position.y;
-                        existing.PosZ = battery.transform.position.z;
-                        existing.RotX = battery.transform.rotation.x;
-                        existing.RotY = battery.transform.rotation.y;
-                        existing.RotZ = battery.transform.rotation.z;
-                        existing.RotW = battery.transform.rotation.w;
                         connection.Update(existing);
                     }
                     else
@@ -766,15 +710,7 @@ public class SaveSystem : MonoBehaviour
                             BatteryName = cleanName,
                             RechargeAmount = battery.rechargeAmount,
                             IsHeld = isHeld,
-                            IsDropped = isDropped,
-                            IsUsed = false,
-                            PosX = battery.transform.position.x,
-                            PosY = battery.transform.position.y,
-                            PosZ = battery.transform.position.z,
-                            RotX = battery.transform.rotation.x,
-                            RotY = battery.transform.rotation.y,
-                            RotZ = battery.transform.rotation.z,
-                            RotW = battery.transform.rotation.w
+                            IsUsed = false
                         };
                         connection.Insert(batteryData);
                     }
@@ -788,7 +724,6 @@ public class SaveSystem : MonoBehaviour
                 {
                     existing.IsUsed = true;
                     existing.IsHeld = false;
-                    existing.IsDropped = false;
                     connection.Update(existing);
                 }
             }
@@ -825,7 +760,6 @@ public class SaveSystem : MonoBehaviour
 
                 bool isRevealed = obj.activeSelf;
                 bool isPlaced = false;
-                bool isDropped = false;
 
                 // ── Check ALL ancestors for holder components ──
                 Transform parent = obj.transform.parent;
@@ -841,51 +775,40 @@ public class SaveSystem : MonoBehaviour
                     parent = parent.parent;
                 }
 
-                // ── If not held and not placed, it's dropped ──
-                if (!isPlaced && obj.transform.parent == null)
-                {
-                    isDropped = true;
-                }
-
                 RitualItemData ritualData = new RitualItemData
                 {
                     ItemName = cleanName,
                     IsRevealed = isRevealed,
-                    IsPlaced = isPlaced,
-                    IsDropped = isDropped,
-                    PosX = obj.transform.position.x,
-                    PosY = obj.transform.position.y,
-                    PosZ = obj.transform.position.z,
-                    RotX = obj.transform.rotation.x,
-                    RotY = obj.transform.rotation.y,
-                    RotZ = obj.transform.rotation.z,
-                    RotW = obj.transform.rotation.w
+                    IsPlaced = isPlaced
                 };
                 connection.Insert(ritualData);
             }
 
             // ── SAVE FLASHLIGHT STATE ──
-            connection.DeleteAll<FlashlightData>();
-            FlashlightPickup[] flashlights = Object.FindObjectsOfType<FlashlightPickup>();
-            foreach (FlashlightPickup flashlight in flashlights)
+            try
             {
-                if (flashlight != null)
+                connection.DeleteAll<FlashlightData>();
+                FlashlightPickup[] flashlights = Object.FindObjectsOfType<FlashlightPickup>();
+                foreach (FlashlightPickup flashlight in flashlights)
                 {
-                    FlashlightData flashlightData = new FlashlightData
+                    if (flashlight != null)
                     {
-                        FlashlightName = flashlight.gameObject.name.Replace("(Clone)", ""),
-                        BatteryLife = flashlight.batteryLife,
-                        CurrentBattery = flashlight.GetBatteryPercent() * flashlight.batteryLife,
-                        IsOn = flashlight.IsOn,
-                        IsHeld = flashlight.gameObject.transform.parent != null && 
-                                 flashlight.gameObject.transform.parent.CompareTag("Player"),
-                        WasDropped = flashlight.wasDropped,
-                        PosX = flashlight.transform.position.x,
-                        PosY = flashlight.transform.position.y,
-                        PosZ = flashlight.transform.position.z
-                    };
-                    connection.Insert(flashlightData);
+                        FlashlightData flashlightData = new FlashlightData
+                        {
+                            FlashlightName = flashlight.gameObject.name.Replace("(Clone)", ""),
+                            BatteryLife = flashlight.batteryLife,
+                            CurrentBattery = flashlight.GetBatteryPercent() * flashlight.batteryLife,
+                            IsOn = flashlight.IsOn,
+                            IsHeld = flashlight.gameObject.transform.parent != null &&
+                                     flashlight.gameObject.transform.parent.CompareTag("Player")
+                        };
+                        connection.Insert(flashlightData);
+                    }
                 }
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogError("[SaveSystem] Could not save flashlight state: " + exception.Message);
             }
 
             // ── SAVE DOORS WITH ROTATION ──
@@ -931,6 +854,11 @@ public class SaveSystem : MonoBehaviour
                     LocalPosY = localPosition.y,
                     LocalPosZ = localPosition.z
                 });
+
+                if (logDrawerSaveLoad)
+                {
+                    Debug.Log($"[Drawer Save] {drawer.name} | id={GenerateDrawerId(drawer)} | open={drawer.IsOpen()} | localPosition={localPosition}", drawer);
+                }
             }
             // ── SAVE RITUAL ──
             connection.DeleteAll<RitualData>();
@@ -998,6 +926,17 @@ public class SaveSystem : MonoBehaviour
                 }
             }
 
+            // Save map ownership separately because the physical map is not kept in inventory.
+            MapSystem mapSystem = FindObjectOfType<MapSystem>();
+            if (mapSystem != null)
+            {
+                connection.Insert(new GameStateData
+                {
+                    Key = "HasMap",
+                    Value = mapSystem.HasMap ? "true" : "false"
+                });
+            }
+
             // ── SAVE USED KEYS ──
             var usedKeyCount = connection.Table<KeyData>().Where(k => k.WasUsed).Count();
 
@@ -1038,10 +977,21 @@ public class SaveSystem : MonoBehaviour
 
                 bool isDropped = false;
                 string cleanName = obj.name.Replace("(Clone)", "");
+                bool isRitualItem = cleanName == "LargeCandle" ||
+                                    cleanName == "LargeCandle (1)" ||
+                                    cleanName == "Cross" ||
+                                    cleanName == "Bible";
 
                 // Gas has its own Chapter 2 save record. Keeping it out of the
                 // generic drop table prevents the loader from making a second can.
                 if (IsHardModeDatabase() && pickup != null && IsGas(pickup))
+                {
+                    continue;
+                }
+
+                // The Hard-mode wrench has its own table because it restores through
+                // a dedicated path. Do not duplicate its transform in DroppedItemData.
+                if (IsHardModeDatabase() && pickup != null && IsWrench(pickup))
                 {
                     continue;
                 }
@@ -1051,7 +1001,7 @@ public class SaveSystem : MonoBehaviour
                     continue;
                 }
 
-                if (candle != null)
+                if (candle != null && !isRitualItem)
                 {
                     continue;
                 }
@@ -1061,20 +1011,7 @@ public class SaveSystem : MonoBehaviour
                     continue;
                 }
 
-                if (battery != null)
-                {
-                    continue;
-                }
-
-                if (cleanName == "LargeCandle" || 
-                    cleanName == "LargeCandle (1)" || 
-                    cleanName == "Cross" || 
-                    cleanName == "Bible")
-                {
-                    continue;
-                }
-
-                if (candle != null && cleanName.ToLower().Contains("candle"))
+                if (candle != null && cleanName.ToLower().Contains("candle") && !isRitualItem)
                 {
                     continue;
                 }
@@ -1085,6 +1022,13 @@ public class SaveSystem : MonoBehaviour
                 }
 
                 if (pickup != null && pickup.wasDropped && !pickup.isPickedUp)
+                {
+                    isDropped = true;
+                }
+
+                // Batteries keep their detailed charge data in BatteryData, and also
+                // get a generic drop record so they are visible in DroppedItemData.
+                if (battery != null && battery.wasDropped)
                 {
                     isDropped = true;
                 }
@@ -1356,7 +1300,19 @@ public class SaveSystem : MonoBehaviour
     }
     private string GenerateDrawerId(DrawerInteraction drawer)
     {
-        return GenerateAIId(drawer);
+        // Do not use sibling indexes here. Picking up or disabling any scene object
+        // can change those indexes, which makes the same drawer look like a new one.
+        Transform parent = drawer.transform.parent;
+        if (parent == null)
+        {
+            Vector3 position = drawer.transform.position;
+            return $"{SceneManager.GetActiveScene().name}:Drawer:{drawer.name}:{position.x:F2}:{position.y:F2}:{position.z:F2}";
+        }
+
+        // A drawer's parent is static furniture, so its name and world position
+        // remain the same whether the drawer is open, closed, or items are picked up.
+        Vector3 parentPosition = parent.position;
+        return $"{SceneManager.GetActiveScene().name}:Drawer:{parent.name}:{parentPosition.x:F2}:{parentPosition.y:F2}:{parentPosition.z:F2}:{drawer.name}";
     }
 
     private string GenerateDoorId(DoorInteraction door)
@@ -1387,6 +1343,24 @@ public class SaveSystem : MonoBehaviour
             if (player == null)
             {
                 return false;
+            }
+
+            // Restore the map ability and remove the world pickup when the player
+            // had already collected it in the saved game.
+            GameStateData mapState = connection.Table<GameStateData>()
+                .Where(state => state.Key == "HasMap").FirstOrDefault();
+            bool hasMap = mapState != null && mapState.Value == "true";
+            MapSystem mapSystem = FindObjectOfType<MapSystem>();
+            if (mapSystem != null)
+            {
+                mapSystem.RestoreMapOwnership(hasMap);
+                if (hasMap)
+                {
+                    foreach (MapPickup mapPickup in FindObjectsOfType<MapPickup>())
+                    {
+                        mapPickup.RestoreCollected();
+                    }
+                }
             }
 
             Vector3 targetPosition = new Vector3(playerData.PosX, playerData.PosY, playerData.PosZ);
@@ -1530,12 +1504,24 @@ public class SaveSystem : MonoBehaviour
             {
                 DrawerInteraction drawer;
                 if (!drawerLookup.TryGetValue(drawerData.DrawerId, out drawer))
+                {
+                    if (logDrawerSaveLoad)
+                    {
+                        Debug.LogWarning($"[Drawer Load] No scene drawer matches saved id={drawerData.DrawerId} ({drawerData.DrawerName}).");
+                    }
                     continue;
+                }
 
-                drawer.RestoreSavedState(drawerData.IsOpen, new Vector3(
+                Vector3 savedLocalPosition = new Vector3(
                     drawerData.LocalPosX,
                     drawerData.LocalPosY,
-                    drawerData.LocalPosZ));
+                    drawerData.LocalPosZ);
+                drawer.RestoreSavedState(drawerData.IsOpen, savedLocalPosition);
+
+                if (logDrawerSaveLoad)
+                {
+                    Debug.Log($"[Drawer Load] {drawer.name} | id={drawerData.DrawerId} | open={drawerData.IsOpen} | localPosition={savedLocalPosition}", drawer);
+                }
             }
             // ── Get data from database ──
             var inventoryItems = connection.Table<InventoryData>().ToList();
@@ -1584,12 +1570,16 @@ List<string> inventoryItemNames = new List<string>();
                 heldBatteryNames.Add(batteryData.BatteryName);
             }
 
-            // ── Get dropped batteries from database ──
-            var droppedBatteryData = batteryDataList.Where(b => b.IsDropped && !b.IsUsed && !b.IsHeld).ToList();
+            // DroppedItemData owns a dropped battery's world position and rotation.
+            // BatteryData remains responsible only for its charge and usage state.
+            var droppedBatteryData = droppedItems.Where(item =>
+                item.IsDropped && batteryDataList.Any(battery =>
+                    battery.BatteryName == item.ItemName && !battery.IsUsed && !battery.IsHeld))
+                .ToList();
             List<string> droppedBatteryNames = new List<string>();
-            foreach (BatteryData batteryData in droppedBatteryData)
+            foreach (DroppedItemData droppedBattery in droppedBatteryData)
             {
-                droppedBatteryNames.Add(batteryData.BatteryName);
+                droppedBatteryNames.Add(droppedBattery.ItemName);
             }
 
             // ── Get ritual items data ──
@@ -1600,9 +1590,15 @@ List<string> inventoryItemNames = new List<string>();
                 revealedItemNames.Add(itemData.ItemName);
             }
 
-            var droppedRitualItems = ritualItemDataList.Where(r => r.IsDropped).ToList();
+            // DroppedItemData owns the dropped transform for ritual items.
+            var droppedRitualItems = droppedItems.Where(item => item.IsDropped &&
+                (item.ItemName == "LargeCandle" ||
+                 item.ItemName == "LargeCandle (1)" ||
+                 item.ItemName == "Cross" ||
+                 item.ItemName == "Bible"))
+                .ToList();
             List<string> droppedRitualItemNames = new List<string>();
-            foreach (RitualItemData itemData in droppedRitualItems)
+            foreach (DroppedItemData itemData in droppedRitualItems)
             {
                 droppedRitualItemNames.Add(itemData.ItemName);
             }
@@ -1660,7 +1656,7 @@ List<string> inventoryItemNames = new List<string>();
 
                 string cleanName = obj.name.Replace("(Clone)", "");
                 
-                var savedBattery = droppedBatteryData.FirstOrDefault(b => b.BatteryName == cleanName);
+                var savedBattery = droppedBatteryData.FirstOrDefault(b => b.ItemName == cleanName);
                 if (savedBattery != null)
                 {
                     bool isInInventory = inventoryItemNames.Contains(cleanName);
@@ -1970,9 +1966,10 @@ List<string> inventoryItemNames = new List<string>();
                 if (obj == null) continue;
 
                 string cleanName = obj.name.Replace("(Clone)", "");
-                var savedBattery = droppedBatteryData.FirstOrDefault(b => b.BatteryName == cleanName);
+                var savedBattery = droppedBatteryData.FirstOrDefault(b => b.ItemName == cleanName);
+                var savedBatteryState = batteryDataList.FirstOrDefault(b => b.BatteryName == cleanName);
                 
-                if (savedBattery != null)
+                if (savedBattery != null && savedBatteryState != null)
                 {
                     Destroy(obj);
                     
@@ -1988,10 +1985,15 @@ List<string> inventoryItemNames = new List<string>();
                             BatteryPickup batteryComp = spawnedBattery.GetComponent<BatteryPickup>();
                             if (batteryComp != null)
                             {
-                                batteryComp.rechargeAmount = savedBattery.RechargeAmount;
+                                batteryComp.rechargeAmount = savedBatteryState.RechargeAmount;
                                 batteryComp.wasDropped = true;
                                 batteryComp.isHeld = false;
                                 batteryComp.wasUsed = false;
+                            }
+
+                            if (Inventory.Instance != null)
+                            {
+                                Inventory.Instance.RestoreDropLight(spawnedBattery);
                             }
                         }
                     }
@@ -2020,6 +2022,11 @@ List<string> inventoryItemNames = new List<string>();
                         if (spawnedItem != null)
                         {
                             spawnedItem.SetActive(true);
+
+                            if (Inventory.Instance != null)
+                            {
+                                Inventory.Instance.RestoreDropLight(spawnedItem);
+                            }
                         }
                     }
                 }
@@ -2070,6 +2077,7 @@ List<string> inventoryItemNames = new List<string>();
                     Inventory.Instance.DropItem(0);
                 }
 
+                int savedEquippedIndex = -1;
                 foreach (InventoryData invData in inventoryItems)
                 {
                     if (usedKeyNames.Contains(invData.ItemName) || usedBatteryNames.Contains(invData.ItemName))
@@ -2131,11 +2139,19 @@ List<string> inventoryItemNames = new List<string>();
                             flashlight.ResetDroppedState();
                         }
 
-                        Inventory.Instance.AddItem(itemObject);
+                        if (Inventory.Instance.AddItem(itemObject) && invData.IsEquipped)
+                        {
+                            savedEquippedIndex = Inventory.Instance.GetItems().Count - 1;
+                        }
                     }
                     else
                     {
                     }
+                }
+
+                if (savedEquippedIndex >= 0)
+                {
+                    Inventory.Instance.SelectItem(savedEquippedIndex);
                 }
 
                 if (Inventory.Instance.GetItems().Count > 0)
@@ -2201,6 +2217,10 @@ List<string> inventoryItemNames = new List<string>();
                     scenePickup.ResetItem();
                     scenePickup.wasDropped = true;
                     scenePickup.isHeld = false;
+                    if (Inventory.Instance != null)
+                    {
+                        Inventory.Instance.RestoreDropLight(scenePickup.gameObject);
+                    }
                     continue;
                 }
 
@@ -2237,6 +2257,11 @@ List<string> inventoryItemNames = new List<string>();
                             }
                             flashlightComp.wasDropped = true;
                             flashlightComp.SetHeld(false);
+                        }
+
+                        if (Inventory.Instance != null)
+                        {
+                            Inventory.Instance.RestoreDropLight(spawnedItem);
                         }
                     }
                     else
@@ -2486,334 +2511,5 @@ List<string> inventoryItemNames = new List<string>();
             connection.Close();
             connection = null;
         }
-    }
-}
-
-// ── SQLITE DATA MODELS ──
-[Table("WrenchData")]
-public class WrenchData
-{
-    [PrimaryKey]
-    public string WrenchId { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public bool IsHeld { get; set; }
-    public bool IsDropped { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
-}
-[Table("GasData")]
-public class GasData
-{
-    [PrimaryKey]
-    public string GasId { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public bool IsHeld { get; set; }
-    public bool IsDropped { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
-}
-[Table("GeneratorCoverData")]
-public class GeneratorCoverData
-{
-    [PrimaryKey]
-    public string CoverId { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public bool IsRemoved { get; set; }
-}
-[Table("AIPositionData")]
-public class AIPositionData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string AIId { get; set; }
-    public string SceneName { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
-}
-[Table("PlayerData")]
-public class PlayerData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
-    public float Health { get; set; }
-    public float MaxHealth { get; set; }
-    public float Sensitivity { get; set; }
-    public string CurrentScene { get; set; }
-}
-
-[Table("InventoryData")]
-public class InventoryData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string ItemName { get; set; }
-    public int Quantity { get; set; }
-    public bool IsEquipped { get; set; }
-}
-
-[Table("DoorData")]
-public class DoorData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string DoorId { get; set; }
-    public string DoorName { get; set; }
-    public bool IsUnlocked { get; set; }
-    public bool IsOpen { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
-}
-
-[Table("DrawerData")]
-public class DrawerData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-    public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-    public string DrawerId { get; set; }
-    public string DrawerName { get; set; }
-    public bool IsOpen { get; set; }
-    public float LocalPosX { get; set; }
-    public float LocalPosY { get; set; }
-    public float LocalPosZ { get; set; }
-}
-[Table("RitualData")]
-public class RitualData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public bool IsComplete { get; set; }
-}
-
-[Table("NoteData")]
-public class NoteData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string NoteTitle { get; set; }
-    public bool IsRead { get; set; }
-}
-
-[Table("GameStateData")]
-public class GameStateData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string Key { get; set; }
-    public string Value { get; set; }
-}
-
-[Table("DroppedItemData")]
-public class DroppedItemData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string ItemName { get; set; }
-    public bool IsHeld { get; set; }
-    public bool IsDropped { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
-}
-
-[Table("FlashlightData")]
-public class FlashlightData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string FlashlightName { get; set; }
-    public float BatteryLife { get; set; }
-    public float CurrentBattery { get; set; }
-    public bool IsOn { get; set; }
-    public bool IsHeld { get; set; }
-    public bool WasDropped { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-}
-
-[Table("KeyData")]
-public class KeyData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string KeyName { get; set; }
-    public bool WasUsed { get; set; }
-}
-
-[Table("BatteryData")]
-public class BatteryData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string BatteryName { get; set; }
-    public float RechargeAmount { get; set; }
-    public bool IsHeld { get; set; }
-    public bool IsDropped { get; set; }
-    public bool IsUsed { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
-}
-
-[Table("RitualItemData")]
-public class RitualItemData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public string ItemName { get; set; }
-    public bool IsRevealed { get; set; }
-    public bool IsPlaced { get; set; }
-    public bool IsDropped { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
-}
-
-// ── NEW: ProgressionData table ──
-[Table("ProgressionData")]
-public class ProgressionData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public int ProgressValue { get; set; }
-    public int TotalPoints { get; set; }
-}
-
-[Table("SubtitleData")]
-public class SubtitleData
-{
-    [PrimaryKey]
-    public string SubtitleId { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public bool IsTriggered { get; set; }
-}
-[Table("StaminaData")]
-public class StaminaData
-{
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public float CurrentStamina { get; set; }
-}
-
-[Table("IntroData")]
-public class IntroData
-{
-    [PrimaryKey]
-    public int Id { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public int SectionIndex { get; set; }
-    public int LineIndex { get; set; }
-    public bool IsComplete { get; set; }
-}
-
-
-/// <summary>
-/// Creates the Version 3 local save schema. Each database file has one save
-/// profile (Id = 1); every game-state table is a child of that profile.
-/// </summary>
-public static class RelationalSaveSchema
-{
-    public const int LocalProfileId = 1;
-    public const int SchemaVersion = 3;
-
-    public static void Create(SQLiteConnection connection, bool isHardMode)
-    {
-        connection.Execute("PRAGMA foreign_keys = ON");
-        connection.Execute("CREATE TABLE IF NOT EXISTS SaveProfileData (" +
-                           "Id INTEGER PRIMARY KEY, " +
-                           "SaveName TEXT NOT NULL, " +
-                           "Difficulty TEXT NOT NULL, " +
-                           "SchemaVersion INTEGER NOT NULL)");
-
-        string difficulty = isHardMode ? "Hard" : "Normal";
-        connection.Execute("INSERT OR IGNORE INTO SaveProfileData " +
-                           "(Id, SaveName, Difficulty, SchemaVersion) VALUES " +
-                           "(1, 'Local Save', '" + difficulty + "', " + SchemaVersion + ")");
-        connection.Execute("UPDATE SaveProfileData SET Difficulty = '" + difficulty + "', SchemaVersion = " + SchemaVersion + " WHERE Id = " + LocalProfileId);
-
-        CreateChildTable(connection, "PlayerData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL, Health REAL, MaxHealth REAL, Sensitivity REAL, CurrentScene TEXT");
-        CreateChildTable(connection, "InventoryData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, Quantity INTEGER, IsEquipped INTEGER");
-        CreateChildTable(connection, "DoorData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "DoorId TEXT, DoorName TEXT, IsUnlocked INTEGER, IsOpen INTEGER, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
-        CreateChildTable(connection, "DrawerData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "DrawerId TEXT, DrawerName TEXT, IsOpen INTEGER, LocalPosX REAL, LocalPosY REAL, LocalPosZ REAL");
-        CreateChildTable(connection, "RitualData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "IsComplete INTEGER");
-        CreateChildTable(connection, "NoteData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "NoteTitle TEXT, IsRead INTEGER");
-        CreateChildTable(connection, "GameStateData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "Key TEXT, Value TEXT");
-        CreateChildTable(connection, "DroppedItemData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, IsHeld INTEGER NOT NULL DEFAULT 0, IsDropped INTEGER NOT NULL DEFAULT 1, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
-        CreateChildTable(connection, "FlashlightData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "FlashlightName TEXT, BatteryLife REAL, CurrentBattery REAL, IsOn INTEGER NOT NULL DEFAULT 0, IsHeld INTEGER, WasDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL");
-        CreateChildTable(connection, "KeyData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "KeyName TEXT, WasUsed INTEGER");
-        CreateChildTable(connection, "BatteryData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "BatteryName TEXT, RechargeAmount REAL, IsHeld INTEGER, IsDropped INTEGER, IsUsed INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
-        CreateChildTable(connection, "RitualItemData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, IsRevealed INTEGER, IsPlaced INTEGER, IsDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
-        CreateChildTable(connection, "ProgressionData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ProgressValue INTEGER, TotalPoints INTEGER");
-        CreateChildTable(connection, "SubtitleData", "SubtitleId TEXT PRIMARY KEY", "IsTriggered INTEGER NOT NULL DEFAULT 0");
-        CreateChildTable(connection, "StaminaData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "CurrentStamina REAL");
-        CreateChildTable(connection, "IntroData", "Id INTEGER PRIMARY KEY", "SectionIndex INTEGER, LineIndex INTEGER, IsComplete INTEGER");
-        CreateChildTable(connection, "AIPositionData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "AIId TEXT, SceneName TEXT, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
-
-        if (!isHardMode)
-            return;
-
-        CreateChildTable(connection, "WrenchData", "WrenchId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
-        CreateChildTable(connection, "GasData", "GasId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
-        CreateChildTable(connection, "GeneratorCoverData", "CoverId TEXT PRIMARY KEY", "IsRemoved INTEGER");
-    }
-
-    private static void CreateChildTable(SQLiteConnection connection, string tableName, string primaryKey, string columns)
-    {
-        connection.Execute("CREATE TABLE IF NOT EXISTS " + tableName + " (" +
-                           primaryKey + ", " +
-                           "SaveProfileId INTEGER NOT NULL DEFAULT 1, " +
-                           columns + ", " +
-                           "FOREIGN KEY (SaveProfileId) REFERENCES SaveProfileData(Id) ON DELETE CASCADE)");
     }
 }

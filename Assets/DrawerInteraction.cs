@@ -38,11 +38,18 @@ public class DrawerInteraction : MonoBehaviour
     public string playerTag = "Player";
 
     public bool isBusy = false;
+
+    [Header("Debug")]
+    [Tooltip("Logs any non-animation movement that changes this drawer's local position.")]
+    public bool logUnexpectedPositionChanges = true;
+
     private bool isOpen = false;
     private bool isAnimating = false;
     private Vector3 closedPosition;
     private Vector3 openPosition;
     private AudioSource audioSource;
+    private Vector3 lastDebugLocalPosition;
+    private bool hasDebugPosition;
 
     void Start()
     {
@@ -55,6 +62,9 @@ public class DrawerInteraction : MonoBehaviour
         audioSource.spatialBlend = 1f;
         audioSource.playOnAwake = false;
         audioSource.volume = soundVolume;
+
+        lastDebugLocalPosition = transform.localPosition;
+        hasDebugPosition = true;
     }
 
     Vector3 GetDirectionVector()
@@ -186,6 +196,35 @@ public class DrawerInteraction : MonoBehaviour
         isAnimating = false;
         isOpen = open;
         transform.localPosition = savedLocalPosition;
+        openPosition = savedLocalPosition;
+
+        DrawerItemParent drawerStorage = GetComponent<DrawerItemParent>();
+        if (drawerStorage != null)
+        {
+            drawerStorage.SyncStoredItems();
+        }
+
+        Physics.SyncTransforms();
+    }
+
+    private void LateUpdate()
+    {
+        if (!logUnexpectedPositionChanges)
+            return;
+
+        if (!hasDebugPosition)
+        {
+            lastDebugLocalPosition = transform.localPosition;
+            hasDebugPosition = true;
+            return;
+        }
+
+        if (!isAnimating && (transform.localPosition - lastDebugLocalPosition).sqrMagnitude > 0.000001f)
+        {
+            Debug.LogWarning($"[Drawer Position Changed] {name} | open={isOpen} | from={lastDebugLocalPosition} | to={transform.localPosition}", this);
+        }
+
+        lastDebugLocalPosition = transform.localPosition;
     }
 
     void OnDrawGizmosSelected()

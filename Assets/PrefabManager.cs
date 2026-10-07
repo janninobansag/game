@@ -4,6 +4,14 @@ using System.Collections.Generic;
 
 public class PrefabManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class ItemPrefabEntry
+    {
+        [Tooltip("The exact item name saved to the database, without '(Clone)'.")]
+        public string itemName;
+        public GameObject prefab;
+    }
+
     public static PrefabManager Instance;
 
     // Reusable item prefabs used by systems that spawn dropped or restored items.
@@ -20,6 +28,11 @@ public class PrefabManager : MonoBehaviour
     public GameObject house1KeyPrefab;
     public GameObject largeCandlePrefab;
 
+    // Scene-specific registrations. Use this list for Chapter 2 items that are
+    // not part of the shared fields above.
+    [Header("Additional Scene Item Prefabs")]
+    public List<ItemPrefabEntry> additionalItemPrefabs = new List<ItemPrefabEntry>();
+
     // Older prefab references kept so existing scenes and saves still work.
     [Header("Legacy/Backward Compatible")]
     public GameObject keyPrefab;
@@ -30,17 +43,20 @@ public class PrefabManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
+        // Each chapter has its own prefab list. The active scene's manager must
+        // replace the previous one so Chapter 2 can spawn its own item prefabs.
+        Instance = this;
         BuildPrefabDictionary();
+    }
+
+    void OnDestroy()
+    {
+        // Do not clear the reference when an older scene manager is destroyed
+        // after the new scene manager has already become active.
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     void BuildPrefabDictionary()
@@ -58,6 +74,14 @@ public class PrefabManager : MonoBehaviour
         AddPrefab(house3KeyPrefab, "House 3 key");
         AddPrefab(house1KeyPrefab, "Key house 1");
         AddPrefab(largeCandlePrefab, "LargeCandle");
+
+        foreach (ItemPrefabEntry entry in additionalItemPrefabs)
+        {
+            if (entry != null)
+            {
+                AddPrefab(entry.prefab, entry.itemName);
+            }
+        }
 
         AddPrefab(keyPrefab, "Key");
         AddPrefab(candlePrefab, "LargeCandle");

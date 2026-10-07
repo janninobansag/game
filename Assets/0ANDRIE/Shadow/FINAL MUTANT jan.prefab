@@ -1355,17 +1355,15 @@ MonoBehaviour:
   roamWaitMax: 5
   attackDamage: 25
   attackCooldown: 1.5
-  chaseSound: {fileID: 8300000, guid: bbdc68993bdb14543af220835f48a15c, type: 3}
+  audioSource: {fileID: 0}
+  chaseSound: {fileID: 8300000, guid: 47711bcc71bb3744baf71bab180d1cab, type: 3}
   chaseVolume: 1
   maxAudioDistance: 50
   attackSound: {fileID: 8300000, guid: 1d2cd61e33175264e890c278323846d5, type: 3}
   effectDistance: 8
   maxShakeIntensity: 0.3
-  mutantLight: {fileID: 2170535505040684955}
-  lightFlickerSpeed: 15
-  minIntensity: 0.5
-  maxIntensity: 2.5
-  lightColor: {r: 1, g: 0, b: 0, a: 1}
+  bushTag: Bush
+  checkBush: 1
   startPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &5033110348248799289
 GameObject:
