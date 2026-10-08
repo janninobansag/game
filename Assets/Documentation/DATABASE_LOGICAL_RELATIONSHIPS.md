@@ -1,6 +1,6 @@
 # VAREN Relational Save Relationships
 
-Version 3 uses a real SQLite relational save schema. Each database contains one
+Schema version 6 uses a real SQLite relational save schema. Each database contains one
 `SaveProfileData` row (`Id = 1`) for the local single-player save. Every game-state
 table stores `SaveProfileId`, which is a foreign key to that profile with
 `ON DELETE CASCADE`.
