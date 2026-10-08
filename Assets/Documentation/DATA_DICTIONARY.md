@@ -37,11 +37,11 @@ SQLite booleans are stored as `0` (false) or `1` (true). All player-save tables 
 | `RitualData` | `Id`, `SaveProfileId`, `IsComplete` | Whether the Varen ritual is complete. |
 | `NoteData` | `Id`, `SaveProfileId`, `NoteTitle`, `IsRead` | Note identifier and read state. |
 | `GameStateData` | `Id`, `SaveProfileId`, `Key`, `Value` | General named gameplay state; `Value` is text. |
-| `DroppedItemData` | `Id`, `SaveProfileId`, `ItemName`, `IsHeld`, `IsDropped`, `PosX/Y/Z`, `RotX/Y/Z/W` | Generic dropped item state and transform. |
-| `FlashlightData` | `Id`, `SaveProfileId`, `FlashlightName`, `BatteryLife`, `CurrentBattery`, `IsOn`, `IsHeld`, `WasDropped`, `PosX/Y/Z` | Flashlight charge, power, ownership, and position. |
+| `DroppedItemData` | `Id`, `SaveProfileId`, `ItemName`, `IsHeld`, `IsDropped`, `PosX/Y/Z`, `RotX/Y/Z/W` | Generic dropped-item state and transform, including dropped flashlights, batteries, and ritual items. |
+| `FlashlightData` | `Id`, `SaveProfileId`, `FlashlightName`, `BatteryLife`, `CurrentBattery`, `IsOn`, `IsHeld` | Flashlight charge, on/off state, and held state. Its dropped transform is stored in `DroppedItemData`. |
 | `KeyData` | `Id`, `SaveProfileId`, `KeyName`, `WasUsed` | Key identifier and consumed/unlocked state. |
-| `BatteryData` | `Id`, `SaveProfileId`, `BatteryName`, `RechargeAmount`, `IsHeld`, `IsDropped`, `IsUsed`, `PosX/Y/Z`, `RotX/Y/Z/W` | Battery charge value, state, and transform. |
-| `RitualItemData` | `Id`, `SaveProfileId`, `ItemName`, `IsRevealed`, `IsPlaced`, `IsDropped`, `PosX/Y/Z`, `RotX/Y/Z/W` | Candle, Cross, Bible, and other ritual-item state. |
+| `BatteryData` | `Id`, `SaveProfileId`, `BatteryName`, `RechargeAmount`, `IsHeld`, `IsUsed` | Battery charge value, held state, and used state. Its dropped transform is stored in `DroppedItemData`. |
+| `RitualItemData` | `Id`, `SaveProfileId`, `ItemName`, `IsRevealed`, `IsPlaced` | Candle, Cross, Bible, and other ritual-item reveal and placement state. Its dropped transform is stored in `DroppedItemData`. |
 | `ProgressionData` | `Id`, `SaveProfileId`, `ProgressValue`, `TotalPoints` | Current and total points for progress percentage. |
 | `SubtitleData` | `SubtitleId` (primary key), `SaveProfileId`, `IsTriggered` | One-time subtitle identifier and shown state. |
 | `StaminaData` | `Id`, `SaveProfileId`, `CurrentStamina` | Player stamina, used by Hard mode. |

@@ -1,6 +1,6 @@
 // VAREN Chapter 1 Normal save database ERD: gameSave_v2.db
 // Paste this file into https://dbdiagram.io to view the diagram.
-// Source: Assets/SaveSystem.cs
+// Source: Assets/SaveDatabaseSchema.cs and Assets/SaveModels.cs
 // Every game-state table references SaveProfileData.Id through SaveProfileId.
 
 Table SaveProfileData {
@@ -101,10 +101,6 @@ Table FlashlightData {
   CurrentBattery float
   IsOn boolean
   IsHeld boolean
-  WasDropped boolean
-  PosX float
-  PosY float
-  PosZ float
 }
 
 Table KeyData {
@@ -120,15 +116,7 @@ Table BatteryData {
   BatteryName varchar
   RechargeAmount float
   IsHeld boolean
-  IsDropped boolean
   IsUsed boolean
-  PosX float
-  PosY float
-  PosZ float
-  RotX float
-  RotY float
-  RotZ float
-  RotW float
 }
 
 Table RitualItemData {
@@ -137,14 +125,6 @@ Table RitualItemData {
   ItemName varchar
   IsRevealed boolean
   IsPlaced boolean
-  IsDropped boolean
-  PosX float
-  PosY float
-  PosZ float
-  RotX float
-  RotY float
-  RotZ float
-  RotW float
 }
 
 Table ProgressionData {
