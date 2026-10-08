@@ -8,9 +8,9 @@ using TMPro;
 [RequireComponent(typeof(NavMeshAgent))]
 public class TikbalangAI : MonoBehaviour
 {
-    [Header("Trigger Debug")]
-    [Tooltip("Shows why Tikbalang was asked to teleport. Disable after testing.")]
-    public bool debugTrigger = true;
+    [Header("Movement Debug")]
+    [Tooltip("Writes one Console message when Tikbalang stops or becomes stuck while the player is walking or running.")]
+    public bool logMovementStops = true;
     [Header("References")]
     public Transform player;
     public Animator animator;
@@ -84,6 +84,10 @@ public class TikbalangAI : MonoBehaviour
     [Min(0f)] public float teleportCooldown = 1f;
     [Min(0.1f)] public float spawnPointNavMeshSearchRadius = 3f;
 
+    [Header("Chase NavMesh")]
+    [Tooltip("How far from the player Tikbalang searches for a walkable NavMesh point.")]
+    [Min(1f)] public float playerChaseNavMeshSearchRadius = 12f;
+
     private NavMeshAgent agent;
     private float nextDestinationUpdate;
     private float nextDoorCheckTime;
@@ -109,6 +113,7 @@ public class TikbalangAI : MonoBehaviour
     private bool isQuestionPanelOpen;
     private bool wasPlayerControllerEnabled;
     private readonly System.Collections.Generic.List<Button> qnaButtons = new System.Collections.Generic.List<Button>();
+    private string lastMovementStopReason;
     // Gets the NavMesh agent and finds the player, animator, and audio source if needed.
     private void Awake()
     {
@@ -159,32 +164,30 @@ public class TikbalangAI : MonoBehaviour
     {
         // PlayerController and other gameplay scripts normally lock the cursor.
         // Keep Q&A clickable regardless of script execution order.
-        if (!isQuestionPanelOpen)
-            return;
+        if (isQuestionPanelOpen)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        CheckMovementStopDebug();
     }
     // Called by TikbalangJumpscareTrigger when the player enters its detector collider.
     // Rejects invalid requests and starts the first encounter sequence when valid.
     public bool TriggerDetectionJumpscare(TikbalangJumpscareTrigger triggerSource)
     {
         FindPlayerIfNeeded();
-        string sourceName = triggerSource != null ? triggerSource.name : "unknown source";
 
         if (player == null)
         {
-            LogTriggerDebug($"Rejected teleport request from '{sourceName}': Player reference was not found.");
             return false;
         }
 
         if (isFirstEncounterPlaying || isCatchSequencePlaying)
         {
-            LogTriggerDebug($"Rejected teleport request from '{sourceName}': a Tikbalang sequence is already running.");
             return false;
         }
 
-        LogTriggerDebug($"Accepted teleport request from detector '{sourceName}'.");
         StartCoroutine(PlayDetectionJumpscare());
         return true;
     }
@@ -467,21 +470,20 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
     {
         if (agent == null || !agent.enabled || !agent.isOnNavMesh || player == null)
         {
-            LogTriggerDebug("First encounter finished, but Tikbalang could not resume chase because the agent or player is unavailable.");
             return;
         }
 
         nextDestinationUpdate = 0f;
         agent.isStopped = false;
-        agent.SetDestination(player.position);
+        SetChaseDestination();
         SetMovementAnimation(true);
-        LogTriggerDebug("First encounter finished. Tikbalang is now chasing the player.");
     }
     // Chooses walking or running, handles doors, updates the chase destination, and audio.
     private void ChasePlayer()
     {
         if (!agent.enabled || !agent.isOnNavMesh)
         {
+            ReportMovementStop("The NavMesh Agent is disabled or Tikbalang is outside the NavMesh.");
             SetMovementAnimation(false);
             return;
         }
@@ -509,7 +511,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
 
         if (Time.time >= nextDestinationUpdate)
         {
-            agent.SetDestination(player.position);
+            SetChaseDestination();
             nextDestinationUpdate = Time.time + destinationRefreshRate;
         }
 
@@ -520,12 +522,44 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             StopChaseSound();
     }
 
+    // Targets the closest walkable point near the player rather than the player's
+    // exact transform position, which can sit slightly outside the baked NavMesh.
+    private bool SetChaseDestination()
+    {
+        if (player == null || agent == null || !agent.enabled || !agent.isOnNavMesh)
+            return false;
+
+        float searchRadius = Mathf.Max(1f, playerChaseNavMeshSearchRadius);
+        if (!NavMesh.SamplePosition(player.position, out NavMeshHit playerNavMeshPoint,
+                                    searchRadius, agent.areaMask))
+        {
+            agent.ResetPath();
+            SetMovementAnimation(false);
+            ReportMovementStop("No NavMesh point was found near the player, so Tikbalang cannot calculate a chase route.");
+            return false;
+        }
+
+        NavMeshPath chasePath = new NavMeshPath();
+        if (!agent.CalculatePath(playerNavMeshPoint.position, chasePath) ||
+            chasePath.status != NavMeshPathStatus.PathComplete)
+        {
+            agent.ResetPath();
+            SetMovementAnimation(false);
+            ReportMovementStop("The player and Tikbalang are on disconnected NavMesh areas. Bake or connect the NavMesh between their locations.");
+            return false;
+        }
+
+        agent.SetPath(chasePath);
+        return true;
+    }
+
     // Detects a door ahead, asks it to open, and pauses Tikbalang while it opens.
     private bool HandleDoorAhead()
     {
         if (Time.time < doorPauseUntil)
         {
             agent.isStopped = true;
+            ReportMovementStop("Tikbalang is waiting after opening a door.");
             return true;
         }
 
@@ -537,10 +571,12 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
                 doorPauseUntil = Time.time + doorPauseAfterOpening;
                 agent.isStopped = true;
                 nextDestinationUpdate = 0f;
+                ReportMovementStop("Tikbalang opened a door and is waiting for it to finish moving.");
                 return true;
             }
 
             agent.isStopped = true;
+            ReportMovementStop("A closed or locked door is still blocking Tikbalang's path.");
             return true;
         }
 
@@ -559,6 +595,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
 
         doorBlockingPath = door;
         agent.isStopped = true;
+        ReportMovementStop("A door was detected directly in Tikbalang's path.");
         return true;
     }
 
@@ -773,9 +810,42 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             }
     }
 
-    // Writes diagnostic messages to the Console when trigger debugging is enabled.
-    private void LogTriggerDebug(string message)
+    private void CheckMovementStopDebug()
     {
-        if (debugTrigger)
-            Debug.Log($"[Tikbalang Trigger Debug] {message}", this);
-    }}
+        if (!logMovementStops || !hasAwakened || isCatchSequencePlaying || agent == null)
+            return;
+
+        if (!agent.enabled || !agent.isOnNavMesh)
+        {
+            ReportMovementStop("The NavMesh Agent is disabled or Tikbalang is outside the NavMesh.");
+            return;
+        }
+
+        // This also catches a stop caused by another script, a blocked NavMesh path,
+        // or an obstacle. It reports only once per stop, rather than every frame.
+        bool isStalledOnPath = agent.hasPath && !agent.pathPending &&
+                               agent.remainingDistance > agent.stoppingDistance + 0.15f &&
+                               agent.velocity.sqrMagnitude < 0.0025f;
+        if (agent.isStopped && string.IsNullOrEmpty(lastMovementStopReason))
+            ReportMovementStop("NavMesh Agent isStopped is true. Check the earlier Tikbalang movement message for the reason.");
+        else if (isStalledOnPath)
+            ReportMovementStop("Tikbalang has a path but is not moving. An obstacle, an invalid NavMesh route, or another script may be blocking the agent.");
+        else
+            lastMovementStopReason = null;
+    }
+
+    private void ReportMovementStop(string reason)
+    {
+        if (!logMovementStops || lastMovementStopReason == reason)
+            return;
+
+        lastMovementStopReason = reason;
+        bool playerIsMoving = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f ||
+                              Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f;
+        string playerState = playerIsMoving
+            ? (playerController != null && playerController.IsSprinting ? "running" : "walking")
+            : "standing still";
+        Debug.Log($"[Tikbalang Movement Debug] {reason} Player is {playerState}. " +
+                  $"remainingDistance={agent.remainingDistance:F2}, velocity={agent.velocity.magnitude:F2}, hasPath={agent.hasPath}.", this);
+    }
+}

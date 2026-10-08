@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 8230264061910533886}
   - component: {fileID: 4621524592988443201}
   - component: {fileID: 7609228235003012024}
-  - component: {fileID: 9038241915490910228}
   - component: {fileID: 872707100650811299}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree05collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,28 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &9038241915490910228
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4305513282664869843}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7126169851493744098, guid: 17bfa3e3d301de54585bf74e8b9661de, type: 3}
 --- !u!136 &872707100650811299
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -127,6 +104,6 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.7
-  m_Height: 13.63
+  m_Height: 14.194941
   m_Direction: 1
-  m_Center: {x: -0.06454468, y: 6.25, z: 0.00000011920929}
+  m_Center: {x: -0.06454468, y: 5.9675303, z: 0.00000011920929}

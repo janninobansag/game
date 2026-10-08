@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 773458023988484393}
   - component: {fileID: 2148423652927099948}
   - component: {fileID: 2869947149819139960}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree25
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,5 +103,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.7605133, y: 8.082247, z: 1.7390041}
-  m_Center: {x: 0.008735657, y: 4.0411234, z: 0.020385861}
+  m_Size: {x: 1.7605133, y: 8.924858, z: 1.7390041}
+  m_Center: {x: 0.008735657, y: 3.6198175, z: 0.020385861}
