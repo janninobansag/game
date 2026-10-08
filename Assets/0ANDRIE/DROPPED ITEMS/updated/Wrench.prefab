@@ -193,4 +193,5 @@ MonoBehaviour:
   - {fileID: 0}
   saveKey: WrenchSpawnIndex
   useSpawnRotation: 1
+  disableRandomSpawn: 0
   logSpawnChoice: 1
