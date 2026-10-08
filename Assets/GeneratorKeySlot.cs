@@ -26,6 +26,14 @@ public class GeneratorKeySlot : MonoBehaviour
     [Tooltip("Local scale after insertion. Generatorbox is scaled to 100, so 0.01 keeps the key normal-sized.")]
     public Vector3 insertedKeyLocalScale = new Vector3(0.01f, 0.01f, 0.01f);
 
+    [Header("Lights Shutdown Warning")]
+    [Tooltip("Shows an urgent notice shortly before the generator lights turn off.")]
+    public bool showLightsShutdownWarning = true;
+    [Min(0f)] public float warningSecondsBeforeShutdown = 10f;
+    [Min(0.1f)] public float warningDisplayDuration = 10f;
+    [TextArea(2, 4)] public string shutdownWarningMessage = "WARNING: Generator power is failing! Find fuel quickly before the lights go out.";
+    public Color shutdownWarningColor = new Color(1f, 0.25f, 0.1f);
+
     [Header("Gas Respawn After Shutdown")]
     [Tooltip("Creates one fresh Gas can when this generator finishes and its lights turn off.")]
     public bool respawnGasWhenLightsTurnOff = true;
@@ -45,6 +53,7 @@ public class GeneratorKeySlot : MonoBehaviour
     private Quaternion insertedRotation;
     private bool isRunning;
     private bool showPrompt;
+    private bool showShutdownWarning;
     private string lastDebugState;
     private GameObject gasRespawnTemplate;
 
@@ -148,12 +157,30 @@ public class GeneratorKeySlot : MonoBehaviour
         showPrompt = false;
         SetGeneratorLights(true);
         if (insertedKey != null) insertedKey.transform.localRotation = insertedRotation * Quaternion.Euler(turnRotation);
+        if (showLightsShutdownWarning)
+            StartCoroutine(ShowLightsShutdownWarning());
         yield return new WaitForSeconds(runningSeconds);
+        showShutdownWarning = false;
         SetGeneratorLights(false);
         if (insertedKey != null) insertedKey.transform.localRotation = insertedRotation;
         if (fuelInteraction != null) fuelInteraction.ConsumeFuel();
         SpawnGasAtRandomPoint();
         isRunning = false;
+    }
+
+    private IEnumerator ShowLightsShutdownWarning()
+    {
+        float waitBeforeWarning = Mathf.Max(0f, runningSeconds - warningSecondsBeforeShutdown);
+        if (waitBeforeWarning > 0f)
+            yield return new WaitForSeconds(waitBeforeWarning);
+
+        if (!isRunning)
+            yield break;
+
+        showShutdownWarning = true;
+        float availableWarningTime = Mathf.Min(warningDisplayDuration, warningSecondsBeforeShutdown);
+        yield return new WaitForSeconds(availableWarningTime);
+        showShutdownWarning = false;
     }
 
     private void SetGeneratorLights(bool enabled)
@@ -303,6 +330,17 @@ public class GeneratorKeySlot : MonoBehaviour
     }
     private void OnGUI()
     {
+        if (showShutdownWarning)
+        {
+            GUIStyle warningShadow = new GUIStyle { fontSize = 25, alignment = TextAnchor.UpperCenter, wordWrap = true };
+            warningShadow.normal.textColor = Color.black;
+            GUIStyle warningText = new GUIStyle(warningShadow);
+            warningText.normal.textColor = shutdownWarningColor;
+            Rect warningRect = new Rect(Screen.width * 0.5f - 310f, Screen.height * 0.17f, 620f, 100f);
+            GUI.Label(new Rect(warningRect.x + 2f, warningRect.y + 2f, warningRect.width, warningRect.height), shutdownWarningMessage, warningShadow);
+            GUI.Label(warningRect, shutdownWarningMessage, warningText);
+        }
+
         if (!showPrompt || isRunning) return;
         string message = insertedKey == null ? "Press E to insert Generator Key" : "Press E to turn Generator on";
         GUIStyle shadow = new GUIStyle { fontSize = 22, alignment = TextAnchor.MiddleCenter };

@@ -18,11 +18,18 @@ public class RandomWrenchSpawn : MonoBehaviour
     [Tooltip("Use the selected spawn point's rotation as well as its position.")]
     public bool useSpawnRotation = true;
 
+    [Header("Testing")]
+    [Tooltip("When checked, the Wrench stays at its scene position and does not choose a random spawn point.")]
+    public bool disableRandomSpawn;
+
     [Header("Debug")]
     public bool logSpawnChoice = true;
 
     private void Awake()
     {
+        if (disableRandomSpawn)
+            return;
+
         PlaceAtSavedOrRandomSpawn();
     }
 
