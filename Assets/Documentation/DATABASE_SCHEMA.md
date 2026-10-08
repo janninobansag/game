@@ -1,6 +1,6 @@
 # VAREN Save Database
 
-This document describes the SQLite save database used by `Assets/SaveSystem.cs`.
+This document describes the SQLite save database used by `Assets/SaveDatabaseSchema.cs` and `Assets/SaveSystem.cs`.
 It is a save-game database, not an online account database.
 
 ## ERD files
@@ -55,7 +55,7 @@ Chapter 1 database:
 
 ## Relationships
 
-Version 2 is a formal relational SQLite save schema. Each player-save database
+Schema version 6 is a formal relational SQLite save schema. Each player-save database
 contains one `SaveProfileData` parent row (`Id = 1`). Every game-state table has a
 `SaveProfileId` foreign key that references this parent with `ON DELETE CASCADE`.
 
@@ -76,5 +76,7 @@ scripts; they are not foreign keys between item-type tables.
 
 ## Source of truth
 
-The schema is defined in `Assets/SaveSystem.cs`. If a data model class changes,
-update both documentation files so the ERD remains accurate.
+The SQLite schema is defined in `Assets/SaveDatabaseSchema.cs`; `Assets/SaveModels.cs`
+defines the matching C# data models, and `Assets/SaveSystem.cs` reads and writes the
+records. If a schema or data-model class changes, update the data dictionary and both
+ERD files so the documentation remains accurate.

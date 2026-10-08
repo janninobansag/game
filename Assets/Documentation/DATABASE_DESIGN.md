@@ -60,11 +60,11 @@ SaveProfileData (parent)
 | `InventoryData` | `Id` | Items in the three-slot inventory, their quantities, and equipped state. |
 | `DoorData` | `Id` | Door identity, lock/open state, and rotation. |
 | `DrawerData` | `Id` | Drawer identity, open/closed state, and exact local position. |
-| `DroppedItemData` | `Id` | Generic dropped item state, location, rotation, and held/dropped flags. |
-| `FlashlightData` | `Id` | Flashlight battery, held/dropped state, location, and whether the light is on. |
-| `BatteryData` | `Id` | Battery state, charge amount, use state, and world transform. |
+| `DroppedItemData` | `Id` | Generic dropped-item state, world transform, and held/dropped flags. It stores the transform for dropped flashlights, batteries, and ritual items. |
+| `FlashlightData` | `Id` | Flashlight battery values, on/off state, and held state. |
+| `BatteryData` | `Id` | Battery recharge amount, held state, and used state. |
 | `KeyData` | `Id` | Whether a named key has been used. |
-| `RitualItemData` | `Id` | Bible, cross, candles, and other ritual item reveal/place/drop state. |
+| `RitualItemData` | `Id` | Bible, cross, candles, and other ritual-item reveal and placed state. |
 | `RitualData` | `Id` | Overall ritual completion state. |
 | `ProgressionData` | `Id` | Progress points and total points displayed by the game. |
 | `SubtitleData` | `SubtitleId` | One-time subtitle completion state. |

@@ -38,9 +38,9 @@ Older `PlayerPrefs` values are automatically copied into `SettingsData` the firs
 
 ## Player-save database tables
 
-Each Version 3 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
+Each schema-version 6 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
 
-Normal and Hard modes have the same table structure, but each mode has its own database file.
+Normal and Hard modes share the following core tables, but each mode has its own database file.
 
 | Table | What it stores | Main connection |
 | --- | --- | --- |
@@ -51,15 +51,17 @@ Normal and Hard modes have the same table structure, but each mode has its own d
 | `RitualData` | Ritual completion state. | `SaveSystem.cs`, ritual scripts |
 | `NoteData` | Notes that have been read. | `SaveSystem.cs`, note scripts |
 | `GameStateData` | General named game-state values. | `SaveSystem.cs` and gameplay scripts |
-| `DroppedItemData` | Dropped item name, position, and rotation. | `SaveSystem.cs`, inventory/pickup scripts |
-| `FlashlightData` | Flashlight battery, held state, and dropped position. | `SaveSystem.cs`, `FlashlightPickup.cs` |
+| `DroppedItemData` | Dropped item name, held/dropped state, position, and rotation. It owns the world transform for dropped flashlight, battery, and ritual items. | `SaveSystem.cs`, inventory/pickup scripts |
+| `FlashlightData` | Flashlight battery, on/off state, and held state. | `SaveSystem.cs`, `FlashlightPickup.cs` |
 | `KeyData` | Used keys. | `SaveSystem.cs`, `Key.cs` |
-| `BatteryData` | Battery amount, used/held/dropped state, position, rotation. | `SaveSystem.cs`, `BatteryPickup.cs` |
-| `RitualItemData` | Candle, cross, Bible, and other ritual-item reveal/place/drop state. | `SaveSystem.cs`, ritual item scripts |
+| `BatteryData` | Battery recharge amount, used state, and held state. | `SaveSystem.cs`, `BatteryPickup.cs` |
+| `RitualItemData` | Candle, cross, Bible, and other ritual-item reveal and placed state. | `SaveSystem.cs`, ritual item scripts |
 | `StaminaData` | Current Hard-mode stamina. | `SaveSystem.cs`, `StaminaController.cs` |
 | `SubtitleData` | Whether one-time subtitles have already triggered. | `SaveSystem.cs`, subtitle trigger scripts |
 | `IntroData` | Story intro section, sentence, and completion state. | `SaveSystem.cs`, `StoryIntro.cs` |
 | `ProgressionData` | Current progress points and total points used for the load-panel percentage. | `SaveSystem.cs`, `ProgressionSystem.cs`, `MenuManager.cs` |
+
+Hard mode also creates `WrenchData`, `GasData`, and `GeneratorCoverData` for the Chapter 2 generator sequence.
 
 ## Save and load flow
 

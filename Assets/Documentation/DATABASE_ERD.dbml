@@ -1,10 +1,7 @@
 // VAREN Chapter 2 Hard save database ERD: gameSave_Hard_v2.db
 // Paste this file into https://dbdiagram.io to view the diagram.
-// Source: Assets/SaveSystem.cs
-//
-// Important: the SQLite database currently has no declared foreign keys.
-// The "logical relationship" notes in DATABASE_SCHEMA.md describe how
-// game systems match rows using names, IDs, and the current scene.
+// Source: Assets/SaveDatabaseSchema.cs and Assets/SaveModels.cs
+// Every game-state table references SaveProfileData.Id through SaveProfileId.
 
 Table SaveProfileData {
   Id integer [pk]
@@ -104,10 +101,6 @@ Table FlashlightData {
   CurrentBattery float
   IsOn boolean
   IsHeld boolean
-  WasDropped boolean
-  PosX float
-  PosY float
-  PosZ float
 }
 
 Table KeyData {
@@ -123,15 +116,7 @@ Table BatteryData {
   BatteryName varchar
   RechargeAmount float
   IsHeld boolean
-  IsDropped boolean
   IsUsed boolean
-  PosX float
-  PosY float
-  PosZ float
-  RotX float
-  RotY float
-  RotZ float
-  RotW float
 }
 
 Table RitualItemData {
@@ -140,14 +125,6 @@ Table RitualItemData {
   ItemName varchar
   IsRevealed boolean
   IsPlaced boolean
-  IsDropped boolean
-  PosX float
-  PosY float
-  PosZ float
-  RotX float
-  RotY float
-  RotZ float
-  RotW float
 }
 
 Table ProgressionData {
