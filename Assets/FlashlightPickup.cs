@@ -1,5 +1,6 @@
 // PURPOSE: Manages flashlight pickup, battery drain, beam behavior, and dropped or held state.
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FlashlightPickup : MonoBehaviour
 {
@@ -7,6 +8,12 @@ public class FlashlightPickup : MonoBehaviour
     [Header("Flashlight Settings")]
     public float batteryLife = 100f;
     public float drainRate = 2f;
+
+    [Header("Difficulty Battery Drain")]
+    [Tooltip("Makes this flashlight consume battery faster during Hard mode.")]
+    public bool drainFasterInHardMode = true;
+    [Tooltip("Multiplier applied to Drain Rate in Hard mode. 2 means the battery drains twice as fast.")]
+    [Min(1f)] public float hardModeDrainMultiplier = 2f;
 
     [Header("Light Settings")]
     [Tooltip("Maximum brightness of the flashlight beam when the battery is full.")]
@@ -111,7 +118,7 @@ public class FlashlightPickup : MonoBehaviour
         {
             if (currentBattery > 0f)
             {
-                currentBattery -= drainRate * Time.deltaTime;
+                currentBattery -= GetActiveDrainRate() * Time.deltaTime;
 
                 if (flashlight != null)
                 {
@@ -158,6 +165,18 @@ public class FlashlightPickup : MonoBehaviour
         float distancePercent = Mathf.Clamp01(hit.distance / dimmingDistance);
         return Mathf.Lerp(minimumNearObjectIntensity, 1f, distancePercent);
     }
+
+    private float GetActiveDrainRate()
+    {
+        // Chapter 2 is the Hard-mode scene. The PlayerPrefs check also supports
+        // loading a Hard-mode save before scene-specific objects finish starting.
+        bool isHardMode = SceneManager.GetActiveScene().name == "chapter 2" ||
+                          PlayerPrefs.GetString("GameDifficulty", "Normal") == "Hard";
+        return drainFasterInHardMode && isHardMode
+            ? drainRate * hardModeDrainMultiplier
+            : drainRate;
+    }
+
     void LateUpdate()
     {
         if (!isHeld || !aimBeamWithCamera || flashlight == null)

@@ -179,6 +179,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   batteryLife: 100
   drainRate: 0.6
+  drainFasterInHardMode: 1
+  hardModeDrainMultiplier: 2
   intensity: 800
   range: 220
   spotAngle: 58

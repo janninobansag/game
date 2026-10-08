@@ -1355,7 +1355,6 @@ MonoBehaviour:
   roamWaitMax: 5
   attackDamage: 25
   attackCooldown: 1.5
-  audioSource: {fileID: 0}
   chaseSound: {fileID: 8300000, guid: 47711bcc71bb3744baf71bab180d1cab, type: 3}
   chaseVolume: 1
   maxAudioDistance: 50
