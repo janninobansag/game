@@ -33,7 +33,8 @@ public class PauseMenu : MonoBehaviour
     [Header("Settings Values")]
     public float defaultVolume = 100f;
     public float defaultSensitivity = 2f;
-    public float defaultBrightness = 0.3f;
+    // Used only when the player has no saved brightness preference yet.
+    public float defaultBrightness = 0.5f;
 
     [Header("Hover Feedback")]
     public AudioClip hoverSound;

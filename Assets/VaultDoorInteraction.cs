@@ -213,8 +213,8 @@ public class VaultDoorInteraction : MonoBehaviour
 
         // A wrong PIN clears the input and briefly shows feedback.
         enteredPin = string.Empty;
-        pinFeedback = "Incorrect PIN";
-        pinFeedbackTimer = 1.5f;
+        pinFeedback = "Incorrect PIN. Look for the PIN in the Guide Book in the bedroom.";
+        pinFeedbackTimer = 3f;
     }
 
     private void OnGUI()
@@ -243,7 +243,7 @@ public class VaultDoorInteraction : MonoBehaviour
     {
         // Draw the PIN window in the centre of the screen.
         float width = Mathf.Min(420f, Screen.width - 40f);
-        Rect windowRect = new Rect((Screen.width - width) * 0.5f, Screen.height * 0.5f - 130f, width, 260f);
+        Rect windowRect = new Rect((Screen.width - width) * 0.5f, Screen.height * 0.5f - 145f, width, 290f);
         GUI.Box(windowRect, "Vault PIN");
         GUI.Label(new Rect(windowRect.x + 30f, windowRect.y + 55f, windowRect.width - 60f, 25f), "Enter the vault PIN", CenteredStyle(20, Color.white));
 
@@ -252,12 +252,16 @@ public class VaultDoorInteraction : MonoBehaviour
         GUI.FocusControl("VaultPinInput");
 
         if (!string.IsNullOrEmpty(pinFeedback))
-            GUI.Label(new Rect(windowRect.x + 30f, windowRect.y + 145f, windowRect.width - 60f, 25f), pinFeedback, CenteredStyle(18, Color.red));
+        {
+            GUIStyle feedbackStyle = CenteredStyle(18, Color.red);
+            feedbackStyle.wordWrap = true;
+            GUI.Label(new Rect(windowRect.x + 30f, windowRect.y + 145f, windowRect.width - 60f, 45f), pinFeedback, feedbackStyle);
+        }
 
-        bool submit = GUI.Button(new Rect(windowRect.x + 70f, windowRect.y + 185f, 125f, 38f), "Unlock") ||
+        bool submit = GUI.Button(new Rect(windowRect.x + 70f, windowRect.y + 205f, 125f, 38f), "Unlock") ||
                       (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return);
         if (submit) SubmitPin();
-        if (GUI.Button(new Rect(windowRect.xMax - 195f, windowRect.y + 185f, 125f, 38f), "Cancel")) ClosePinUi();
+        if (GUI.Button(new Rect(windowRect.xMax - 195f, windowRect.y + 205f, 125f, 38f), "Cancel")) ClosePinUi();
     }
 
     private static bool IsChildOf(Transform target, Transform parent)

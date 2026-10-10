@@ -906,6 +906,7 @@ public class SaveSystem : MonoBehaviour
             }
             // ── SAVE CHECKPOINT ──
             connection.DeleteAll<GameStateData>();
+            SavePathGuideProgress();
             if (CheckpointTrigger.HasCheckpointSaved)
             {
                 GameStateData checkpointData = new GameStateData
@@ -1177,6 +1178,39 @@ public class SaveSystem : MonoBehaviour
                pickup.gameObject.scene == SceneManager.GetActiveScene();
     }
 
+    private void SavePathGuideProgress()
+    {
+        foreach (PathGuideIndicator guide in Resources.FindObjectsOfTypeAll<PathGuideIndicator>())
+        {
+            if (guide == null || guide.gameObject.scene != SceneManager.GetActiveScene() ||
+                guide.gameObject.hideFlags != HideFlags.None)
+                continue;
+
+            connection.Insert(new GameStateData
+            {
+                Key = guide.SaveKey,
+                Value = guide.CurrentLocationIndex.ToString()
+            });
+        }
+    }
+
+    private void RestorePathGuideProgress()
+    {
+        foreach (PathGuideIndicator guide in Resources.FindObjectsOfTypeAll<PathGuideIndicator>())
+        {
+            if (guide == null || guide.gameObject.scene != SceneManager.GetActiveScene() ||
+                guide.gameObject.hideFlags != HideFlags.None)
+                continue;
+
+            GameStateData savedProgress = connection.Table<GameStateData>()
+                .Where(state => state.Key == guide.SaveKey)
+                .FirstOrDefault();
+
+            if (savedProgress != null && int.TryParse(savedProgress.Value, out int savedIndex))
+                guide.RestoreProgress(savedIndex);
+        }
+    }
+
     private void SaveGasState()
     {
         connection.DeleteAll<GasData>();
@@ -1417,6 +1451,7 @@ public class SaveSystem : MonoBehaviour
                 stamina.RestoreStamina(staminaData.CurrentStamina);
 
             RestoreAIPositions();
+            RestorePathGuideProgress();
             if (IsHardModeDatabase())
             {
                 RestoreWrenchState();

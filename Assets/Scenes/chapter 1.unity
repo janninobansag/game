@@ -15,7 +15,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.06
@@ -2258,7 +2258,7 @@ MonoBehaviour:
   brightnessLabel: {fileID: 7897772492875046256}
   defaultVolume: 100
   defaultSensitivity: 2
-  defaultBrightness: 0.3
+  defaultBrightness: 0.5
   hoverSound: {fileID: 0}
   hoverVolume: 0.6
   isPaused: 0
@@ -10888,6 +10888,7 @@ MonoBehaviour:
   subtitleText: "\u201CA ritual\u2026 to keep something trapped?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: b86fd83423184c479d872765a6fcc070
 --- !u!114 &724227466
 MonoBehaviour:
@@ -11659,7 +11660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 1426200869}
+  m_Material: {fileID: 1964602097}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -13900,7 +13901,7 @@ MonoBehaviour:
   settingsBackButton: {fileID: 2895680616968182349}
   defaultVolume: 100
   defaultSensitivity: 2
-  defaultBrightness: 0.3
+  defaultBrightness: 0.5
   defaultQuality: 2
   currentVolume: 0
   currentSensitivity: 0
@@ -21075,6 +21076,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &1420467416
 MonoBehaviour:
@@ -21229,45 +21231,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1421010670}
   m_Mesh: {fileID: 4300014, guid: fb4b189d2629f3341a839074d8cff2da, type: 3}
---- !u!21 &1426200869
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &1430427484
 GameObject:
   m_ObjectHideFlags: 0
@@ -22336,6 +22299,7 @@ MonoBehaviour:
   storyIntro: {fileID: 0}
   player: {fileID: 5057019129688464930}
   playerTag: Player
+  saveId: 
   currentLocationIndex: 0
 --- !u!1 &1550656583
 GameObject:
@@ -27464,6 +27428,7 @@ MonoBehaviour:
   subtitleText: "It\u2019s not in the church anymore\u2026"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: dbaeb89492984f4292e9f50be57c38e1
 --- !u!114 &1853023355
 MonoBehaviour:
@@ -27558,7 +27523,7 @@ Transform:
   m_GameObject: {fileID: 1856482164}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.14, y: -1.37, z: -3.01}
+  m_LocalPosition: {x: -0.84, y: -1.37, z: -0.341}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -29327,6 +29292,45 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1187089298}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &1964602097
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1971267262
 GameObject:
   m_ObjectHideFlags: 0
@@ -53111,6 +53115,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: c2cab7cfb1ff41db9a66df281823068f
 --- !u!4 &7770078832008455148
 Transform:

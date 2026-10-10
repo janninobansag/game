@@ -76,6 +76,8 @@ Table GameStateData {
   SaveProfileId integer [not null]
   Key varchar
   Value varchar
+
+  Note: 'General key/value state. Path-guide progress uses Key = PathGuide:<guide-id> and Value = waypoint index.'
 }
 
 Table DroppedItemData {
