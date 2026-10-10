@@ -36,7 +36,7 @@ SQLite booleans are stored as `0` (false) or `1` (true). All player-save tables 
 | `DrawerData` | `Id`, `SaveProfileId`, `DrawerId`, `DrawerName`, `IsOpen`, `LocalPosX/Y/Z` | Stable drawer id, state, and local position. |
 | `RitualData` | `Id`, `SaveProfileId`, `IsComplete` | Whether the Varen ritual is complete. |
 | `NoteData` | `Id`, `SaveProfileId`, `NoteTitle`, `IsRead` | Note identifier and read state. |
-| `GameStateData` | `Id`, `SaveProfileId`, `Key`, `Value` | General named gameplay state; `Value` is text. |
+| `GameStateData` | `Id`, `SaveProfileId`, `Key`, `Value` | General named gameplay state; `Value` is text. Path-guide progress uses `Key = PathGuide:<guide-id>` and stores the current waypoint index in `Value`. |
 | `DroppedItemData` | `Id`, `SaveProfileId`, `ItemName`, `IsHeld`, `IsDropped`, `PosX/Y/Z`, `RotX/Y/Z/W` | Generic dropped-item state and transform, including dropped flashlights, batteries, and ritual items. |
 | `FlashlightData` | `Id`, `SaveProfileId`, `FlashlightName`, `BatteryLife`, `CurrentBattery`, `IsOn`, `IsHeld` | Flashlight charge, on/off state, and held state. Its dropped transform is stored in `DroppedItemData`. |
 | `KeyData` | `Id`, `SaveProfileId`, `KeyName`, `WasUsed` | Key identifier and consumed/unlocked state. |

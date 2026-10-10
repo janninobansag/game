@@ -1,6 +1,7 @@
 // PURPOSE: Guides the player through ordered waypoint children using a screen-edge arrow.
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PathGuideIndicator : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class PathGuideIndicator : MonoBehaviour
     public string playerTag = "Player";
 
     [Header("Progress")]
+    [Tooltip("Optional unique ID for saving this guide's progress. Leave empty to use its scene hierarchy path.")]
+    public string saveId;
     [SerializeField] private int currentLocationIndex;
 
     private Camera playerCamera;
@@ -52,6 +55,12 @@ public class PathGuideIndicator : MonoBehaviour
             return location;
         }
     }
+
+    /// <summary>Waypoint number currently selected by this guide, including the completed state.</summary>
+    public int CurrentLocationIndex => currentLocationIndex;
+
+    /// <summary>Unique key used by SaveSystem to store this guide's progress.</summary>
+    public string SaveKey => "PathGuide:" + GetSaveId();
 
     private void Awake()
     {
@@ -103,6 +112,23 @@ public class PathGuideIndicator : MonoBehaviour
         currentLocationIndex = index;
     }
 
+    /// <summary>Restores a saved waypoint number. An index equal to the waypoint count means the guide was completed.</summary>
+    public void RestoreProgress(int savedIndex)
+    {
+        RefreshChildLocations();
+        int locationCount = indicatorLocations == null ? 0 : indicatorLocations.Length;
+        currentLocationIndex = Mathf.Clamp(savedIndex, 0, locationCount);
+
+        // The guide could only have pointed at an active waypoint when the game
+        // was saved. Restore that target's visibility before drawing the arrow.
+        if (onlyGuideActiveLocations && currentLocationIndex < locationCount)
+        {
+            Transform savedLocation = indicatorLocations[currentLocationIndex];
+            if (savedLocation != null)
+                savedLocation.gameObject.SetActive(true);
+        }
+    }
+
     public void AdvanceToNextLocation()
     {
         if (indicatorLocations == null || indicatorLocations.Length == 0)
@@ -136,6 +162,22 @@ public class PathGuideIndicator : MonoBehaviour
 
         FindStoryIntroIfNeeded();
         return storyIntro != null && storyIntro.IsIntroActive;
+    }
+
+    private string GetSaveId()
+    {
+        if (!string.IsNullOrWhiteSpace(saveId))
+            return saveId.Trim();
+
+        string path = SceneManager.GetActiveScene().name;
+        Transform current = transform;
+        while (current != null)
+        {
+            path += "/" + current.name + "[" + current.GetSiblingIndex() + "]";
+            current = current.parent;
+        }
+
+        return path;
     }
 
     private void OnGUI()

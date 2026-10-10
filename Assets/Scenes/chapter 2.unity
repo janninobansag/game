@@ -15,7 +15,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.06
@@ -2259,6 +2259,45 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144031906}
   m_Mesh: {fileID: -9110627038371529689, guid: b176645ce344e2e4982fbfb9558e664c, type: 3}
+--- !u!21 &147032384
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &150461055
 GameObject:
   m_ObjectHideFlags: 0
@@ -2750,7 +2789,7 @@ MonoBehaviour:
   brightnessLabel: {fileID: 7897772492875046256}
   defaultVolume: 100
   defaultSensitivity: 2
-  defaultBrightness: 0.3
+  defaultBrightness: 0.5
   hoverSound: {fileID: 0}
   hoverVolume: 0.6
   isPaused: 0
@@ -3463,6 +3502,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1239852370935010581, guid: 182e0ac605003ba498d5b184e0fd310b,
+        type: 3}
+      propertyPath: mapSystem
+      value: 
+      objectReference: {fileID: 8145964823572664760}
     - target: {fileID: 2449164712783654663, guid: 182e0ac605003ba498d5b184e0fd310b,
         type: 3}
       propertyPath: m_Name
@@ -11136,6 +11180,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &600959573
 MonoBehaviour:
@@ -12294,37 +12339,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 649981106}
   m_Enabled: 1
---- !u!1 &665426354
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 665426355}
-  m_Layer: 0
-  m_Name: flashlight spawner (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &665426355
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665426354}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.733, y: 3.292, z: -0.528}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8279296265341740042}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &668612057
 GameObject:
   m_ObjectHideFlags: 0
@@ -13242,6 +13256,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &693130703
 MonoBehaviour:
@@ -13510,124 +13525,6 @@ Transform:
   - {fileID: 779613338}
   - {fileID: 1374211057}
   - {fileID: 2052273202}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &699640800
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 699640803}
-  - component: {fileID: 699640802}
-  - component: {fileID: 699640801}
-  m_Layer: 0
-  m_Name: Point Light (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!114 &699640801
-MonoBehaviour:
-  m_ObjectHideFlags: 64
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699640800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 3
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_RenderingLayers: 1
-  m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_ShadowRenderingLayers: 1
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
-  m_SoftShadowQuality: 0
---- !u!108 &699640802
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699640800}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 3.16
-  m_Range: 19.6
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 2
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
---- !u!4 &699640803
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699640800}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 130.15, y: 4.48, z: -28.99}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &707259313
@@ -13987,6 +13884,7 @@ MonoBehaviour:
   subtitleText: "\u201CA ritual\u2026 to keep something trapped?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: b86fd83423184c479d872765a6fcc070
 --- !u!1001 &732308554
 PrefabInstance:
@@ -15058,7 +14956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 1615742470}
+  m_Material: {fileID: 147032384}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -15446,6 +15344,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &779613341
 MonoBehaviour:
@@ -15986,6 +15885,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &791827509
 MonoBehaviour:
@@ -17014,6 +16914,9 @@ MonoBehaviour:
       type: 3}
   - itemName: Vault Key
     prefab: {fileID: 6157018419477816363, guid: c4ac5d2e1673b9c4a953f4f23e0cc682,
+      type: 3}
+  - itemName: Kids Bedroom Key
+    prefab: {fileID: 2386884328121894393, guid: f88a12fe781e68b499212078d103e971,
       type: 3}
   keyPrefab: {fileID: 1094395432253410215, guid: 5e4af3db781c4b04ebf4e1935992268c,
     type: 3}
@@ -19275,7 +19178,7 @@ MonoBehaviour:
   settingsBackButton: {fileID: 2895680616968182349}
   defaultVolume: 100
   defaultSensitivity: 2
-  defaultBrightness: 0.3
+  defaultBrightness: 0.5
   defaultQuality: 2
   currentVolume: 0
   currentSensitivity: 0
@@ -20249,6 +20152,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &940752240
 MonoBehaviour:
@@ -24606,37 +24510,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &1078302546
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1078302547}
-  m_Layer: 0
-  m_Name: flashlight spawner (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1078302547
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078302546}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.541, y: -2.483, z: 0.05}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8279296265341740042}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1082813434
 GameObject:
   m_ObjectHideFlags: 0
@@ -24864,37 +24737,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085240036}
   m_Mesh: {fileID: 4300002, guid: 74bd41a0048b70a4b95cc80f58fbd457, type: 3}
---- !u!1 &1088801288
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1088801289}
-  m_Layer: 0
-  m_Name: flashlight spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1088801289
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1088801288}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.547, y: 0.804, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8279296265341740042}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1092079924
 GameObject:
   m_ObjectHideFlags: 0
@@ -27897,6 +27739,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &1214425011
 MonoBehaviour:
@@ -30006,6 +29849,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &1374211060
 MonoBehaviour:
@@ -31135,6 +30979,7 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &1420467416
 MonoBehaviour:
@@ -35587,45 +35432,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608176856}
   m_Mesh: {fileID: 4300000, guid: fb4b189d2629f3341a839074d8cff2da, type: 3}
---- !u!21 &1615742470
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &1617481929
 GameObject:
   m_ObjectHideFlags: 0
@@ -40152,6 +39958,7 @@ MonoBehaviour:
   subtitleText: "It\u2019s not in the church anymore\u2026"
   displayDuration: 4
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: dbaeb89492984f4292e9f50be57c38e1
 --- !u!114 &1853023355
 MonoBehaviour:
@@ -58827,7 +58634,7 @@ Transform:
   m_GameObject: {fileID: 4950782034116501097}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50.46, y: 0.23, z: -33.38}
+  m_LocalPosition: {x: 81.84, y: 0.23, z: -7.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -63217,155 +63024,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3647245947052544171}
   m_Mesh: {fileID: 4300002, guid: fb4b189d2629f3341a839074d8cff2da, type: 3}
---- !u!65 &1068172881156629344
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068172881162811232}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.0037348, y: 4.484176, z: 0.2143895}
-  m_Center: {x: -0.47708073, y: 2.242088, z: -0.003078077}
---- !u!23 &1068172881160772740
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068172881162811232}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 7a8d6bb394f243445b9377162ba792a8, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1068172881161768588
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068172881162811232}
-  m_Mesh: {fileID: 4300002, guid: 18b3a5bc912e52242b16bd2f42d6407b, type: 3}
---- !u!1 &1068172881162811232
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1068172881163060896}
-  - component: {fileID: 1068172881161768588}
-  - component: {fileID: 1068172881160772740}
-  - component: {fileID: 1068172881156629344}
-  - component: {fileID: 1068172881163060897}
-  - component: {fileID: 1068172881163060898}
-  m_Layer: 0
-  m_Name: Villa2_Door_A (11)
-  m_TagString: Door
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1068172881163060896
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068172881162811232}
-  serializedVersion: 2
-  m_LocalRotation: {x: -4.0308273e-10, y: 0.99982995, z: -0.000000021852028, w: -0.018442316}
-  m_LocalPosition: {x: 22.996826, y: 15.055531, z: 1.8857422}
-  m_LocalScale: {x: -1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5772290061149685357}
-  m_LocalEulerAnglesHint: {x: 0, y: -177.887, z: 0}
---- !u!114 &1068172881163060897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068172881162811232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
-  closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
-  doorVolume: 1
-  openAngle: 90
-  animationSpeed: 2
-  invertDirection: 0
-  isLocked: 0
-  linkedDoor: {fileID: 0}
-  raycastRange: 3
-  interactKey: 101
-  doorTag: Door
-  interactionEnabled: 1
-  lockedDoorText: This door is locked!
-  lockedPromptDuration: 2
---- !u!208 &1068172881163060898
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068172881162811232}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.50200003, y: 2.242, z: 0.10700001}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: -0.47700003, y: 2.242, z: -0.003}
-  m_TimeToStationary: 0.5
 --- !u!4 &1069031268202983120
 Transform:
   m_ObjectHideFlags: 0
@@ -81685,6 +81343,23 @@ Transform:
   - {fileID: 3264173369785404035}
   m_Father: {fileID: 348911852}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1996923008814209259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090228783265145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  subtitleText: "They were trying to keep people out\u2026 why?"
+  displayDuration: 4
+  delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
+  subtitleId: c2cab7cfb1ff41db9a66df281823068f
 --- !u!33 &1997504181497621784
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -90365,6 +90040,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300020, guid: fb4b189d2629f3341a839074d8cff2da, type: 3}
+--- !u!114 &2476240436264701637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090228783265145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveTriggerToActivate: {fileID: 0}
+  itemName: paper 2
+  disableAfterActivation: 1
 --- !u!1 &2487009832975370061
 GameObject:
   m_ObjectHideFlags: 0
@@ -96040,7 +95730,7 @@ Transform:
   m_GameObject: {fileID: 8841746530532243556}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 106.842, y: 5.049, z: -62.041}
+  m_LocalPosition: {x: 106.35, y: 5.07, z: -62.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -100809,6 +100499,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4441812937781138099}
   m_Mesh: {fileID: 4300026, guid: fb4b189d2629f3341a839074d8cff2da, type: 3}
+--- !u!4 &3037004298395203652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090228783265145}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.0028869852, y: 0.0043707625, z: -0.70709324, w: 0.70710087}
+  m_LocalPosition: {x: 110.92376, y: 4.711, z: -55.678318}
+  m_LocalScale: {x: 34.48608, y: 12.348559, z: 19.435661}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0.588, y: 0.12, z: -89.999}
 --- !u!4 &3040218900481488605
 Transform:
   m_ObjectHideFlags: 0
@@ -102716,6 +102421,14 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.0000024, y: 4, z: 0.79480267}
   m_Center: {x: 1.9999988, y: 2, z: 0.016331732}
+--- !u!33 &3153324074916096224
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090228783265145}
+  m_Mesh: {fileID: -5495902117074765545, guid: 6b05690141d4fc242b1e5587163098a3, type: 3}
 --- !u!23 &3153834713995550022
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -109866,6 +109579,74 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.99999547, y: 6, z: 1.0000002}
   m_Center: {x: 0.0000038146973, y: 3, z: -0.00000014901161}
+--- !u!1001 &3451442837036532501
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2386884328121894393, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_Name
+      value: Kids Bedroom Key
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 63.375
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.264
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -43.977
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.790302
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.61271757
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 75.573
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152989773609087386, guid: f88a12fe781e68b499212078d103e971,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f88a12fe781e68b499212078d103e971, type: 3}
 --- !u!23 &3454869885745768121
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -119999,6 +119780,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
+--- !u!1 &4026090228783265145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3037004298395203652}
+  - component: {fileID: 3153324074916096224}
+  - component: {fileID: 8562297818519626384}
+  - component: {fileID: 8318236937151173340}
+  - component: {fileID: 4202533512094519000}
+  - component: {fileID: 1996923008814209259}
+  - component: {fileID: 2476240436264701637}
+  - component: {fileID: 4992287420617991585}
+  m_Layer: 0
+  m_Name: Journal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &4038045236534592973
 GameObject:
   m_ObjectHideFlags: 0
@@ -122470,6 +122274,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &4202533512094519000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090228783265145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
+  highlightRange: 3
+  pulseSpeed: 2
+  pulseMinIntensity: 0.3
+  pulseMaxIntensity: 1.2
+  outlineWidth: 1.03
 --- !u!33 &4204898176485011302
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -125503,7 +125325,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 2.0725638e-10, y: 0.99995506, z: -0.000000021854744, w: 0.009482771}
   m_LocalPosition: {x: 21.03778, y: 15.055531, z: 1.8857422}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.0588, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5772290061149685357}
@@ -125576,13 +125398,13 @@ MonoBehaviour:
   openAngle: 90
   animationSpeed: 2
   invertDirection: 1
-  isLocked: 0
+  isLocked: 1
   linkedDoor: {fileID: 0}
   raycastRange: 3
   interactKey: 101
   doorTag: Door
   interactionEnabled: 1
-  lockedDoorText: This door is locked!
+  lockedDoorText: This door is locked find kids bedroom key!
   lockedPromptDuration: 2
 --- !u!208 &4333923618576770796
 NavMeshObstacle:
@@ -136383,6 +136205,77 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: c386420031e9c484182f7920f158c313, type: 3}
+--- !u!114 &4992287420617991585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090228783265145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 310abf78a239ef44b9edb9c10961fbaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bookTitle: Guide Book
+  readRange: 2
+  readKey: 101
+  nextPageKey: 101
+  prevPageKey: 113
+  pages:
+  - 'Always look for the Flashlight and save the battery because flashlight is your
+    bestfriend here.
+
+
+    Becarful of the tikbalang, never look to the tikbalang
+    and use the flashlight to make the Tikbalang disappear.
+
+
+    And one more thing,
+    remember this PIN because you will use it for sure: 1234
+
+'
+  - "White Lady\n\nDid you know? \n\nThe White Lady is one of the Philippines\u2019
+    best-known urban legends. She is often described as a woman in a white dress
+    who appears at night on empty roads.\n\nOne famous version is linked to Balete
+    Drive in Quezon City, where drivers tell stories of seeing a woman appear beside
+    the road, in a taxi, or in a rearview mirror. The story has many versions because
+    it has been retold for generations."
+  - "Tikbalang Trivia\n\nDid you know?\nIn Philippine folklore, a Tikbalang is often
+    described as a tall creature with the head and hooves of a horse. It is said
+    to live in forests, mountains, bamboo groves, and lonely roads, where it confuses
+    travelers and makes them lose their way.  \n\nSome Filipinos also say that when
+    rain falls while the sun is shining, a Tikbalang is getting married: \u201CMay
+    kinakasal na tikbalang.\u201D  \n\nTikbalang stories vary by region and family,
+    which shows how Philippine folklore is passed from one generation to another."
+  - "Manananggal\n\nDid you know? \n\n\nThe Manananggal is a creature from Philippine
+    folklore, especially well known in Visayan stories. Its name comes from a word
+    connected with separating or detaching.\n\nFolklore often describes it as a person
+    who separates its upper body from its lower body at night, grows wings, and flies
+    away to hunt. Stories about the Manananggal differ between regions."
+  - "Tiyanak\n\nDid you know? \n\nThe Tiyanak, sometimes called Tsanak, is a creature
+    in Philippine folklore that is often said to imitate the cry of a baby.\n\nIn
+    many stories, the crying sound leads travelers deeper into the forest or away
+    from a safe path. The legend teaches listeners to be careful when traveling alone
+    at night."
+  - "Kapre\n\nDid you know? \n\nThe Kapre is a giant, dark, tree-dwelling being in
+    Philippine folklore. It is often described as having red eyes and smoking a large
+    cigar.\n\nStories say that a Kapre may live in large old trees, especially balete
+    trees. It is known for playing tricks on travelers by making them lose their
+    way in the forest. Some stories describe the smell of smoke as a sign that a
+    Kapre may be nearby."
+  pageTitles:
+  - Guide Book
+  - page 2
+  - page 3
+  - page 4
+  - page 5
+  - page 6
+  pageFlipSound: {fileID: 0}
+  openBookSound: {fileID: 0}
+  closeBookSound: {fileID: 0}
+  soundVolume: 0.7
+  playerTag: Player
 --- !u!64 &4992816226958942591
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -149928,7 +149821,6 @@ Transform:
   - {fileID: 4038045236534947037}
   - {fileID: 664176201047484723}
   - {fileID: 6735896815671961705}
-  - {fileID: 1068172881163060896}
   - {fileID: 367695588102359721}
   - {fileID: 6509171319169812299}
   - {fileID: 7736519184721513542}
@@ -177183,7 +177075,6 @@ GameObject:
   - component: {fileID: 7925347515215838155}
   - component: {fileID: 6239700864527793579}
   - component: {fileID: 7801194456072695206}
-  - component: {fileID: 8279296265341740043}
   m_Layer: 0
   m_Name: Flashlight
   m_TagString: Pickup
@@ -185350,6 +185241,7 @@ MonoBehaviour:
   subtitleText: "Good\u2026 I'll need this."
   displayDuration: 2.81
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: :0:Flashlight
 --- !u!4 &7801446258976117063
 Transform:
@@ -192012,7 +191904,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapKey: 109
-  mapTexture: {fileID: 2800000, guid: 320419df18eacb44a9fd4a0ba9e68baa, type: 3}
+  mapTexture: {fileID: 2800000, guid: c42bfc997248e4d46ae41b9e05d5e8b2, type: 3}
   mapStartsUnlocked: 0
   hasMap: 0
   worldMinX: -29.8
@@ -193867,35 +193759,13 @@ Transform:
   m_GameObject: {fileID: 7267319070965894106}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6762262, y: -0.20668371, z: -0.2066838, w: 0.6762262}
-  m_LocalPosition: {x: 93.47, y: 5.28, z: -50.82}
+  m_LocalPosition: {x: 110.53, y: 4.704, z: -55.398}
   m_LocalScale: {x: 1.68, y: 1.5843, z: 2.19}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2088891192237191068}
-  - {fileID: 1088801289}
-  - {fileID: 1078302547}
-  - {fileID: 665426355}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: -33.991}
---- !u!114 &8279296265341740043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7267319070965894106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a99253e711cd28347a447a57a4ac6772, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnPoints:
-  - {fileID: 1088801289}
-  - {fileID: 1078302547}
-  - {fileID: 665426355}
-  saveKey: FlashlightSpawnIndex
-  useSpawnRotation: 1
-  logSpawnChoice: 1
 --- !u!64 &8286890177962607829
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -194500,6 +194370,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &8318236937151173340
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090228783265145}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0015920353, y: 0.014019005, z: 0.01539171}
+  m_Center: {x: 0, y: 0.000038286435, z: 0.000050683033}
 --- !u!4 &8319337529383960290
 Transform:
   m_ObjectHideFlags: 0
@@ -199188,6 +199079,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5772290061149685357}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &8562297818519626384
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026090228783265145}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 3b47fd571a88fc241bcb274cd5c8f8dc, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &8564024248631521756
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -210573,7 +210506,6 @@ SceneRoots:
   - {fileID: 604958784}
   - {fileID: 20335620}
   - {fileID: 31595577}
-  - {fileID: 699640803}
   - {fileID: 841853680}
   - {fileID: 348911852}
   - {fileID: 1782226980}
@@ -210584,6 +210516,7 @@ SceneRoots:
   - {fileID: 181489456371736314}
   - {fileID: 7463298445594875322}
   - {fileID: 357320044}
+  - {fileID: 3451442837036532501}
   - {fileID: 4018231007467276808}
   - {fileID: 749444251}
   - {fileID: 543450653642214541}
@@ -210606,4 +210539,5 @@ SceneRoots:
   - {fileID: 1688556244}
   - {fileID: 2074501021}
   - {fileID: 191644020}
+  - {fileID: 3037004298395203652}
   - {fileID: 379645407}

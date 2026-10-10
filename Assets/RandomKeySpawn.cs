@@ -14,11 +14,19 @@ public class RandomKeySpawn : MonoBehaviour
     public string saveKey = "MansionKeySpawnIndex";
     public bool useSpawnRotation = true;
 
+    [Header("Testing")]
+    [Tooltip("When checked, the key stays at its scene position and does not choose a random spawn point.")]
+    public bool disableRandomSpawn;
+
     [Header("Debug")]
     public bool logSpawnChoice = true;
 
     private void Awake()
     {
+        // Enable Disable Random Spawn in the Inspector to keep the key at its placed scene position while testing.
+        if (disableRandomSpawn)
+            return;
+
         // Place this key using its saved choice, or create and save a new random choice.
         PlaceAtSavedOrRandomSpawn();
     }

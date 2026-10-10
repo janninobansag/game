@@ -85,7 +85,6 @@ public class Inventory : MonoBehaviour
         if (fp != null)
         {
             fp.SetHeld(held);
-            Debug.Log($"[Inventory] Flashlight {(held ? "equipped" : "unequipped")}: {item.name}", item);
         }
 
         BatteryUse bu = item.GetComponent<BatteryUse>();
