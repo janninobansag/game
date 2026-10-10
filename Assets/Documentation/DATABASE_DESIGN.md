@@ -71,7 +71,7 @@ SaveProfileData (parent)
 | `IntroData` | `Id` | Current intro section, line, and completion state. |
 | `AIPositionData` | `Id` | AI identity, scene, and saved transform. |
 | `StaminaData` | `Id` | Current player stamina for Hard mode. |
-| `GameStateData` | `Id` | Named state values for gameplay that does not need its own fixed table. |
+| `GameStateData` | `Id` | Named state values for gameplay that does not need its own fixed table, including the saved path-guide waypoint. |
 
 ## 5. Hard-mode Entities
 
@@ -137,7 +137,7 @@ Player selects Load Game
 | [Database Schema](DATABASE_SCHEMA.md) | Detailed field-level schema reference. |
 | [Logical Relationships](DATABASE_LOGICAL_RELATIONSHIPS.md) | Explanation of how Unity scene object IDs match saved rows. |
 | [Normal Mode ERD](CHAPTER_1_DATABASE_ERD.dbml) | DBML source for the Normal-mode relational diagram. |
-| [Hard Mode ERD](DATABASE_ERD.dbml) | DBML source for the Hard-mode relational diagram. |
+| [Hard Mode ERD](CHAPTER_2_DATABASE_ERD.dbml) | DBML source for the Hard-mode relational diagram. |
 | [Settings ERD](SETTINGS_DATABASE_ERD.dbml) | DBML source for the settings database diagram. |
 
 ## 11. Scope and Future Expansion

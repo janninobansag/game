@@ -6,7 +6,7 @@ Table SettingsData {
   Id integer [pk, note: 'Always saved as 1; the game stores one settings row']
   Volume float
   Sensitivity float
-  Brightness float
+  Brightness float [note: 'Normalized brightness. First-time players start at 0.5 (50%).']
   QualityLevel integer
   Language integer
 }

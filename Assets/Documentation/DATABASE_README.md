@@ -50,7 +50,7 @@ Normal and Hard modes share the following core tables, but each mode has its own
 | `DrawerData` | Drawer identity, open/closed state, and exact local position. `SaveProfileId` is a foreign key to `SaveProfileData.Id`; `DrawerId` identifies the matching Unity drawer object. | `SaveSystem.cs`, `DrawerInteraction.cs` |
 | `RitualData` | Ritual completion state. | `SaveSystem.cs`, ritual scripts |
 | `NoteData` | Notes that have been read. | `SaveSystem.cs`, note scripts |
-| `GameStateData` | General named game-state values. | `SaveSystem.cs` and gameplay scripts |
+| `GameStateData` | General named game-state values. Includes `PathGuide:<guide-id>` records whose value is the current path-guide waypoint index. | `SaveSystem.cs`, `PathGuideIndicator.cs`, and gameplay scripts |
 | `DroppedItemData` | Dropped item name, held/dropped state, position, and rotation. It owns the world transform for dropped flashlight, battery, and ritual items. | `SaveSystem.cs`, inventory/pickup scripts |
 | `FlashlightData` | Flashlight battery, on/off state, and held state. | `SaveSystem.cs`, `FlashlightPickup.cs` |
 | `KeyData` | Used keys. | `SaveSystem.cs`, `Key.cs` |

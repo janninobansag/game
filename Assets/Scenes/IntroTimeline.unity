@@ -1244,7 +1244,7 @@ MonoBehaviour:
   brightnessLabel: {fileID: 7897772492875046256}
   defaultVolume: 100
   defaultSensitivity: 2
-  defaultBrightness: 0.3
+  defaultBrightness: 0.5
   isPaused: 0
 --- !u!4 &173129282
 Transform:
@@ -9282,7 +9282,7 @@ MonoBehaviour:
   settingsBackButton: {fileID: 2895680616968182349}
   defaultVolume: 100
   defaultSensitivity: 2
-  defaultBrightness: 0.3
+  defaultBrightness: 0.5
   defaultQuality: 2
   currentVolume: 0
   currentSensitivity: 0

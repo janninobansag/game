@@ -11,7 +11,7 @@ which save database you want to view:
 | Database file | Game mode / purpose | ERD source |
 | --- | --- | --- |
 | `gameSave_v2.db` | Chapter 1 Normal | [CHAPTER_1_DATABASE_ERD.dbml](CHAPTER_1_DATABASE_ERD.dbml) |
-| `gameSave_Hard_v2.db` | Chapter 2 Hard | [DATABASE_ERD.dbml](DATABASE_ERD.dbml) |
+| `gameSave_Hard_v2.db` | Chapter 2 Hard | [CHAPTER_2_DATABASE_ERD.dbml](CHAPTER_2_DATABASE_ERD.dbml) |
 | `settings.db` | Menu and player settings | [SETTINGS_DATABASE_ERD.dbml](SETTINGS_DATABASE_ERD.dbml) |
 
 ## Scope
@@ -27,7 +27,7 @@ following tables exist in both modes:
 | Drawer open state and local position | `DrawerData` |
 | Ritual completion | `RitualData` |
 | Notes read by the player | `NoteData` |
-| General key/value state | `GameStateData` |
+| General key/value state, including the active path-guide waypoint | `GameStateData` |
 | Generic dropped items | `DroppedItemData` |
 | Flashlight state | `FlashlightData` |
 | Used keys | `KeyData` |

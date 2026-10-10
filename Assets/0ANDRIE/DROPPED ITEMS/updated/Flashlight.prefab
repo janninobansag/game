@@ -248,6 +248,7 @@ MonoBehaviour:
   subtitleText: "Good\u2026 I'll need this."
   displayDuration: 2.81
   delayBeforeShow: 0.5
+  logPickupSubtitleDebug: 1
   subtitleId: :0:Flashlight
 --- !u!1 &6720801816340489328
 GameObject:
