@@ -25,6 +25,9 @@ public class BagUI : MonoBehaviour
     [SerializeField] private int displayedCapacity = -1;
     private const int CurrentLayoutVersion = 9;
     [SerializeField] private int builtLayoutVersion = -1;
+    private readonly List<int> displayedItemIds = new List<int>();
+    private int displayedItemCount = -1;
+    private int displayedSelectedIndex = int.MinValue;
 
     void OnEnable()
     {
@@ -34,13 +37,37 @@ public class BagUI : MonoBehaviour
 
     void Update()
     {
-        if (Inventory.Instance == null) return;
-        Inventory.Instance.CleanupNullItems();
+        Inventory inventory = Inventory.Instance;
+        if (inventory == null) return;
+        inventory.CleanupNullItems();
 
-        int max = Inventory.Instance.GetMax();
+        int max = inventory.GetMax();
         if (panel == null || displayedCapacity != max || builtLayoutVersion != CurrentLayoutVersion) CreatePanel(max);
         EnsureEquippedItemNameUi();
-        Refresh();
+        if (NeedsRefresh(inventory))
+            Refresh(inventory);
+    }
+
+    // Avoids rebuilding Canvas meshes and preview RenderTextures when the inventory
+    // has not changed since the previous frame.
+    private bool NeedsRefresh(Inventory inventory)
+    {
+        int count = inventory.GetCount();
+        int selected = inventory.GetSelectedIndex();
+        List<GameObject> items = inventory.GetItems();
+        if (count != displayedItemCount || selected != displayedSelectedIndex ||
+            displayedItemIds.Count != slotTexts.Count)
+            return true;
+
+        for (int i = 0; i < slotTexts.Count; i++)
+        {
+            GameObject item = i < items.Count ? items[i] : null;
+            int itemId = item != null ? item.GetInstanceID() : 0;
+            if (displayedItemIds[i] != itemId)
+                return true;
+        }
+
+        return false;
     }
 
     private void CreatePanel(int max)
@@ -113,13 +140,13 @@ public class BagUI : MonoBehaviour
         hintText = null;
     }
 
-    private void Refresh()
+    private void Refresh(Inventory inventory)
     {
         // Copy the current Inventory contents into the visible bag slots.
-        int count = Inventory.Instance.GetCount();
-        int max = Inventory.Instance.GetMax();
-        int selected = Inventory.Instance.GetSelectedIndex();
-        List<GameObject> items = Inventory.Instance.GetItems();
+        int count = inventory.GetCount();
+        int max = inventory.GetMax();
+        int selected = inventory.GetSelectedIndex();
+        List<GameObject> items = inventory.GetItems();
 
         RefreshEquippedItemName(items, selected);
 
@@ -162,6 +189,15 @@ public class BagUI : MonoBehaviour
             slotTexts[i].gameObject.SetActive(false);
             slotTexts[i].text = slotText;
             slotTexts[i].color = Color.white;
+        }
+
+        displayedItemCount = count;
+        displayedSelectedIndex = selected;
+        displayedItemIds.Clear();
+        for (int i = 0; i < slotTexts.Count; i++)
+        {
+            GameObject item = i < items.Count ? items[i] : null;
+            displayedItemIds.Add(item != null ? item.GetInstanceID() : 0);
         }
     }
 

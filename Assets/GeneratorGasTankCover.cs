@@ -18,6 +18,10 @@ public class GeneratorGasTankCover : MonoBehaviour
     [Min(0.1f)] public float interactRange = 2.5f;
     [Min(0.1f)] public float holdDuration = 2f;
 
+    [Header("Crosshair Prompts")]
+    public string wrenchRequiredPrompt = "Wrench required";
+    public string useWrenchPrompt = "Hold E to use Wrench";
+
     [Header("Unscrewing Motion")]
     // Visual rotation and lift applied while the player holds E with the wrench.
     [Min(0f)] public float spinDegrees = 1080f;
@@ -37,6 +41,7 @@ public class GeneratorGasTankCover : MonoBehaviour
     private float holdProgress;
     private bool isRemoved;
     private bool showPrompt;
+    private string currentPromptMessage;
 
     private void Start()
     {
@@ -69,7 +74,9 @@ public class GeneratorGasTankCover : MonoBehaviour
 
         bool isLookingAtCover = IsLookingAtCover();
         bool holdingWrench = IsHoldingRequiredItem();
-        showPrompt = isLookingAtCover && holdingWrench;
+        // Show feedback whenever the player aims at the cover, including when empty-handed.
+        showPrompt = isLookingAtCover;
+        currentPromptMessage = holdingWrench ? useWrenchPrompt : wrenchRequiredPrompt;
 
         if (isLookingAtCover && holdingWrench && Input.GetKey(interactKey))
         {
@@ -166,7 +173,7 @@ public class GeneratorGasTankCover : MonoBehaviour
         int percent = Mathf.RoundToInt(holdProgress * 100f);
         string message = holdProgress > 0f
             ? "Hold E to unscrew Gas Tank Cover: " + percent + "%"
-            : "Hold E to use Wrench";
+            : currentPromptMessage;
 
         GUIStyle shadow = new GUIStyle();
         shadow.fontSize = 22;

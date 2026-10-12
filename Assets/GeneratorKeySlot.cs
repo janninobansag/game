@@ -15,6 +15,17 @@ public class GeneratorKeySlot : MonoBehaviour
     [Tooltip("Add every other duplicated generator light here. All assigned lights turn on and off together.")]
     public Light[] additionalGeneratorLights;
 
+    [Header("Lights Out Background Music")]
+    [Tooltip("Your normal Chapter 2 background Audio Source. If empty, the script finds the object named 'BG music'.")]
+    public AudioSource backgroundMusicSource;
+    [Tooltip("The scene object name used to find the normal background Audio Source automatically.")]
+    public string backgroundMusicObjectName = "BG music";
+    [Tooltip("Drag the intense background music clip here. It plays after the generator lights stay off.")]
+    public AudioClip lightsOutBackgroundMusic;
+    [Range(0f, 1f)] public float lightsOutBackgroundMusicVolume = 0.37f;
+    [Tooltip("Prevents music from switching rapidly while the generator lights flicker.")]
+    [Min(0f)] public float lightsOutMusicDelay = 0.35f;
+
     // The selected inventory key must match Required Key Name before it can be inserted.
     [Header("Key")]
     public string requiredKeyName = "Generator key";
@@ -25,6 +36,12 @@ public class GeneratorKeySlot : MonoBehaviour
     public Vector3 turnRotation = new Vector3(0f, 90f, 0f);
     [Tooltip("Local scale after insertion. Generatorbox is scaled to 100, so 0.01 keeps the key normal-sized.")]
     public Vector3 insertedKeyLocalScale = new Vector3(0.01f, 0.01f, 0.01f);
+
+    [Header("Crosshair Prompts")]
+    public string generatorKeyRequiredPrompt = "Generator Key required";
+    public string insertKeyPrompt = "Press E to insert Generator Key";
+    public string fuelRequiredPrompt = "Fuel required";
+    public string startGeneratorPrompt = "Press E to turn Generator on";
 
     [Header("Lights Shutdown Warning")]
     [Tooltip("Shows an urgent notice shortly before the generator lights turn off.")]
@@ -53,9 +70,14 @@ public class GeneratorKeySlot : MonoBehaviour
     private Quaternion insertedRotation;
     private bool isRunning;
     private bool showPrompt;
+    private string currentPromptMessage;
     private bool showShutdownWarning;
     private string lastDebugState;
     private GameObject gasRespawnTemplate;
+    private AudioClip normalBackgroundMusic;
+    private float normalBackgroundMusicVolume;
+    private bool normalBackgroundMusicLoop;
+    private float lightsOffSince = -1f;
 
     /// <summary>True while at least one generator light assigned to this slot is enabled.</summary>
     public bool AreAnyGeneratorLightsOn
@@ -78,6 +100,7 @@ public class GeneratorKeySlot : MonoBehaviour
     private void Start()
     {
         playerCamera = Camera.main;
+        FindAndCacheBackgroundMusic();
         // The generator area starts lit. A separate GeneratorLightsOffTrigger
         // handles the scripted blink and blackout when the player reaches it.
         SetGeneratorLights(true);
@@ -88,25 +111,46 @@ public class GeneratorKeySlot : MonoBehaviour
 
     private void Update()
     {
+        UpdateBackgroundMusicForLightState();
         showPrompt = false;
+        currentPromptMessage = null;
         if (!IsLookingAtSlot()) { ReportDebug("Blocked: aim at the key-slot collider within " + interactRange + " meters."); return; }
 
         if (insertedKey == null)
         {
-            GameObject key = GetSelectedKey();
-            if (key == null) { ReportDebug("Blocked: insert Generator key first."); return; }
-            ReportDebug("Ready: press E to insert Generator key.");
+            // Always provide feedback while the crosshair is on the slot, even when empty-handed.
             showPrompt = true;
+            GameObject key = GetSelectedKey();
+            if (key == null)
+            {
+                currentPromptMessage = generatorKeyRequiredPrompt;
+                ReportDebug("Blocked: insert Generator key first.");
+                return;
+            }
+
+            currentPromptMessage = insertKeyPrompt;
+            ReportDebug("Ready: press E to insert Generator key.");
             if (Input.GetKeyDown(interactKey)) InsertKey(key, true);
             return;
         }
 
         if (isRunning) { ReportDebug("Generator is currently running."); return; }
-        if (fuelInteraction == null) { ReportDebug("Blocked: Fuel Interaction reference is missing."); return; }
-        if (!fuelInteraction.HasFuel()) { ReportDebug("Blocked: generator has no fuel. Refill Gas first."); return; }
-
-        ReportDebug("Ready: press E to turn Generator on for " + runningSeconds + " seconds.");
         showPrompt = true;
+        if (fuelInteraction == null)
+        {
+            currentPromptMessage = fuelRequiredPrompt;
+            ReportDebug("Blocked: Fuel Interaction reference is missing.");
+            return;
+        }
+        if (!fuelInteraction.HasFuel())
+        {
+            currentPromptMessage = fuelRequiredPrompt;
+            ReportDebug("Blocked: generator has no fuel. Refill Gas first.");
+            return;
+        }
+
+        currentPromptMessage = startGeneratorPrompt;
+        ReportDebug("Ready: press E to turn Generator on for " + runningSeconds + " seconds.");
         if (Input.GetKeyDown(interactKey)) StartCoroutine(RunGenerator());
     }
     private bool IsLookingAtSlot()
@@ -200,6 +244,66 @@ public class GeneratorKeySlot : MonoBehaviour
     private static bool IsLightOn(Light light)
     {
         return light != null && light.enabled && light.gameObject.activeInHierarchy;
+    }
+
+    // Uses the existing Chapter 2 music source, without requiring a scene reference to be set manually.
+    private void FindAndCacheBackgroundMusic()
+    {
+        if (backgroundMusicSource == null && !string.IsNullOrWhiteSpace(backgroundMusicObjectName))
+        {
+            GameObject musicObject = GameObject.Find(backgroundMusicObjectName);
+            if (musicObject != null)
+                backgroundMusicSource = musicObject.GetComponent<AudioSource>();
+        }
+
+        if (backgroundMusicSource == null)
+            return;
+
+        normalBackgroundMusic = backgroundMusicSource.clip;
+        normalBackgroundMusicVolume = backgroundMusicSource.volume;
+        normalBackgroundMusicLoop = backgroundMusicSource.loop;
+    }
+
+    // Plays intense music only after the flicker has finished, then restores the original track when power returns.
+    private void UpdateBackgroundMusicForLightState()
+    {
+        if (backgroundMusicSource == null)
+            return;
+
+        bool lightsAreOn = AreAnyGeneratorLightsOn;
+        if (!lightsAreOn)
+        {
+            if (lightsOffSince < 0f)
+                lightsOffSince = Time.time;
+
+            if (Time.time - lightsOffSince < lightsOutMusicDelay)
+                return;
+
+            SwitchBackgroundMusic(lightsOutBackgroundMusic, lightsOutBackgroundMusicVolume, true);
+            return;
+        }
+
+        lightsOffSince = -1f;
+        SwitchBackgroundMusic(normalBackgroundMusic, normalBackgroundMusicVolume, normalBackgroundMusicLoop);
+    }
+
+    private void SwitchBackgroundMusic(AudioClip clip, float volume, bool loop)
+    {
+        if (clip == null || backgroundMusicSource == null)
+            return;
+
+        if (backgroundMusicSource.clip == clip && backgroundMusicSource.isPlaying)
+        {
+            backgroundMusicSource.volume = volume;
+            backgroundMusicSource.loop = loop;
+            return;
+        }
+
+        backgroundMusicSource.Stop();
+        backgroundMusicSource.clip = clip;
+        backgroundMusicSource.volume = volume;
+        backgroundMusicSource.loop = loop;
+        backgroundMusicSource.Play();
     }
 
     private void PrepareGasRespawnTemplate()
@@ -342,7 +446,9 @@ public class GeneratorKeySlot : MonoBehaviour
         }
 
         if (!showPrompt || isRunning) return;
-        string message = insertedKey == null ? "Press E to insert Generator Key" : "Press E to turn Generator on";
+        string message = string.IsNullOrEmpty(currentPromptMessage)
+            ? (insertedKey == null ? insertKeyPrompt : startGeneratorPrompt)
+            : currentPromptMessage;
         GUIStyle shadow = new GUIStyle { fontSize = 22, alignment = TextAnchor.MiddleCenter };
         shadow.normal.textColor = Color.black;
         GUIStyle text = new GUIStyle(shadow); text.normal.textColor = Color.white;

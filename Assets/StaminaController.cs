@@ -18,6 +18,8 @@ public class StaminaController : MonoBehaviour
 
     private float currentStamina;
     private float recoveryTimer;
+    private float nextStaminaBarSearchTime;
+    private float lastDisplayedStamina = float.NaN;
 
     public float CurrentStamina => currentStamina;
     public bool IsHardMode => SceneManager.GetActiveScene().name == "chapter 2" || PlayerPrefs.GetString("GameDifficulty", "Normal") == "Hard";
@@ -76,25 +78,49 @@ public class StaminaController : MonoBehaviour
 
     private void FindStaminaBar()
     {
+        // Chapter 1 has no stamina bar. Avoid searching the whole scene every frame
+        // while the player is in that chapter.
+        if (Time.unscaledTime < nextStaminaBarSearchTime)
+            return;
+
+        nextStaminaBarSearchTime = Time.unscaledTime + 1f;
         GameObject barObject = GameObject.Find("StaminaBar");
         if (barObject != null)
+        {
             staminaBar = barObject.GetComponent<Slider>();
+            lastDisplayedStamina = float.NaN;
+        }
     }
 
     private void RefreshUI()
     {
+        bool isHardMode = IsHardMode;
+
+        // Normal mode has no stamina HUD, so never search Chapter 1 for one.
         if (staminaBar == null)
+        {
+            if (!isHardMode)
+                return;
             FindStaminaBar();
+        }
 
         if (staminaBar == null)
             return;
 
-        staminaBar.gameObject.SetActive(IsHardMode);
-        if (!IsHardMode)
+        if (staminaBar.gameObject.activeSelf != isHardMode)
+            staminaBar.gameObject.SetActive(isHardMode);
+
+        if (!isHardMode)
             return;
 
-        staminaBar.minValue = 0f;
-        staminaBar.maxValue = maxStamina;
-        staminaBar.value = currentStamina;
+        if (staminaBar.minValue != 0f)
+            staminaBar.minValue = 0f;
+        if (!Mathf.Approximately(staminaBar.maxValue, maxStamina))
+            staminaBar.maxValue = maxStamina;
+        if (!Mathf.Approximately(lastDisplayedStamina, currentStamina))
+        {
+            staminaBar.value = currentStamina;
+            lastDisplayedStamina = currentStamina;
+        }
     }
 }

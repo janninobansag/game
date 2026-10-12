@@ -1,5 +1,6 @@
 // PURPOSE: Handles door opening, closing, locks, audio, and requests to open the door for an enemy.
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour
@@ -9,6 +10,10 @@ public class DoorInteraction : MonoBehaviour
     public AudioClip openSound;
     public AudioClip closeSound;
     public float doorVolume = 1f;
+
+    [Header("Performance")]
+    [Tooltip("Loads the assigned door sounds when the scene starts so opening this door does not need to load them during gameplay.")]
+    [SerializeField] private bool preloadDoorSounds = true;
 
     // Movement settings for the door hinge animation.
     private AudioSource audioSource;
@@ -43,6 +48,21 @@ public class DoorInteraction : MonoBehaviour
     private bool showPrompt = false;
     private bool showLockedPrompt = false;
     private float lockedPromptTimer = 0f;
+    private Camera playerCamera;
+
+    // Every door looks down the same centre-screen ray. Share its result so a scene
+    // with many doors performs one raycast per frame instead of one raycast per door.
+    private static int sharedRaycastFrame = -1;
+    private static Camera sharedRaycastCamera;
+    private static float sharedRaycastRange;
+    private static RaycastHit sharedRaycastHit;
+    private static bool sharedRaycastHitSomething;
+
+    private static readonly HashSet<int> preloadedSoundIds = new HashSet<int>();
+    private static GUIStyle promptStyle;
+    private static GUIStyle promptShadowStyle;
+    private static GUIStyle lockedPromptStyle;
+    private static GUIStyle lockedPromptShadowStyle;
 
     void Start()
     {
@@ -52,12 +72,19 @@ public class DoorInteraction : MonoBehaviour
         openRotation = Quaternion.Euler(
             transform.eulerAngles + new Vector3(0, angle, 0));
 
+        playerCamera = Camera.main;
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.spatialBlend = 1f;
         audioSource.playOnAwake = false;
         audioSource.volume = doorVolume;
         audioSource.maxDistance = 10f;
         audioSource.rolloffMode = AudioRolloffMode.Linear;
+
+        if (preloadDoorSounds)
+        {
+            PreloadSound(openSound);
+            PreloadSound(closeSound);
+        }
     }
 
     void Update()
@@ -68,11 +95,10 @@ public class DoorInteraction : MonoBehaviour
         if (!interactionEnabled)
             return;
 
-        Ray ray = Camera.main.ScreenPointToRay(
-            new Vector3(Screen.width / 2, Screen.height / 2));
-        RaycastHit hit;
+        if (playerCamera == null)
+            playerCamera = Camera.main;
 
-        if (Physics.Raycast(ray, out hit, raycastRange))
+        if (playerCamera != null && TryGetInteractionHit(playerCamera, raycastRange, out RaycastHit hit))
         {
             if (hit.collider.CompareTag(doorTag) &&
                 hit.collider.transform.IsChildOf(transform))
@@ -99,12 +125,7 @@ public class DoorInteraction : MonoBehaviour
             }
         }
 
-        if (showLockedPrompt)
-        {
-            lockedPromptTimer -= Time.deltaTime;
-            if (lockedPromptTimer <= 0f)
-                showLockedPrompt = false;
-        }
+        UpdateLockedPromptTimer();
     }
 
     // ── NEW: Set open state without animation ──
@@ -223,43 +244,81 @@ public class DoorInteraction : MonoBehaviour
         // Draw the normal interaction prompt or the locked message.
         if (showPrompt && !showLockedPrompt)
         {
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 22;
-            style.alignment = TextAnchor.MiddleCenter;
-            style.normal.textColor = Color.white;
-
-            GUIStyle shadow = new GUIStyle();
-            shadow.fontSize = 22;
-            shadow.alignment = TextAnchor.MiddleCenter;
-            shadow.normal.textColor = Color.black;
+            EnsurePromptStyles();
 
             string msg = $"Press {interactKey} to open";
             GUI.Label(new Rect(Screen.width / 2 - 199,
                 Screen.height / 2 + 51, 400, 40),
-                msg, shadow);
+                msg, promptShadowStyle);
             GUI.Label(new Rect(Screen.width / 2 - 200,
                 Screen.height / 2 + 50, 400, 40),
-                msg, style);
+                msg, promptStyle);
         }
 
         if (showLockedPrompt)
         {
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 22;
-            style.alignment = TextAnchor.MiddleCenter;
-            style.normal.textColor = Color.red;
-
-            GUIStyle shadow = new GUIStyle();
-            shadow.fontSize = 22;
-            shadow.alignment = TextAnchor.MiddleCenter;
-            shadow.normal.textColor = Color.black;
+            EnsurePromptStyles();
 
             GUI.Label(new Rect(Screen.width / 2 - 199,
                 Screen.height / 2 + 51, 400, 40),
-                lockedDoorText, shadow);
+                lockedDoorText, lockedPromptShadowStyle);
             GUI.Label(new Rect(Screen.width / 2 - 200,
                 Screen.height / 2 + 50, 400, 40),
-                lockedDoorText, style);
+                lockedDoorText, lockedPromptStyle);
         }
+    }
+
+    private static bool TryGetInteractionHit(Camera camera, float range, out RaycastHit hit)
+    {
+        if (sharedRaycastFrame != Time.frameCount || sharedRaycastCamera != camera ||
+            !Mathf.Approximately(sharedRaycastRange, range))
+        {
+            sharedRaycastFrame = Time.frameCount;
+            sharedRaycastCamera = camera;
+            sharedRaycastRange = range;
+            Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            sharedRaycastHitSomething = Physics.Raycast(ray, out sharedRaycastHit, range);
+        }
+
+        hit = sharedRaycastHit;
+        return sharedRaycastHitSomething;
+    }
+
+    private static void PreloadSound(AudioClip clip)
+    {
+        if (clip != null && preloadedSoundIds.Add(clip.GetInstanceID()))
+            clip.LoadAudioData();
+    }
+
+    private void UpdateLockedPromptTimer()
+    {
+        if (!showLockedPrompt)
+            return;
+
+        lockedPromptTimer -= Time.deltaTime;
+        if (lockedPromptTimer <= 0f)
+            showLockedPrompt = false;
+    }
+
+    private static void EnsurePromptStyles()
+    {
+        if (promptStyle != null)
+            return;
+
+        promptStyle = CreatePromptStyle(Color.white);
+        promptShadowStyle = CreatePromptStyle(Color.black);
+        lockedPromptStyle = CreatePromptStyle(Color.red);
+        lockedPromptShadowStyle = CreatePromptStyle(Color.black);
+    }
+
+    private static GUIStyle CreatePromptStyle(Color color)
+    {
+        GUIStyle style = new GUIStyle
+        {
+            fontSize = 22,
+            alignment = TextAnchor.MiddleCenter
+        };
+        style.normal.textColor = color;
+        return style;
     }
 }

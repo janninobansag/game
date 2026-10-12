@@ -25,6 +25,13 @@ public class TikbalangAI : MonoBehaviour
     [Tooltip("Distance in front of the player where Tikbalang appears after the first jumpscare.")]
     [Min(1f)] public float firstEncounterFrontDistance = 4f;
 
+    [Header("Intro Generator Objective Popup")]
+    [Tooltip("Shows the generator objective after the first Tikbalang jumpscare ends.")]
+    public bool showGeneratorObjectiveAfterIntro = true;
+    [TextArea(2, 4)] public string generatorObjectiveMessage = "The lights are out! Find the Generator and fix it as soon as possible.";
+    [Min(0.1f)] public float generatorObjectivePopupDuration = 6f;
+    public Color generatorObjectiveColor = new Color(1f, 0.82f, 0.25f);
+
     [Header("Question & Answer Settings")]
     [Tooltip("Drag the scene QnAPanel here. The game can find it automatically if left empty.")]
     public GameObject qnaPanel;
@@ -66,6 +73,14 @@ public class TikbalangAI : MonoBehaviour
     [Tooltip("Looped only while Tikbalang is running after the player sees it.")]
     public AudioClip chaseSound;
     [Range(0f, 1f)] public float chaseVolume = 0.8f;
+
+    [Header("Walking Audio")]
+    [Tooltip("Optional separate Audio Source for Tikbalang's walking sound. Leave empty to create one automatically at runtime.")]
+    public AudioSource walkingAudioSource;
+    [Tooltip("Looped while Tikbalang is walking, including when generator lights make him walk during a chase.")]
+    public AudioClip walkingSound;
+    [Range(0f, 1f)] public float walkingVolume = 0.65f;
+    [Min(1f)] public float walkingMaxDistance = 12f;
 
     [Header("Player Sight Run Trigger")]
     [Tooltip("Once the player camera gets a clear view of Tikbalang, he keeps running for the rest of that chase.")]
@@ -110,7 +125,10 @@ public class TikbalangAI : MonoBehaviour
     private bool isFirstEncounterPlaying;
     private bool isCatchSequencePlaying;
     private bool isPlayingChaseSound;
+    private bool isPlayingWalkingSound;
     private bool hasBeenSeenByPlayer;
+    private bool showGeneratorObjectivePopup;
+    private float generatorObjectivePopupTimer;
     private DoorInteraction doorBlockingPath;
     private float nextCatchTime;
     private Quaternion cameraRotationBeforeCatch;
@@ -142,6 +160,7 @@ public class TikbalangAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         if (animator == null) animator = GetComponentInChildren<Animator>();
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        EnsureWalkingAudioSource();
         if (generatorKeySlot == null) generatorKeySlot = FindObjectOfType<GeneratorKeySlot>();
         FindPlayerIfNeeded();
     }
@@ -163,6 +182,7 @@ public class TikbalangAI : MonoBehaviour
     private void Update()
     {
         FindPlayerIfNeeded();
+        UpdateGeneratorObjectivePopup();
         if (player == null) return;
 
         // Tikbalang remains dormant until TikbalangJumpscareTrigger starts the first encounter.
@@ -259,6 +279,7 @@ public class TikbalangAI : MonoBehaviour
         TeleportToSpawnPoint(true);
 yield return StartCoroutine(RestoreCameraAfterJumpscare());
         SetPlayerQuestionLock(false);
+        ShowGeneratorObjectivePopup();
         nextCatchTime = Time.time + catchCooldown;
         isCatchSequencePlaying = false;
         ResumeChaseAfterEncounter();
@@ -864,6 +885,7 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
     // Sets available animator parameters for walking, running, and movement speed.
     private void SetMovementAnimation(bool moving, bool running = false)
     {
+        UpdateWalkingSound(moving && !running);
         if (animator == null) return;
         bool walking = moving && !running;
         SetAnimatorBoolIfPresent("walking", walking);
@@ -895,6 +917,96 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         if (audioSource.clip == chaseSound)
             audioSource.Stop();
         isPlayingChaseSound = false;
+    }
+
+    // Creates a dedicated source so walking audio never interrupts the chase or jumpscare sounds.
+    private void EnsureWalkingAudioSource()
+    {
+        if (walkingAudioSource != null && walkingAudioSource != audioSource)
+            return;
+
+        GameObject sourceObject = new GameObject("Tikbalang Walking Audio");
+        sourceObject.transform.SetParent(transform, false);
+        walkingAudioSource = sourceObject.AddComponent<AudioSource>();
+        walkingAudioSource.spatialBlend = 1f;
+        walkingAudioSource.playOnAwake = false;
+        walkingAudioSource.rolloffMode = AudioRolloffMode.Linear;
+    }
+
+    // Starts or stops the looping walk sound whenever Tikbalang changes movement state.
+    private void UpdateWalkingSound(bool shouldPlay)
+    {
+        if (walkingAudioSource == null)
+            EnsureWalkingAudioSource();
+
+        if (walkingAudioSource == null || walkingSound == null)
+            return;
+
+        // Enforce a positional source even when a source was assigned in the Inspector.
+        walkingAudioSource.spatialBlend = 1f;
+        walkingAudioSource.rolloffMode = AudioRolloffMode.Linear;
+
+        if (shouldPlay)
+        {
+            if (walkingAudioSource.clip != walkingSound)
+            {
+                walkingAudioSource.Stop();
+                walkingAudioSource.clip = walkingSound;
+            }
+
+            walkingAudioSource.volume = walkingVolume;
+            walkingAudioSource.maxDistance = walkingMaxDistance;
+            walkingAudioSource.loop = true;
+            if (!walkingAudioSource.isPlaying)
+                walkingAudioSource.Play();
+            isPlayingWalkingSound = true;
+            return;
+        }
+
+        if (isPlayingWalkingSound && walkingAudioSource.isPlaying)
+            walkingAudioSource.Stop();
+        isPlayingWalkingSound = false;
+    }
+
+    // Shows the Chapter 2 objective only after the first Tikbalang jumpscare releases the player.
+    private void ShowGeneratorObjectivePopup()
+    {
+        if (!showGeneratorObjectiveAfterIntro || string.IsNullOrWhiteSpace(generatorObjectiveMessage))
+            return;
+
+        showGeneratorObjectivePopup = true;
+        generatorObjectivePopupTimer = Mathf.Max(0.1f, generatorObjectivePopupDuration);
+    }
+
+    private void UpdateGeneratorObjectivePopup()
+    {
+        if (!showGeneratorObjectivePopup)
+            return;
+
+        generatorObjectivePopupTimer -= Time.deltaTime;
+        if (generatorObjectivePopupTimer <= 0f)
+            showGeneratorObjectivePopup = false;
+    }
+
+    private void OnGUI()
+    {
+        if (!showGeneratorObjectivePopup)
+            return;
+
+        GUIStyle shadow = new GUIStyle
+        {
+            fontSize = 25,
+            alignment = TextAnchor.MiddleCenter,
+            wordWrap = true
+        };
+        shadow.normal.textColor = Color.black;
+
+        GUIStyle text = new GUIStyle(shadow);
+        text.normal.textColor = generatorObjectiveColor;
+
+        Rect rect = new Rect(Screen.width * 0.5f - 320f, Screen.height * 0.18f, 640f, 80f);
+        GUI.Label(new Rect(rect.x + 2f, rect.y + 2f, rect.width, rect.height), generatorObjectiveMessage, shadow);
+        GUI.Label(rect, generatorObjectiveMessage, text);
     }
 
     // Sets an animator trigger only if a matching trigger parameter exists.

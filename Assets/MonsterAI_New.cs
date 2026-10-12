@@ -108,7 +108,10 @@ public class MonsterAI_New : MonoBehaviour
     private readonly List<bool> frozenMutantAgentStates = new List<bool>();
     private readonly List<Button> qnaButtons = new List<Button>();
     private readonly List<UnityEngine.Events.UnityAction> qnaButtonActions = new List<UnityEngine.Events.UnityAction>();
-    private readonly List<PaintedTreeObstacle> paintedTrees = new List<PaintedTreeObstacle>();
+    private const float PaintedTreeCellSize = 10f;
+    private readonly Dictionary<Vector2Int, List<PaintedTreeObstacle>> paintedTreeGrid =
+        new Dictionary<Vector2Int, List<PaintedTreeObstacle>>();
+    private float largestPaintedTreeRadius;
     private float nextPaintedTreeDestinationUpdate;
 
     private struct PaintedTreeObstacle
@@ -1207,7 +1210,8 @@ public class MonsterAI_New : MonoBehaviour
     [ContextMenu("Refresh Painted Tree Cache")]
     public void CachePaintedTrees()
     {
-        paintedTrees.Clear();
+        paintedTreeGrid.Clear();
+        largestPaintedTreeRadius = 0f;
 
         Terrain[] terrains = Terrain.activeTerrains;
         for (int terrainIndex = 0; terrainIndex < terrains.Length; terrainIndex++)
@@ -1224,9 +1228,31 @@ public class MonsterAI_New : MonoBehaviour
                 Vector3 localPosition = Vector3.Scale(instance.position, terrainData.size);
                 Vector3 worldPosition = terrain.transform.TransformPoint(localPosition);
                 float radius = Mathf.Max(0.5f, instance.widthScale * 0.5f);
-                paintedTrees.Add(new PaintedTreeObstacle(worldPosition, radius));
+                AddPaintedTreeToGrid(new PaintedTreeObstacle(worldPosition, radius));
             }
         }
+    }
+
+    // Groups static painted trees by world-space cell so route checks do not scan
+    // every tree on a large terrain.
+    private void AddPaintedTreeToGrid(PaintedTreeObstacle tree)
+    {
+        Vector2Int cell = GetPaintedTreeCell(tree.position);
+        if (!paintedTreeGrid.TryGetValue(cell, out List<PaintedTreeObstacle> treesInCell))
+        {
+            treesInCell = new List<PaintedTreeObstacle>();
+            paintedTreeGrid.Add(cell, treesInCell);
+        }
+
+        treesInCell.Add(tree);
+        largestPaintedTreeRadius = Mathf.Max(largestPaintedTreeRadius, tree.radius);
+    }
+
+    private Vector2Int GetPaintedTreeCell(Vector3 position)
+    {
+        return new Vector2Int(
+            Mathf.FloorToInt(position.x / PaintedTreeCellSize),
+            Mathf.FloorToInt(position.z / PaintedTreeCellSize));
     }
 
     // Uses a point beside the first tree blocking White Lady's direct route.
@@ -1244,7 +1270,7 @@ public class MonsterAI_New : MonoBehaviour
 
     private bool TrySetPaintedTreeDetour(Vector3 destination)
     {
-        if (paintedTrees.Count == 0)
+        if (paintedTreeGrid.Count == 0)
             return false;
 
         Vector3 start = transform.position;
@@ -1262,26 +1288,44 @@ public class MonsterAI_New : MonoBehaviour
         float closestDistance = float.MaxValue;
         bool foundBlockingTree = false;
 
-        for (int i = 0; i < paintedTrees.Count; i++)
+        Vector3 routeEnd = start + routeDirection * lookAhead;
+        float searchPadding = largestPaintedTreeRadius + paintedTreeClearance;
+        Vector2Int minCell = GetPaintedTreeCell(new Vector3(
+            Mathf.Min(start.x, routeEnd.x) - searchPadding, 0f,
+            Mathf.Min(start.z, routeEnd.z) - searchPadding));
+        Vector2Int maxCell = GetPaintedTreeCell(new Vector3(
+            Mathf.Max(start.x, routeEnd.x) + searchPadding, 0f,
+            Mathf.Max(start.z, routeEnd.z) + searchPadding));
+
+        for (int cellX = minCell.x; cellX <= maxCell.x; cellX++)
         {
-            PaintedTreeObstacle tree = paintedTrees[i];
-            Vector3 toTree = tree.position - start;
-            toTree.y = 0f;
-            float alongRoute = Vector3.Dot(toTree, routeDirection);
-            if (alongRoute <= 0f || alongRoute > lookAhead)
-                continue;
+            for (int cellZ = minCell.y; cellZ <= maxCell.y; cellZ++)
+            {
+                if (!paintedTreeGrid.TryGetValue(new Vector2Int(cellX, cellZ), out List<PaintedTreeObstacle> treesInCell))
+                    continue;
 
-            Vector3 closestPoint = start + routeDirection * alongRoute;
-            Vector3 flatTreePosition = tree.position;
-            flatTreePosition.y = 0f;
-            float clearance = tree.radius + paintedTreeClearance;
-            if ((flatTreePosition - closestPoint).sqrMagnitude > clearance * clearance ||
-                alongRoute >= closestDistance)
-                continue;
+                for (int i = 0; i < treesInCell.Count; i++)
+                {
+                    PaintedTreeObstacle tree = treesInCell[i];
+                    Vector3 toTree = tree.position - start;
+                    toTree.y = 0f;
+                    float alongRoute = Vector3.Dot(toTree, routeDirection);
+                    if (alongRoute <= 0f || alongRoute > lookAhead)
+                        continue;
 
-            closestTree = tree;
-            closestDistance = alongRoute;
-            foundBlockingTree = true;
+                    Vector3 closestPoint = start + routeDirection * alongRoute;
+                    Vector3 flatTreePosition = tree.position;
+                    flatTreePosition.y = 0f;
+                    float clearance = tree.radius + paintedTreeClearance;
+                    if ((flatTreePosition - closestPoint).sqrMagnitude > clearance * clearance ||
+                        alongRoute >= closestDistance)
+                        continue;
+
+                    closestTree = tree;
+                    closestDistance = alongRoute;
+                    foundBlockingTree = true;
+                }
+            }
         }
 
         if (!foundBlockingTree)

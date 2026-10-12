@@ -18,6 +18,10 @@ public class GeneratorFuelInteraction : MonoBehaviour
     [Min(0.1f)] public float interactRange = 2.5f;
     [Min(0.1f)] public float pourDuration = 3f;
 
+    [Header("Crosshair Prompts")]
+    [Tooltip("Shown while the player aims directly at this Generatorbox without Gas selected.")]
+    public string fuelRequiredPrompt = "Fuel required";
+
     [Header("Pour Motion")]
     public Transform pourPoint;
     public Vector3 pourRotationOffset = new Vector3(0f, 0f, 95f);
@@ -35,6 +39,7 @@ public class GeneratorFuelInteraction : MonoBehaviour
     private bool coverMissingFromGenerator;
     private bool showPrompt;
     private bool showClosedCoverPrompt;
+    private bool showFuelRequiredPrompt;
     private float pourProgress;
     private string lastDebugState;
 
@@ -64,6 +69,7 @@ public class GeneratorFuelInteraction : MonoBehaviour
         GameObject gas = GetSelectedGas();
         showPrompt = coverIsOpen && lookingAtGenerator && gas != null;
         showClosedCoverPrompt = !coverIsOpen && lookingAtGenerator && gas != null;
+        showFuelRequiredPrompt = lookingAtGenerator && gas == null && IsLookingAtThisGeneratorBox();
 
         if (lookingAtGenerator && gas != null)
             ReportDebug("Gas aimed at Generator. Cover event=" + coverRemovedThisSession +
@@ -94,6 +100,16 @@ public class GeneratorFuelInteraction : MonoBehaviour
         if (!Physics.Raycast(ray, out RaycastHit hit, interactRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)) return false;
         Transform root = interactionRoot != null ? interactionRoot : transform;
         return hit.collider.transform == root || hit.collider.transform.IsChildOf(root);
+    }
+
+    private bool IsLookingAtThisGeneratorBox()
+    {
+        if (playerCamera == null)
+            return false;
+
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f));
+        return Physics.Raycast(ray, out RaycastHit hit, interactRange, Physics.DefaultRaycastLayers,
+                   QueryTriggerInteraction.Ignore) && hit.collider.transform == transform;
     }
 
     private GameObject GetSelectedGas()
@@ -231,6 +247,8 @@ public class GeneratorFuelInteraction : MonoBehaviour
         string message;
         if (isPouring)
             message = "Hold " + interactKey + " to pour Gas: " + Mathf.RoundToInt(pourProgress * 100f) + "%";
+        else if (showFuelRequiredPrompt)
+            message = fuelRequiredPrompt;
         else if (showClosedCoverPrompt)
             message = "Remove the gas tank cover first";
         else if (showPrompt)
