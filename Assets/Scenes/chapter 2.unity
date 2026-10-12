@@ -15,7 +15,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.06
@@ -2259,45 +2259,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144031906}
   m_Mesh: {fileID: -9110627038371529689, guid: b176645ce344e2e4982fbfb9558e664c, type: 3}
---- !u!21 &147032384
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &150461055
 GameObject:
   m_ObjectHideFlags: 0
@@ -14956,7 +14917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 147032384}
+  m_Material: {fileID: 1260967062}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -28388,6 +28349,45 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!21 &1260967062
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1265710988
 GameObject:
   m_ObjectHideFlags: 0
@@ -43947,7 +43947,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2100634911}
-  - component: {fileID: 2100634912}
   m_Layer: 0
   m_Name: 2nd floor Door
   m_TagString: Door
@@ -43971,32 +43970,6 @@ Transform:
   - {fileID: 1312485711}
   m_Father: {fileID: 5772290061149685357}
   m_LocalEulerAnglesHint: {x: 0, y: -2.758, z: 0}
---- !u!114 &2100634912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100634910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
-  closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
-  doorVolume: 1
-  openAngle: 90
-  animationSpeed: 1
-  invertDirection: 0
-  isLocked: 0
-  linkedDoor: {fileID: 0}
-  raycastRange: 3
-  interactKey: 101
-  doorTag: Door
-  interactionEnabled: 1
-  lockedDoorText: This door is locked!
-  lockedPromptDuration: 2
 --- !u!1 &2110068496
 GameObject:
   m_ObjectHideFlags: 0
@@ -95730,7 +95703,7 @@ Transform:
   m_GameObject: {fileID: 8841746530532243556}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 106.35, y: 5.07, z: -62.2}
+  m_LocalPosition: {x: 96.92, y: 1.69, z: -15.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -113239,6 +113212,9 @@ MonoBehaviour:
   teleportCooldown: 1
   spawnPointNavMeshSearchRadius: 3
   playerChaseNavMeshSearchRadius: 12
+  avoidPaintedTrees: 1
+  paintedTreeLookAheadDistance: 8
+  paintedTreeClearance: 2
 --- !u!65 &3661957178885932554
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -116746,6 +116722,10 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 4294967295
+  avoidPaintedTrees: 1
+  paintedTreeLookAheadDistance: 8
+  paintedTreeClearance: 2
+  paintedTreeDestinationRefreshRate: 0.12
   bushTag: Bush
   checkBush: 1
   jumpscareCooldown: 2
