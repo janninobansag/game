@@ -37,6 +37,7 @@ public class SubtitleManager : MonoBehaviour
     private bool isShowing;
     private Coroutine currentCoroutine;
     private Coroutine typeCoroutine;
+    private string lastAppliedText;
 
     void Awake()
     {
@@ -62,7 +63,8 @@ public class SubtitleManager : MonoBehaviour
     void Update()
     {
         if (!Application.isPlaying) return;
-        EnsureUi();
+        if (subtitlePanel == null)
+            EnsureUi();
         subtitleAlpha = isShowing ? Mathf.Lerp(subtitleAlpha, 1f, Time.deltaTime * fadeSpeed) : Mathf.Lerp(subtitleAlpha, 0f, Time.deltaTime * fadeSpeed);
         RefreshUi();
     }
@@ -125,7 +127,6 @@ public class SubtitleManager : MonoBehaviour
         {
             if (subtitleCanvasGroup == null) subtitleCanvasGroup = subtitlePanel.GetComponent<CanvasGroup>();
             if (subtitleCanvasGroup == null) subtitleCanvasGroup = subtitlePanel.AddComponent<CanvasGroup>();
-            ApplyResponsiveLayout();
             return;
         }
 
@@ -198,9 +199,17 @@ public class SubtitleManager : MonoBehaviour
         bool visible = isShowing || subtitleAlpha > .01f;
         if (subtitlePanel.activeSelf != visible) subtitlePanel.SetActive(visible);
         if (!visible) return;
-        if (subtitleCanvasGroup != null) subtitleCanvasGroup.alpha = subtitleAlpha;
+        if (subtitleCanvasGroup != null && !Mathf.Approximately(subtitleCanvasGroup.alpha, subtitleAlpha))
+            subtitleCanvasGroup.alpha = subtitleAlpha;
+
+        // Assigning TMP text marks the Canvas dirty. Only do it for a new subtitle
+        // character or a genuinely changed subtitle message.
+        if (lastAppliedText == displayedText)
+            return;
+
         if (shadowText != null) shadowText.text = displayedText;
         if (subtitleText != null) subtitleText.text = displayedText;
+        lastAppliedText = displayedText;
     }
 
     private static GameObject CreateUiObject(string name, Transform parent)

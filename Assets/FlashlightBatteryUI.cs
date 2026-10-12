@@ -9,6 +9,13 @@ public class FlashlightBatteryUI : MonoBehaviour
     [Header("UI References")]
     public Slider batteryBar;
     public Image batteryFill;
+    [Tooltip("How often the battery bar refreshes while a flashlight is held.")]
+    [Min(0.02f)] public float refreshInterval = 0.1f;
+
+    private FlashlightPickup displayedFlashlight;
+    private float nextRefreshTime;
+    private float displayedBatteryPercent = -1f;
+    private int displayedBatteryColorBand = -1;
 
     private void OnEnable()
     {
@@ -27,7 +34,12 @@ public class FlashlightBatteryUI : MonoBehaviour
         if (!Application.isPlaying)
             return;
 
-        Refresh();
+        FlashlightPickup heldFlashlight = FlashlightPickup.HeldFlashlight;
+        if (heldFlashlight != displayedFlashlight || Time.unscaledTime >= nextRefreshTime)
+        {
+            Refresh();
+            nextRefreshTime = Time.unscaledTime + refreshInterval;
+        }
     }
 
     private void Refresh()
@@ -39,20 +51,34 @@ public class FlashlightBatteryUI : MonoBehaviour
         if (batteryBar == null)
             return;
 
-        batteryBar.gameObject.SetActive(shouldShow);
+        if (batteryBar.gameObject.activeSelf != shouldShow)
+            batteryBar.gameObject.SetActive(shouldShow);
+        displayedFlashlight = flashlight;
         if (!shouldShow)
+        {
+            displayedBatteryPercent = -1f;
+            displayedBatteryColorBand = -1;
             return;
+        }
 
         float batteryPercent = flashlight.GetBatteryPercent();
-        batteryBar.minValue = 0f;
-        batteryBar.maxValue = 1f;
-        batteryBar.value = batteryPercent;
-
-        if (batteryFill != null)
+        if (batteryBar.minValue != 0f)
+            batteryBar.minValue = 0f;
+        if (batteryBar.maxValue != 1f)
+            batteryBar.maxValue = 1f;
+        if (!Mathf.Approximately(displayedBatteryPercent, batteryPercent))
         {
-            batteryFill.color = batteryPercent > 0.5f ? new Color(0.35f, 0.9f, 0.45f) :
-                batteryPercent > 0.25f ? new Color(1f, 0.78f, 0.2f) :
+            batteryBar.value = batteryPercent;
+            displayedBatteryPercent = batteryPercent;
+        }
+
+        int batteryColorBand = batteryPercent > 0.5f ? 0 : batteryPercent > 0.25f ? 1 : 2;
+        if (batteryFill != null && displayedBatteryColorBand != batteryColorBand)
+        {
+            batteryFill.color = batteryColorBand == 0 ? new Color(0.35f, 0.9f, 0.45f) :
+                batteryColorBand == 1 ? new Color(1f, 0.78f, 0.2f) :
                 new Color(0.95f, 0.25f, 0.2f);
+            displayedBatteryColorBand = batteryColorBand;
         }
     }
 

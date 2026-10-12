@@ -7,6 +7,8 @@ public class StoryIntro : MonoBehaviour
     [Header("Settings")]
     public float textFadeSpeed = 1.2f;
     public float textHoldTime = 3f;
+    [Tooltip("Seconds each story sentence stays on screen before the next sentence appears automatically.")]
+    public float autoNextDelay = 4f;
     public float sectionPauseTime = 0.8f;
     [Tooltip("Kept for older scenes. The intro now uses left click to continue and Enter to skip.")]
     public bool skipOnAnyKey = false;
@@ -163,10 +165,14 @@ public class StoryIntro : MonoBehaviour
                 SaveCurrentProgress(false);
                 yield return StartCoroutine(FadeText(0f, 1f));
 
-                // A click is required before the following sentence is shown.
+                // The player can continue early, otherwise move to the next sentence automatically.
                 advanceRequested = false;
-                while (!advanceRequested)
+                float autoNextTimer = 0f;
+                while (!advanceRequested && autoNextTimer < autoNextDelay)
+                {
+                    autoNextTimer += Time.deltaTime;
                     yield return null;
+                }
 
                 yield return StartCoroutine(FadeText(1f, 0f));
             }
@@ -351,12 +357,13 @@ public class StoryIntro : MonoBehaviour
         if (!isSkipping && blackAlpha > 0.5f)
         {
             GUIStyle skipStyle = new GUIStyle();
-            skipStyle.fontSize = 10;
+            skipStyle.fontSize = 14;
+            skipStyle.fontStyle = FontStyle.Bold;
             skipStyle.normal.textColor =
-                new Color(0.4f, 0.38f, 0.35f, textAlpha * 0.6f);
+                new Color(0.95f, 0.9f, 0.82f, Mathf.Clamp01(textAlpha));
             skipStyle.alignment = TextAnchor.MiddleRight;
-            GUI.Label(new Rect(sw - 160f, sh - 30f, 140f, 18f),
-                "Left Click: Continue | Enter: Skip", skipStyle);
+            GUI.Label(new Rect(sw - 260f, sh - 42f, 240f, 28f),
+                "Left Click: Continue  |  ENTER: Skip", skipStyle);
         }
 
         GUI.color = Color.white;
