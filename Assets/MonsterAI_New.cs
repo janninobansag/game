@@ -25,6 +25,16 @@ public class MonsterAI_New : MonoBehaviour
     [Header("Obstacle Detection")]
     public bool checkObstacles = true;
     public LayerMask obstacleLayer = -1;
+
+    [Header("Painted Tree Avoidance")]
+    [Tooltip("Makes White Lady steer around trees painted on Unity Terrain, even when those trees are not baked into the NavMesh.")]
+    public bool avoidPaintedTrees = true;
+    [Tooltip("How far ahead White Lady checks for a painted tree that blocks her route.")]
+    [Min(1f)] public float paintedTreeLookAheadDistance = 8f;
+    [Tooltip("Extra space White Lady leaves around the trunk while moving past a painted tree.")]
+    [Min(0.1f)] public float paintedTreeClearance = 1.5f;
+    [Tooltip("How often White Lady updates her tree-aware chase destination.")]
+    [Min(0.02f)] public float paintedTreeDestinationRefreshRate = 0.12f;
     
     [Header("Bush Detection")]
     public string bushTag = "Bush";
@@ -98,6 +108,20 @@ public class MonsterAI_New : MonoBehaviour
     private readonly List<bool> frozenMutantAgentStates = new List<bool>();
     private readonly List<Button> qnaButtons = new List<Button>();
     private readonly List<UnityEngine.Events.UnityAction> qnaButtonActions = new List<UnityEngine.Events.UnityAction>();
+    private readonly List<PaintedTreeObstacle> paintedTrees = new List<PaintedTreeObstacle>();
+    private float nextPaintedTreeDestinationUpdate;
+
+    private struct PaintedTreeObstacle
+    {
+        public Vector3 position;
+        public float radius;
+
+        public PaintedTreeObstacle(Vector3 position, float radius)
+        {
+            this.position = position;
+            this.radius = radius;
+        }
+    }
 
     private enum State { Patrol, Chase, Jumpscare, Idle, QnA }
     private State currentState = State.Patrol;
@@ -118,6 +142,7 @@ public class MonsterAI_New : MonoBehaviour
         
         startPosition = transform.position;
         PopulateTeleportSpawnsIfNeeded();
+        CachePaintedTrees();
         agent.speed = walkSpeed;
         agent.isStopped = false;
 
@@ -685,16 +710,29 @@ public class MonsterAI_New : MonoBehaviour
     {
         Transform spawnPoint = GetNextTeleportSpawn();
         Vector3 destination = spawnPoint != null ? spawnPoint.position : startPosition;
+        int areaMask = agent != null ? agent.areaMask : NavMesh.AllAreas;
 
-        if (NavMesh.SamplePosition(destination, out NavMeshHit hit, spawnPointNavMeshSearchRadius, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(destination, out NavMeshHit hit, spawnPointNavMeshSearchRadius, areaMask))
             destination = hit.position;
 
-        if (agent != null && agent.isOnNavMesh)
+        if (agent != null)
         {
-            agent.Warp(destination);
-            agent.ResetPath();
-            agent.isStopped = false;
-            agent.speed = walkSpeed;
+            // PerformJumpscare disables the agent. Re-enable it before teleporting so
+            // Warp reconnects White Lady to the NavMesh instead of only moving Transform.
+            if (!agent.enabled)
+                agent.enabled = true;
+
+            if (agent.isOnNavMesh)
+            {
+                agent.Warp(destination);
+                agent.ResetPath();
+                agent.isStopped = false;
+                agent.speed = walkSpeed;
+            }
+            else
+            {
+                transform.position = destination;
+            }
         }
         else
         {
@@ -713,6 +751,37 @@ public class MonsterAI_New : MonoBehaviour
         isIdle = false;
         playerInSight = false;
 
+        StartCoroutine(ResumePatrolAfterTeleport());
+    }
+
+    // Waits one frame after a Transform fallback so Unity can attach the NavMeshAgent,
+    // then assigns a fresh patrol route. This prevents a teleport from leaving her stuck.
+    private IEnumerator ResumePatrolAfterTeleport()
+    {
+        yield return null;
+
+        if (agent == null)
+            yield break;
+
+        if (!agent.enabled)
+            agent.enabled = true;
+
+        if (!agent.isOnNavMesh &&
+            NavMesh.SamplePosition(transform.position, out NavMeshHit nearestPoint,
+                                   spawnPointNavMeshSearchRadius, agent.areaMask))
+        {
+            agent.Warp(nearestPoint.position);
+        }
+
+        if (!agent.isOnNavMesh)
+        {
+            Debug.LogWarning("White Lady could not resume after teleport because no NavMesh point was found near the selected spawn.", this);
+            yield break;
+        }
+
+        agent.ResetPath();
+        agent.isStopped = false;
+        agent.speed = walkSpeed;
         SetNewPatrolTarget();
     }
 
@@ -988,7 +1057,11 @@ public class MonsterAI_New : MonoBehaviour
         
         if (player != null)
         {
-            agent.SetDestination(player.position);
+            if (Time.time >= nextPaintedTreeDestinationUpdate)
+            {
+                SetDestinationAvoidingPaintedTrees(player.position);
+                nextPaintedTreeDestinationUpdate = Time.time + paintedTreeDestinationRefreshRate;
+            }
             
             Vector3 direction = (player.position - transform.position).normalized;
             direction.y = 0f;
@@ -1111,7 +1184,7 @@ public class MonsterAI_New : MonoBehaviour
             NavMeshHit hit;
             if (NavMesh.SamplePosition(randomDirection, out hit, patrolRadius, NavMesh.AllAreas))
             {
-                agent.SetDestination(hit.position);
+                SetDestinationAvoidingPaintedTrees(hit.position);
                 agent.isStopped = false;
                 return;
             }
@@ -1119,14 +1192,120 @@ public class MonsterAI_New : MonoBehaviour
         
         if (NavMesh.SamplePosition(startPosition, out NavMeshHit fallbackHit, 10f, NavMesh.AllAreas))
         {
-            agent.SetDestination(fallbackHit.position);
+            SetDestinationAvoidingPaintedTrees(fallbackHit.position);
             agent.isStopped = false;
         }
         else
         {
-            agent.SetDestination(transform.position);
+            SetDestinationAvoidingPaintedTrees(transform.position);
             agent.isStopped = false;
         }
+    }
+
+    // Reads Terrain tree instances once because painted trees are not consistently
+    // available as ordinary scene objects or NavMesh obstacles at runtime.
+    [ContextMenu("Refresh Painted Tree Cache")]
+    public void CachePaintedTrees()
+    {
+        paintedTrees.Clear();
+
+        Terrain[] terrains = Terrain.activeTerrains;
+        for (int terrainIndex = 0; terrainIndex < terrains.Length; terrainIndex++)
+        {
+            Terrain terrain = terrains[terrainIndex];
+            if (terrain == null || terrain.terrainData == null)
+                continue;
+
+            TerrainData terrainData = terrain.terrainData;
+            TreeInstance[] instances = terrainData.treeInstances;
+            for (int treeIndex = 0; treeIndex < instances.Length; treeIndex++)
+            {
+                TreeInstance instance = instances[treeIndex];
+                Vector3 localPosition = Vector3.Scale(instance.position, terrainData.size);
+                Vector3 worldPosition = terrain.transform.TransformPoint(localPosition);
+                float radius = Mathf.Max(0.5f, instance.widthScale * 0.5f);
+                paintedTrees.Add(new PaintedTreeObstacle(worldPosition, radius));
+            }
+        }
+    }
+
+    // Uses a point beside the first tree blocking White Lady's direct route.
+    private bool SetDestinationAvoidingPaintedTrees(Vector3 destination)
+    {
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh)
+            return false;
+
+        if (avoidPaintedTrees && TrySetPaintedTreeDetour(destination))
+            return true;
+
+        agent.SetDestination(destination);
+        return true;
+    }
+
+    private bool TrySetPaintedTreeDetour(Vector3 destination)
+    {
+        if (paintedTrees.Count == 0)
+            return false;
+
+        Vector3 start = transform.position;
+        start.y = 0f;
+        Vector3 end = destination;
+        end.y = 0f;
+        Vector3 route = end - start;
+        float routeLength = route.magnitude;
+        if (routeLength < 0.1f)
+            return false;
+
+        Vector3 routeDirection = route / routeLength;
+        float lookAhead = Mathf.Min(routeLength, Mathf.Max(1f, paintedTreeLookAheadDistance));
+        PaintedTreeObstacle closestTree = default;
+        float closestDistance = float.MaxValue;
+        bool foundBlockingTree = false;
+
+        for (int i = 0; i < paintedTrees.Count; i++)
+        {
+            PaintedTreeObstacle tree = paintedTrees[i];
+            Vector3 toTree = tree.position - start;
+            toTree.y = 0f;
+            float alongRoute = Vector3.Dot(toTree, routeDirection);
+            if (alongRoute <= 0f || alongRoute > lookAhead)
+                continue;
+
+            Vector3 closestPoint = start + routeDirection * alongRoute;
+            Vector3 flatTreePosition = tree.position;
+            flatTreePosition.y = 0f;
+            float clearance = tree.radius + paintedTreeClearance;
+            if ((flatTreePosition - closestPoint).sqrMagnitude > clearance * clearance ||
+                alongRoute >= closestDistance)
+                continue;
+
+            closestTree = tree;
+            closestDistance = alongRoute;
+            foundBlockingTree = true;
+        }
+
+        if (!foundBlockingTree)
+            return false;
+
+        Vector3 side = Vector3.Cross(Vector3.up, routeDirection).normalized;
+        float detourDistance = closestTree.radius + paintedTreeClearance;
+        return TrySetDetourPath(closestTree.position + side * detourDistance) ||
+               TrySetDetourPath(closestTree.position - side * detourDistance);
+    }
+
+    private bool TrySetDetourPath(Vector3 candidate)
+    {
+        if (!NavMesh.SamplePosition(candidate, out NavMeshHit detourPoint,
+                                    paintedTreeClearance + 1f, agent.areaMask))
+            return false;
+
+        NavMeshPath detourPath = new NavMeshPath();
+        if (!agent.CalculatePath(detourPoint.position, detourPath) ||
+            detourPath.status != NavMeshPathStatus.PathComplete)
+            return false;
+
+        agent.SetPath(detourPath);
+        return true;
     }
     
     void UpdateAnimations()
