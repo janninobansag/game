@@ -1355,10 +1355,12 @@ MonoBehaviour:
   roamWaitMax: 5
   attackDamage: 25
   attackCooldown: 1.5
-  chaseSound: {fileID: 8300000, guid: 47711bcc71bb3744baf71bab180d1cab, type: 3}
+  jumpscareFaceDistance: 2.42
+  jumpscareCameraFocusHeight: 2.6
+  chaseSound: {fileID: 8300000, guid: 704d9eb8ab8d47c44b90e5516eb807dd, type: 3}
   chaseVolume: 1
-  maxAudioDistance: 50
-  attackSound: {fileID: 8300000, guid: 1d2cd61e33175264e890c278323846d5, type: 3}
+  maxAudioDistance: 100
+  attackSound: {fileID: 8300000, guid: 94b87d5289312224d84e96e965bc470a, type: 3}
   effectDistance: 8
   maxShakeIntensity: 0.3
   bushTag: Bush

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
+using UnityEngine.UI;
 
 public class OutroManager : MonoBehaviour
 {
@@ -22,6 +23,12 @@ public class OutroManager : MonoBehaviour
     private float fadeAlpha = 0f;
     private bool isFading = false;
     private bool videoEnded = false;
+    private Canvas overlayCanvas;
+    private RawImage videoImage;
+    private Image fadeImage;
+    private RenderTexture videoTexture;
+    private int textureWidth;
+    private int textureHeight;
 
     void Start()
     {
@@ -31,7 +38,7 @@ public class OutroManager : MonoBehaviour
         fadeTexture.Apply();
 
         // Start with black screen
-        fadeAlpha = 1f;
+        SetFadeAlpha(1f);
 
         // Get video player if not assigned
         if (videoPlayer == null)
@@ -39,6 +46,7 @@ public class OutroManager : MonoBehaviour
 
         if (videoPlayer != null)
         {
+            CreateVideoOverlay();
             // Register event for when video ends
             videoPlayer.loopPointReached += OnVideoEnd;
             
@@ -64,8 +72,11 @@ public class OutroManager : MonoBehaviour
 
     void Update()
     {
-        // Optional: Skip video with any key
-        if (Input.anyKeyDown && !isFading && !videoEnded)
+        EnsureVideoTexture();
+
+        // Credits can only be skipped with Enter.
+        bool enterPressed = Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter);
+        if (enterPressed && !isFading && !videoEnded)
         {
             SkipVideo();
         }
@@ -96,10 +107,10 @@ public class OutroManager : MonoBehaviour
         while (elapsed < fadeInDuration)
         {
             elapsed += Time.deltaTime;
-            fadeAlpha = Mathf.Lerp(1f, 0f, elapsed / fadeInDuration);
+            SetFadeAlpha(Mathf.Lerp(1f, 0f, elapsed / fadeInDuration));
             yield return null;
         }
-        fadeAlpha = 0f;
+        SetFadeAlpha(0f);
         
         isFading = false;
     }
@@ -116,10 +127,10 @@ public class OutroManager : MonoBehaviour
         while (elapsed < fadeOutDuration)
         {
             elapsed += Time.deltaTime;
-            fadeAlpha = Mathf.Lerp(0f, 1f, elapsed / fadeOutDuration);
+            SetFadeAlpha(Mathf.Lerp(0f, 1f, elapsed / fadeOutDuration));
             yield return null;
         }
-        fadeAlpha = 1f;
+        SetFadeAlpha(1f);
 
         // Wait a moment
         yield return new WaitForSeconds(0.3f);
@@ -136,7 +147,7 @@ public class OutroManager : MonoBehaviour
 
     void OnGUI()
     {
-        if (fadeAlpha > 0f)
+        if (fadeImage == null && fadeAlpha > 0f)
         {
             GUI.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, fadeAlpha);
             GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), fadeTexture);
@@ -145,7 +156,83 @@ public class OutroManager : MonoBehaviour
 
     void OnDestroy()
     {
+        if (videoTexture != null)
+        {
+            videoTexture.Release();
+            Destroy(videoTexture);
+        }
         if (fadeTexture != null)
             Destroy(fadeTexture);
+    }
+
+    // Draw the outro as screen-space UI so camera render scale and post effects cannot alter the video.
+    private void CreateVideoOverlay()
+    {
+        GameObject canvasObject = new GameObject("Outro Video Overlay", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+        overlayCanvas = canvasObject.GetComponent<Canvas>();
+        overlayCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        overlayCanvas.sortingOrder = 1000;
+
+        GameObject videoObject = new GameObject("Video", typeof(RectTransform), typeof(RawImage), typeof(AspectRatioFitter));
+        videoObject.transform.SetParent(canvasObject.transform, false);
+        videoImage = videoObject.GetComponent<RawImage>();
+        videoImage.raycastTarget = false;
+        StretchToScreen(videoImage.rectTransform);
+
+        AspectRatioFitter aspectFitter = videoObject.GetComponent<AspectRatioFitter>();
+        aspectFitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+        aspectFitter.aspectRatio = videoPlayer.clip != null && videoPlayer.clip.height > 0
+            ? (float)videoPlayer.clip.width / videoPlayer.clip.height
+            : 16f / 9f;
+
+        GameObject fadeObject = new GameObject("Fade", typeof(RectTransform), typeof(Image));
+        fadeObject.transform.SetParent(canvasObject.transform, false);
+        fadeImage = fadeObject.GetComponent<Image>();
+        fadeImage.raycastTarget = false;
+        StretchToScreen(fadeImage.rectTransform);
+        SetFadeAlpha(fadeAlpha);
+
+        videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+        EnsureVideoTexture();
+    }
+
+    private void EnsureVideoTexture()
+    {
+        if (videoPlayer == null || videoImage == null) return;
+
+        int width = Mathf.Max(1, Screen.width);
+        int height = Mathf.Max(1, Screen.height);
+        if (videoTexture != null && width == textureWidth && height == textureHeight) return;
+
+        if (videoTexture != null)
+        {
+            videoTexture.Release();
+            Destroy(videoTexture);
+        }
+
+        textureWidth = width;
+        textureHeight = height;
+        videoTexture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32);
+        videoTexture.Create();
+        videoPlayer.targetTexture = videoTexture;
+        videoImage.texture = videoTexture;
+    }
+
+    private void SetFadeAlpha(float alpha)
+    {
+        fadeAlpha = alpha;
+        if (fadeImage == null) return;
+
+        Color color = fadeColor;
+        color.a *= fadeAlpha;
+        fadeImage.color = color;
+    }
+
+    private static void StretchToScreen(RectTransform rect)
+    {
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
     }
 }

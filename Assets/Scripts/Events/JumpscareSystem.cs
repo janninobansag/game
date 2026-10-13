@@ -6,10 +6,8 @@ public class JumpscareSystem : MonoBehaviour
 {
     public static JumpscareSystem Instance;
 
-    // Audio and timing used for the active jumpscare sequence.
+    // Timing used for the active jumpscare sequence.
     [Header("Jumpscare Settings")]
-    public AudioClip jumpscareSound;
-    public AudioClip screamSound;
     public float jumpscareDuration = 3f;
 
     // What happens after the jumpscare finishes.
@@ -19,8 +17,13 @@ public class JumpscareSystem : MonoBehaviour
 
     // Positioning used to place the mutant in front of the player camera.
     [Header("Mutant Face Settings")]
-    public float mutantFaceDistance = 0.8f;
+    [Tooltip("Fallback distance when the catching enemy has no individual setting.")]
+    public float mutantFaceDistance = 1.35f;
     public float mutantMoveSpeed = 30f;
+    [Tooltip("Time used to turn the player camera toward Varen when he catches the player.")]
+    [Min(0f)] public float cameraLookDuration = 0.25f;
+    [Tooltip("Height on Varen used as the camera focus point.")]
+    public float mutantFaceHeight = 1.5f;
 
     private bool isJumpscaring = false;
     private float jumpscareAlpha = 0f;
@@ -29,7 +32,6 @@ public class JumpscareSystem : MonoBehaviour
     private float deathAlpha = 0f;
     private float shakeTimer = 0f;
     private Vector2 shakeOffset;
-    private AudioSource audioSource;
 
     // Mutant reference
     private GameObject mutantObj;
@@ -45,13 +47,6 @@ public class JumpscareSystem : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-    }
-
-    void Start()
-    {
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.spatialBlend = 0f;
-        audioSource.playOnAwake = false;
     }
 
     void Update()
@@ -124,10 +119,18 @@ public class JumpscareSystem : MonoBehaviour
                 mutantObj.GetComponent<UnityEngine.AI.NavMeshAgent>();
             if (agent != null) agent.enabled = false;
 
-            // Calculate position in front of camera
             Camera cam = Camera.main;
+            if (cam == null)
+                yield break;
+
+            // Turn toward Varen before bringing him in front of the player.
+            float focusHeight = ai != null ? ai.jumpscareCameraFocusHeight : mutantFaceHeight;
+            yield return StartCoroutine(FocusCameraOnMutant(cam.transform, mutantObj.transform, focusHeight));
+
+            // Calculate position in front of camera
+            float faceDistance = ai != null ? ai.jumpscareFaceDistance : mutantFaceDistance;
             mutantTargetPos = cam.transform.position +
-                cam.transform.forward * mutantFaceDistance;
+                cam.transform.forward * faceDistance;
             mutantTargetPos.y = cam.transform.position.y - 1.5f;
 
             // Face the player
@@ -148,10 +151,6 @@ mutantTargetRot = Quaternion.Euler(euler);
         flashAlpha = 1f;
         shakeTimer = 0.6f;
 
-        // Play jumpscare sound
-        if (jumpscareSound != null)
-            audioSource.PlayOneShot(jumpscareSound);
-
         // Fade flash → red overlay
         float elapsed = 0f;
         while (elapsed < 0.2f)
@@ -165,10 +164,8 @@ mutantTargetRot = Quaternion.Euler(euler);
         flashAlpha = 0f;
         jumpscareAlpha = 1f;
 
-        // Play scream after short delay
+        // Brief pause before holding the jumpscare.
         yield return new WaitForSeconds(0.3f);
-        if (screamSound != null)
-            audioSource.PlayOneShot(screamSound);
 
         // Hold jumpscare
         yield return new WaitForSeconds(jumpscareDuration);
@@ -202,6 +199,27 @@ mutantTargetRot = Quaternion.Euler(euler);
             UnityEngine.SceneManagement.SceneManager.LoadScene(
                 UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
+    }
+
+    IEnumerator FocusCameraOnMutant(Transform playerCamera, Transform mutant, float focusHeight)
+    {
+        Vector3 direction = mutant.position + Vector3.up * focusHeight - playerCamera.position;
+        if (direction.sqrMagnitude < 0.001f)
+            yield break;
+
+        Quaternion startRotation = playerCamera.rotation;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        float elapsed = 0f;
+
+        while (elapsed < cameraLookDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float progress = cameraLookDuration <= 0f ? 1f : elapsed / cameraLookDuration;
+            playerCamera.rotation = Quaternion.Slerp(startRotation, targetRotation, progress);
+            yield return null;
+        }
+
+        playerCamera.rotation = targetRotation;
     }
 
     void OnGUI()

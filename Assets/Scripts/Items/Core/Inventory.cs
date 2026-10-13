@@ -42,6 +42,12 @@ public class Inventory : MonoBehaviour
     private List<GameObject> items = new List<GameObject>();
     private int selectedIndex = -1;
     private PhysicMaterial dropPhysicsMaterial;
+    private static readonly KeyCode[] slotKeys =
+    {
+        KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3,
+        KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6,
+        KeyCode.Alpha7, KeyCode.Alpha8, KeyCode.Alpha9
+    };
 
     void Awake()
     {
@@ -57,8 +63,23 @@ public class Inventory : MonoBehaviour
         if (scroll > 0f) CycleItem(-1);
         else if (scroll < 0f) CycleItem(1);
 
+        HandleSlotShortcuts();
+
         if (Input.GetKeyDown(KeyCode.G) && selectedIndex >= 0 && selectedIndex < items.Count)
             DropItem(selectedIndex);
+    }
+
+    private void HandleSlotShortcuts()
+    {
+        int availableSlots = Mathf.Min(items.Count, slotKeys.Length);
+        for (int index = 0; index < availableSlots; index++)
+        {
+            if (Input.GetKeyDown(slotKeys[index]))
+            {
+                SelectItem(index);
+                return;
+            }
+        }
     }
 
     void CycleItem(int direction)

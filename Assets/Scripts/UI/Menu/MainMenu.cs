@@ -651,8 +651,8 @@ void Start()
             GUI.Label(new Rect(startX, startY + rowH * 8, keyW, rowH), "G", controlTitleStyle);
             GUI.Label(new Rect(startX + keyW, startY + rowH * 8, actionW, rowH), "Drop item", controlTextStyle);
             
-            GUI.Label(new Rect(startX, startY + rowH * 9, keyW, rowH), "Scroll Wheel", controlTitleStyle);
-            GUI.Label(new Rect(startX + keyW, startY + rowH * 9, actionW, rowH), "Switch item", controlTextStyle);
+            GUI.Label(new Rect(startX, startY + rowH * 9, keyW, rowH), "1 / 2 / 3", controlTitleStyle);
+            GUI.Label(new Rect(startX + keyW, startY + rowH * 9, actionW, rowH), "Select item", controlTextStyle);
             
             GUI.Label(new Rect(startX, startY + rowH * 10, keyW, rowH), "M", controlTitleStyle);
             GUI.Label(new Rect(startX + keyW, startY + rowH * 10, actionW, rowH), "Map", controlTextStyle);

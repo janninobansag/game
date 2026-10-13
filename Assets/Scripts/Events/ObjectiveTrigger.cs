@@ -44,6 +44,8 @@ public class ObjectiveTrigger : MonoBehaviour
         {
             panelRect = objectivePanel.GetComponent<RectTransform>();
             originalPosition = panelRect.localPosition;
+            originalPosition.x += 40f;
+            panelRect.localPosition = originalPosition;
             objectivePanel.SetActive(false);
         }
     }
