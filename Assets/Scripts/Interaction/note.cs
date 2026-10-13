@@ -8,15 +8,46 @@ public class Note : MonoBehaviour
     [Header("Objectives")] public ObjectiveTrigger onCloseObjective;
     [Header("On Close Audio")] public AudioTrigger onCloseAudio;
     // Text and interaction distance for this readable note.
-    [Header("Note Settings")]
+    [Header("English Note")]
     public string noteTitle = "Old Note";
     [TextArea(3, 10)] public string noteContent = "Write your note content here...";
+
+    [Header("Korean Translation")]
+    public string koreanTitle;
+    [TextArea(3, 10)] public string koreanContent;
+
+    [Header("Tagalog Translation")]
+    public string tagalogTitle;
+    [TextArea(3, 10)] public string tagalogContent;
+
     public float readRange = 2f;
     public KeyCode readKey = KeyCode.E;
 
     public bool IsReading => isReading;
     // Other scripts use this to detect whether the player has already read the note.
     public bool HasBeenRead() => hasBeenRead;
+
+    public string GetLocalizedTitle()
+    {
+        if (GameplayLocalization.IsKorean && !string.IsNullOrWhiteSpace(koreanTitle)) return koreanTitle;
+        if (GameplayLocalization.IsTagalog && !string.IsNullOrWhiteSpace(tagalogTitle)) return tagalogTitle;
+        return noteTitle;
+    }
+
+    public string GetLocalizedContent()
+    {
+        if (GameplayLocalization.IsKorean && !string.IsNullOrWhiteSpace(koreanContent)) return koreanContent;
+        if (GameplayLocalization.IsTagalog && !string.IsNullOrWhiteSpace(tagalogContent)) return tagalogContent;
+        return noteContent;
+    }
+
+    private string GetReadPrompt()
+    {
+        string title = GetLocalizedTitle();
+        if (GameplayLocalization.IsKorean) return $"{readKey} 키를 눌러 {title} 읽기";
+        if (GameplayLocalization.IsTagalog) return $"Pindutin ang {readKey} upang basahin ang {title}";
+        return $"Press {readKey} to read {title}";
+    }
 
     private static Note activeNote;
     private bool hasBeenRead;
@@ -53,7 +84,7 @@ public class Note : MonoBehaviour
         if (ui == null) return;
         if (lookingAtNote)
         {
-            ui.ShowPrompt(this, $"Press {readKey} to read {noteTitle}");
+            ui.ShowPrompt(this, GetReadPrompt());
             if (Input.GetKeyDown(readKey)) OpenNote();
         }
         else ui.HidePrompt(this);
