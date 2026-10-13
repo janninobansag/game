@@ -246,13 +246,13 @@ public class GeneratorFuelInteraction : MonoBehaviour
         Rect rect = new Rect(Screen.width * 0.5f - 200f, Screen.height * 0.5f + 50f, 400f, 35f);
         string message;
         if (isPouring)
-            message = "Hold " + interactKey + " to pour Gas: " + Mathf.RoundToInt(pourProgress * 100f) + "%";
+            message = string.Format(GameplayLocalization.TranslateSubtitle("Hold {0} to pour Gas: {1}%"), interactKey, Mathf.RoundToInt(pourProgress * 100f));
         else if (showFuelRequiredPrompt)
-            message = fuelRequiredPrompt;
+            message = GameplayLocalization.TranslateSubtitle(fuelRequiredPrompt);
         else if (showClosedCoverPrompt)
-            message = "Remove the gas tank cover first";
+            message = GameplayLocalization.TranslateSubtitle("Remove the gas tank cover first");
         else if (showPrompt)
-            message = "Hold " + interactKey + " to pour Gas";
+            message = string.Format(GameplayLocalization.TranslateSubtitle("Hold {0} to pour Gas"), interactKey);
         else
             return;
         GUI.Label(new Rect(rect.x + 1f, rect.y + 1f, rect.width, rect.height), message, shadow);

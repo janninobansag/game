@@ -441,14 +441,16 @@ public class GeneratorKeySlot : MonoBehaviour
             GUIStyle warningText = new GUIStyle(warningShadow);
             warningText.normal.textColor = shutdownWarningColor;
             Rect warningRect = new Rect(Screen.width * 0.5f - 310f, Screen.height * 0.17f, 620f, 100f);
-            GUI.Label(new Rect(warningRect.x + 2f, warningRect.y + 2f, warningRect.width, warningRect.height), shutdownWarningMessage, warningShadow);
-            GUI.Label(warningRect, shutdownWarningMessage, warningText);
+            string localizedWarning = GameplayLocalization.TranslateSubtitle(shutdownWarningMessage);
+            GUI.Label(new Rect(warningRect.x + 2f, warningRect.y + 2f, warningRect.width, warningRect.height), localizedWarning, warningShadow);
+            GUI.Label(warningRect, localizedWarning, warningText);
         }
 
         if (!showPrompt || isRunning) return;
         string message = string.IsNullOrEmpty(currentPromptMessage)
             ? (insertedKey == null ? insertKeyPrompt : startGeneratorPrompt)
             : currentPromptMessage;
+        message = GameplayLocalization.TranslateSubtitle(message);
         GUIStyle shadow = new GUIStyle { fontSize = 22, alignment = TextAnchor.MiddleCenter };
         shadow.normal.textColor = Color.black;
         GUIStyle text = new GUIStyle(shadow); text.normal.textColor = Color.white;

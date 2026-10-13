@@ -363,7 +363,7 @@ public class StoryIntro : MonoBehaviour
                 new Color(0.95f, 0.9f, 0.82f, Mathf.Clamp01(textAlpha));
             skipStyle.alignment = TextAnchor.MiddleRight;
             GUI.Label(new Rect(sw - 260f, sh - 42f, 240f, 28f),
-                "Left Click: Continue  |  ENTER: Skip", skipStyle);
+                GameplayLocalization.TranslateSubtitle("Left Click: Continue | ENTER: Skip"), skipStyle);
         }
 
         GUI.color = Color.white;

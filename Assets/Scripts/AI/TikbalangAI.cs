@@ -395,18 +395,18 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             elapsed += Time.unscaledDeltaTime;
-            SetText("TimerText", "Time: " + Mathf.Max(0f, questionDisplayTime - elapsed).ToString("F1") + "s");
+            SetText("TimerText", string.Format(GameplayLocalization.TranslateSubtitle("Time: {0:F1}s"), Mathf.Max(0f, questionDisplayTime - elapsed)));
             yield return null;
         }
 
         bool correct = answerReceived && currentQuestion != null && selectedAnswerIndex == currentQuestion.correctAnswerIndex;
         if (correct)
         {
-            SetFeedback("Correct!", Color.green);
+            SetFeedback(GameplayLocalization.TranslateSubtitle("Correct!"), Color.green);
         }
         else
         {
-            SetFeedback("Wrong!", Color.red);
+            SetFeedback(GameplayLocalization.TranslateSubtitle("Wrong!"), Color.red);
         }
 
         // Keep the feedback visible first. Applying damage afterward lets the shared
@@ -453,11 +453,11 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
     private void PopulateQuestionUI()
     {
         selectedAnswerIndex = -1;
-        SetText("QuestionText", currentQuestion.question);
-        SetText("OptionA/Text (TMP)", "A. " + currentQuestion.options[0]);
-        SetText("OptionB/Text (TMP)", "B. " + currentQuestion.options[1]);
-        SetText("OptionC/Text (TMP)", "C. " + currentQuestion.options[2]);
-        SetText("OptionD/Text (TMP)", "D. " + currentQuestion.options[3]);
+        SetText("QuestionText", GameplayLocalization.TranslateSubtitle(currentQuestion.question));
+        SetText("OptionA/Text (TMP)", "A. " + GameplayLocalization.TranslateSubtitle(currentQuestion.options[0]));
+        SetText("OptionB/Text (TMP)", "B. " + GameplayLocalization.TranslateSubtitle(currentQuestion.options[1]));
+        SetText("OptionC/Text (TMP)", "C. " + GameplayLocalization.TranslateSubtitle(currentQuestion.options[2]));
+        SetText("OptionD/Text (TMP)", "D. " + GameplayLocalization.TranslateSubtitle(currentQuestion.options[3]));
         SetFeedback(string.Empty, Color.white);
     }
 
@@ -1005,8 +1005,9 @@ yield return StartCoroutine(RestoreCameraAfterJumpscare());
         text.normal.textColor = generatorObjectiveColor;
 
         Rect rect = new Rect(Screen.width * 0.5f - 320f, Screen.height * 0.18f, 640f, 80f);
-        GUI.Label(new Rect(rect.x + 2f, rect.y + 2f, rect.width, rect.height), generatorObjectiveMessage, shadow);
-        GUI.Label(rect, generatorObjectiveMessage, text);
+        string localizedMessage = GameplayLocalization.TranslateSubtitle(generatorObjectiveMessage);
+        GUI.Label(new Rect(rect.x + 2f, rect.y + 2f, rect.width, rect.height), localizedMessage, shadow);
+        GUI.Label(rect, localizedMessage, text);
     }
 
     // Sets an animator trigger only if a matching trigger parameter exists.
