@@ -56,14 +56,14 @@ public class MenuManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        
+
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
         audioSource.spatialBlend = 0f;
-        
+
         float savedVolume = PlayerPrefs.GetFloat("MasterVolume", 100f);
         AudioListener.volume = savedVolume / 100f;
 
@@ -97,7 +97,7 @@ public class MenuManager : MonoBehaviour
     {
         string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
         string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
-        
+
         bool normalExists = File.Exists(normalPath);
         bool hardExists = File.Exists(hardPath);
         return normalExists || hardExists;
@@ -131,7 +131,7 @@ public class MenuManager : MonoBehaviour
         // Completed saves remain visible but cannot be selected.
         bool hasNormalSave = HasNormalSave();
         bool canLoadNormalSave = CanLoadSave("gameSave_v2.db");
-        
+
         // Check if Hard mode save exists
         bool hasHardSave = HasHardSave();
         bool canLoadHardSave = CanLoadSave("gameSave_Hard_v2.db");
@@ -164,7 +164,7 @@ public class MenuManager : MonoBehaviour
         {
             string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
             int normalProgress = GetProgressFromDatabase(normalPath);
-            
+
             if (normalProgress >= 100)
             {
                 normalProgressText.text = "Completed";
@@ -187,7 +187,7 @@ public class MenuManager : MonoBehaviour
         {
             string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
             int hardProgress = GetProgressFromDatabase(hardPath);
-            
+
             if (hardProgress >= 100)
             {
                 hardProgressText.text = "Completed";
@@ -238,16 +238,16 @@ public class MenuManager : MonoBehaviour
     public void OpenLoadPanel()
     {
         PlayClickSound();
-        
+
         // Update button visibility before showing panel
         UpdateLoadButtonsVisibility();
-        
+
         // ── Load progression when panel opens ──
         LoadAndDisplayProgression();
-        
+
         if (loadPanel != null)
             loadPanel.SetActive(true);
-        
+
         if (difficultyPanel != null)
             difficultyPanel.SetActive(false);
     }
@@ -256,7 +256,7 @@ public class MenuManager : MonoBehaviour
     public void CloseLoadPanel()
     {
         PlayClickSound();
-        
+
         if (loadPanel != null)
             loadPanel.SetActive(false);
 
@@ -268,27 +268,27 @@ public class MenuManager : MonoBehaviour
         PlayClickSound();
 
         string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
-        
+
         if (CanLoadSave("gameSave_v2.db"))
         {
-            
+
             // Set the difficulty so SaveSystem loads the correct database
             PlayerPrefs.SetString("GameDifficulty", "Normal");
             PlayerPrefs.SetInt("ShouldLoadSave", 1);
             PlayerPrefs.SetInt("SkipIntro", 1);
             PlayerPrefs.SetString("SavedScene", "chapter 1");
             PlayerPrefs.Save();
-            
+
             if (loadPanel != null)
             loadPanel.SetActive(false);
 
-            
+
             // Force reload SaveSystem to use Normal database
             if (SaveSystem.Instance != null)
             {
                 SaveSystem.Instance.ReinitializeDatabase();
             }
-            
+
             SceneFader.Instance.FadeToScene("chapter 1");
         }
         else
@@ -302,27 +302,27 @@ public class MenuManager : MonoBehaviour
         PlayClickSound();
 
         string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
-        
+
         if (CanLoadSave("gameSave_Hard_v2.db"))
         {
-            
+
             // Set the difficulty so SaveSystem loads the correct database
             PlayerPrefs.SetString("GameDifficulty", "Hard");
             PlayerPrefs.SetInt("ShouldLoadSave", 1);
             PlayerPrefs.SetInt("SkipIntro", 1);
             PlayerPrefs.SetString("SavedScene", "chapter 2");
             PlayerPrefs.Save();
-            
+
             if (loadPanel != null)
             loadPanel.SetActive(false);
 
-            
+
             // Force reload SaveSystem to use Hard database
             if (SaveSystem.Instance != null)
             {
                 SaveSystem.Instance.ReinitializeDatabase();
             }
-            
+
             SceneFader.Instance.FadeToScene("chapter 2");
         }
         else
@@ -333,7 +333,7 @@ public class MenuManager : MonoBehaviour
     public void PlayGame()
     {
         PlayClickSound();
-        
+
         if (difficultyPanel != null)
         {
             difficultyPanel.SetActive(true);
@@ -345,17 +345,9 @@ public class MenuManager : MonoBehaviour
         PlayClickSound();
         ProgressionTrigger.ClearSavedStates();
         ObjectiveTrigger.ClearSavedStates();
-        
+
         if (difficultyPanel != null)
             difficultyPanel.SetActive(false);
-
-        // ── Clear all data when starting a new game ──
-        if (SaveSystem.Instance != null)
-        {
-            SaveSystem.Instance.ClearKeyData();
-            SaveSystem.Instance.ClearBatteryData();
-            SaveSystem.Instance.ClearRitualItemData();
-        }
 
         // ── Reset all PickupTriggerSpawner states ──
         PickupTriggerSpawner[] spawners = FindObjectsOfType<PickupTriggerSpawner>();
@@ -384,11 +376,14 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.DeleteKey("WrenchSpawnIndex_Normal");
         PlayerPrefs.DeleteKey("WrenchSpawnIndex_Hard");
         PlayerPrefs.Save();
-        
+
         // Force SaveSystem to use Normal database
         if (SaveSystem.Instance != null)
         {
             SaveSystem.Instance.ReinitializeDatabase();
+            SaveSystem.Instance.ClearKeyData();
+            SaveSystem.Instance.ClearBatteryData();
+            SaveSystem.Instance.ClearRitualItemData();
             SaveSystem.Instance.ClearNewGameWorldState();
             SaveSystem.Instance.ClearProgressionData();
             SaveSystem.Instance.ClearStoryIntroData();
@@ -398,7 +393,7 @@ public class MenuManager : MonoBehaviour
         {
             ClearProgressionDataFromFile("gameSave_v2.db");
         }
-        
+
         SceneFader.Instance.FadeToScene("chapter 1");
     }
 
@@ -407,17 +402,9 @@ public class MenuManager : MonoBehaviour
         PlayClickSound();
         ProgressionTrigger.ClearSavedStates();
         ObjectiveTrigger.ClearSavedStates();
-        
+
         if (difficultyPanel != null)
             difficultyPanel.SetActive(false);
-
-        // ── Clear all data when starting a new game ──
-        if (SaveSystem.Instance != null)
-        {
-            SaveSystem.Instance.ClearKeyData();
-            SaveSystem.Instance.ClearBatteryData();
-            SaveSystem.Instance.ClearRitualItemData();
-        }
 
         // ── Reset all PickupTriggerSpawner states ──
         PickupTriggerSpawner[] spawners = FindObjectsOfType<PickupTriggerSpawner>();
@@ -446,11 +433,14 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.DeleteKey("WrenchSpawnIndex_Normal");
         PlayerPrefs.DeleteKey("WrenchSpawnIndex_Hard");
         PlayerPrefs.Save();
-        
+
         // Force SaveSystem to use Hard database
         if (SaveSystem.Instance != null)
         {
             SaveSystem.Instance.ReinitializeDatabase();
+            SaveSystem.Instance.ClearKeyData();
+            SaveSystem.Instance.ClearBatteryData();
+            SaveSystem.Instance.ClearRitualItemData();
             SaveSystem.Instance.ClearNewGameWorldState();
             SaveSystem.Instance.ClearProgressionData();
             SaveSystem.Instance.ClearStoryIntroData();
@@ -460,7 +450,7 @@ public class MenuManager : MonoBehaviour
         {
             ClearProgressionDataFromFile("gameSave_Hard_v2.db");
         }
-        
+
         SceneFader.Instance.FadeToScene("chapter 2");
     }
 
@@ -500,7 +490,7 @@ public class MenuManager : MonoBehaviour
     public void CloseDifficultyPanel()
     {
         PlayClickSound();
-        
+
         if (difficultyPanel != null)
             difficultyPanel.SetActive(false);
     }
@@ -747,12 +737,12 @@ public class MenuManager : MonoBehaviour
     public void QuitGame()
     {
         PlayClickSound();
-        
+
         if (SaveSystem.Instance != null)
         {
             SaveSystem.Instance.SaveGame();
         }
-        
+
         Application.Quit();
     }
 

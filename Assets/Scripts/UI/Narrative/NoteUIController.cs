@@ -129,6 +129,7 @@ public class NoteUIController : MonoBehaviour
         if (readerPanel == null) BuildUI();
         if (readerPanel.activeSelf) return;
         promptOwner = owner;
+        ApplyLanguageFont();
         promptText.text = message;
         promptPanel.SetActive(true);
     }
@@ -145,8 +146,10 @@ public class NoteUIController : MonoBehaviour
         if (readerPanel == null) BuildUI();
         openNote = note;
         HidePrompt(note);
-        titleText.text = note.noteTitle;
-        contentText.text = note.noteContent;
+        titleText.text = note.GetLocalizedTitle();
+        contentText.text = note.GetLocalizedContent();
+        ApplyLanguageFont();
+        RefreshLocalizedControls();
         ApplyResponsiveLayout();
         readerPanel.SetActive(true);
     }
@@ -169,10 +172,40 @@ public class NoteUIController : MonoBehaviour
         if (titleText == null) { Transform t = paper.Find("Title"); if (t != null) titleText = t.GetComponent<TextMeshProUGUI>(); }
         if (contentText == null) { Transform t = paper.Find("Content"); if (t != null) contentText = t.GetComponent<TextMeshProUGUI>(); }
         if (hintText == null) { Transform t = paper.Find("Hint"); if (t != null) hintText = t.GetComponent<TextMeshProUGUI>(); }
-        if (hintText != null) hintText.text = "Press F to Close.";
+        RefreshLocalizedControls();
         ApplyResponsiveLayout();
     }
 
+    private void RefreshLocalizedControls()
+    {
+        if (hintText != null)
+            hintText.text = GameplayLocalization.IsKorean ? "F 키를 눌러 닫기" : GameplayLocalization.IsTagalog ? "Pindutin ang F upang isara." : "Press F to Close.";
+
+        if (closeButton == null) return;
+        TextMeshProUGUI label = closeButton.GetComponentInChildren<TextMeshProUGUI>();
+        if (label != null)
+            label.text = GameplayLocalization.IsKorean ? "닫기" : GameplayLocalization.IsTagalog ? "ISARA" : "Close";
+    }
+
+    private void ApplyLanguageFont()
+    {
+        TMP_FontAsset font = TMP_Settings.defaultFontAsset;
+        if (GameplayLocalization.IsKorean)
+        {
+            SettingsPanel settings = FindObjectOfType<SettingsPanel>();
+            if (settings != null && settings.koreanFont != null) font = settings.koreanFont;
+        }
+
+        if (promptText != null) promptText.font = font;
+        if (titleText != null) titleText.font = font;
+        if (contentText != null) contentText.font = font;
+        if (hintText != null) hintText.font = font;
+        if (closeButton != null)
+        {
+            TextMeshProUGUI label = closeButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (label != null) label.font = font;
+        }
+    }
     private void ConfigureCanvasScaler()
     {
         Canvas canvas = GetComponentInParent<Canvas>();

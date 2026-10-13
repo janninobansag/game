@@ -198,8 +198,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -327,7 +327,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 
+  m_Name:
   m_Rect:
     serializedVersion: 2
     x: 0
@@ -340,8 +340,8 @@ Sprite:
   m_Pivot: {x: 0.5, y: 0.5}
   m_Extrude: 0
   m_IsPolygon: 0
-  m_AtlasName: 
-  m_PackingTag: 
+  m_AtlasName:
+  m_PackingTag:
   m_RenderDataKey:
     00000000000000000000000000000000: 0
   m_AtlasTags: []
@@ -530,7 +530,7 @@ Sprite:
     downscaleMultiplier: 1
   m_PhysicsShape: []
   m_Bones: []
-  m_SpriteID: 
+  m_SpriteID:
 --- !u!4 &27332469 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7263751259506570267, guid: 9543b80a9783c4344bd2d18909274c89,
@@ -584,8 +584,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -778,8 +778,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger (6)
   progressPoints: 10
   triggerOnce: 1
@@ -838,8 +838,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.9, g: 0.82, b: 0.62, a: 1}
   m_RaycastTarget: 1
@@ -948,8 +948,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -1020,8 +1020,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -1157,8 +1157,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -1201,8 +1201,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.25, g: 0.11, b: 0.035, a: 0.9}
   m_RaycastTarget: 1
@@ -1498,8 +1498,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -1621,8 +1621,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -1631,7 +1631,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1735,8 +1735,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 547e5b557045a2548810f626cfb8fd6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   maxHealth: 100
   currentHealth: 100
   healthBarFill: {fileID: 887013938}
@@ -1811,8 +1811,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "This place\u2026 doesn\u2019t feel right."
@@ -1887,8 +1887,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -1962,8 +1962,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -2096,8 +2096,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -2173,8 +2173,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.7490196}
   m_RaycastTarget: 1
@@ -2240,8 +2240,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 710b8190b68e3684cbeb2dd672b4b722, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   pausePanel: {fileID: 167529038}
   settingsPanel: {fileID: 2062316890965865548}
   crosshair: {fileID: 950413154}
@@ -2325,8 +2325,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -2459,8 +2459,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -2469,7 +2469,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2593,8 +2593,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -2842,8 +2842,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 040526ca88bcd664f8d85405693b8ba9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   itemTags:
   - Pickup
   - Item
@@ -2858,8 +2858,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e7c0a0529926804f898ac65001ca55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openDistance: 0.01
   animationSpeed: 2
   isLocked: 0
@@ -2900,8 +2900,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c06d1f1baef3e64ca592c76fb11e066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   watchedItem: {fileID: 825243179}
   objectToActivate: {fileID: 6398925276802950538}
   setNewObjective: 1
@@ -2968,8 +2968,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -3043,52 +3043,13 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!21 &254121537
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!213 &255159554
 Sprite:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 
+  m_Name:
   m_Rect:
     serializedVersion: 2
     x: 0
@@ -3101,8 +3062,8 @@ Sprite:
   m_Pivot: {x: 0.5, y: 0.5}
   m_Extrude: 0
   m_IsPolygon: 0
-  m_AtlasName: 
-  m_PackingTag: 
+  m_AtlasName:
+  m_PackingTag:
   m_RenderDataKey:
     00000000000000000000000000000000: 0
   m_AtlasTags: []
@@ -3291,7 +3252,7 @@ Sprite:
     downscaleMultiplier: 1
   m_PhysicsShape: []
   m_Bones: []
-  m_SpriteID: 
+  m_SpriteID:
 --- !u!1 &256351882
 GameObject:
   m_ObjectHideFlags: 0
@@ -3413,11 +3374,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 1
@@ -3701,8 +3663,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger (2)
   progressPoints: 10
   triggerOnce: 1
@@ -3720,11 +3682,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 1
@@ -4404,8 +4367,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -4526,8 +4489,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -4681,8 +4644,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10bba7d8681c70f4fa0320a2123546c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   audioClip: {fileID: 8300000, guid: 95545f33726a5694d8aeffc3e0bb652d, type: 3}
   volume: 25.23
   loop: 0
@@ -4741,8 +4704,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger
   progressPoints: 1
   triggerOnce: 1
@@ -5026,8 +4989,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -5036,7 +4999,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5266,8 +5229,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -5434,8 +5397,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "this house\u2026"
@@ -5650,11 +5613,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 1
@@ -5769,11 +5733,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -5832,8 +5797,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -5983,8 +5948,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger (8)
   progressPoints: 10
   triggerOnce: 1
@@ -6190,8 +6155,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -6219,7 +6184,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -6267,8 +6232,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: WHAT WAS THAT!!
@@ -6477,8 +6442,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -6601,8 +6566,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -6703,8 +6668,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bba6ea11f4446c446b8cf4c8c59d69a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   defaultDisplayTime: 4
   fadeSpeed: 2
   characterDelay: 0.03
@@ -6788,8 +6753,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -6798,7 +6763,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6922,8 +6887,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -7310,11 +7275,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 1
@@ -7354,8 +7320,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d039c67f58f9c8d428e9a7931c2284f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   respawnDelay: 1.82
 --- !u!65 &508679048
@@ -7504,8 +7470,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -7599,7 +7565,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 
+  m_Name:
   m_Rect:
     serializedVersion: 2
     x: 0
@@ -7612,8 +7578,8 @@ Sprite:
   m_Pivot: {x: 0.5, y: 0.5}
   m_Extrude: 0
   m_IsPolygon: 0
-  m_AtlasName: 
-  m_PackingTag: 
+  m_AtlasName:
+  m_PackingTag:
   m_RenderDataKey:
     00000000000000000000000000000000: 0
   m_AtlasTags: []
@@ -7802,7 +7768,7 @@ Sprite:
     downscaleMultiplier: 1
   m_PhysicsShape: []
   m_Bones: []
-  m_SpriteID: 
+  m_SpriteID:
 --- !u!1 &523523575
 GameObject:
   m_ObjectHideFlags: 0
@@ -7831,8 +7797,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3a34f60d1c7a0e4e8ab078593330851, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   shadowPrefab: {fileID: 2767362432705681916, guid: 45318240113fe6f489191ef9a5548112,
     type: 3}
   spawnPoint: {fileID: 2697446038755416690, guid: e3155a5174b20654c9f0543db0e367be,
@@ -7907,8 +7873,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.05, g: 0.05, b: 0.08, a: 0.9}
   m_RaycastTarget: 0
@@ -7966,8 +7932,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -8017,11 +7983,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -8082,8 +8049,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.554717, g: 0.554717, b: 0.554717, a: 0}
   m_RaycastTarget: 1
@@ -8296,8 +8263,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
   m_RaycastTarget: 1
@@ -8366,8 +8333,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd89fbec37b533f4fb5bd166540dcf93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   jumpscareSound: {fileID: 8300000, guid: 2a0787d9f5c97cb4c9d2fb56bdcf8b29, type: 3}
   screamSound: {fileID: 0}
   jumpscareDuration: 2.5
@@ -8423,8 +8390,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.78}
   m_RaycastTarget: 1
@@ -8498,8 +8465,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -8664,8 +8631,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "This is where it started\u2026"
@@ -8735,8 +8702,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c06d1f1baef3e64ca592c76fb11e066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   watchedItem: {fileID: 825243179}
   objectToActivate: {fileID: 6065094376368716835}
   setNewObjective: 0
@@ -8870,8 +8837,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af0dfb7ebd29a754c919fb3878ddd813, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   lightsToFlicker:
@@ -8972,8 +8939,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -9610,8 +9577,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "Someone lived here recently\u2026"
@@ -9767,8 +9734,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "Someone lived here recently\u2026"
@@ -9822,8 +9789,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.7275326, b: 0.2999999, a: 0}
   m_RaycastTarget: 0
@@ -9916,8 +9883,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "Who\u2019s there?!"
@@ -10127,8 +10094,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -10214,12 +10181,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681042267}
   m_CullTransparentMesh: 1
---- !u!4 &683911993 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
-    type: 3}
-  m_PrefabInstance: {fileID: 8319522320320211979}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &687905427
 GameObject:
   m_ObjectHideFlags: 0
@@ -10583,8 +10544,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -10716,8 +10677,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "Stop messing with me\u2026"
@@ -10784,8 +10745,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
@@ -10806,6 +10767,49 @@ MonoBehaviour:
 
     Take
     the key. Go to Mil''s home and find Mil.'
+  koreanTitle: "\uC624\uB798\uB41C \uCABD\uC9C0"
+  koreanContent: "\uC5B4\uC82F\uBC24 \uAD50\uD68C \uC548\uC5D0\uC11C \uB9C8\uD14C\uC624
+    \uC2E0\uBD80\uAC00 \uB9D0\uD558\uB294 \uC18C\uB9AC\uB97C \uB4E4\uC5C8\uB2E4.\r\n\uADF8\uC758
+    \uBAA9\uC18C\uB9AC\uB294 \uD3C9\uC18C\uC640 \uB2EC\uB790\uB2E4.\r\n\r\n\uC624\uB298
+    \uADF8\uB294 \uC6B0\uB9AC \uBAA8\uB450\uC5D0\uAC8C \uAE30\uB3C4\uB97C \uC704\uD574
+    \uBAA8\uC774\uB77C\uACE0 \uD588\uB2E4.\r\n\uB77C\uC774\uCE74\uC640 \uC0E4\uC774\uB098\uB294
+    \uC774\uBBF8 \uADF8\uAC00 \uCD1B\uBD88, \uC131\uACBD, \uC2ED\uC790\uAC00\uB97C
+    \uC900\uBE44\uD558\uB294 \uAC83\uC744 \uB3D5\uACE0 \uC788\uB2E4.\r\n\r\n\uBB34\uC2A8
+    \uC77C\uC774 \uBC8C\uC5B4\uC9C0\uACE0 \uC788\uB294\uC9C0 \uC774\uD574\uD560 \uC218
+    \uC788\uB294 \uC0AC\uB78C\uC740 \uBC00\uBFD0\uC77C\uC9C0\uB3C4 \uBAA8\uB978\uB2E4.\r\n\uBC00\uACFC
+    \uC8FC\uB4DC\uB294 \uB9C8\uD14C\uC624 \uC2E0\uBD80\uB3C4 \uC9C0\uCF1C\uBCF4\uACE0
+    \uC788\uB2E4.\r\n\r\n\uBC00\uC758 \uC9D1 \uC5F4\uC1E0\uB97C \uCC3E\uC544 \uC774\uACF3\uC5D0
+    \uC228\uACA8 \uB450\uC5C8\uB2E4.\r\n\uADF8 \uC5F4\uC1E0\uB97C \uAC00\uC9C0\uACE0
+    \uBC00\uC758 \uC9D1\uC73C\uB85C \uAC00\uC11C \uBC00\uC744 \uCC3E\uC544\uB77C."
+  tagalogTitle: Lumang Tala
+  tagalogContent: 'Narinig ko si Father Mateo na nagsasalita sa loob ng simbahan
+    kagabi.
+
+    Iba ang tunog ng kanyang boses kaysa dati.
+
+
+
+    Ngayon,
+    sinabi niya sa aming lahat na magtipon para sa panalangin.
+
+    Tinutulungan
+    na siya nina Laica at Shyna sa paghahanda ng mga kandila, Bibliya, at krus.
+
+
+
+    Maaaring
+    si Mill lamang ang nakakaunawa sa kung ano ang nangyayari.
+
+    Binabantayan
+    din nila ni Jude si Father Mateo.
+
+
+
+    Nahanap ko ang susi ng bahay ni
+    Mill at itinago ko ito rito.
+
+    Kunin ang susi, pumunta sa bahay ni Mill,
+    at hanapin siya.'
   readRange: 2
   readKey: 101
 --- !u!65 &724227460
@@ -10904,8 +10908,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   highlightColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   highlightRange: 3
   pulseSpeed: 2
@@ -10922,8 +10926,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   subtitleText: "\u201CA ritual\u2026 to keep something trapped?"
   displayDuration: 4
   delayBeforeShow: 0.5
@@ -10939,8 +10943,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2de488038aa0494492f86709b714fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   targetNote: {fileID: 724227459}
   triggerToActivate: {fileID: 0}
   waypointLocationsToActivate:
@@ -11095,8 +11099,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -11138,7 +11142,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 2
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &739117658
@@ -11151,8 +11155,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -11225,8 +11229,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11345d9985df2b64b9203a36f1ad737a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   placementPoint: {fileID: 1875680110}
   interactRange: 2
   interactKey: 101
@@ -11628,8 +11632,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!4 &761208774
 Transform:
   m_ObjectHideFlags: 0
@@ -11697,9 +11701,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 254121537}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 2112894914}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -11814,8 +11818,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -11824,7 +11828,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11948,8 +11952,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -11958,7 +11962,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12168,8 +12172,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -12308,8 +12312,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -12405,8 +12409,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae9af52be1ab46644a93d8c40fdfed05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -12435,8 +12439,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_IsGlobal: 1
   priority: 0
   blendDistance: 0
@@ -12473,7 +12477,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -12609,8 +12613,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7ae5ffa9af849147af2a7922c79a3e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   batteryPrefab: {fileID: 9059141294138033317, guid: 249b83492c48e6849ae70d9401800682,
     type: 3}
   bedroomKeyPrefab: {fileID: 3120904975514936307, guid: a1bb94e192563ce4aa9a34a0ad49d1fe,
@@ -12702,8 +12706,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -12969,8 +12973,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 040526ca88bcd664f8d85405693b8ba9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   itemTags:
   - Pickup
   - Item
@@ -12985,8 +12989,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e7c0a0529926804f898ac65001ca55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openDistance: 0.01
   animationSpeed: 2
   isLocked: 0
@@ -13055,8 +13059,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.18, g: 0.9, b: 0.3, a: 1}
   m_RaycastTarget: 0
@@ -13125,8 +13129,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -13200,8 +13204,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -13210,7 +13214,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -13357,8 +13361,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -13395,8 +13399,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e7c0a0529926804f898ac65001ca55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openDistance: 0.01
   animationSpeed: 2
   isLocked: 0
@@ -13457,8 +13461,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -13467,7 +13471,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -13605,8 +13609,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.554717, g: 0.554717, b: 0.554717, a: 0}
   m_RaycastTarget: 1
@@ -13680,8 +13684,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -13913,8 +13917,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82036074d23271049b2c53fef7ff7d64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   volumeSlider: {fileID: 8425150593031237964}
   volumeLabel: {fileID: 5739614158842617647}
   sensitivitySlider: {fileID: 5326692241910019494}
@@ -14437,8 +14441,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "No lights\u2026 no movement\u2026"
@@ -14509,8 +14513,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e7c0a0529926804f898ac65001ca55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openDistance: 0.01
   animationSpeed: 2
   isLocked: 0
@@ -14534,8 +14538,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 040526ca88bcd664f8d85405693b8ba9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   itemTags:
   - Pickup
   - Item
@@ -14605,8 +14609,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "\u2026I don\u2019t like this\u2026"
@@ -14812,8 +14816,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -15187,8 +15191,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -15258,8 +15262,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10bba7d8681c70f4fa0320a2123546c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   audioClip: {fileID: 8300000, guid: 7631c546201194f4495961bccae8222e, type: 3}
   volume: 1
   loop: 0
@@ -15360,8 +15364,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -15435,8 +15439,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -15743,8 +15747,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -15920,8 +15924,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -16041,8 +16045,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -16124,8 +16128,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -16226,8 +16230,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b822329082073c64ba3fc0538dcbd190, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   totalProgressPoints: 100
   saveKey: GameProgress
   progressionTriggers:
@@ -16408,8 +16412,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   highlightColor: {r: 0.4867924, g: 0.16808112, b: 0.19014218, a: 1}
   highlightRange: 3
   pulseSpeed: 2
@@ -16426,8 +16430,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
@@ -16437,6 +16441,47 @@ MonoBehaviour:
     holy items can weaken Varen, but they cannot seal him here.\n\n\r\n\rAfter placing
     them, go to the heart of Malawak Forest.\r\n\rFind the ritual tree and pray there.\r\n\rOnly
     the final prayer at the tree can complete the sealing and stop Varen."
+  koreanTitle: "\uB9C8\uD14C\uC624 \uC2E0\uBD80\uC758 \uB9C8\uC9C0\uB9C9 \uAE30\uB3C4"
+  koreanContent: "\uC774 \uAE00\uC744 \uCC3E\uC558\uB2E4\uBA74, \uC131\uC2A4\uB7EC\uC6B4
+    \uBB3C\uAC74\uB4E4\uC774 \uB2E4\uC2DC \uBAA8\uB450 \uBAA8\uC600\uB2E4\uB294 \uB73B\uC774\uB2E4.\r\n\r\n\uB450
+    \uAC1C\uC758 \uCD1B\uBD88\uACFC \uC131\uACBD, \uADF8\uB9AC\uACE0 \uC2ED\uC790\uAC00\uB97C
+    \uAD50\uD68C \uC548\uC758 \uC81C\uC790\uB9AC\uC5D0 \uB193\uC544\uB77C.\r\n\uC774
+    \uC131\uC2A4\uB7EC\uC6B4 \uBB3C\uAC74\uB4E4\uC740 \uBC14\uB80C\uC744 \uC57D\uD558\uAC8C
+    \uB9CC\uB4E4 \uC218 \uC788\uC9C0\uB9CC,\r\n\uC774\uACF3\uC5D0\uC11C\uB294 \uADF8\uB97C
+    \uBD09\uC778\uD560 \uC218 \uC5C6\uB2E4.\r\n\r\n\uBAA8\uB4E0 \uBB3C\uAC74\uC744
+    \uB193\uC740 \uB4A4, \uB9D0\uB77C\uC641 \uC232\uC758 \uC911\uC2EC\uBD80\uB85C
+    \uAC00\uB77C.\r\n\uC758\uC2DD\uC758 \uB098\uBB34\uB97C \uCC3E\uC544 \uADF8\uACF3\uC5D0\uC11C
+    \uAE30\uB3C4\uD558\uB77C.\r\n\r\n\uC624\uC9C1 \uADF8 \uB098\uBB34\uC5D0\uC11C
+    \uC62C\uB9AC\uB294 \uB9C8\uC9C0\uB9C9 \uAE30\uB3C4\uB9CC\uC774\r\n\uBD09\uC778\uC744
+    \uC644\uC131\uD558\uACE0 \uBC14\uB80C\uC744 \uBA48\uCD9C \uC218 \uC788\uB2E4."
+  tagalogTitle: Huling Panalangin ni Father Mateo
+  tagalogContent: 'Kung natagpuan mo ito, ibig sabihin ay muling magkakasama na ang
+    mga banal na bagay.
+
+
+
+    Ilagay ang dalawang kandila, ang Bibliya, at
+    ang krus sa kanilang tamang lugar sa loob ng simbahan.
+
+    Mapapahina ng mga
+    banal na bagay na ito si Varen,
+
+    ngunit hindi siya maaaring ma-seal dito.
+
+
+
+    Pagkatapos
+    mailagay ang lahat ng bagay, pumunta sa gitna ng Malawak Forest.
+
+    Hanapin
+    ang ritual tree at manalangin doon.
+
+
+
+    Tanging ang huling panalangin
+    sa puno ang makakakumpleto sa pag-seal
+
+    at makakapigil kay Varen.'
   readRange: 2
   readKey: 101
 --- !u!65 &1041007803
@@ -16520,8 +16565,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2de488038aa0494492f86709b714fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   targetNote: {fileID: 1041007802}
   triggerToActivate: {fileID: 0}
   waypointLocationsToActivate:
@@ -16763,8 +16808,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -16861,8 +16906,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2402c858ccddd094a99f2489bd4fb30e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   doScreenBlood: 0
@@ -17010,8 +17055,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 0
@@ -17208,8 +17253,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -17218,7 +17263,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -17376,8 +17421,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -17550,8 +17595,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -17594,8 +17639,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.25, g: 0.11, b: 0.035, a: 0.9}
   m_RaycastTarget: 1
@@ -17622,12 +17667,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1082813434}
   m_CullTransparentMesh: 1
---- !u!4 &1088002111 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5564313635064430396, guid: 9c459b753d9ab134f8114057339f27d7,
-    type: 3}
-  m_PrefabInstance: {fileID: 8319522320320211979}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1092079924
 GameObject:
   m_ObjectHideFlags: 0
@@ -17843,8 +17882,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -17886,7 +17925,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 3
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1100763481
@@ -17899,8 +17938,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -17970,8 +18009,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -18100,8 +18139,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -18295,11 +18334,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 2
   invertDirection: 0
@@ -18354,8 +18394,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -18471,8 +18511,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c06d1f1baef3e64ca592c76fb11e066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   watchedItem: {fileID: 825243179}
   objectToActivate: {fileID: 545794768}
   setNewObjective: 0
@@ -18545,8 +18585,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger (1)
   progressPoints: 10
   triggerOnce: 1
@@ -18576,8 +18616,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f2c74c04ebb6964d94b9881b00a704d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   placementPoint: {fileID: 1964564362}
   interactRange: 2
   interactKey: 101
@@ -18616,8 +18656,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f2c74c04ebb6964d94b9881b00a704d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   placementPoint: {fileID: 663339940}
   interactRange: 2
   interactKey: 101
@@ -18668,8 +18708,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 0
@@ -18790,8 +18830,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -18938,8 +18978,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10bba7d8681c70f4fa0320a2123546c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   audioClip: {fileID: 8300000, guid: 2a0787d9f5c97cb4c9d2fb56bdcf8b29, type: 3}
   volume: 1
   loop: 0
@@ -19012,8 +19052,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89b0a07933a06c54f9179cd0e63105a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   candleHolder1: {fileID: 1893285070}
   candleHolder2: {fileID: 741629655}
   bibleHolder: {fileID: 1187089299}
@@ -19097,8 +19137,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
@@ -19205,8 +19245,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -19322,13 +19362,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bdfb60fdaf24bd49b26a587b842e8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   objectiveText: Search the guard house.
   displayDuration: 4
   triggerOnce: 1
   playerTag: Player
-  saveId: 
+  saveId:
   objectivePanel: {fileID: 528647684}
   objectiveLabel: {fileID: 1520062541}
   fadeSpeed: 3
@@ -19397,8 +19437,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3a34f60d1c7a0e4e8ab078593330851, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   shadowPrefab: {fileID: 6704214038659889146, guid: 17bdcc370bc83814da5b774c78290c20,
     type: 3}
   spawnPoint: {fileID: 9137262015287188920, guid: 8254e5d3dbdb77a40876efd60c5834a1,
@@ -19487,8 +19527,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "This must be church\u2026"
@@ -19581,8 +19621,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_IgnoreReversedGraphics: 1
   m_BlockingObjects: 0
   m_BlockingMask:
@@ -19598,8 +19638,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
@@ -19936,8 +19976,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.9, g: 0.82, b: 0.62, a: 1}
   m_RaycastTarget: 1
@@ -20011,8 +20051,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -20049,11 +20089,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -20259,8 +20300,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -20609,8 +20650,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
   m_RaycastTarget: 1
@@ -20865,8 +20906,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -20975,8 +21016,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
@@ -20994,6 +21035,33 @@ MonoBehaviour:
 
     I left a key
     on my table it is the key to laica and shyna''s home. '
+  koreanTitle: "\uC8FC\uB4DC\uC758 \uACBD\uBE44 \uAE30\uB85D"
+  koreanContent: "\uBC00\uACFC \uB098\uB294 \uB9C8\uD14C\uC624 \uC2E0\uBD80\uB97C
+    \uC9C0\uCF1C\uBCF4\uACE0 \uC788\uC5C8\uB2E4.\n\uADF8\uB294 \uC774\uC81C \uB2E4\uB974\uAC8C
+    \uC6C0\uC9C1\uC778\uB2E4. \uADF8\uB294 \uBE48 \uBC29\uC5D0 \uB9D0\uC744 \uAC78\uACE0
+    \uC790\uC815\uC774 \uC9C0\uB098\uBA74 \uAD50\uD68C \uCABD\uC73C\uB85C \uAC78\uC5B4\uAC04\uB2E4.\n\uADF8\uC5D0\uAC8C
+    \uBB34\uC2A8 \uC77C\uC774 \uC77C\uC5B4\uB0AC\uB294\uC9C0\uB294 \uBAA8\uB974\uC9C0\uB9CC,
+    \uBB54\uAC00 \uC774\uC0C1\uD558\uB2E4.\n\uB77C\uC774\uCE74\uC640 \uC0E4\uC774\uB098\uAC00
+    \uB354 \uB9CE\uC774 \uC54C\uACE0 \uC788\uC744\uC9C0\uB3C4 \uBAA8\uB978\uB2E4.
+    \uADF8\uB4E4\uC740 \uB9C8\uD14C\uC624 \uC2E0\uBD80\uC640 \uAC00\uC7A5 \uAC00\uAE4C\uC6B4
+    \uC0AC\uB78C\uB4E4\uC774\uB2E4.\n\uB0B4 \uCC45\uC0C1 \uC704\uC5D0 \uC5F4\uC1E0\uB97C
+    \uB450\uC5C8\uB2E4. \uADF8\uAC83\uC740 \uB77C\uC774\uCE74\uC640 \uC0E4\uC774\uB098\uC758
+    \uC9D1 \uC5F4\uC1E0\uB2E4."
+  tagalogTitle: Tala ng Bantay ni Jude
+  tagalogContent: 'Binabantayan namin ni Mil si Father Mateo.
+
+    Iba na siyang
+    kumilos ngayon. Nakikipag-usap siya sa mga walang laman na silid at naglalakad
+    patungo sa simbahan pagkatapos ng hatinggabi.
+
+    Hindi namin alam kung ano
+    ang mali sa kanya, ngunit may hindi tama.
+
+    Maaaring mas marami pang alam
+    sina Laica at Shyna. Sila ang pinakamalapit kay Father Mateo.
+
+    Nag-iwan ako
+    ng susi sa mesa ko. Ito ang susi sa bahay nina Laica at Shyna.'
   readRange: 2
   readKey: 101
 --- !u!65 &1420467410
@@ -21092,8 +21160,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
   highlightRange: 3
   pulseSpeed: 2
@@ -21110,8 +21178,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
@@ -21127,8 +21195,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   objectiveTriggerToActivate: {fileID: 1861130344}
   itemName: paper 2
   disableAfterActivation: 1
@@ -21142,8 +21210,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ca993e4af7a6c248b86a524453c87bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!114 &1420467418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21154,8 +21222,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2de488038aa0494492f86709b714fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   targetNote: {fileID: 1420467409}
   triggerToActivate: {fileID: 0}
   waypointLocationsToActivate:
@@ -21461,8 +21529,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -21471,7 +21539,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -21770,8 +21838,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -21826,8 +21894,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: -1
@@ -22080,8 +22148,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce58473a84a69a145ae8ca2b0be30344, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!4 &1517574211
 Transform:
   m_ObjectHideFlags: 0
@@ -22144,8 +22212,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -22314,8 +22382,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83c79f44b082b5f479791a0284fb8881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   indicatorLocations:
   - {fileID: 1856482165}
   - {fileID: 1050687843}
@@ -22336,9 +22404,9 @@ MonoBehaviour:
   arrowColor: {r: 1, g: 1, b: 1, a: 0.49019608}
   hideDuringStoryIntro: 1
   storyIntro: {fileID: 0}
-  player: {fileID: 5057019129688464930}
+  player: {fileID: 2750480495508846167}
   playerTag: Player
-  saveId: 
+  saveId:
   currentLocationIndex: 0
 --- !u!1 &1550656583
 GameObject:
@@ -22387,8 +22455,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -22462,8 +22530,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -22472,7 +22540,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -22577,8 +22645,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10bba7d8681c70f4fa0320a2123546c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   audioClip: {fileID: 8300000, guid: 1d2cd61e33175264e890c278323846d5, type: 3}
   volume: 0.12
   loop: 0
@@ -22671,8 +22739,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -22801,8 +22869,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: -1
@@ -22919,8 +22987,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -23533,10 +23601,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbbed66e7604d35479a1b949c8941031, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   textFadeSpeed: 1.2
   textHoldTime: 3
+  autoNextDelay: 4
   sectionPauseTime: 0.8
   skipOnAnyKey: 1
   koreanFont: {fileID: 12800000, guid: cb0883446917e094485c9ffb21797cd9, type: 3}
@@ -23948,13 +24017,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bdfb60fdaf24bd49b26a587b842e8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   objectiveText: Find the remaining ritual items
   displayDuration: 4
   triggerOnce: 1
   playerTag: Player
-  saveId: 
+  saveId:
   objectivePanel: {fileID: 0}
   objectiveLabel: {fileID: 0}
   fadeSpeed: 3
@@ -24038,8 +24107,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger (3)
   progressPoints: 10
   triggerOnce: 1
@@ -24072,11 +24141,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 1
@@ -24203,8 +24273,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -24356,8 +24426,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger (5)
   progressPoints: 10
   triggerOnce: 1
@@ -24493,8 +24563,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "These must be the items\u2026"
@@ -24565,8 +24635,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -24717,8 +24787,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -24841,8 +24911,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2de488038aa0494492f86709b714fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   targetNote: {fileID: 1776354141}
   triggerToActivate: {fileID: 1202844270}
   waypointLocationsToActivate: []
@@ -25012,8 +25082,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
@@ -25113,8 +25183,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -25123,7 +25193,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -25295,8 +25365,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37df7eb91eef81647a77f399118864bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   textFadeSpeed: 1.5
   textHoldTime: 2.5
   blackFadeOutSpeed: 0.8
@@ -25344,13 +25414,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bdfb60fdaf24bd49b26a587b842e8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   objectiveText: 'You found the guard house. '
   displayDuration: 4
   triggerOnce: 1
   playerTag: Player
-  saveId: 
+  saveId:
   objectivePanel: {fileID: 918216975}
   objectiveLabel: {fileID: 1197019867}
   fadeSpeed: 3
@@ -25401,11 +25471,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -25466,8 +25537,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -25510,8 +25581,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.25, g: 0.11, b: 0.035, a: 0.9}
   m_RaycastTarget: 1
@@ -25660,8 +25731,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3559da74026ca604e8995feaa55d8fd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   editorSlotCount: 3
   panel: {fileID: 262677173}
   titleText: {fileID: 0}
@@ -25703,8 +25774,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 397c60e7d9aaa35448cc96d8bed42fe9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   maxCapacity: 3
   dropDistance: 1.5
   dropStartHeightOffset: 0
@@ -25937,8 +26008,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger (7)
   progressPoints: 10
   triggerOnce: 1
@@ -26066,8 +26137,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e7c0a0529926804f898ac65001ca55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openDistance: 0.01
   animationSpeed: 2
   isLocked: 0
@@ -26091,8 +26162,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 040526ca88bcd664f8d85405693b8ba9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   itemTags:
   - Pickup
   - Item
@@ -26165,8 +26236,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   highlightColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   highlightRange: 3
   pulseSpeed: 2
@@ -26183,8 +26254,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   linkedSubtitleTrigger: {fileID: 414109452}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
@@ -26195,6 +26266,43 @@ MonoBehaviour:
     hid Laica's candle inside this house.\r\n\rThere is also something important
     in the CR, but it is locked.\r\n\rThe key to the CR was left in the Guard House.\r\nGo
     back to the Guard House, find the key, then return here."
+  koreanTitle: "\uC564\uC758 \uC77C\uC9C0"
+  koreanContent: "\uB77C\uC774\uCE74\uAC00 \uC870\uAE08 \uC804\uC5D0 \uC774\uACF3\uC5D0
+    \uC640\uC11C \uCD1B\uBD88 \uD558\uB098\uB97C \uB098\uC5D0\uAC8C \uB9E1\uAE30\uACE0
+    \uAC14\uB2E4.\r\n\uADF8\uB140\uB294 \uB9C8\uD14C\uC624 \uC2E0\uBD80\uAC00 \uD544\uC694\uD55C
+    \uB2E4\uB978 \uCD1B\uBD88\uC740 \uAD50\uD68C\uC758 \uAE30\uB3C4\uC2E4 \uC548\uC5D0
+    \uB450\uC5C8\uB2E4\uACE0 \uB9D0\uD588\uB2E4.\r\n\uB2E4\uB978 \uCD1B\uBD88 \uD558\uB098\uB294
+    \uC774\uBBF8 \uAD50\uD68C \uC5B4\uB518\uAC00\uC5D0 \uC788\uC9C0\uB9CC, \uC5B4\uB514\uC5D0
+    \uB450\uC5C8\uB294\uC9C0\uB294 \uBAA8\uB974\uACA0\uB2E4.\r\n\r\n\uB098\uB294
+    \uB77C\uC774\uCE74\uC758 \uCD1B\uBD88\uC744 \uC774 \uC9D1 \uC548\uC5D0 \uC228\uACBC\uB2E4.\r\n\uD654\uC7A5\uC2E4\uC5D0\uB3C4
+    \uC911\uC694\uD55C \uAC83\uC774 \uD558\uB098 \uC788\uC9C0\uB9CC, \uBB38\uC774
+    \uC7A0\uACA8 \uC788\uB2E4.\r\n\r\n\uD654\uC7A5\uC2E4 \uC5F4\uC1E0\uB294 \uACBD\uBE44\uC2E4\uC5D0
+    \uB450\uACE0 \uC654\uB2E4.\r\n\uACBD\uBE44\uC2E4\uB85C \uB3CC\uC544\uAC00 \uC5F4\uC1E0\uB97C
+    \uCC3E\uC740 \uB4A4, \uB2E4\uC2DC \uC774\uACF3\uC73C\uB85C \uB3CC\uC544\uC640\uB77C."
+  tagalogTitle: Talaarawan ni Ann
+  tagalogContent: 'Pumunta rito kanina si Laica at iniwan sa akin ang isang kandila.
+
+    Sinabi
+    niya na inilagay niya sa prayer room sa loob ng simbahan ang isa pang kandilang
+    kailangan ni Father Mateo.
+
+    Ang isa pang kandila ay nasa simbahan na rin,
+    pero hindi ko alam kung saan niya ito inilagay.
+
+
+
+    Itinago ko ang kandila
+    ni Laica sa loob ng bahay na ito.
+
+    May isa pang mahalagang bagay sa CR,
+    pero naka-lock ito.
+
+
+
+    Naiwan ang susi ng CR sa Guard House.
+
+    Bumalik
+    sa Guard House, hanapin ang susi, pagkatapos ay bumalik dito.'
   readRange: 2
   readKey: 101
 --- !u!65 &1776354142
@@ -26718,8 +26826,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -26842,8 +26950,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!114 &1804605221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26854,8 +26962,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Delegates:
   - eventID: 0
     callback:
@@ -26883,8 +26991,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -26926,7 +27034,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1810422992
@@ -26972,8 +27080,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 0
@@ -27109,8 +27217,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
@@ -27129,8 +27237,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
@@ -27177,13 +27285,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bdfb60fdaf24bd49b26a587b842e8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   objectiveText: bedroom!!
   displayDuration: 4
   triggerOnce: 0
   playerTag: Player
-  saveId: 
+  saveId:
   objectivePanel: {fileID: 0}
   objectiveLabel: {fileID: 0}
   fadeSpeed: 3
@@ -27267,13 +27375,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bdfb60fdaf24bd49b26a587b842e8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   objectiveText: Perform the ritual.
   displayDuration: 4
   triggerOnce: 1
   playerTag: Player
-  saveId: 
+  saveId:
   objectivePanel: {fileID: 0}
   objectiveLabel: {fileID: 0}
   fadeSpeed: 3
@@ -27349,8 +27457,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   highlightColor: {r: 0.4867924, g: 0.16808112, b: 0.19014218, a: 1}
   highlightRange: 3
   pulseSpeed: 2
@@ -27367,8 +27475,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   linkedSubtitleTrigger: {fileID: 675674281}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 339704663}
@@ -27379,6 +27487,50 @@ MonoBehaviour:
     us.\n\r\n\rI kept the church key, the cross, and one sacred candle inside this
     house.\r\n\rThe Bible was left inside the church.\r\n\rTake these items and go
     to the church. Find the Bible and the second candle before Varen finds you."
+  koreanTitle: "\uBC00\uC758 \uB9C8\uC9C0\uB9C9 \uCABD\uC9C0"
+  koreanContent: "\uC8FC\uB4DC\uC758 \uB9D0\uC774 \uB9DE\uC558\uB2E4. \uB9C8\uD14C\uC624
+    \uC2E0\uBD80\uB294 \uBB34\uC5B8\uAC00\uC5D0 \uBE59\uC758\uB418\uC5C8\uB2E4.\r\n\uAD50\uD68C
+    \uC548\uC5D0 \uC788\uB294 \uADF8\uAC83\uC740 \uBC14\uB80C\uC774\uB77C\uACE0 \uBD88\uB9B0\uB2E4.\r\n\r\n\uC6B0\uB9AC\uB294
+    \uC758\uC2DD\uC744 \uBA48\uCD94\uB824\uACE0 \uD588\uC9C0\uB9CC, \uBC14\uB80C\uC740
+    \uB9C8\uD14C\uC624 \uC2E0\uBD80\uC640 \uAD50\uD68C \uC548\uC5D0 \uC788\uB358
+    \uC0AC\uB78C\uB4E4\uC744 \uBAA8\uB450 \uC8FD\uC600\uB2E4.\r\n\uC8FC\uB4DC\uC640
+    \uB098\uB294 \uAC04\uC2E0\uD788 \uD0C8\uCD9C\uD588\uC9C0\uB9CC, \uADF8\uAC83\uC740
+    \uC544\uC9C1\uB3C4 \uC6B0\uB9AC\uB97C \uCAD3\uACE0 \uC788\uB2E4.\r\n\r\n\uB098\uB294
+    \uAD50\uD68C \uC5F4\uC1E0\uC640 \uC2ED\uC790\uAC00, \uADF8\uB9AC\uACE0 \uC131\uC2A4\uB7EC\uC6B4
+    \uCD1B\uBD88 \uD558\uB098\uB97C \uC774 \uC9D1 \uC548\uC5D0 \uBCF4\uAD00\uD574
+    \uB450\uC5C8\uB2E4.\r\n\uC131\uACBD\uC740 \uC544\uC9C1 \uAD50\uD68C \uC548\uC5D0
+    \uB0A8\uC544 \uC788\uB2E4.\r\n\r\n\uC774 \uBB3C\uAC74\uB4E4\uC744 \uAC00\uC9C0\uACE0
+    \uAD50\uD68C\uB85C \uAC00\uB77C.\r\n\uBC14\uB80C\uC774 \uB108\uB97C \uCC3E\uAE30
+    \uC804\uC5D0 \uC131\uACBD\uACFC \uB450 \uBC88\uC9F8 \uCD1B\uBD88\uC744 \uCC3E\uC544\uB77C."
+  tagalogTitle: Huling Tala ni Mill
+  tagalogContent: 'Tama si Jude. May masamang nilalang na sumapi kay Father Mateo.
+
+    Ang
+    nilalang sa loob ng simbahan ay tinatawag na Varen.
+
+
+
+    Sinubukan naming
+    pigilan ang ritwal, ngunit pinatay ni Varen si Father Mateo at ang lahat ng nasa
+    loob ng simbahan.
+
+    Nakatakas kami ni Jude, ngunit patuloy pa rin kaming
+    hinahabol nito.
+
+
+
+    Itinago ko sa bahay na ito ang susi ng simbahan,
+    ang krus, at isang banal na kandila.
+
+    Nasa loob pa rin ng simbahan ang Bibliya.
+
+
+
+    Dalhin
+    ang mga bagay na ito at pumunta sa simbahan.
+
+    Hanapin ang Bibliya at ang
+    pangalawang kandila bago ka mahanap ni Varen.'
   readRange: 2
   readKey: 101
 --- !u!65 &1853023351
@@ -27462,8 +27614,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   subtitleText: "It\u2019s not in the church anymore\u2026"
   displayDuration: 4
   delayBeforeShow: 0.5
@@ -27479,8 +27631,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   linkedSubtitleTrigger: {fileID: 709685910}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
@@ -27491,6 +27643,10 @@ MonoBehaviour:
     us.\n\r\n\rI kept the church key, the cross, and one sacred candle inside this
     house.\r\n\rThe Bible was left inside the church.\r\n\rTake these items and go
     to the church. Find the Bible and the second candle before Varen finds you."
+  koreanTitle:
+  koreanContent:
+  tagalogTitle:
+  tagalogContent:
   readRange: 2
   readKey: 101
 --- !u!114 &1853023356
@@ -27503,8 +27659,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   linkedSubtitleTrigger: {fileID: 1251300721}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
@@ -27515,6 +27671,10 @@ MonoBehaviour:
     us.\n\r\n\rI kept the church key, the cross, and one sacred candle inside this
     house.\r\n\rThe Bible was left inside the church.\r\n\rTake these items and go
     to the church. Find the Bible and the second candle before Varen finds you."
+  koreanTitle:
+  koreanContent:
+  tagalogTitle:
+  tagalogContent:
   readRange: 2
   readKey: 101
 --- !u!114 &1853023357
@@ -27527,8 +27687,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2de488038aa0494492f86709b714fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   targetNote: {fileID: 1853023350}
   triggerToActivate: {fileID: 0}
   waypointLocationsToActivate:
@@ -27596,13 +27756,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bdfb60fdaf24bd49b26a587b842e8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   objectiveText: Look for the house. Use the map "M"
   displayDuration: 6
   triggerOnce: 1
   playerTag: Player
-  saveId: 
+  saveId:
   objectivePanel: {fileID: 1869837493}
   objectiveLabel: {fileID: 1214679408}
   fadeSpeed: 3
@@ -27704,8 +27864,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.554717, g: 0.554717, b: 0.554717, a: 0}
   m_RaycastTarget: 1
@@ -28005,8 +28165,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -28158,8 +28318,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -28362,8 +28522,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11345d9985df2b64b9203a36f1ad737a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   placementPoint: {fileID: 1959855625}
   interactRange: 2
   interactKey: 101
@@ -28419,8 +28579,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!114 &1902310930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28431,8 +28591,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Delegates:
   - eventID: 0
     callback:
@@ -28460,8 +28620,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -28503,7 +28663,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1905523506
@@ -28549,8 +28709,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -28667,8 +28827,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -28789,8 +28949,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -28866,8 +29026,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -28909,7 +29069,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1935974259
@@ -28922,8 +29082,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -28999,8 +29159,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -29050,8 +29210,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.04, g: 0.04, b: 0.06, a: 0.9}
   m_RaycastTarget: 0
@@ -29088,11 +29248,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -29151,8 +29312,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
@@ -29374,8 +29535,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10bba7d8681c70f4fa0320a2123546c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   audioClip: {fileID: 8300000, guid: 2a0787d9f5c97cb4c9d2fb56bdcf8b29, type: 3}
   volume: 914.4
   loop: 0
@@ -29455,8 +29616,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!114 &1971941622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29467,8 +29628,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Delegates:
   - eventID: 0
     callback:
@@ -29496,8 +29657,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -29539,7 +29700,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1976931775
@@ -29585,8 +29746,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "This place feels worse\u2026"
@@ -29657,8 +29818,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3a34f60d1c7a0e4e8ab078593330851, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   shadowPrefab: {fileID: 590613577760352707, guid: 98187bd1902d695448afcc5a9dcb72b9,
     type: 3}
   spawnPoint: {fileID: 7263751259506570267, guid: 9543b80a9783c4344bd2d18909274c89,
@@ -29736,8 +29897,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.72, b: 0.12, a: 1}
   m_RaycastTarget: 0
@@ -29812,8 +29973,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -29975,8 +30136,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -30098,8 +30259,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -30173,8 +30334,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   highlightColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   highlightRange: 3
   pulseSpeed: 2
@@ -30191,8 +30352,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 1829975272}
   onCloseAudio: {fileID: 980127727}
@@ -30209,6 +30370,48 @@ MonoBehaviour:
     in this house.
 
     Find it, then go to Ann''s home.'
+  koreanTitle: "\uC0E4\uC774\uB098\uC758 \uAE30\uB85D"
+  koreanContent: "\uB77C\uC774\uCE74\uB294 \uC544\uC9C1\uB3C4 \uB9C8\uD14C\uC624
+    \uC2E0\uBD80\uAC00 \uBD80\uD0C1\uD55C \uCD1B\uBD88\uC744 \uC900\uBE44\uD558\uACE0
+    \uC788\uB2E4.\r\n\uB2E8\uC21C\uD55C \uAE30\uB3C4\uB97C \uC704\uD574 \uC65C \uADF8\uAC83\uB4E4\uC774
+    \uD544\uC694\uD55C\uC9C0 \uC774\uD574\uAC00 \uB418\uC9C0 \uC54A\uB294\uB2E4.\r\n\uADF8\uB294
+    \uC6B0\uB9AC\uC5D0\uAC8C \uC131\uACBD\uACFC \uC2ED\uC790\uAC00\uB3C4 \uC900\uBE44\uD574
+    \uB2EC\uB77C\uACE0 \uD588\uB2E4.\r\n\r\n\uBB54\uAC00 \uC798\uBABB\uB41C \uB290\uB08C\uC774
+    \uB4E4\uC9C0\uB9CC, \uB77C\uC774\uCE74\uB294 \uADF8\uB97C \uBBFF\uC5B4\uC57C
+    \uD55C\uB2E4\uACE0 \uB9D0\uD55C\uB2E4.\r\n\uC606\uC9D1\uC5D0 \uC0AC\uB294 \uC564\uC774
+    \uC6B0\uB9AC\uC640 \uC774\uC57C\uAE30\uD558\uACE0 \uC2F6\uC5B4 \uD588\uB2E4.\r\n\uADF8\uB140\uB294
+    \uB2A6\uC740 \uBC24 \uAD50\uD68C \uADFC\uCC98\uC5D0\uC11C \uB9C8\uD14C\uC624
+    \uC2E0\uBD80\uB97C \uBCF4\uC558\uB2E4\uACE0 \uB9D0\uD588\uB2E4.\r\n\r\n\uC564\uC758
+    \uC9D1 \uC5F4\uC1E0\uB294 \uC774 \uC9D1 \uC5B4\uB518\uAC00\uC5D0 \uC788\uB2E4.\r\n\uC5F4\uC1E0\uB97C
+    \uCC3E\uC544\uC11C \uC564\uC758 \uC9D1\uC73C\uB85C \uAC00\uB77C."
+  tagalogTitle: Tala ni Shyna
+  tagalogContent: 'Inihahanda pa rin ni Laica ang mga kandilang ipinakuha ni Father
+    Mateo.
+
+    Hindi ko maintindihan kung bakit kailangan niya ang mga ito para
+    lamang sa isang simpleng panalangin.
+
+    Pinahanda rin niya sa amin ang Bibliya
+    at ang krus.
+
+
+
+    May pakiramdam akong may mali, ngunit sinabi ni Laica
+    na dapat natin siyang pagkatiwalaan.
+
+    Gustong makipag-usap sa amin ni Ann
+    na nakatira sa katabing bahay.
+
+    Sinabi niyang nakita niya si Father Mateo
+    malapit sa simbahan noong gabing-gabi na.
+
+
+
+    Ang susi ng bahay ni Ann
+    ay nasa isang lugar sa loob ng bahay na ito.
+
+    Hanapin ito, pagkatapos ay
+    pumunta sa bahay ni Ann.'
   readRange: 2
   readKey: 101
 --- !u!65 &2052273205
@@ -30292,8 +30495,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2de488038aa0494492f86709b714fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   targetNote: {fileID: 2052273204}
   triggerToActivate: {fileID: 0}
   waypointLocationsToActivate:
@@ -30788,8 +30991,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -30832,8 +31035,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.25, g: 0.11, b: 0.035, a: 0.9}
   m_RaycastTarget: 1
@@ -30975,8 +31178,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2de488038aa0494492f86709b714fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   targetNote: {fileID: 1776354141}
   triggerToActivate: {fileID: 523523575}
   waypointLocationsToActivate: []
@@ -31063,8 +31266,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   triggerName: progress trigger (4)
   progressPoints: 10
   triggerOnce: 1
@@ -31072,6 +31275,45 @@ MonoBehaviour:
   OnTriggerActivated:
     m_PersistentCalls:
       m_Calls: []
+--- !u!21 &2112894914
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &2113977989
 GameObject:
   m_ObjectHideFlags: 0
@@ -31172,8 +31414,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e217dd180222849ac4a8a81710061a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   playerTag: Player
   triggerOnce: 1
   subtitleText: "Someone lived here recently\u2026"
@@ -31229,8 +31471,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -31272,7 +31514,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2120293968
@@ -31285,8 +31527,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -31429,10 +31671,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52f1bcd46f9243ae993f7cfe6721f047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   batteryBar: {fileID: 1936467817}
   batteryFill: {fileID: 1047417506}
+  refreshInterval: 0.1
 --- !u!114 &920000000000002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31443,8 +31686,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5bbf06d92e78b942b1bd50f9a3a54c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   promptPanel: {fileID: 1496256090}
   promptText: {fileID: 116242526}
   readerPanel: {fileID: 2036761911}
@@ -31464,8 +31707,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9acdc86427db47a1a4750a88dd8ced31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   promptPanel: {fileID: 857635401}
   promptText: {fileID: 1065014484}
   readerPanel: {fileID: 570858290}
@@ -31827,8 +32070,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -31870,7 +32113,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &211003326580040428
@@ -32157,6 +32400,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7326660552032639318}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &262643555504307964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3323848970838858341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4532cbbe49006984b9ac44bbda5f337d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  walkBobSpeed: 8.5
+  walkBobAmount: 0.022
+  sprintBobSpeed: 12
+  sprintBobAmount: 0.04
+  crouchBobSpeed: 6
+  crouchBobAmount: 0.012
+  smoothSpeed: 14
+  bobFadeInSpeed: 7
+  bobFadeOutSpeed: 10
+  itemWalkBobSpeed: 10
+  itemWalkBobAmount: 0.025
+  itemSprintBobSpeed: 15
+  itemSprintBobAmount: 0.045
+  itemBobSmooth: 8
+  swayAmount: 0.012
+  swaySmooth: 6
+  swayClamp: 0.08
+  externalShakeAmount: 0
 --- !u!4 &263804592955427227
 Transform:
   m_ObjectHideFlags: 0
@@ -32691,8 +32964,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!224 &433554260379637836
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33746,8 +34019,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -33972,6 +34245,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &934179805201823023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841746530532243556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dba1ffb29c299c46b6de9d34ed89770, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  moveSpeed: 3
+  sprintSpeed: 5.86
+  sprintFOVIncrease: 20.6
+  gravity: -35
+  maxWalkableSlope: 55
+  groundAcceleration: 20
+  groundDeceleration: 26
+  airAcceleration: 8
+  jumpHeight: 1.5
+  groundCheck: {fileID: 4489113276587578167}
+  groundCheckRadius: 0.3
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  crouchSpeedMultiplier: 0.5
+  crouchHeight: 2
+  crouchCenterY: 0.56
+  mouseSensitivity: 1.804105
+  cameraHolder: {fileID: 1150598090074733149}
 --- !u!64 &935113267602948243
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -34582,6 +34886,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!4 &1150598090074733149
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3323848970838858341}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.77, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2750480495508846167}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1157358250157847065
 GameObject:
   m_ObjectHideFlags: 0
@@ -35105,8 +35424,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
@@ -35516,8 +35835,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -36036,8 +36355,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -36236,27 +36555,27 @@ PrefabInstance:
     - target: {fileID: 3892379529371514371, guid: 206f9fc8a5de6134fa1a1807fb629409,
         type: 3}
       propertyPath: player
-      value: 
-      objectReference: {fileID: 5057019129688464930}
+      value:
+      objectReference: {fileID: 2750480495508846167}
     - target: {fileID: 3892379529371514371, guid: 206f9fc8a5de6134fa1a1807fb629409,
         type: 3}
       propertyPath: qnaPanel
-      value: 
+      value:
       objectReference: {fileID: 1713572638}
     - target: {fileID: 3892379529371514371, guid: 206f9fc8a5de6134fa1a1807fb629409,
         type: 3}
       propertyPath: whiteLadyTeleportSpawns.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 508905780}
     - target: {fileID: 3892379529371514371, guid: 206f9fc8a5de6134fa1a1807fb629409,
         type: 3}
       propertyPath: whiteLadyTeleportSpawns.Array.data[1]
-      value: 
+      value:
       objectReference: {fileID: 316196865}
     - target: {fileID: 3892379529371514371, guid: 206f9fc8a5de6134fa1a1807fb629409,
         type: 3}
       propertyPath: whiteLadyTeleportSpawns.Array.data[2]
-      value: 
+      value:
       objectReference: {fileID: 2084501436}
     - target: {fileID: 6921110341466177307, guid: 206f9fc8a5de6134fa1a1807fb629409,
         type: 3}
@@ -36525,8 +36844,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &1803905126791765452
 GameObject:
   m_ObjectHideFlags: 0
@@ -37434,8 +37753,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   objectiveTriggerToActivate: {fileID: 0}
   itemName: paper 2
   disableAfterActivation: 1
@@ -37634,8 +37953,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -37714,6 +38033,14 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!81 &2228912202801762534
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3323848970838858341}
+  m_Enabled: 1
 --- !u!1 &2239725184826057283
 GameObject:
   m_ObjectHideFlags: 0
@@ -37818,8 +38145,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &2263382171199921526
 GameObject:
   m_ObjectHideFlags: 0
@@ -38131,8 +38458,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -38174,7 +38501,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!64 &2393863909551189940
@@ -38687,8 +39014,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -38784,6 +39111,32 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
+--- !u!143 &2586392250025630419
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841746530532243556}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &2591252361334502576
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -39160,6 +39513,67 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2728863013839801839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3323848970838858341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+--- !u!4 &2750480495508846167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841746530532243556}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.5990935, z: 0, w: 0.80067915}
+  m_LocalPosition: {x: 125.53, y: 2.85, z: -77.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4489113276587578167}
+  - {fileID: 1150598090074733149}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 73.61, z: 0}
 --- !u!33 &2755666851182358655
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -39395,8 +39809,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -39438,7 +39852,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!23 &2897119201280909228
@@ -39609,8 +40023,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!65 &2987856916746431498
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -40074,8 +40488,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -40164,8 +40578,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!4 &3113911324447311672
 Transform:
   m_ObjectHideFlags: 0
@@ -40666,6 +41080,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7008888957433783925}
   m_Mesh: {fileID: 4300004, guid: 5381912f22f2e044db439d7fe95c968d, type: 3}
+--- !u!1 &3323848970838858341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1150598090074733149}
+  - component: {fileID: 5843259232708524551}
+  - component: {fileID: 2228912202801762534}
+  - component: {fileID: 2728863013839801839}
+  - component: {fileID: 262643555504307964}
+  - component: {fileID: 6583791088576500879}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &3339954001403010383 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8471297466990135363, guid: 0195280aadfcf1a4abedb847addd24b2,
@@ -41280,8 +41715,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -41323,7 +41758,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 2
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!23 &3601223241429263352
@@ -41543,8 +41978,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.5396226, g: 0.49176925, b: 0.49176925, a: 1}
   m_RaycastTarget: 1
@@ -42474,8 +42909,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -42572,8 +43007,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!114 &4110874229853320219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42584,8 +43019,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.5396226, g: 0.49176925, b: 0.49176925, a: 1}
   m_RaycastTarget: 1
@@ -42694,8 +43129,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -42917,8 +43352,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.5396226, g: 0.49176925, b: 0.49176925, a: 1}
   m_RaycastTarget: 1
@@ -42990,8 +43425,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -43033,7 +43468,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!65 &4221958556955629543
@@ -43670,6 +44105,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4489113276587578167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6538911785553387267}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.999, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2750480495508846167}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &4489760236469912800
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -45072,8 +45522,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5af6be17fd75cc84597a0cf7fb81f886, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ritualDuration: 15
   interactRange: 2
   ritualKey: 101
@@ -45229,24 +45679,6 @@ RectTransform:
   m_AnchoredPosition: {x: -447.76587, y: -4.7052}
   m_SizeDelta: {x: 232.9076, y: 42.1015}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!4 &5057019129688464930 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-    type: 3}
-  m_PrefabInstance: {fileID: 8319522320320211979}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5057019129688464932 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 178075398762855859, guid: 9c459b753d9ab134f8114057339f27d7,
-    type: 3}
-  m_PrefabInstance: {fileID: 8319522320320211979}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47bf7a4e0d1cca24a8e5db2d0599f9ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &5080582336885827680
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -45323,8 +45755,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.96981126, g: 0.4885653, b: 0.4885653, a: 1}
   m_RaycastTarget: 1
@@ -45785,8 +46217,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.5803922}
   m_RaycastTarget: 1
@@ -45836,8 +46268,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -45886,7 +46318,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!23 &5333271370352874741
@@ -46281,8 +46713,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.96981126, g: 0.4885653, b: 0.4885653, a: 1}
   m_RaycastTarget: 1
@@ -46333,8 +46765,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 310abf78a239ef44b9edb9c10961fbaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   bookTitle: Old Book
   readRange: 2
   readKey: 101
@@ -46973,11 +47405,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -47278,6 +47711,30 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300006, guid: 5381912f22f2e044db439d7fe95c968d, type: 3}
+--- !u!114 &5725897018631337117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841746530532243556}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74ff4bafe6c54b744bf7908a0f4fab19, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  walkStepInterval: 0.69
+  sprintStepInterval: 0.3
+  crouchStepInterval: 0.7
+  stepVolume: 0.6
+  grassSounds: []
+  woodSounds: []
+  stoneSounds: []
+  defaultSounds: []
+  raycastDistance: 2.75
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!222 &5738626894782923194
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -47364,8 +47821,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -47801,8 +48258,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -47855,6 +48312,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4985165782118914044}
   m_LocalEulerAnglesHint: {x: -1.6650001, y: 90.00001, z: -14.397}
+--- !u!20 &5843259232708524551
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3323848970838858341}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.01
+  far clip plane: 18
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 0
+  m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!33 &5854848122431662679
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -48171,8 +48679,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9084e0e0ba8769c4097c30dbd7d25e94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!23 &5971233791257023571
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -48567,8 +49075,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -49535,8 +50043,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb81c0d31716b314fafbc0404cc8438c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!4 &6494595586169813588 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7444831821199855615, guid: f550a095fd3266b46a6a1c8b2188e04d,
@@ -49680,8 +50188,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -49799,6 +50307,22 @@ LODGroup:
     renderers:
     - renderer: {fileID: 0}
   m_Enabled: 1
+--- !u!1 &6538911785553387267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4489113276587578167}
+  m_Layer: 0
+  m_Name: GroundCheacke
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 18
+  m_IsActive: 1
 --- !u!23 &6547264890227289353
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -49895,6 +50419,22 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6583791088576500879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3323848970838858341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da37f94856b0f004c99de0741df0a517, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  showScanlines: 1
+  scanlineOpacity: 0.08
+  showVignette: 1
+  vignetteStrength: -0.06
 --- !u!4 &6586676048541080943
 Transform:
   m_ObjectHideFlags: 0
@@ -49937,11 +50477,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -50076,8 +50617,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -50767,8 +51308,8 @@ PrefabInstance:
     - target: {fileID: 1239852370935010581, guid: 182e0ac605003ba498d5b184e0fd310b,
         type: 3}
       propertyPath: mapSystem
-      value: 
-      objectReference: {fileID: 5057019129688464932}
+      value:
+      objectReference: {fileID: 8145964823572664760}
     - target: {fileID: 2449164712783654663, guid: 182e0ac605003ba498d5b184e0fd310b,
         type: 3}
       propertyPath: m_Name
@@ -50863,8 +51404,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
   highlightRange: 3
   pulseSpeed: 2
@@ -51108,8 +51649,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -51172,8 +51713,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.96981126, g: 0.4885653, b: 0.4885653, a: 1}
   m_RaycastTarget: 1
@@ -51551,11 +52092,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -52259,6 +52801,14 @@ Transform:
   - {fileID: 423838058113190915}
   m_Father: {fileID: 348911852}
   m_LocalEulerAnglesHint: {x: 0, y: 0.377, z: 0}
+--- !u!33 &7481331474337063858
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841746530532243556}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &7485561860813180214
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52487,6 +53037,48 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3075518447110109103}
   m_Mesh: {fileID: 4300002, guid: ef54abd295dd2024eb209fe29b573dc1, type: 3}
+--- !u!23 &7567504678937945266
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841746530532243556}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &7568217272058041207
 GameObject:
   m_ObjectHideFlags: 0
@@ -52669,11 +53261,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -52942,7 +53535,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -53000,8 +53593,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 040526ca88bcd664f8d85405693b8ba9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   itemTags:
   - Pickup
   - Item
@@ -53110,8 +53703,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
@@ -53322,8 +53915,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -53453,8 +54046,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -53574,6 +54167,34 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: 5381912f22f2e044db439d7fe95c968d, type: 3}
+--- !u!114 &7918334356255294011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841746530532243556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547e5b557045a2548810f626cfb8fd6a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  maxHealth: 100
+  currentHealth: 100
+  healthBarFill: {fileID: 887013938}
+  healthText: {fileID: 1112798010}
+  damageVignette: {fileID: 771742463}
+  healthBar: {fileID: 524089999}
+  healthBarPanel: {fileID: 524089995}
+  healthBarSize: {x: 260, y: 22}
+  healthBarPosition: {x: 171, y: 165}
+  damageFlashDuration: 0.5
+  invincibilityDuration: 1
+  damageColor: {r: 0.21568628, g: 0, b: 0, a: 0.42745098}
+  bloodEffectIntensity: 0.9
+  deathDelay: 6
+  deathScreen: {fileID: 1995394515}
+  isDead: 0
 --- !u!23 &7927783088664205488
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -53922,11 +54543,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 2
   invertDirection: 0
@@ -54552,6 +55174,28 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: ce9e4b8d53bcef14eb13c1ff56120243, type: 3}
+--- !u!114 &8145964823572664760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841746530532243556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47bf7a4e0d1cca24a8e5db2d0599f9ad, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  mapKey: 109
+  mapTexture: {fileID: 2800000, guid: 320419df18eacb44a9fd4a0ba9e68baa, type: 3}
+  mapStartsUnlocked: 0
+  hasMap: 0
+  worldMinX: -29.8
+  worldMaxX: 164.2
+  worldMinZ: -104.7
+  worldMaxZ: 100
+  mapWidth: 1054
+  mapHeight: 607.1
 --- !u!23 &8152392077924505308
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -54612,8 +55256,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -54655,7 +55299,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &8175582278300845996
@@ -55004,204 +55648,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8975864475257266831}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &8319522320320211979
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 702791232458593391, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 2204356283941842480, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 524089999}
-    - target: {fileID: 2204356283941842480, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: healthText
-      value: 
-      objectReference: {fileID: 1112798010}
-    - target: {fileID: 2204356283941842480, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: deathScreen
-      value: 
-      objectReference: {fileID: 1995394515}
-    - target: {fileID: 2204356283941842480, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: healthBarFill
-      value: 
-      objectReference: {fileID: 887013938}
-    - target: {fileID: 2204356283941842480, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: damageVignette
-      value: 
-      objectReference: {fileID: 771742463}
-    - target: {fileID: 2204356283941842480, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: healthBarPanel
-      value: 
-      objectReference: {fileID: 524089995}
-    - target: {fileID: 2477978325751059980, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_ClearFlags
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2477978325751059980, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: field of view
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 2477978325751059980, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_FOVAxisMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2477978325751059980, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: far clip plane
-      value: 44.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2477978325751059980, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: near clip plane
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 2477978325751059980, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_OcclusionCulling
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 125.53
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.85
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -77.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.80067915
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.5990935
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 73.61
-      objectReference: {fileID: 0}
-    - target: {fileID: 6151717016847735388, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6244873151105278436, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_RendererIndex
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6725086455006983790, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972120046498944598, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: gravity
-      value: -35
-      objectReference: {fileID: 0}
-    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: groundCheck
-      value: 
-      objectReference: {fileID: 1088002111}
-    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: cameraHolder
-      value: 
-      objectReference: {fileID: 683911993}
-    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: mouseSensitivity
-      value: 1.804105
-      objectReference: {fileID: 0}
-    - target: {fileID: 9187975381426854180, guid: 9c459b753d9ab134f8114057339f27d7,
-        type: 3}
-      propertyPath: sprintFOVIncrease
-      value: 20.6
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9c459b753d9ab134f8114057339f27d7, type: 3}
 --- !u!114 &8323892205176294041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55212,8 +55658,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -55255,7 +55701,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!4 &8328584059676278935
@@ -55284,11 +55730,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -55490,8 +55937,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -55540,7 +55987,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!64 &8434926671167141324
@@ -56010,8 +56457,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -56060,7 +56507,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!224 &8617319842996028967
@@ -56234,8 +56681,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e7c0a0529926804f898ac65001ca55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openDistance: 0.01
   animationSpeed: 2
   isLocked: 0
@@ -56280,8 +56727,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 040526ca88bcd664f8d85405693b8ba9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   itemTags:
   - Pickup
   - Item
@@ -56724,6 +57171,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1121114975156154856}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8841746530532243556
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2750480495508846167}
+  - component: {fileID: 7481331474337063858}
+  - component: {fileID: 7567504678937945266}
+  - component: {fileID: 2586392250025630419}
+  - component: {fileID: 934179805201823023}
+  - component: {fileID: 5725897018631337117}
+  - component: {fileID: 8145964823572664760}
+  - component: {fileID: 7918334356255294011}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 18
+  m_IsActive: 1
 --- !u!205 &8847550954687083884
 LODGroup:
   m_ObjectHideFlags: 0
@@ -56927,11 +57397,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -57264,7 +57735,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -57377,11 +57848,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdf0ce09c529184aaa4ba3737c62b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   openSound: {fileID: 8300000, guid: b05d7f52ae69bf04bb523551d3f0c23c, type: 3}
   closeSound: {fileID: 8300000, guid: d659c9d803900df47a1131327599c694, type: 3}
   doorVolume: 1
+  preloadDoorSounds: 1
   openAngle: 90
   animationSpeed: 1
   invertDirection: 0
@@ -57932,7 +58404,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 256351885}
-  - {fileID: 8319522320320211979}
+  - {fileID: 2750480495508846167}
   - {fileID: 2113977990}
   - {fileID: 1256670438}
   - {fileID: 925834454}
