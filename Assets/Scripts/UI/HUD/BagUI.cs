@@ -31,6 +31,7 @@ public class BagUI : MonoBehaviour
 
     void OnEnable()
     {
+        ConfigureCanvasScaler(GetUiCanvas());
         if (!Application.isPlaying && (panel == null || equippedItemNamePanel == null || builtLayoutVersion != CurrentLayoutVersion))
             CreatePanel(editorSlotCount);
     }
@@ -81,6 +82,7 @@ public class BagUI : MonoBehaviour
 
         Canvas canvas = GetUiCanvas();
         if (canvas == null) return;
+        ConfigureCanvasScaler(canvas);
 
         displayedCapacity = max;
         builtLayoutVersion = CurrentLayoutVersion;
@@ -218,6 +220,22 @@ public class BagUI : MonoBehaviour
         Canvas ownCanvas = GetComponent<Canvas>();
         return ownCanvas != null ? ownCanvas : FindObjectOfType<Canvas>();
     }
+
+    // Keep the bottom-center inventory HUD readable at every Game view size,
+    // including Unity's Free Aspect mode.
+    private static void ConfigureCanvasScaler(Canvas canvas)
+    {
+        if (canvas == null) return;
+
+        CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+        if (scaler == null) scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+        scaler.matchWidthOrHeight = .5f;
+    }
+
     private void EnsureEquippedItemNameUi()
     {
         if (equippedItemNamePanel != null && equippedItemNameText != null)

@@ -484,7 +484,7 @@ The menu scene's existing language buttons now save a selected language in `Play
 ## Story Intro and Gameplay Korean Translation
 
 - Replaced the StoryIntro narrative with the Malawak Forest story: Father Mateo, Varen, the broken church ritual, Mil and Jude, the sacred items, the White Lady, the Tikbalang, and the present-day adventurer.
-- Added Korean versions of the story intro and common gameplay subtitles. SubtitleManager now translates text at display time and switches to Noto Sans KR in Chapter 1, Chapter 2, and IntroTimeline.
+- Added Korean versions of the story intro and common gameplay subtitles. SubtitleManager now translates text at display time and switches to Noto Sans KR in Chapter 1 and Chapter 2.
 
 - Selecting a language now captures the live slider values before refreshing labels, preventing volume, sensitivity, and brightness from displaying stale zero values.
 

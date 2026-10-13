@@ -27,6 +27,12 @@ public partial class MutantAI : MonoBehaviour
     public float attackDamage = 30f;
     public float attackCooldown = 1.5f;
 
+    [Header("Catch Jumpscare")]
+    [Tooltip("How far from the player Varen appears after catching them.")]
+    [Min(0.1f)] public float jumpscareFaceDistance = 1.35f;
+    [Tooltip("Height on Varen the player camera looks at during the catch.")]
+    [Min(0f)] public float jumpscareCameraFocusHeight = 1.8f;
+
     [Header("Audio")]
     public AudioClip chaseSound;
     [Range(0f, 1f)] public float chaseVolume = 100f;
