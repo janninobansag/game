@@ -568,7 +568,7 @@ public class MonsterAI_New : MonoBehaviour
         if (questionText != null)
         {
             var tmpro = questionText.GetComponent<TMPro.TextMeshProUGUI>();
-            if (tmpro != null) tmpro.text = currentQuestion.question;
+            if (tmpro != null) tmpro.text = GameplayLocalization.TranslateSubtitle(currentQuestion.question);
         }
 
         // ── Update option texts ──
@@ -576,34 +576,34 @@ public class MonsterAI_New : MonoBehaviour
         {
             var tmpro = optionAText.GetComponent<TMPro.TextMeshProUGUI>();
             if (tmpro != null && currentQuestion.options != null && currentQuestion.options.Length > 0)
-                tmpro.text = $"A. {currentQuestion.options[0]}";
+                tmpro.text = "A. " + GameplayLocalization.TranslateSubtitle(currentQuestion.options[0]);
         }
 
         if (optionBText != null)
         {
             var tmpro = optionBText.GetComponent<TMPro.TextMeshProUGUI>();
             if (tmpro != null && currentQuestion.options != null && currentQuestion.options.Length > 1)
-                tmpro.text = $"B. {currentQuestion.options[1]}";
+                tmpro.text = "B. " + GameplayLocalization.TranslateSubtitle(currentQuestion.options[1]);
         }
 
         if (optionCText != null)
         {
             var tmpro = optionCText.GetComponent<TMPro.TextMeshProUGUI>();
             if (tmpro != null && currentQuestion.options != null && currentQuestion.options.Length > 2)
-                tmpro.text = $"C. {currentQuestion.options[2]}";
+                tmpro.text = "C. " + GameplayLocalization.TranslateSubtitle(currentQuestion.options[2]);
         }
 
         if (optionDText != null)
         {
             var tmpro = optionDText.GetComponent<TMPro.TextMeshProUGUI>();
             if (tmpro != null && currentQuestion.options != null && currentQuestion.options.Length > 3)
-                tmpro.text = $"D. {currentQuestion.options[3]}";
+                tmpro.text = "D. " + GameplayLocalization.TranslateSubtitle(currentQuestion.options[3]);
         }
 
         if (timerText != null)
         {
             var tmpro = timerText.GetComponent<TMPro.TextMeshProUGUI>();
-            if (tmpro != null) tmpro.text = $"Time: {questionDisplayTime:F1}s";
+            if (tmpro != null) tmpro.text = string.Format(GameplayLocalization.TranslateSubtitle("Time: {0:F1}s"), questionDisplayTime);
         }
     }
 
@@ -615,7 +615,7 @@ public class MonsterAI_New : MonoBehaviour
         if (timerText != null)
         {
             float remaining = Mathf.Max(0f, questionDisplayTime - questionTimer);
-            string timerString = $"Time: {remaining:F1}s";
+            string timerString = string.Format(GameplayLocalization.TranslateSubtitle("Time: {0:F1}s"), remaining);
             
             var tmpro = timerText.GetComponent<TMPro.TextMeshProUGUI>();
             if (tmpro != null) tmpro.text = timerString;
@@ -677,7 +677,7 @@ public class MonsterAI_New : MonoBehaviour
     IEnumerator CorrectAnswerSequence()
     {
         isResolvingQnA = true;
-        ShowFeedback("Correct!", Color.green);
+        ShowFeedback(GameplayLocalization.TranslateSubtitle("Correct!"), Color.green);
         yield return new WaitForSeconds(0.8f);
 
         TeleportMonsterAway();
@@ -690,7 +690,7 @@ public class MonsterAI_New : MonoBehaviour
     IEnumerator WrongAnswerSequence()
     {
         isResolvingQnA = true;
-        ShowFeedback("Wrong!", Color.red);
+        ShowFeedback(GameplayLocalization.TranslateSubtitle("Wrong!"), Color.red);
         yield return new WaitForSeconds(0.8f);
 
         if (player != null)

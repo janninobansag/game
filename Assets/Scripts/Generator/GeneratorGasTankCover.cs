@@ -172,8 +172,8 @@ public class GeneratorGasTankCover : MonoBehaviour
 
         int percent = Mathf.RoundToInt(holdProgress * 100f);
         string message = holdProgress > 0f
-            ? "Hold E to unscrew Gas Tank Cover: " + percent + "%"
-            : currentPromptMessage;
+            ? string.Format(GameplayLocalization.TranslateSubtitle("Hold {0} to unscrew Gas Tank Cover: {1}%"), interactKey, percent)
+            : GameplayLocalization.TranslateSubtitle(currentPromptMessage);
 
         GUIStyle shadow = new GUIStyle();
         shadow.fontSize = 22;
