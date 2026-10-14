@@ -39,7 +39,7 @@ public class JumpscareSystem : MonoBehaviour
     private Vector3 mutantTargetPos;
     private Quaternion mutantTargetRot;
     private bool movingMutant = false;
-    
+
 
     void Awake()
     {
