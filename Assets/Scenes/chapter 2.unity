@@ -15,7 +15,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.06
@@ -3556,79 +3556,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8606416365509906162}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &191644020
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1239852370935010581, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: mapSystem
-      value: 
-      objectReference: {fileID: 8145964823572664760}
-    - target: {fileID: 2449164712783654663, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_Name
-      value: Map
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 134.5957
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.533
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -22.984823
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.00042702508
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.71455896
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.00011702684
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.6995751
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -180.044
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -88.78601
-      objectReference: {fileID: 0}
-    - target: {fileID: 5402998312965958393, guid: 182e0ac605003ba498d5b184e0fd310b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.024993896
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 182e0ac605003ba498d5b184e0fd310b, type: 3}
 --- !u!65 &193231630
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3731,45 +3658,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!21 &201749875
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &221081417
 GameObject:
   m_ObjectHideFlags: 0
@@ -3822,6 +3710,45 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1352599093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &230878856
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &233629542
 GameObject:
   m_ObjectHideFlags: 0
@@ -11395,216 +11322,6 @@ MonoBehaviour:
   delayBeforeActivate: 0
   persistThroughSaves: 1
   saveKey: CrossRevealed
---- !u!1 &600959569
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 600959570}
-  - component: {fileID: 600959577}
-  - component: {fileID: 600959576}
-  - component: {fileID: 600959575}
-  - component: {fileID: 600959574}
-  - component: {fileID: 600959573}
-  - component: {fileID: 600959572}
-  - component: {fileID: 600959571}
-  m_Layer: 0
-  m_Name: Guard house's note (5)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &600959570
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600959569}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 82.815, y: 1.871, z: -29.009}
-  m_LocalScale: {x: 0.25472, y: 0.011997665, z: 0.20089}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 696073085}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &600959571
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600959569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveTriggerToActivate: {fileID: 1861130344}
-  itemName: paper 2
-  disableAfterActivation: 1
---- !u!114 &600959572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600959569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  subtitleText: "They were trying to keep people out\u2026 why?"
-  displayDuration: 4
-  delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
-  subtitleId: 545bf218e0b2420784bb2c76e7f86348
---- !u!114 &600959573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600959569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
-  highlightRange: 3
-  pulseSpeed: 2
-  pulseMinIntensity: 0.3
-  pulseMaxIntensity: 1.2
-  outlineWidth: 1.03
---- !u!114 &600959574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600959569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  linkedSubtitleTrigger: {fileID: 0}
-  onCloseObjective: {fileID: 0}
-  onCloseAudio: {fileID: 0}
-  noteTitle: Note
-  noteContent: 'If you are reading this, you woke up before he found you.
-
-
-    The
-    front door is locked.
-
-    Father Mathew took the Mansion Key upstairs
-
-    and
-    hid it in the bedroom at the end of the hall.
-
-    You must seal Varen.
-
-
-    I
-    hid the Bedroom Key somewhere on this floor.
-
-    Look in the office, waiting
-    area, kitchen, or storage room.
-
-
-    Do not go upstairs until you find it.
-
-
-    Also
-    the vault key password is: 1234
-
-
-    - A Friend'
-  koreanTitle: 
-  koreanContent: 
-  tagalogTitle: 
-  tagalogContent: 
-  readRange: 2
-  readKey: 101
---- !u!65 &600959575
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600959569}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.53, y: 2.43, z: 1.94}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &600959576
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600959569}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 54e975e64545fca48b8b676bd43fe1f1, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &600959577
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600959569}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &604958784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12496,7 +12213,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000021855692, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -17.04, y: 9.04, z: -9.18}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.89, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1561244303}
@@ -13575,7 +13292,7 @@ Transform:
   m_GameObject: {fileID: 693130699}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 82.815, y: 1.871, z: -29.009}
+  m_LocalPosition: {x: 82.604, y: 1.871, z: -29.099}
   m_LocalScale: {x: 0.25472, y: 0.011997665, z: 0.20089}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13608,7 +13325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subtitleText: "They were trying to keep people out\u2026 why?"
+  subtitleText: WHAT?!
   displayDuration: 4
   delayBeforeShow: 0.5
   logPickupSubtitleDebug: 1
@@ -13910,13 +13627,7 @@ Transform:
   - {fileID: 1853023348}
   - {fileID: 1041007800}
   - {fileID: 1420467413}
-  - {fileID: 1214425008}
   - {fileID: 693130700}
-  - {fileID: 940752237}
-  - {fileID: 791827506}
-  - {fileID: 600959570}
-  - {fileID: 779613338}
-  - {fileID: 1374211057}
   - {fileID: 2052273202}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15392,7 +15103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 201749875}
+  m_Material: {fileID: 230878856}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -15712,213 +15423,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &779613337
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 779613338}
-  - component: {fileID: 779613345}
-  - component: {fileID: 779613344}
-  - component: {fileID: 779613343}
-  - component: {fileID: 779613342}
-  - component: {fileID: 779613341}
-  - component: {fileID: 779613340}
-  - component: {fileID: 779613339}
-  m_Layer: 0
-  m_Name: Guard house's note (6)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &779613338
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779613337}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 82.815, y: 1.871, z: -29.009}
-  m_LocalScale: {x: 0.25472, y: 0.011997665, z: 0.20089}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 696073085}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &779613339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779613337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveTriggerToActivate: {fileID: 1861130344}
-  itemName: paper 2
-  disableAfterActivation: 1
---- !u!114 &779613340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779613337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  subtitleText: "They were trying to keep people out\u2026 why?"
-  displayDuration: 4
-  delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
-  subtitleId: 545bf218e0b2420784bb2c76e7f86348
---- !u!114 &779613341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779613337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
-  highlightRange: 3
-  pulseSpeed: 2
-  pulseMinIntensity: 0.3
-  pulseMaxIntensity: 1.2
-  outlineWidth: 1.03
---- !u!114 &779613342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779613337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  linkedSubtitleTrigger: {fileID: 0}
-  onCloseObjective: {fileID: 0}
-  onCloseAudio: {fileID: 0}
-  noteTitle: Note
-  noteContent: 'If you are reading this, you woke up before he found you.
-
-
-    The
-    front door is locked.
-
-    Father Mathew took the Mansion Key upstairs
-
-    and
-    hid it in the bedroom at the end of the hall.
-
-    You must seal Varen.
-
-
-    I
-    hid the Bedroom Key somewhere on this floor.
-
-    Look in the office, waiting
-    area, kitchen, or storage room.
-
-
-    Do not go upstairs until you find it.
-
-
-    -
-    A Friend'
-  koreanTitle: 
-  koreanContent: 
-  tagalogTitle: 
-  tagalogContent: 
-  readRange: 2
-  readKey: 101
---- !u!65 &779613343
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779613337}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.53, y: 2.43, z: 1.94}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &779613344
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779613337}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 54e975e64545fca48b8b676bd43fe1f1, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &779613345
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779613337}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &783638440
 GameObject:
   m_ObjectHideFlags: 0
@@ -16257,213 +15761,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 790110147}
   m_Mesh: {fileID: 8552134717624371188, guid: b176645ce344e2e4982fbfb9558e664c, type: 3}
---- !u!1 &791827505
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 791827506}
-  - component: {fileID: 791827513}
-  - component: {fileID: 791827512}
-  - component: {fileID: 791827511}
-  - component: {fileID: 791827510}
-  - component: {fileID: 791827509}
-  - component: {fileID: 791827508}
-  - component: {fileID: 791827507}
-  m_Layer: 0
-  m_Name: Guard house's note (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &791827506
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791827505}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 82.815, y: 1.871, z: -29.009}
-  m_LocalScale: {x: 0.25472, y: 0.011997665, z: 0.20089}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 696073085}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &791827507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791827505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveTriggerToActivate: {fileID: 1861130344}
-  itemName: paper 2
-  disableAfterActivation: 1
---- !u!114 &791827508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791827505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  subtitleText: "They were trying to keep people out\u2026 why?"
-  displayDuration: 4
-  delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
-  subtitleId: 545bf218e0b2420784bb2c76e7f86348
---- !u!114 &791827509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791827505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
-  highlightRange: 3
-  pulseSpeed: 2
-  pulseMinIntensity: 0.3
-  pulseMaxIntensity: 1.2
-  outlineWidth: 1.03
---- !u!114 &791827510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791827505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  linkedSubtitleTrigger: {fileID: 0}
-  onCloseObjective: {fileID: 0}
-  onCloseAudio: {fileID: 0}
-  noteTitle: Note
-  noteContent: 'If you are reading this, you woke up before he found you.
-
-
-    The
-    front door is locked.
-
-    Father Mathew took the Mansion Key upstairs
-
-    and
-    hid it in the bedroom at the end of the hall.
-
-    You must seal Varen.
-
-
-    I
-    hid the Bedroom Key somewhere on this floor.
-
-    Look in the office, waiting
-    area, kitchen, or storage room.
-
-
-    Do not go upstairs until you find it.
-
-
-    -
-    A Friend'
-  koreanTitle: 
-  koreanContent: 
-  tagalogTitle: 
-  tagalogContent: 
-  readRange: 2
-  readKey: 101
---- !u!65 &791827511
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791827505}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.53, y: 2.43, z: 1.94}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &791827512
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791827505}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 54e975e64545fca48b8b676bd43fe1f1, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &791827513
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791827505}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &795348606
 GameObject:
   m_ObjectHideFlags: 0
@@ -20675,213 +19972,6 @@ Transform:
   - {fileID: 709685909}
   m_Father: {fileID: 456368831}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &940752236
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 940752237}
-  - component: {fileID: 940752244}
-  - component: {fileID: 940752243}
-  - component: {fileID: 940752242}
-  - component: {fileID: 940752241}
-  - component: {fileID: 940752240}
-  - component: {fileID: 940752239}
-  - component: {fileID: 940752238}
-  m_Layer: 0
-  m_Name: Guard house's note (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &940752237
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940752236}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 82.815, y: 1.871, z: -29.009}
-  m_LocalScale: {x: 0.25472, y: 0.011997665, z: 0.20089}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 696073085}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &940752238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940752236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveTriggerToActivate: {fileID: 1861130344}
-  itemName: paper 2
-  disableAfterActivation: 1
---- !u!114 &940752239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940752236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  subtitleText: "They were trying to keep people out\u2026 why?"
-  displayDuration: 4
-  delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
-  subtitleId: 545bf218e0b2420784bb2c76e7f86348
---- !u!114 &940752240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940752236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
-  highlightRange: 3
-  pulseSpeed: 2
-  pulseMinIntensity: 0.3
-  pulseMaxIntensity: 1.2
-  outlineWidth: 1.03
---- !u!114 &940752241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940752236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  linkedSubtitleTrigger: {fileID: 0}
-  onCloseObjective: {fileID: 0}
-  onCloseAudio: {fileID: 0}
-  noteTitle: Note
-  noteContent: 'If you are reading this, you woke up before he found you.
-
-
-    The
-    front door is locked.
-
-    Father Mathew took the Mansion Key upstairs
-
-    and
-    hid it in the bedroom at the end of the hall.
-
-    You must seal Varen.
-
-
-    I
-    hid the Bedroom Key somewhere on this floor.
-
-    Look in the office, waiting
-    area, kitchen, or storage room.
-
-
-    Do not go upstairs until you find it.
-
-
-    -
-    A Friend'
-  koreanTitle: 
-  koreanContent: 
-  tagalogTitle: 
-  tagalogContent: 
-  readRange: 2
-  readKey: 101
---- !u!65 &940752242
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940752236}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.53, y: 2.43, z: 1.94}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &940752243
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940752236}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 54e975e64545fca48b8b676bd43fe1f1, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &940752244
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940752236}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &943898938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20979,37 +20069,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 434977699}
   m_SourcePrefab: {fileID: 100100000, guid: 2ddd01b1b9b6f6d4684a1582baa32a32, type: 3}
---- !u!1 &945433124
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 945433125}
-  m_Layer: 0
-  m_Name: gas spawn point
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &945433125
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 945433124}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.982, y: -1.3, z: 12.95}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1265710989}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &950413154
 GameObject:
   m_ObjectHideFlags: 0
@@ -28808,213 +27867,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1210813701}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1214425007
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1214425008}
-  - component: {fileID: 1214425015}
-  - component: {fileID: 1214425014}
-  - component: {fileID: 1214425013}
-  - component: {fileID: 1214425012}
-  - component: {fileID: 1214425011}
-  - component: {fileID: 1214425010}
-  - component: {fileID: 1214425009}
-  m_Layer: 0
-  m_Name: Guard house's note (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1214425008
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214425007}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 82.815, y: 1.871, z: -29.009}
-  m_LocalScale: {x: 0.25472, y: 0.011997665, z: 0.20089}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 696073085}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1214425009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214425007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveTriggerToActivate: {fileID: 1861130344}
-  itemName: paper 2
-  disableAfterActivation: 1
---- !u!114 &1214425010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214425007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  subtitleText: "They were trying to keep people out\u2026 why?"
-  displayDuration: 4
-  delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
-  subtitleId: 545bf218e0b2420784bb2c76e7f86348
---- !u!114 &1214425011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214425007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
-  highlightRange: 3
-  pulseSpeed: 2
-  pulseMinIntensity: 0.3
-  pulseMaxIntensity: 1.2
-  outlineWidth: 1.03
---- !u!114 &1214425012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214425007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  linkedSubtitleTrigger: {fileID: 0}
-  onCloseObjective: {fileID: 0}
-  onCloseAudio: {fileID: 0}
-  noteTitle: Note
-  noteContent: 'If you are reading this, you woke up before he found you.
-
-
-    The
-    front door is locked.
-
-    Father Mathew took the Mansion Key upstairs
-
-    and
-    hid it in the bedroom at the end of the hall.
-
-    You must seal Varen.
-
-
-    I
-    hid the Bedroom Key somewhere on this floor.
-
-    Look in the office, waiting
-    area, kitchen, or storage room.
-
-
-    Do not go upstairs until you find it.
-
-
-    -
-    A Friend'
-  koreanTitle: 
-  koreanContent: 
-  tagalogTitle: 
-  tagalogContent: 
-  readRange: 2
-  readKey: 101
---- !u!65 &1214425013
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214425007}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.53, y: 2.43, z: 1.94}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1214425014
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214425007}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 54e975e64545fca48b8b676bd43fe1f1, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1214425015
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214425007}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1214679406
 GameObject:
   m_ObjectHideFlags: 0
@@ -29151,81 +28003,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1214679406}
   m_CullTransparentMesh: 1
---- !u!1 &1240644157
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1240644160}
-  - component: {fileID: 1240644159}
-  - component: {fileID: 1240644158}
-  m_Layer: 0
-  m_Name: ObjectiveTrigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1240644158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1240644157}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bdfb60fdaf24bd49b26a587b842e8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveText: Search the guard house.
-  displayDuration: 4
-  triggerOnce: 1
-  playerTag: Player
-  saveId: 
-  objectivePanel: {fileID: 528647684}
-  objectiveLabel: {fileID: 1520062541}
-  fadeSpeed: 3
-  slideDistance: 50
---- !u!65 &1240644159
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1240644157}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &1240644160
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1240644157}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 80.62657, y: -10.55387, z: -22.39709}
-  m_LocalScale: {x: 1, y: 2.8554, z: 21.62381}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2113977990}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1245325557
 GameObject:
   m_ObjectHideFlags: 0
@@ -29705,7 +28482,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 945433125}
   - {fileID: 2052439990}
   - {fileID: 783638441}
   - {fileID: 340747549}
@@ -31039,213 +29815,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1362482115}
   m_Mesh: {fileID: 4300006, guid: fb4b189d2629f3341a839074d8cff2da, type: 3}
---- !u!1 &1374211056
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1374211057}
-  - component: {fileID: 1374211064}
-  - component: {fileID: 1374211063}
-  - component: {fileID: 1374211062}
-  - component: {fileID: 1374211061}
-  - component: {fileID: 1374211060}
-  - component: {fileID: 1374211059}
-  - component: {fileID: 1374211058}
-  m_Layer: 0
-  m_Name: Guard house's note (7)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1374211057
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374211056}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 82.815, y: 1.871, z: -29.009}
-  m_LocalScale: {x: 0.25472, y: 0.011997665, z: 0.20089}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 696073085}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1374211058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374211056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveTriggerToActivate: {fileID: 1861130344}
-  itemName: paper 2
-  disableAfterActivation: 1
---- !u!114 &1374211059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374211056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c68eb8825e81b8946be39bae8f7d0c77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  subtitleText: "They were trying to keep people out\u2026 why?"
-  displayDuration: 4
-  delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
-  subtitleId: 545bf218e0b2420784bb2c76e7f86348
---- !u!114 &1374211060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374211056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightColor: {r: 0.3584906, g: 0.15451579, b: 0.1427198, a: 1}
-  highlightRange: 3
-  pulseSpeed: 2
-  pulseMinIntensity: 0.3
-  pulseMaxIntensity: 1.2
-  outlineWidth: 1.03
---- !u!114 &1374211061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374211056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7a654d932174f45b141d2b0de5b863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  linkedSubtitleTrigger: {fileID: 0}
-  onCloseObjective: {fileID: 0}
-  onCloseAudio: {fileID: 0}
-  noteTitle: Note
-  noteContent: 'If you are reading this, you woke up before he found you.
-
-
-    The
-    front door is locked.
-
-    Father Mathew took the Mansion Key upstairs
-
-    and
-    hid it in the bedroom at the end of the hall.
-
-    You must seal Varen.
-
-
-    I
-    hid the Bedroom Key somewhere on this floor.
-
-    Look in the office, waiting
-    area, kitchen, or storage room.
-
-
-    Do not go upstairs until you find it.
-
-
-    -
-    A Friend'
-  koreanTitle: 
-  koreanContent: 
-  tagalogTitle: 
-  tagalogContent: 
-  readRange: 2
-  readKey: 101
---- !u!65 &1374211062
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374211056}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.53, y: 2.43, z: 1.94}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1374211063
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374211056}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 54e975e64545fca48b8b676bd43fe1f1, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1374211064
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374211056}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!108 &1378749257 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 3510610481172732986, guid: f495980c04948cc4f93ce0a53e664586,
@@ -32162,7 +30731,6 @@ GameObject:
   - component: {fileID: 1420467409}
   - component: {fileID: 1420467414}
   - component: {fileID: 1420467415}
-  - component: {fileID: 1420467416}
   m_Layer: 0
   m_Name: Guard house's note
   m_TagString: Untagged
@@ -32308,7 +30876,7 @@ Transform:
   m_GameObject: {fileID: 1420467408}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 107.136, y: -1.266, z: 3.1210027}
+  m_LocalPosition: {x: 107.406, y: -1.266, z: 3.398}
   m_LocalScale: {x: 0.25472, y: 0.011997665, z: 0.20089}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -32349,21 +30917,6 @@ MonoBehaviour:
   delayBeforeShow: 0.5
   logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
---- !u!114 &1420467416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1420467408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb84e6d165f926449379465e5d2c6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveTriggerToActivate: {fileID: 1861130344}
-  itemName: paper 2
-  disableAfterActivation: 1
 --- !u!1 &1421010670
 GameObject:
   m_ObjectHideFlags: 0
@@ -41503,17 +40056,17 @@ PrefabInstance:
     - target: {fileID: 6346049426277504344, guid: c1bb325f0b0e5184fb7b97bacdcdcb9a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 42.952454
+      value: 42.85
       objectReference: {fileID: 0}
     - target: {fileID: 6346049426277504344, guid: c1bb325f0b0e5184fb7b97bacdcdcb9a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.894171
+      value: 0.963
       objectReference: {fileID: 0}
     - target: {fileID: 6346049426277504344, guid: c1bb325f0b0e5184fb7b97bacdcdcb9a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -89.980865
+      value: -89.828
       objectReference: {fileID: 0}
     - target: {fileID: 6346049426277504344, guid: c1bb325f0b0e5184fb7b97bacdcdcb9a,
         type: 3}
@@ -41995,7 +40548,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1861130345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42046,13 +40599,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1861130344}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 80.56, y: -10.67, z: 33.63}
-  m_LocalScale: {x: 1.4120097, y: 0.7681026, z: 7.9197865}
+  m_LocalRotation: {x: -0, y: -0.6713104, z: -0, w: 0.74117637}
+  m_LocalPosition: {x: 59.352, y: -8.17, z: 1.399}
+  m_LocalScale: {x: 1.4120097, y: 0.7681026, z: 2.5828006}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2113977990}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -84.337, z: 0}
 --- !u!1 &1869837493
 GameObject:
   m_ObjectHideFlags: 0
@@ -46285,7 +44838,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1240644160}
   - {fileID: 1842664139}
   - {fileID: 1861130347}
   - {fileID: 1829975274}
@@ -68077,6 +66629,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7146666024095329548}
   m_Mesh: {fileID: 4300006, guid: 66e1e8886a45bf44893f8dc3927f6cbb, type: 3}
+--- !u!114 &1239852370757522529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449164712660201075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3492ec9ba693bf043b503e4be9faaaf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapName: Map
+  pickupRange: 2
+  pickupKey: 101
+  mapSystem: {fileID: 8145964823572664760}
+  objectiveTriggerToActivate: {fileID: 1861130344}
 --- !u!1 &1243891551758866316
 GameObject:
   m_ObjectHideFlags: 0
@@ -68930,7 +67499,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000021855692, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -17.04, y: 9.04, z: -9.18}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.89, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1561244303}
@@ -76015,6 +74584,14 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1592568823577655375
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449164712660201075}
+  m_Mesh: {fileID: 4300000, guid: 7ea765cb44447094ab0aef02257cb821, type: 3}
 --- !u!64 &1594468077235956515
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -91532,6 +90109,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8694012859786301635}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2449164712660201075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5402998312812063629}
+  - component: {fileID: 1592568823577655375}
+  - component: {fileID: 6539235218686768703}
+  - component: {fileID: 3073433446716732117}
+  - component: {fileID: 8147609072260506938}
+  - component: {fileID: 1239852370757522529}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &2451038472485934304
 GameObject:
   m_ObjectHideFlags: 0
@@ -97532,7 +96130,7 @@ Transform:
   m_GameObject: {fileID: 8841746530532243556}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 106.28, y: 5.32, z: -62.224}
+  m_LocalPosition: {x: 106.38, y: 5.06, z: -62.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -102315,7 +100913,7 @@ Transform:
   m_GameObject: {fileID: 4026090228783265145}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0028869852, y: 0.0043707625, z: -0.70709324, w: 0.70710087}
-  m_LocalPosition: {x: 110.92376, y: 4.711, z: -55.678318}
+  m_LocalPosition: {x: 110.69, y: 4.711, z: -55.474}
   m_LocalScale: {x: 34.48608, y: 12.348559, z: 19.435661}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -102971,6 +101569,27 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: 5381912f22f2e044db439d7fe95c968d, type: 3}
+--- !u!65 &3073433446716732117
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449164712660201075}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5145125, y: 0.030000007, z: 0.5145126}
+  m_Center: {x: 0, y: 0, z: 0.25000003}
 --- !u!1 &3075518447110109103
 GameObject:
   m_ObjectHideFlags: 0
@@ -145558,6 +144177,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6511599564808510486}
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 180}
+--- !u!4 &5402998312812063629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449164712660201075}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.71455896, y: 0.00011702684, z: -0.6995751, w: -0.00042702508}
+  m_LocalPosition: {x: 110.992, y: 4.684, z: -55.727}
+  m_LocalScale: {x: 1, y: 1.0000005, z: 1.0000005}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: -180.044, y: -88.78601, z: -0.024993896}
 --- !u!4 &5405579033948013341
 Transform:
   m_ObjectHideFlags: 0
@@ -150382,30 +149016,6 @@ Transform:
   - {fileID: 5739176893931137057}
   m_Father: {fileID: 4982978889591262466}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5725897018631337117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8841746530532243556}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74ff4bafe6c54b744bf7908a0f4fab19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkStepInterval: 0.69
-  sprintStepInterval: 0.3
-  crouchStepInterval: 0.7
-  stepVolume: 0.6
-  grassSounds: []
-  woodSounds: []
-  stoneSounds: []
-  defaultSounds: []
-  raycastDistance: 2.75
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!1 &5726006502654561309
 GameObject:
   m_ObjectHideFlags: 0
@@ -152645,7 +151255,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 18
+  far clip plane: 20
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -165209,8 +163819,8 @@ Light:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 205.4
   m_Range: 220
-  m_SpotAngle: 58
-  m_InnerSpotAngle: 42
+  m_SpotAngle: 111.8
+  m_InnerSpotAngle: 111.8
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -166786,6 +165396,48 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 18
   m_IsActive: 1
+--- !u!23 &6539235218686768703
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449164712660201075}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: ddc8c45e4ad44ac4b97855d23d3ecdd2, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!23 &6547264890227289353
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -177848,7 +176500,6 @@ MonoBehaviour:
   respawnGasWhenLightsTurnOff: 1
   gasPrefab: {fileID: 919132148883830733}
   gasSpawnPoints:
-  - {fileID: 945433125}
   - {fileID: 2052439990}
   - {fileID: 783638441}
   - {fileID: 340747549}
@@ -185756,17 +184407,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   batteryLife: 100
-  drainRate: 0.6
+  drainRate: 0.2
   drainFasterInHardMode: 1
   hardModeDrainMultiplier: 2
   intensity: 205.4
   range: 220
-  spotAngle: 58
-  innerSpotAngle: 42
+  spotAngle: 111.8
+  innerSpotAngle: 179
   shadows: 0
   dimNearObjects: 1
-  dimmingDistance: 3.87
-  minimumNearObjectIntensity: 0.3
+  dimmingDistance: 25.4
+  minimumNearObjectIntensity: 0
   dimmingLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -193264,6 +191915,24 @@ MonoBehaviour:
   worldMaxZ: 100
   mapWidth: 1054
   mapHeight: 607.1
+--- !u!114 &8147609072260506938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449164712660201075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d356f537caeef4dae6cb1766de830e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 1, g: 0.8, b: 0.2, a: 1}
+  highlightRange: 3
+  pulseSpeed: 2
+  pulseMinIntensity: 0.3
+  pulseMaxIntensity: 1.2
+  outlineWidth: 1.03
 --- !u!1 &8148469155630749059
 GameObject:
   m_ObjectHideFlags: 0
@@ -195128,7 +193797,7 @@ Transform:
   m_GameObject: {fileID: 7267319070965894106}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6762262, y: -0.20668371, z: -0.2066838, w: 0.6762262}
-  m_LocalPosition: {x: 110.53, y: 4.704, z: -55.398}
+  m_LocalPosition: {x: 110.242, y: 4.748, z: -55.29}
   m_LocalScale: {x: 1.68, y: 1.5843, z: 2.19}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -206667,7 +205336,6 @@ GameObject:
   - component: {fileID: 7567504678937945266}
   - component: {fileID: 2586392250025630419}
   - component: {fileID: 934179805201823023}
-  - component: {fileID: 5725897018631337117}
   - component: {fileID: 8145964823572664760}
   - component: {fileID: 7918334356255294011}
   - component: {fileID: 5057019129688464938}
@@ -211909,7 +210577,7 @@ SceneRoots:
   - {fileID: 1646156895}
   - {fileID: 1688556244}
   - {fileID: 2074501021}
-  - {fileID: 191644020}
+  - {fileID: 5402998312812063629}
   - {fileID: 3037004298395203652}
   - {fileID: 543450653561335310}
   - {fileID: 379645407}

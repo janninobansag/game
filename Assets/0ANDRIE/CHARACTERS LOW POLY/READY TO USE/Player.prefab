@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1905528494963378361}
   - component: {fileID: 5805236079351527128}
   - component: {fileID: 9187975381426854180}
-  - component: {fileID: 4324186237358545046}
   - component: {fileID: 178075398762855859}
   - component: {fileID: 2204356283941842480}
   m_Layer: 0
@@ -143,30 +142,6 @@ MonoBehaviour:
   crouchCenterY: 0.56
   mouseSensitivity: 3
   cameraHolder: {fileID: 8972120046498944598}
---- !u!114 &4324186237358545046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 702791232458593391}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74ff4bafe6c54b744bf7908a0f4fab19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkStepInterval: 0.69
-  sprintStepInterval: 0.3
-  crouchStepInterval: 0.7
-  stepVolume: 0.6
-  grassSounds: []
-  woodSounds: []
-  stoneSounds: []
-  defaultSounds: []
-  raycastDistance: 2.75
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!114 &178075398762855859
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -295,7 +295,6 @@ Audio systems include:
 
 - `AudioManager.cs`: global volume and settings.
 - `AudioTrigger.cs`: scene-triggered audio.
-- `FootstepSound.cs`: player footsteps.
 - `ButtonSound.cs`: UI hover/click sounds.
 - Local audio on doors, drawers, ritual objects, books, notes, and jumpscares.
 

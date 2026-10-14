@@ -15,6 +15,10 @@ public class MapPickup : MonoBehaviour
     [Tooltip("Drag the MapSystem component from the Player here. Leave empty to find it automatically.")]
     public MapSystem mapSystem;
 
+    [Header("Objective Trigger Activation")]
+    [Tooltip("Optional. This object starts hidden and becomes active when the player collects the map.")]
+    public GameObject objectiveTriggerToActivate;
+
     private Camera playerCamera;
     private bool isCollected;
     private bool showPickupPrompt;
@@ -24,6 +28,9 @@ public class MapPickup : MonoBehaviour
         // Cache the player camera used by the centre-screen pickup raycast.
         playerCamera = Camera.main;
         FindMapSystemIfNeeded();
+
+        if (objectiveTriggerToActivate != null)
+            objectiveTriggerToActivate.SetActive(false);
     }
 
     private void Update()
@@ -57,6 +64,9 @@ public class MapPickup : MonoBehaviour
         isCollected = true;
         showPickupPrompt = false;
         mapSystem.UnlockMap();
+
+        if (objectiveTriggerToActivate != null)
+            objectiveTriggerToActivate.SetActive(true);
         gameObject.SetActive(false);
     }
 
@@ -65,6 +75,8 @@ public class MapPickup : MonoBehaviour
     {
         isCollected = true;
         showPickupPrompt = false;
+        if (objectiveTriggerToActivate != null)
+            objectiveTriggerToActivate.SetActive(true);
         gameObject.SetActive(false);
     }
 
