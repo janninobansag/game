@@ -79,7 +79,7 @@ public class JumpscareSystemNEW : MonoBehaviour
         if (isBreathing)
         {
             breathingTimer -= Time.deltaTime;
-            
+
             // Camera shake / breathing effect
             if (headBob != null)
             {
@@ -97,13 +97,13 @@ public class JumpscareSystemNEW : MonoBehaviour
                 isBreathing = false;
                 if (headBob != null)
                     headBob.externalShakeAmount = 0f;
-                
+
                 if (breathingAudioSource != null)
                 {
                     breathingAudioSource.Stop();
                     breathingAudioSource.volume = breathingVolume;
                 }
-                
+
             }
         }
     }
@@ -254,14 +254,14 @@ public class JumpscareSystemNEW : MonoBehaviour
     {
         isBreathing = true;
         breathingTimer = breathingDuration;
-        
+
         if (breathingSound != null && breathingAudioSource != null)
         {
             breathingAudioSource.clip = breathingSound;
             breathingAudioSource.volume = breathingVolume;
             breathingAudioSource.Play();
         }
-        
+
     }
 
     public void ResetJumpscare()
@@ -270,7 +270,7 @@ public class JumpscareSystemNEW : MonoBehaviour
         isBreathing = false;
         if (headBob != null)
             headBob.externalShakeAmount = 0f;
-        
+
         if (breathingAudioSource != null && breathingAudioSource.isPlaying)
         {
             breathingAudioSource.Stop();

@@ -1,7 +1,6 @@
 // First encounter, catch jumpscare, and camera behavior for Tikbalang.
 using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
 
 public partial class TikbalangAI
 {

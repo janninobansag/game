@@ -36,6 +36,7 @@ public class CheckpointTrigger : MonoBehaviour
             spawnPosition = p.transform.position;
             spawnRotation = p.transform.rotation;
         }
+
     }
 
     void OnTriggerEnter(Collider other)
@@ -154,59 +155,49 @@ public class CheckpointTrigger : MonoBehaviour
         float sw = Screen.width;
         float sh = Screen.height;
 
-        // Black fade
         if (blackAlpha > 0.01f)
         {
             GUI.color = new Color(0f, 0f, 0f, blackAlpha);
-            GUI.DrawTexture(new Rect(0, 0, sw, sh),
-                Texture2D.whiteTexture);
-
+            GUI.DrawTexture(new Rect(0, 0, sw, sh), Texture2D.whiteTexture);
             if (blackAlpha > 0.5f && isRespawning)
             {
-                GUIStyle s = new GUIStyle();
-                s.fontSize = (int)(sh * 0.024f);
-                s.alignment = TextAnchor.MiddleCenter;
-                s.normal.textColor =
-                    new Color(0.7f, 0.7f, 0.7f, blackAlpha);
+                GUIStyle s = new GUIStyle { fontSize = (int)(sh * 0.024f), alignment = TextAnchor.MiddleCenter };
+                s.normal.textColor = new Color(0.7f, 0.7f, 0.7f, blackAlpha);
                 GUI.color = Color.white;
-                GUI.Label(new Rect(0, sh / 2f - 20f, sw, 40f),
-                    "Returning to checkpoint...", s);
+                GUI.Label(new Rect(0, sh / 2f - 20f, sw, 40f), "Returning to checkpoint...", s);
             }
             GUI.color = Color.white;
         }
 
-        // Notification
         if (showNotif && notifAlpha > 0.01f)
         {
-            float pw = 280f;
-            float ph = 52f;
-            float px = sw - pw - 20f;
-            float py = sh - ph - 80f;
+            float scale = Mathf.Clamp(sh / 1080f, 0.7f, 1.25f);
+            float panelWidth = Mathf.Clamp(sw * 0.27f, 250f * scale, 410f * scale);
+            float panelHeight = 82f * scale;
+            float margin = 24f * scale;
+            float panelX = sw - panelWidth - margin;
+            float panelY = sh - panelHeight - 92f * scale;
+            float padding = 18f * scale;
 
-            GUI.color = new Color(0f, 0f, 0f, 0.75f * notifAlpha);
-            GUI.DrawTexture(new Rect(px, py, pw, ph),
-                Texture2D.whiteTexture);
+            GUI.color = new Color(0f, 0f, 0f, 0.5f * notifAlpha);
+            GUI.DrawTexture(new Rect(panelX + 4f * scale, panelY + 5f * scale, panelWidth, panelHeight), Texture2D.whiteTexture);
+            GUI.color = new Color(0.025f, 0.04f, 0.03f, 0.94f * notifAlpha);
+            GUI.DrawTexture(new Rect(panelX, panelY, panelWidth, panelHeight), Texture2D.whiteTexture);
+            GUI.color = new Color(0.55f, 0.55f, 0.55f, notifAlpha);
+            GUI.DrawTexture(new Rect(panelX, panelY, panelWidth, 1f * scale), Texture2D.whiteTexture);
 
-            GUI.color = new Color(0.2f, 0.85f, 0.3f, notifAlpha);
-            GUI.DrawTexture(new Rect(px, py, 3f, ph),
-                Texture2D.whiteTexture);
+            GUIStyle label = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(10f * scale), fontStyle = FontStyle.Bold };
+            label.normal.textColor = new Color(0.7f, 0.7f, 0.7f, notifAlpha);
+            GUI.Label(new Rect(panelX + padding, panelY + 11f * scale, panelWidth - padding * 2f, 16f * scale), "SYSTEM // CHECKPOINT", label);
 
+            GUIStyle title = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(19f * scale), fontStyle = FontStyle.Bold };
+            title.normal.textColor = new Color(1f, 1f, 1f, notifAlpha);
+            GUI.Label(new Rect(panelX + padding, panelY + 27f * scale, panelWidth - padding * 2f, 26f * scale), "CHECKPOINT SAVED", title);
+
+            GUIStyle subtitle = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(12f * scale) };
+            subtitle.normal.textColor = new Color(0.82f, 0.82f, 0.82f, notifAlpha);
+            GUI.Label(new Rect(panelX + padding, panelY + 54f * scale, panelWidth - padding * 2f, 18f * scale), "You will respawn here if caught.", subtitle);
             GUI.color = Color.white;
-
-            GUIStyle t = new GUIStyle();
-            t.fontSize = (int)(sh * 0.018f);
-            t.fontStyle = FontStyle.Bold;
-            t.normal.textColor =
-                new Color(0.3f, 0.95f, 0.4f, notifAlpha);
-            GUI.Label(new Rect(px + 12f, py + 8f, pw, 20f),
-                "Checkpoint saved!", t);
-
-            GUIStyle sub = new GUIStyle();
-            sub.fontSize = (int)(sh * 0.013f);
-            sub.normal.textColor =
-                new Color(0.7f, 0.75f, 0.7f, notifAlpha);
-            GUI.Label(new Rect(px + 12f, py + 28f, pw, 18f),
-                "You will respawn here if caught", sub);
         }
     }
 }
