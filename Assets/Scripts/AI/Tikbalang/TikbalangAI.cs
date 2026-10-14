@@ -1,9 +1,7 @@
 // PURPOSE: Controls Tikbalang detection, movement, chase audio, door handling, teleporting, Q&A, and jumpscares.
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
-using TMPro;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public partial class TikbalangAI : MonoBehaviour

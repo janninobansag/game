@@ -1,5 +1,4 @@
 // PURPOSE: Displays an objective when activated and saves one-time trigger state.
-using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -79,7 +78,7 @@ public class ObjectiveTrigger : MonoBehaviour
         {
             // Fade out and hide
             currentAlpha = Mathf.Lerp(currentAlpha, 0f, Time.deltaTime * fadeSpeed);
-            
+
             if (currentAlpha <= 0.05f)
             {
                 isShowing = false;
@@ -119,7 +118,7 @@ public class ObjectiveTrigger : MonoBehaviour
         if (objectivePanel != null)
         {
             objectivePanel.SetActive(true);
-            
+
             // Reset position for slide effect
             if (panelRect != null)
             {

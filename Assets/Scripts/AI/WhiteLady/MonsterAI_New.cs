@@ -1,7 +1,6 @@
 // PURPOSE: Controls the White Lady patrol, detection, chase, Q&A encounter, damage, and jumpscare behavior.
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
