@@ -48626,30 +48626,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300006, guid: 5381912f22f2e044db439d7fe95c968d, type: 3}
---- !u!114 &5725897018631337117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8841746530532243556}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74ff4bafe6c54b744bf7908a0f4fab19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkStepInterval: 0.69
-  sprintStepInterval: 0.3
-  crouchStepInterval: 0.7
-  stepVolume: 0.6
-  grassSounds: []
-  woodSounds: []
-  stoneSounds: []
-  defaultSounds: []
-  raycastDistance: 2.75
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!222 &5738626894782923194
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -58099,7 +58075,6 @@ GameObject:
   - component: {fileID: 7567504678937945266}
   - component: {fileID: 2586392250025630419}
   - component: {fileID: 934179805201823023}
-  - component: {fileID: 5725897018631337117}
   - component: {fileID: 8145964823572664760}
   - component: {fileID: 7918334356255294011}
   m_Layer: 0
