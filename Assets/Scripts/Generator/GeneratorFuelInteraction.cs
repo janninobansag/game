@@ -27,27 +27,25 @@ public class GeneratorFuelInteraction : MonoBehaviour
     public Vector3 pourRotationOffset = new Vector3(0f, 0f, 95f);
     public GameObject fueledEffect;
 
-    [Header("Debug")]
-    [Tooltip("Log cover state only when the cover is removed or Gas is aimed at the generator.")]
-    public bool debugInteraction = true;
-
     private Camera playerCamera;
     private bool isPouring;
     private bool isFueled;
     private bool coverRemovedThisSession;
+    private bool hasEverPouredGas;
     private bool coverOpenFromSave;
     private bool coverMissingFromGenerator;
     private bool showPrompt;
     private bool showClosedCoverPrompt;
     private bool showFuelRequiredPrompt;
     private float pourProgress;
-    private string lastDebugState;
 
     private void Start()
     {
         // Restore previously saved fuel and cover state for this generator.
         playerCamera = Camera.main;
         isFueled = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(fuelSaveId);
+        hasEverPouredGas = isFueled || (SaveSystem.Instance != null &&
+            SaveSystem.Instance.IsGeneratorCoverRemoved(fuelSaveId + "EverPoured"));
         coverOpenFromSave = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(coverSaveId);
         if (fueledEffect != null) fueledEffect.SetActive(isFueled);
         if (isFueled) DestroyActiveSceneGas();
@@ -71,13 +69,6 @@ public class GeneratorFuelInteraction : MonoBehaviour
         showClosedCoverPrompt = !coverIsOpen && lookingAtGenerator && gas != null;
         showFuelRequiredPrompt = lookingAtGenerator && gas == null && IsLookingAtThisGeneratorBox();
 
-        if (lookingAtGenerator && gas != null)
-            ReportDebug("Gas aimed at Generator. Cover event=" + coverRemovedThisSession +
-                ", cover detached=" + coverMissingFromGenerator +
-                ", saved cover=" + coverOpenFromSave + ", can pour=" + showPrompt + ".");
-        else
-            lastDebugState = null;
-
         if (showPrompt && Input.GetKeyDown(interactKey))
             StartCoroutine(PourGas(gas));
     }
@@ -88,8 +79,6 @@ public class GeneratorFuelInteraction : MonoBehaviour
         if (!string.Equals(removedCoverId, coverSaveId, System.StringComparison.Ordinal)) return;
         coverRemovedThisSession = true;
         coverOpenFromSave = SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(coverSaveId);
-        ReportDebug("Cover removal received. SaveSystem present=" + (SaveSystem.Instance != null) +
-            ", saved cover=" + coverOpenFromSave + ".");
     }
 
     private bool IsLookingAtGenerator()
@@ -171,9 +160,15 @@ public class GeneratorFuelInteraction : MonoBehaviour
         else if (gas != null) Destroy(gas);
         pourProgress = 1f;
         isFueled = true;
+        hasEverPouredGas = true;
         isPouring = false;
-        if (SaveSystem.Instance != null) SaveSystem.Instance.MarkGeneratorCoverRemoved(fuelSaveId);
+        if (SaveSystem.Instance != null)
+        {
+            SaveSystem.Instance.MarkGeneratorCoverRemoved(fuelSaveId);
+            SaveSystem.Instance.MarkGeneratorCoverRemoved(fuelSaveId + "EverPoured");
+        }
         if (fueledEffect != null) fueledEffect.SetActive(true);
+        DestroyActiveSceneGas();
     }
 
     private void CancelPouring(GameObject gas)
@@ -209,6 +204,14 @@ public class GeneratorFuelInteraction : MonoBehaviour
     }
 
     public bool HasFuel() => isFueled;
+    public bool HasEverPouredGas => hasEverPouredGas;
+
+    // Called by SaveSystem after all item restoration has completed. A later
+    // restore step must never make Gas visible while this generator is fueled.
+    public void RemoveActiveSceneGas()
+    {
+        DestroyActiveSceneGas();
+    }
 
     public void ConsumeFuel()
     {
@@ -222,19 +225,19 @@ public class GeneratorFuelInteraction : MonoBehaviour
     {
         foreach (PickupItem pickup in Resources.FindObjectsOfTypeAll<PickupItem>())
         {
-            if (pickup == null || !pickup.enabled || pickup.gameObject.scene != gameObject.scene) continue;
+            // GeneratorKeySlot keeps an inactive Gas clone as its respawn template.
+            // Ignore that template and remove only Gas the player can actually see.
+            if (pickup == null || !pickup.enabled || !pickup.gameObject.activeInHierarchy ||
+                pickup.gameObject.scene != gameObject.scene)
+                continue;
             if (!IsAcceptedGasName(pickup.itemName)) continue;
-            if (Inventory.Instance != null) Inventory.Instance.RemoveAndDestroy(pickup.gameObject);
-            else Destroy(pickup.gameObject);
-            return;
+            GameObject gas = pickup.gameObject;
+            gas.SetActive(false);
+            if (Inventory.Instance != null && Inventory.Instance.GetItems().Contains(gas))
+                Inventory.Instance.RemoveAndDestroy(gas);
+            else
+                Destroy(gas);
         }
-    }
-
-    private void ReportDebug(string message)
-    {
-        if (!debugInteraction || lastDebugState == message) return;
-        lastDebugState = message;
-        Debug.Log("Generator fuel: " + message, this);
     }
 
     private void OnGUI()

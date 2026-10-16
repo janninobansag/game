@@ -5,7 +5,7 @@ using SQLite4Unity3d;
 public static class RelationalSaveSchema
 {
     public const int LocalProfileId = 1;
-    public const int SchemaVersion = 6;
+    public const int SchemaVersion = 8;
 
     public static void Create(SQLiteConnection connection, bool isHardMode)
     {
@@ -21,7 +21,7 @@ public static class RelationalSaveSchema
                            "(Id, SaveName, Difficulty, SchemaVersion) VALUES " +
                            "(1, 'Local Save', '" + difficulty + "', " + SchemaVersion + ")");
 
-        // Versions 4 through 6 move dropped transforms to DroppedItemData. Existing
+        // Earlier versions move dropped transforms to DroppedItemData. Existing
         // battery, flashlight, and ritual records are reset because old saves are unused.
         int storedSchemaVersion = connection.ExecuteScalar<int>(
             "SELECT SchemaVersion FROM SaveProfileData WHERE Id = " + LocalProfileId);
@@ -40,6 +40,54 @@ public static class RelationalSaveSchema
             if (storedSchemaVersion < 6)
             {
                 connection.Execute("DROP TABLE IF EXISTS RitualItemData");
+            }
+
+            if (isHardMode && storedSchemaVersion < 7)
+            {
+                // Wrench transforms now use the shared dropped-item table.
+                // Keep existing dropped wrench positions during the upgrade.
+                try
+                {
+                    connection.Execute("INSERT INTO DroppedItemData " +
+                        "(SaveProfileId, ItemName, IsHeld, IsDropped, PosX, PosY, PosZ, RotX, RotY, RotZ, RotW) " +
+                        "SELECT SaveProfileId, 'Wrench', 0, 1, PosX, PosY, PosZ, RotX, RotY, RotZ, RotW " +
+                        "FROM WrenchData WHERE IsDropped = 1");
+                }
+                catch (System.Exception) { }
+
+                connection.Execute("CREATE TABLE WrenchData_New (" +
+                                   "WrenchId TEXT PRIMARY KEY, " +
+                                   "SaveProfileId INTEGER NOT NULL DEFAULT 1, " +
+                                   "IsHeld INTEGER, IsDropped INTEGER, " +
+                                   "FOREIGN KEY (SaveProfileId) REFERENCES SaveProfileData(Id) ON DELETE CASCADE)");
+                connection.Execute("INSERT INTO WrenchData_New (WrenchId, SaveProfileId, IsHeld, IsDropped) " +
+                                   "SELECT WrenchId, SaveProfileId, IsHeld, IsDropped FROM WrenchData");
+                connection.Execute("DROP TABLE WrenchData");
+                connection.Execute("ALTER TABLE WrenchData_New RENAME TO WrenchData");
+            }
+
+            if (isHardMode && storedSchemaVersion < 8)
+            {
+                // Gas transforms now use the shared dropped-item table.
+                // Keep existing dropped gas positions during the upgrade.
+                try
+                {
+                    connection.Execute("INSERT INTO DroppedItemData " +
+                        "(SaveProfileId, ItemName, IsHeld, IsDropped, PosX, PosY, PosZ, RotX, RotY, RotZ, RotW) " +
+                        "SELECT SaveProfileId, 'Gas', 0, 1, PosX, PosY, PosZ, RotX, RotY, RotZ, RotW " +
+                        "FROM GasData WHERE IsDropped = 1");
+                }
+                catch (System.Exception) { }
+
+                connection.Execute("CREATE TABLE GasData_New (" +
+                                   "GasId TEXT PRIMARY KEY, " +
+                                   "SaveProfileId INTEGER NOT NULL DEFAULT 1, " +
+                                   "IsHeld INTEGER, IsDropped INTEGER, " +
+                                   "FOREIGN KEY (SaveProfileId) REFERENCES SaveProfileData(Id) ON DELETE CASCADE)");
+                connection.Execute("INSERT INTO GasData_New (GasId, SaveProfileId, IsHeld, IsDropped) " +
+                                   "SELECT GasId, SaveProfileId, IsHeld, IsDropped FROM GasData");
+                connection.Execute("DROP TABLE GasData");
+                connection.Execute("ALTER TABLE GasData_New RENAME TO GasData");
             }
         }
 
@@ -66,8 +114,8 @@ public static class RelationalSaveSchema
         if (!isHardMode)
             return;
 
-        CreateChildTable(connection, "WrenchData", "WrenchId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
-        CreateChildTable(connection, "GasData", "GasId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "WrenchData", "WrenchId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER");
+        CreateChildTable(connection, "GasData", "GasId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER");
         CreateChildTable(connection, "GeneratorCoverData", "CoverId TEXT PRIMARY KEY", "IsRemoved INTEGER");
     }
 

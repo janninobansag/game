@@ -32,6 +32,59 @@ public class GeneratorLightsOffTrigger : MonoBehaviour
 
     private bool hasTriggered;
 
+    // Reports whether this trigger has at least one assigned light to save or restore.
+    public bool HasConfiguredLights
+    {
+        get
+        {
+            if (generatorLights == null)
+                return false;
+
+            foreach (Light light in generatorLights)
+            {
+                if (light != null)
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
+    // Reports the actual state of the complete blackout light list.
+    public bool AreAnyControlledLightsOn
+    {
+        get
+        {
+            if (generatorLights == null)
+                return false;
+
+            foreach (Light light in generatorLights)
+            {
+                if (light != null && light.enabled && light.gameObject.activeInHierarchy)
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
+    // Lets the generator timer apply one consistent state to this complete light list.
+    public void SetControlledLights(bool enabled)
+    {
+        SetAllLights(enabled);
+    }
+
+    // Restores a completed blackout without replaying its flicker or sound.
+    public void RestoreLightsOffState()
+    {
+        hasTriggered = true;
+        SetControlledLights(false);
+
+        Collider trigger = GetComponent<Collider>();
+        if (trigger != null)
+            trigger.enabled = false;
+    }
+
     private void Reset()
     {
         Collider trigger = GetComponent<Collider>();
@@ -41,7 +94,7 @@ public class GeneratorLightsOffTrigger : MonoBehaviour
     private void Start()
     {
         if (turnLightsOnAtSceneStart)
-            SetAllLights(true);
+            SetControlledLights(true);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -70,16 +123,16 @@ public class GeneratorLightsOffTrigger : MonoBehaviour
     {
         for (int i = 0; i < blinkCount; i++)
         {
-            SetAllLights(false);
+            SetControlledLights(false);
             yield return new WaitForSeconds(blinkInterval);
-            SetAllLights(true);
+            SetControlledLights(true);
             yield return new WaitForSeconds(blinkInterval);
         }
 
         if (finalOffDelay > 0f)
             yield return new WaitForSeconds(finalOffDelay);
 
-        SetAllLights(false);
+        SetControlledLights(false);
         Collider trigger = GetComponent<Collider>();
         if (trigger != null)
             trigger.enabled = false;

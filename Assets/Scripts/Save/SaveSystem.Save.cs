@@ -1,5 +1,6 @@
 // PURPOSE: Saves and restores game progress and player state using the selected difficulty database.
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
@@ -294,10 +295,6 @@ public partial class SaveSystem : MonoBehaviour
                     LocalPosZ = localPosition.z
                 });
 
-                if (logDrawerSaveLoad)
-                {
-                    Debug.Log($"[Drawer Save] {drawer.name} | id={GenerateDrawerId(drawer)} | open={drawer.IsOpen()} | localPosition={localPosition}", drawer);
-                }
             }
             // ── SAVE RITUAL ──
             connection.DeleteAll<RitualData>();
@@ -377,6 +374,9 @@ public partial class SaveSystem : MonoBehaviour
                 });
             }
 
+            SaveTikbalangState();
+            SaveGeneratorLightState();
+
             // ── SAVE USED KEYS ──
             var usedKeyCount = connection.Table<KeyData>().Where(k => k.WasUsed).Count();
 
@@ -421,20 +421,6 @@ public partial class SaveSystem : MonoBehaviour
                                     cleanName == "LargeCandle (1)" ||
                                     cleanName == "Cross" ||
                                     cleanName == "Bible";
-
-                // Gas has its own Chapter 2 save record. Keeping it out of the
-                // generic drop table prevents the loader from making a second can.
-                if (IsHardModeDatabase() && pickup != null && IsGas(pickup))
-                {
-                    continue;
-                }
-
-                // The Hard-mode wrench has its own table because it restores through
-                // a dedicated path. Do not duplicate its transform in DroppedItemData.
-                if (IsHardModeDatabase() && pickup != null && IsWrench(pickup))
-                {
-                    continue;
-                }
 
                 if (inventoryItemNames.Contains(cleanName))
                 {
@@ -534,7 +520,7 @@ public partial class SaveSystem : MonoBehaviour
     {
         foreach (PickupItem pickup in Resources.FindObjectsOfTypeAll<PickupItem>())
         {
-            if (pickup == null || !pickup.enabled ||
+            if (pickup == null || !pickup.enabled || !pickup.gameObject.activeInHierarchy ||
                 pickup.gameObject.scene != SceneManager.GetActiveScene() ||
                 pickup.gameObject.hideFlags != HideFlags.None ||
                 pickup.GetComponent<Key>() != null || pickup.GetComponent<FlashlightPickup>() != null ||
@@ -553,50 +539,43 @@ public partial class SaveSystem : MonoBehaviour
 
         foreach (PickupItem wrench in Object.FindObjectsOfType<PickupItem>(true))
         {
-            if (wrench == null || !IsWrench(wrench))
+            if (wrench == null || wrench.gameObject.scene != SceneManager.GetActiveScene() || !IsWrench(wrench))
                 continue;
 
-            Transform item = wrench.transform;
             connection.Insert(new WrenchData
             {
-                WrenchId = GenerateAIId(wrench),
+                // The wrench can be reparented when it is picked up or dropped.
+                // A fixed ID keeps the saved record matchable after that happens.
+                WrenchId = WrenchRecordId,
                 IsHeld = wrench.isHeld,
-                IsDropped = wrench.wasDropped,
-                PosX = item.position.x,
-                PosY = item.position.y,
-                PosZ = item.position.z,
-                RotX = item.rotation.x,
-                RotY = item.rotation.y,
-                RotZ = item.rotation.z,
-                RotW = item.rotation.w
+                IsDropped = wrench.wasDropped
             });
         }
     }
 
     private void RestoreWrenchState()
     {
-        foreach (WrenchData savedWrench in connection.Table<WrenchData>().ToList())
+        WrenchData savedWrench = connection.Find<WrenchData>(WrenchRecordId);
+        if (savedWrench == null)
         {
-            foreach (PickupItem wrench in Resources.FindObjectsOfTypeAll<PickupItem>())
-            {
-                if (wrench == null || !wrench.gameObject.scene.IsValid() || GenerateAIId(wrench) != savedWrench.WrenchId)
-                    continue;
-
-                wrench.wasDropped = savedWrench.IsDropped;
-                wrench.isHeld = savedWrench.IsHeld;
-
-                if (savedWrench.IsDropped)
-                {
-                    wrench.transform.position = new Vector3(savedWrench.PosX, savedWrench.PosY, savedWrench.PosZ);
-                    wrench.transform.rotation = new Quaternion(
-                        savedWrench.RotX, savedWrench.RotY, savedWrench.RotZ, savedWrench.RotW);
-                    wrench.ResetItem();
-                    wrench.wasDropped = true;
-                    wrench.isHeld = false;
-                }
-                break;
-            }
+            // Read the previous hierarchy-based record once, then the next save
+            // replaces it with the stable Wrench record.
+            savedWrench = connection.Table<WrenchData>().FirstOrDefault();
         }
+
+        if (savedWrench == null)
+            return;
+
+        PickupItem wrench = Resources.FindObjectsOfTypeAll<PickupItem>()
+            .FirstOrDefault(item => item != null &&
+                                    item.gameObject.scene == SceneManager.GetActiveScene() &&
+                                    IsWrench(item));
+        if (wrench == null)
+            return;
+
+        wrench.wasDropped = savedWrench.IsDropped;
+        wrench.isHeld = savedWrench.IsHeld;
+
     }
     private static bool IsWrench(PickupItem pickup)
     {
@@ -614,7 +593,32 @@ public partial class SaveSystem : MonoBehaviour
     private static bool IsActiveSceneGas(PickupItem pickup)
     {
         return IsGas(pickup) && pickup.enabled && pickup.gameObject.hideFlags == HideFlags.None &&
+               pickup.gameObject.activeInHierarchy &&
                pickup.gameObject.scene == SceneManager.GetActiveScene();
+    }
+
+    // Before the first pour, the original Gas may exist with the lights on.
+    // After a pour, Gas waits for the generator lights to turn off again.
+    private static bool IsGeneratorActiveOrFueled()
+    {
+        bool hasEverPouredGas = false;
+        foreach (GeneratorFuelInteraction generator in Object.FindObjectsOfType<GeneratorFuelInteraction>())
+        {
+            if (generator.HasFuel())
+                return true;
+            hasEverPouredGas |= generator.HasEverPouredGas;
+        }
+
+        if (!hasEverPouredGas)
+            return false;
+
+        foreach (GeneratorKeySlot generator in Object.FindObjectsOfType<GeneratorKeySlot>())
+        {
+            if (generator.IsRunning || generator.AreAnyGeneratorLightsOn)
+                return true;
+        }
+
+        return false;
     }
 
     private void SavePathGuideProgress()
@@ -660,12 +664,11 @@ public partial class SaveSystem : MonoBehaviour
             return;
         }
 
-        Transform item = gas.transform;
         connection.Insert(new GasData
         {
-            GasId = GasRecordId, IsHeld = gas.isHeld, IsDropped = gas.wasDropped,
-            PosX = item.position.x, PosY = item.position.y, PosZ = item.position.z,
-            RotX = item.rotation.x, RotY = item.rotation.y, RotZ = item.rotation.z, RotW = item.rotation.w
+            GasId = GasRecordId,
+            IsHeld = gas.isHeld,
+            IsDropped = gas.wasDropped
         });
     }
 
@@ -685,13 +688,6 @@ public partial class SaveSystem : MonoBehaviour
         }
         gas.wasDropped = savedGas.IsDropped;
         gas.isHeld = savedGas.IsHeld;
-        if (!savedGas.IsDropped) return;
-
-        gas.transform.position = new Vector3(savedGas.PosX, savedGas.PosY, savedGas.PosZ);
-        gas.transform.rotation = new Quaternion(savedGas.RotX, savedGas.RotY, savedGas.RotZ, savedGas.RotW);
-        gas.ResetItem();
-        gas.wasDropped = true;
-        gas.isHeld = false;
     }
     private void SaveAIPositions()
     {
@@ -718,6 +714,129 @@ public partial class SaveSystem : MonoBehaviour
         }
     }
 
+    // Saves whether Tikbalang has already completed its first encounter and may chase the player.
+    private void SaveTikbalangState()
+    {
+        bool hasAwakenedTikbalang = Object.FindObjectsOfType<TikbalangAI>()
+            .Any(ai => ai != null && ai.HasFirstEncounterStarted);
+
+        connection.Insert(new GameStateData
+        {
+            Key = "TikbalangAwakened",
+            Value = hasAwakenedTikbalang ? "true" : "false"
+        });
+    }
+
+    // Restores Tikbalang after its transform has been placed back in the saved location.
+    private void RestoreTikbalangState()
+    {
+        GameStateData savedState = connection.Table<GameStateData>()
+            .FirstOrDefault(state => state.Key == "TikbalangAwakened");
+
+        if (savedState == null || savedState.Value != "true")
+            return;
+
+        foreach (TikbalangAI tikbalang in Object.FindObjectsOfType<TikbalangAI>())
+            tikbalang.RestoreAwakenedState();
+
+        foreach (TikbalangJumpscareTrigger trigger in Object.FindObjectsOfType<TikbalangJumpscareTrigger>())
+            trigger.RestoreTriggeredState();
+    }
+
+    // Stores the Chapter 2 generator lights separately from the key and fuel state.
+    private void SaveGeneratorLightState()
+    {
+        // The blackout trigger owns the complete Chapter 2 light list. The key
+        // slot intentionally controls only its assigned subset, so prefer the
+        // trigger when it has configured lights.
+        bool hasTrackedLights = false;
+        bool lightsOn = false;
+
+        foreach (GeneratorLightsOffTrigger trigger in Object.FindObjectsOfType<GeneratorLightsOffTrigger>())
+        {
+            if (!trigger.HasConfiguredLights)
+                continue;
+
+            hasTrackedLights = true;
+            if (trigger.AreAnyControlledLightsOn)
+                lightsOn = true;
+        }
+
+        if (!hasTrackedLights)
+        {
+            GeneratorKeySlot generator = Object.FindObjectOfType<GeneratorKeySlot>();
+            if (generator == null)
+                return;
+
+            hasTrackedLights = true;
+            lightsOn = generator.AreAnyGeneratorLightsOn;
+        }
+
+        if (!hasTrackedLights)
+            return;
+
+        connection.Insert(new GameStateData
+        {
+            Key = "GeneratorLightsOn",
+            Value = lightsOn ? "true" : "false"
+        });
+
+        GeneratorKeySlot runningGenerator = Object.FindObjectOfType<GeneratorKeySlot>();
+        bool isRunning = runningGenerator != null && runningGenerator.IsRunning;
+        connection.Insert(new GameStateData
+        {
+            Key = "GeneratorIsRunning",
+            Value = isRunning ? "true" : "false"
+        });
+
+        if (isRunning)
+        {
+            connection.Insert(new GameStateData
+            {
+                Key = "GeneratorRunSecondsRemaining",
+                Value = runningGenerator.RemainingRunSeconds.ToString("R", CultureInfo.InvariantCulture)
+            });
+        }
+    }
+
+    // Runs after every scene Start method has applied its default light state.
+    private void RestoreGeneratorLightState()
+    {
+        GameStateData savedState = connection.Table<GameStateData>()
+            .FirstOrDefault(state => state.Key == "GeneratorLightsOn");
+
+        if (savedState == null)
+            return;
+
+        bool lightsOn = savedState.Value == "true";
+        foreach (GeneratorKeySlot generator in Object.FindObjectsOfType<GeneratorKeySlot>())
+            generator.RestoreGeneratorLights(lightsOn);
+
+        if (!lightsOn)
+        {
+            foreach (GeneratorLightsOffTrigger trigger in Object.FindObjectsOfType<GeneratorLightsOffTrigger>())
+                trigger.RestoreLightsOffState();
+        }
+    }
+
+    // Restarts a timed generator run from its saved remaining duration.
+    private void RestoreGeneratorRunState()
+    {
+        GameStateData runningState = connection.Table<GameStateData>()
+            .FirstOrDefault(state => state.Key == "GeneratorIsRunning");
+        if (runningState == null || runningState.Value != "true")
+            return;
+
+        GameStateData remainingState = connection.Table<GameStateData>()
+            .FirstOrDefault(state => state.Key == "GeneratorRunSecondsRemaining");
+        if (remainingState == null || !float.TryParse(remainingState.Value, NumberStyles.Float,
+                CultureInfo.InvariantCulture, out float remainingSeconds))
+            return;
+
+        foreach (GeneratorKeySlot generator in Object.FindObjectsOfType<GeneratorKeySlot>())
+            generator.RestoreRunningState(remainingSeconds);
+    }
+
     private void RestoreAIPositions()
     {
         string sceneName = SceneManager.GetActiveScene().name;
@@ -731,7 +850,19 @@ public partial class SaveSystem : MonoBehaviour
 
             AIPositionData savedPosition;
             if (!savedPositions.TryGetValue(GenerateAIId(ai), out savedPosition))
-                continue;
+            {
+                // Older saves used a hierarchy path for Tikbalang. The path can
+                // change when Unity reloads the scene, so accept that record once
+                // and write the stable ID on the next save.
+                if (ai is TikbalangAI)
+                {
+                    savedPosition = savedPositions.Values.FirstOrDefault(data =>
+                        data.AIId != null && data.AIId.StartsWith(nameof(TikbalangAI) + ":"));
+                }
+
+                if (savedPosition == null)
+                    continue;
+            }
 
             Transform enemy = ai.transform;
             Vector3 position = new Vector3(savedPosition.PosX, savedPosition.PosY, savedPosition.PosZ);
@@ -760,6 +891,11 @@ public partial class SaveSystem : MonoBehaviour
 
     private string GenerateAIId(Component ai)
     {
+        // Chapter 2 contains only one Tikbalang. A fixed ID remains valid even if
+        // objects are added, removed, or reordered in the scene hierarchy.
+        if (ai is TikbalangAI)
+            return nameof(TikbalangAI);
+
         Transform current = ai.transform;
         string path = current.name + "[" + current.GetSiblingIndex() + "]";
 

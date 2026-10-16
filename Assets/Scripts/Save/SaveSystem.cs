@@ -11,10 +11,7 @@ public partial class SaveSystem : MonoBehaviour
     public string saveFileName = "gameSave_v2.db";
     public bool autoSaveOnQuit = true;
 
-    [Header("Debug")]
-    [Tooltip("Writes each drawer's saved and restored state to the Unity Console.")]
-    public bool logDrawerSaveLoad = true;
-
+    private const string WrenchRecordId = "Wrench";
     private const string GasRecordId = "Gas";
 
     private string savePath;

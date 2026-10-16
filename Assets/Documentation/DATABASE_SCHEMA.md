@@ -27,7 +27,7 @@ following tables exist in both modes:
 | Drawer open state and local position | `DrawerData` |
 | Ritual completion | `RitualData` |
 | Notes read by the player | `NoteData` |
-| General key/value state, including the active path-guide waypoint | `GameStateData` |
+| General key/value state: checkpoints, map ownership, active path-guide waypoint, Tikbalang awakened state, and generator light/run state | `GameStateData` |
 | Generic dropped items | `DroppedItemData` |
 | Flashlight state | `FlashlightData` |
 | Used keys | `KeyData` |
@@ -49,13 +49,15 @@ Chapter 1 database:
 
 | System | Table |
 | --- | --- |
-| Wrench position and state | `WrenchData` |
-| Gas-can position and state | `GasData` |
+| Wrench held/dropped state | `WrenchData` |
+| Wrench world position and rotation | `DroppedItemData` |
+| Gas-can held/dropped state | `GasData` |
+| Gas-can world position and rotation | `DroppedItemData` |
 | Generator cover, fuel, and inserted-key markers | `GeneratorCoverData` |
 
 ## Relationships
 
-Schema version 6 is a formal relational SQLite save schema. Each player-save database
+Schema version 8 is a formal relational SQLite save schema. Each player-save database
 contains one `SaveProfileData` parent row (`Id = 1`). Every game-state table has a
 `SaveProfileId` foreign key that references this parent with `ON DELETE CASCADE`.
 

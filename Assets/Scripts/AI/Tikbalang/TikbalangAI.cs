@@ -6,9 +6,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(NavMeshAgent))]
 public partial class TikbalangAI : MonoBehaviour
 {
-    [Header("Movement Debug")]
-    [Tooltip("Writes one Console message when Tikbalang stops or becomes stuck while the player is walking or running.")]
-    public bool logMovementStops = true;
     [Header("References")]
     public Transform player;
     public Animator animator;
@@ -118,6 +115,19 @@ public partial class TikbalangAI : MonoBehaviour
     private bool hasAwakened;
     // Reports whether Tikbalang first encounter has begun.
     public bool HasFirstEncounterStarted => hasAwakened;
+
+    // Restores the post-first-encounter state without replaying its jumpscare.
+    public void RestoreAwakenedState()
+    {
+        hasAwakened = true;
+        isFirstEncounterPlaying = false;
+        isCatchSequencePlaying = false;
+        nextDestinationUpdate = 0f;
+
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+            agent.isStopped = false;
+    }
+
     // Reports whether Tikbalang is actively chasing outside a jumpscare sequence.
     public bool IsChasingPlayer => hasAwakened && !isFirstEncounterPlaying && !isCatchSequencePlaying;
     private bool isFirstEncounterPlaying;
@@ -137,7 +147,6 @@ public partial class TikbalangAI : MonoBehaviour
     private bool isQuestionPanelOpen;
     private bool wasPlayerControllerEnabled;
     private readonly System.Collections.Generic.List<Button> qnaButtons = new System.Collections.Generic.List<Button>();
-    private string lastMovementStopReason;
     private readonly System.Collections.Generic.List<PaintedTreeObstacle> paintedTrees = new System.Collections.Generic.List<PaintedTreeObstacle>();
 
     private struct PaintedTreeObstacle
@@ -211,7 +220,6 @@ public partial class TikbalangAI : MonoBehaviour
             Cursor.visible = true;
         }
 
-        CheckMovementStopDebug();
     }
     // Called by TikbalangJumpscareTrigger when the player enters its detector collider.
     // Rejects invalid requests and starts the first encounter sequence when valid.
@@ -355,42 +363,4 @@ public partial class TikbalangAI : MonoBehaviour
             }
     }
 
-    private void CheckMovementStopDebug()
-    {
-        if (!logMovementStops || !hasAwakened || isCatchSequencePlaying || agent == null)
-            return;
-
-        if (!agent.enabled || !agent.isOnNavMesh)
-        {
-            ReportMovementStop("The NavMesh Agent is disabled or Tikbalang is outside the NavMesh.");
-            return;
-        }
-
-        // This also catches a stop caused by another script, a blocked NavMesh path,
-        // or an obstacle. It reports only once per stop, rather than every frame.
-        bool isStalledOnPath = agent.hasPath && !agent.pathPending &&
-                               agent.remainingDistance > agent.stoppingDistance + 0.15f &&
-                               agent.velocity.sqrMagnitude < 0.0025f;
-        if (agent.isStopped && string.IsNullOrEmpty(lastMovementStopReason))
-            ReportMovementStop("NavMesh Agent isStopped is true. Check the earlier Tikbalang movement message for the reason.");
-        else if (isStalledOnPath)
-            ReportMovementStop("Tikbalang has a path but is not moving. An obstacle, an invalid NavMesh route, or another script may be blocking the agent.");
-        else
-            lastMovementStopReason = null;
-    }
-
-    private void ReportMovementStop(string reason)
-    {
-        if (!logMovementStops || lastMovementStopReason == reason)
-            return;
-
-        lastMovementStopReason = reason;
-        bool playerIsMoving = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f ||
-                              Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f;
-        string playerState = playerIsMoving
-            ? (playerController != null && playerController.IsSprinting ? "running" : "walking")
-            : "standing still";
-        Debug.Log($"[Tikbalang Movement Debug] {reason} Player is {playerState}. " +
-                  $"remainingDistance={agent.remainingDistance:F2}, velocity={agent.velocity.magnitude:F2}, hasPath={agent.hasPath}.", this);
-    }
 }

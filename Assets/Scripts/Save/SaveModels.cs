@@ -8,32 +8,18 @@ public class WrenchData
 {
     [PrimaryKey]
     public string WrenchId { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public bool IsHeld { get; set; }
+    public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+    public bool IsHeld { get; set; }
     public bool IsDropped { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
 }
 [Table("GasData")]
 public class GasData
 {
     [PrimaryKey]
     public string GasId { get; set; }
-        public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
-public bool IsHeld { get; set; }
+    public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+    public bool IsHeld { get; set; }
     public bool IsDropped { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public float PosZ { get; set; }
-    public float RotX { get; set; }
-    public float RotY { get; set; }
-    public float RotZ { get; set; }
-    public float RotW { get; set; }
 }
 [Table("GeneratorCoverData")]
 public class GeneratorCoverData

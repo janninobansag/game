@@ -8,7 +8,6 @@ public partial class TikbalangAI
     {
         if (!agent.enabled || !agent.isOnNavMesh)
         {
-            ReportMovementStop("The NavMesh Agent is disabled or Tikbalang is outside the NavMesh.");
             SetMovementAnimation(false);
             return;
         }
@@ -60,7 +59,6 @@ public partial class TikbalangAI
         {
             agent.ResetPath();
             SetMovementAnimation(false);
-            ReportMovementStop("No NavMesh point was found near the player, so Tikbalang cannot calculate a chase route.");
             return false;
         }
 
@@ -70,7 +68,6 @@ public partial class TikbalangAI
         {
             agent.ResetPath();
             SetMovementAnimation(false);
-            ReportMovementStop("The player and Tikbalang are on disconnected NavMesh areas. Bake or connect the NavMesh between their locations.");
             return false;
         }
 
@@ -182,7 +179,6 @@ public partial class TikbalangAI
         if (Time.time < doorPauseUntil)
         {
             agent.isStopped = true;
-            ReportMovementStop("Tikbalang is waiting after opening a door.");
             return true;
         }
 
@@ -194,12 +190,10 @@ public partial class TikbalangAI
                 doorPauseUntil = Time.time + doorPauseAfterOpening;
                 agent.isStopped = true;
                 nextDestinationUpdate = 0f;
-                ReportMovementStop("Tikbalang opened a door and is waiting for it to finish moving.");
                 return true;
             }
 
             agent.isStopped = true;
-            ReportMovementStop("A closed or locked door is still blocking Tikbalang's path.");
             return true;
         }
 
@@ -218,7 +212,6 @@ public partial class TikbalangAI
 
         doorBlockingPath = door;
         agent.isStopped = true;
-        ReportMovementStop("A door was detected directly in Tikbalang's path.");
         return true;
     }
 

@@ -77,7 +77,7 @@ Table GameStateData {
   Key varchar
   Value varchar
 
-  Note: 'General key/value state. Path-guide progress uses Key = PathGuide:<guide-id> and Value = waypoint index.'
+  Note: 'General key/value state. Includes HasCheckpoint, CheckpointPos, HasMap, PathGuide:<guide-id> (waypoint index), TikbalangAwakened, GeneratorLightsOn, GeneratorIsRunning, and GeneratorRunSecondsRemaining.'
 }
 
 Table DroppedItemData {
@@ -176,13 +176,6 @@ Table WrenchData {
   SaveProfileId integer [not null]
   IsHeld boolean
   IsDropped boolean
-  PosX float
-  PosY float
-  PosZ float
-  RotX float
-  RotY float
-  RotZ float
-  RotW float
 }
 
 Table GasData {
@@ -190,13 +183,6 @@ Table GasData {
   SaveProfileId integer [not null]
   IsHeld boolean
   IsDropped boolean
-  PosX float
-  PosY float
-  PosZ float
-  RotX float
-  RotY float
-  RotZ float
-  RotW float
 }
 
 Table GeneratorCoverData {
