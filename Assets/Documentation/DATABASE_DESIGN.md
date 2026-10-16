@@ -60,7 +60,7 @@ SaveProfileData (parent)
 | `InventoryData` | `Id` | Items in the three-slot inventory, their quantities, and equipped state. |
 | `DoorData` | `Id` | Door identity, lock/open state, and rotation. |
 | `DrawerData` | `Id` | Drawer identity, open/closed state, and exact local position. |
-| `DroppedItemData` | `Id` | Generic dropped-item state, world transform, and held/dropped flags. It stores the transform for dropped flashlights, batteries, and ritual items. |
+| `DroppedItemData` | `Id` | Generic dropped-item state, world transform, and held/dropped flags. It stores the transform for dropped flashlights, batteries, ritual items, wrench, and gas. |
 | `FlashlightData` | `Id` | Flashlight battery values, on/off state, and held state. |
 | `BatteryData` | `Id` | Battery recharge amount, held state, and used state. |
 | `KeyData` | `Id` | Whether a named key has been used. |
@@ -71,7 +71,7 @@ SaveProfileData (parent)
 | `IntroData` | `Id` | Current intro section, line, and completion state. |
 | `AIPositionData` | `Id` | AI identity, scene, and saved transform. |
 | `StaminaData` | `Id` | Current player stamina for Hard mode. |
-| `GameStateData` | `Id` | Named state values for gameplay that does not need its own fixed table, including the saved path-guide waypoint. |
+| `GameStateData` | `Id` | Named state values for gameplay that does not need its own fixed table: checkpoints, map ownership, path-guide waypoints, Tikbalang's awakened state, and generator light/run state. |
 
 ## 5. Hard-mode Entities
 
@@ -79,8 +79,8 @@ The following tables exist only in `gameSave_Hard_v2.db` because they belong to 
 
 | Entity | Primary key | Purpose |
 | --- | --- | --- |
-| `WrenchData` | `WrenchId` | Tracks the wrench held/dropped state and transform. |
-| `GasData` | `GasId` | Tracks gas held/dropped state and transform. |
+| `WrenchData` | `WrenchId` | Tracks the wrench held/dropped state. Its world transform is stored in `DroppedItemData`. |
+| `GasData` | `GasId` | Tracks gas held/dropped state. Its world transform is stored in `DroppedItemData`. |
 | `GeneratorCoverData` | `CoverId` | Stores whether the generator cover is removed/open and other named generator states. |
 
 ## 6. Relationships and Cardinality

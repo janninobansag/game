@@ -22,11 +22,13 @@ public class RandomWrenchSpawn : MonoBehaviour
     [Tooltip("When checked, the Wrench stays at its scene position and does not choose a random spawn point.")]
     public bool disableRandomSpawn;
 
-    [Header("Debug")]
-    public bool logSpawnChoice = true;
-
     private void Awake()
     {
+        // Dropping from the inventory creates a prefab clone. It must keep its
+        // drop location instead of being moved to a random scene spawn.
+        if (gameObject.name.EndsWith("(Clone)"))
+            return;
+
         if (disableRandomSpawn)
             return;
 
@@ -37,8 +39,6 @@ public class RandomWrenchSpawn : MonoBehaviour
     {
         if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            if (logSpawnChoice)
-                Debug.LogWarning("RandomWrenchSpawn has no spawn points assigned.", this);
             return;
         }
 
@@ -50,8 +50,6 @@ public class RandomWrenchSpawn : MonoBehaviour
             index = GetRandomValidIndex();
             if (index < 0)
             {
-                if (logSpawnChoice)
-                    Debug.LogWarning("RandomWrenchSpawn has no valid spawn transforms assigned.", this);
                 return;
             }
 
@@ -71,8 +69,6 @@ public class RandomWrenchSpawn : MonoBehaviour
         if (useSpawnRotation)
             transform.rotation = selectedSpawn.rotation;
 
-        if (logSpawnChoice)
-            Debug.Log("Wrench spawned at point '" + selectedSpawn.name + "'.", this);
     }
 
     private int GetRandomValidIndex()

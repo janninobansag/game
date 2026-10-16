@@ -158,11 +158,7 @@ public class BagUI : MonoBehaviour
             string slotText = "EMPTY";
             if (i < items.Count && items[i] != null)
             {
-                PickupItem pickup = items[i].GetComponent<PickupItem>();
-                Key key = items[i].GetComponent<Key>();
-                if (pickup != null && !string.IsNullOrEmpty(pickup.itemName)) slotText = pickup.itemName;
-                else if (key != null && !string.IsNullOrEmpty(key.itemName)) slotText = key.itemName;
-                else slotText = items[i].name.Replace("(Clone)", "");
+                slotText = GetItemDisplayName(items[i]);
             }
 
             GameObject item = i < items.Count ? items[i] : null;
@@ -289,6 +285,10 @@ public class BagUI : MonoBehaviour
 
     private static string GetItemDisplayName(GameObject item)
     {
+        BatteryPickup battery = item.GetComponent<BatteryPickup>();
+        if (battery != null && !string.IsNullOrEmpty(battery.itemName))
+            return battery.itemName;
+
         PickupItem pickup = item.GetComponent<PickupItem>();
         if (pickup != null && !string.IsNullOrEmpty(pickup.itemName))
             return pickup.itemName;

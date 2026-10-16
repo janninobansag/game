@@ -9,9 +9,9 @@ using UnityEngine;
 public class VarenSaveAndGameplayTests
 {
     [Test]
-    public void SaveSchema_UsesVersionSix()
+    public void SaveSchema_UsesVersionEight()
     {
-        Assert.That(RelationalSaveSchema.SchemaVersion, Is.EqualTo(6));
+        Assert.That(RelationalSaveSchema.SchemaVersion, Is.EqualTo(8));
     }
 
     [Test]

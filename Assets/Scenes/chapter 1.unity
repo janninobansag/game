@@ -10933,6 +10933,45 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!21 &718275530
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!108 &721227860 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 3808567235710681099, guid: 47b7585dfee2ed04abdc67c8f5a1657a,
@@ -11930,7 +11969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 1422725046}
+  m_Material: {fileID: 718275530}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -12852,7 +12891,7 @@ MonoBehaviour:
     type: 3}
   crossPrefab: {fileID: 8079313861276146235, guid: 59fbc237480a5a64e848c6056fd21f12,
     type: 3}
-  flashlightPrefab: {fileID: 3809855300595545709, guid: 659f62f2b724a1c42ad823de3c864c17,
+  flashlightPrefab: {fileID: 5235453600067852521, guid: 659f62f2b724a1c42ad823de3c864c17,
     type: 3}
   house2KeyPrefab: {fileID: 8893441173438503762, guid: 07c0ec94937b18f488318204584696d0,
     type: 3}
@@ -21910,45 +21949,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1421010670}
   m_Mesh: {fileID: 4300014, guid: fb4b189d2629f3341a839074d8cff2da, type: 3}
---- !u!21 &1422725046
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &1430427484
 GameObject:
   m_ObjectHideFlags: 0
@@ -23198,15 +23198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4830cb608e846c0ba4939f2997f6d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notificationPanel: {fileID: 225955434}
-  notificationGroup: {fileID: 225955431}
-  respawnFade: {fileID: 1067447466}
-  systemLabel: {fileID: 1301094845}
-  titleLabel: {fileID: 1238193417}
-  subtitleLabel: {fileID: 1593910701}
-  respawnLabel: {fileID: 445749622}
-  koreanFont: {fileID: 0}
-  appliedLanguage: 0
 --- !u!224 &1559204651
 RectTransform:
   m_ObjectHideFlags: 0
@@ -48907,6 +48898,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Intensity
       value: 205.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283788083626038469, guid: 659f62f2b724a1c42ad823de3c864c17,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 134.894
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283788083626038469, guid: 659f62f2b724a1c42ad823de3c864c17,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.262
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283788083626038469, guid: 659f62f2b724a1c42ad823de3c864c17,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -20.628
       objectReference: {fileID: 0}
     - target: {fileID: 2513042759713249725, guid: 659f62f2b724a1c42ad823de3c864c17,
         type: 3}

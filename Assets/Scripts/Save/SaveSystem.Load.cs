@@ -100,6 +100,9 @@ public partial class SaveSystem : MonoBehaviour
                 stamina.RestoreStamina(staminaData.CurrentStamina);
 
             RestoreAIPositions();
+            RestoreTikbalangState();
+            RestoreGeneratorLightState();
+            RestoreGeneratorRunState();
             RestorePathGuideProgress();
             if (IsHardModeDatabase())
             {
@@ -189,10 +192,6 @@ public partial class SaveSystem : MonoBehaviour
                 DrawerInteraction drawer;
                 if (!drawerLookup.TryGetValue(drawerData.DrawerId, out drawer))
                 {
-                    if (logDrawerSaveLoad)
-                    {
-                        Debug.LogWarning($"[Drawer Load] No scene drawer matches saved id={drawerData.DrawerId} ({drawerData.DrawerName}).");
-                    }
                     continue;
                 }
 
@@ -202,10 +201,6 @@ public partial class SaveSystem : MonoBehaviour
                     drawerData.LocalPosZ);
                 drawer.RestoreSavedState(drawerData.IsOpen, savedLocalPosition);
 
-                if (logDrawerSaveLoad)
-                {
-                    Debug.Log($"[Drawer Load] {drawer.name} | id={drawerData.DrawerId} | open={drawerData.IsOpen} | localPosition={savedLocalPosition}", drawer);
-                }
             }
             // ── Get data from database ──
             var inventoryItems = connection.Table<InventoryData>().ToList();
@@ -216,11 +211,6 @@ List<string> inventoryItemNames = new List<string>();
             }
 
             var droppedItems = connection.Table<DroppedItemData>().ToList();
-            // Gas uses the dedicated Hard-mode table, not a generic drop record.
-            if (IsHardModeDatabase())
-            {
-                droppedItems.RemoveAll(item => string.Equals(item.ItemName, "Gas", System.StringComparison.OrdinalIgnoreCase));
-            }
             List<string> droppedItemNames = new List<string>();
             foreach (DroppedItemData droppedData in droppedItems)
             {
@@ -594,7 +584,7 @@ List<string> inventoryItemNames = new List<string>();
                     // Hard Mode special pickups restore their original scene object.
                     // Do not destroy them before their saved dropped state is applied.
                     if (pickup != null && pickup.wasDropped && !pickup.isPickedUp &&
-                        IsHardModeDatabase() && IsWrench(pickup))
+                        IsHardModeDatabase() && (IsWrench(pickup) || IsGas(pickup)))
                     {
                         isDroppedVersion = true;
                     }
@@ -890,12 +880,24 @@ List<string> inventoryItemNames = new List<string>();
                     continue;
                 }
 
+                // A Gas record from before it was poured must not recreate Gas
+                // while the generator is fueled or its lights are still running.
+                if (IsHardModeDatabase() &&
+                    string.Equals(droppedData.ItemName, "Gas", System.StringComparison.OrdinalIgnoreCase) &&
+                    IsGeneratorActiveOrFueled())
+                {
+                    continue;
+                }
+
                 Vector3 position = new Vector3(droppedData.PosX, droppedData.PosY, droppedData.PosZ);
                 Quaternion rotation = new Quaternion(droppedData.RotX, droppedData.RotY, droppedData.RotZ, droppedData.RotW);
 
                 PickupItem scenePickup = FindScenePickupByName(droppedData.ItemName);
                 if (scenePickup != null)
                 {
+                    if (IsHardModeDatabase() && (IsWrench(scenePickup) || IsGas(scenePickup)))
+                        scenePickup.transform.SetParent(null, true);
+
                     scenePickup.transform.position = position;
                     scenePickup.transform.rotation = rotation;
                     scenePickup.ResetItem();
@@ -977,6 +979,20 @@ List<string> inventoryItemNames = new List<string>();
                 if (ProgressionSystem.Instance != null)
                     ProgressionSystem.Instance.LoadProgressFromSave(progressionData.ProgressValue);
             }
+
+            // Reconcile after generic item restoration. The original Gas may
+            // remain while lights are on until the player pours it for the first time.
+            GasData savedGas = IsHardModeDatabase()
+                ? connection.Table<GasData>().FirstOrDefault(g => g.GasId == GasRecordId) ??
+                  connection.Table<GasData>().FirstOrDefault(g => g.GasId == "Chapter2Gas")
+                : null;
+            bool savedGasWasHeldOrDropped = (savedGas != null && (savedGas.IsHeld || savedGas.IsDropped)) ||
+                inventoryItemNames.Any(name => name != null &&
+                    string.Equals(name.Replace("(Clone)", "").Trim(), "Gas", System.StringComparison.OrdinalIgnoreCase)) ||
+                droppedItemNames.Any(name => name != null &&
+                    string.Equals(name.Replace("(Clone)", "").Trim(), "Gas", System.StringComparison.OrdinalIgnoreCase));
+            foreach (GeneratorKeySlot generator in Object.FindObjectsOfType<GeneratorKeySlot>())
+                generator.ReconcileGasWithLightState(savedGasWasHeldOrDropped);
             return true;
         }
         catch (System.Exception e)

@@ -17,6 +17,15 @@ public class TikbalangJumpscareTrigger : MonoBehaviour
     private PlayerController playerController;
     private bool hasTriggered;
 
+    // Keeps the first-encounter detector from replaying after a saved game is loaded.
+    public void RestoreTriggeredState()
+    {
+        hasTriggered = true;
+
+        if (triggerOnce && triggerCollider != null)
+            triggerCollider.enabled = false;
+    }
+
     private void Awake()
     {
         triggerCollider = GetComponent<Collider>();

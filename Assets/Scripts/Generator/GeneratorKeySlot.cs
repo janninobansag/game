@@ -62,9 +62,6 @@ public class GeneratorKeySlot : MonoBehaviour
     [Tooltip("Small upward offset so the spawned Gas does not begin inside the floor.")]
     public float gasSpawnHeightOffset = 0.1f;
 
-    [Header("Debug")]
-    public bool debugKeySlot = true;
-
     private Camera playerCamera;
     private GameObject insertedKey;
     private Quaternion insertedRotation;
@@ -72,12 +69,12 @@ public class GeneratorKeySlot : MonoBehaviour
     private bool showPrompt;
     private string currentPromptMessage;
     private bool showShutdownWarning;
-    private string lastDebugState;
     private GameObject gasRespawnTemplate;
     private AudioClip normalBackgroundMusic;
     private float normalBackgroundMusicVolume;
     private bool normalBackgroundMusicLoop;
     private float lightsOffSince = -1f;
+    private float generatorRunEndTime = -1f;
 
     /// <summary>True while at least one generator light assigned to this slot is enabled.</summary>
     public bool AreAnyGeneratorLightsOn
@@ -97,6 +94,80 @@ public class GeneratorKeySlot : MonoBehaviour
         }
     }
 
+    // Exposes the timed generator sequence for save and load.
+    public bool IsRunning => isRunning;
+    public float RemainingRunSeconds => isRunning
+        ? Mathf.Max(0f, generatorRunEndTime - Time.time)
+        : 0f;
+
+    // Applies the saved light state after the scene's default setup has completed.
+    public void RestoreGeneratorLights(bool enabled)
+    {
+        SetGeneratorLights(enabled);
+        lightsOffSince = enabled ? -1f : Time.time;
+    }
+
+    // Resumes a saved timed run after the scene and its saved light state are restored.
+    public void RestoreRunningState(float remainingSeconds)
+    {
+        if (isRunning || remainingSeconds <= 0f)
+            return;
+
+        StartCoroutine(RunGenerator(remainingSeconds));
+    }
+
+    /// <summary>
+    /// Restores the original Gas before the first pour, or the replacement Gas
+    /// after the generator has consumed fuel and its lights have gone out.
+    /// </summary>
+    public void ReconcileGasWithLightState(bool savedGasWasHeldOrDropped)
+    {
+        if (fuelInteraction == null || !fuelInteraction.HasEverPouredGas)
+            return;
+
+        bool anyGeneratorLightIsOn = AreAnyGeneratorLightsOn;
+        if (!anyGeneratorLightIsOn)
+        {
+            foreach (GeneratorKeySlot generator in Object.FindObjectsOfType<GeneratorKeySlot>())
+            {
+                if (generator != null && generator != this && generator.AreAnyGeneratorLightsOn)
+                {
+                    anyGeneratorLightIsOn = true;
+                    break;
+                }
+            }
+        }
+
+        if (anyGeneratorLightIsOn || isRunning || fuelInteraction.HasFuel())
+        {
+            bool removedByFuelInteraction = false;
+            foreach (GeneratorFuelInteraction generator in Object.FindObjectsOfType<GeneratorFuelInteraction>())
+            {
+                generator.RemoveActiveSceneGas();
+                removedByFuelInteraction = true;
+            }
+
+            if (!removedByFuelInteraction)
+                RemoveActiveSceneGas();
+
+            return;
+        }
+
+        // A fresh replacement has no dropped position in the save. Replace the
+        // scene's original Gas with one at a configured random spawn point.
+        if (!savedGasWasHeldOrDropped)
+            RemoveActiveSceneGas();
+
+        SpawnGasAtRandomPoint();
+    }
+
+    private void Awake()
+    {
+        // Cache the original scene Gas before GeneratorFuelInteraction.Start may
+        // remove it while restoring a fueled save.
+        PrepareGasRespawnTemplate();
+    }
+
     private void Start()
     {
         playerCamera = Camera.main;
@@ -104,7 +175,6 @@ public class GeneratorKeySlot : MonoBehaviour
         // The generator area starts lit. A separate GeneratorLightsOffTrigger
         // handles the scripted blink and blackout when the player reaches it.
         SetGeneratorLights(true);
-        PrepareGasRespawnTemplate();
         if (SaveSystem.Instance != null && SaveSystem.Instance.IsGeneratorCoverRemoved(keyInsertedSaveId))
             RestoreInsertedKey();
     }
@@ -114,7 +184,7 @@ public class GeneratorKeySlot : MonoBehaviour
         UpdateBackgroundMusicForLightState();
         showPrompt = false;
         currentPromptMessage = null;
-        if (!IsLookingAtSlot()) { ReportDebug("Blocked: aim at the key-slot collider within " + interactRange + " meters."); return; }
+        if (!IsLookingAtSlot()) return;
 
         if (insertedKey == null)
         {
@@ -124,33 +194,28 @@ public class GeneratorKeySlot : MonoBehaviour
             if (key == null)
             {
                 currentPromptMessage = generatorKeyRequiredPrompt;
-                ReportDebug("Blocked: insert Generator key first.");
                 return;
             }
 
             currentPromptMessage = insertKeyPrompt;
-            ReportDebug("Ready: press E to insert Generator key.");
             if (Input.GetKeyDown(interactKey)) InsertKey(key, true);
             return;
         }
 
-        if (isRunning) { ReportDebug("Generator is currently running."); return; }
+        if (isRunning) return;
         showPrompt = true;
         if (fuelInteraction == null)
         {
             currentPromptMessage = fuelRequiredPrompt;
-            ReportDebug("Blocked: Fuel Interaction reference is missing.");
             return;
         }
         if (!fuelInteraction.HasFuel())
         {
             currentPromptMessage = fuelRequiredPrompt;
-            ReportDebug("Blocked: generator has no fuel. Refill Gas first.");
             return;
         }
 
         currentPromptMessage = startGeneratorPrompt;
-        ReportDebug("Ready: press E to turn Generator on for " + runningSeconds + " seconds.");
         if (Input.GetKeyDown(interactKey)) StartCoroutine(RunGenerator());
     }
     private bool IsLookingAtSlot()
@@ -197,24 +262,31 @@ public class GeneratorKeySlot : MonoBehaviour
 
     private IEnumerator RunGenerator()
     {
+        yield return RunGenerator(runningSeconds);
+    }
+
+    private IEnumerator RunGenerator(float duration)
+    {
         isRunning = true;
+        generatorRunEndTime = Time.time + duration;
         showPrompt = false;
         SetGeneratorLights(true);
         if (insertedKey != null) insertedKey.transform.localRotation = insertedRotation * Quaternion.Euler(turnRotation);
         if (showLightsShutdownWarning)
-            StartCoroutine(ShowLightsShutdownWarning());
-        yield return new WaitForSeconds(runningSeconds);
+            StartCoroutine(ShowLightsShutdownWarning(duration));
+        yield return new WaitForSeconds(duration);
         showShutdownWarning = false;
         SetGeneratorLights(false);
         if (insertedKey != null) insertedKey.transform.localRotation = insertedRotation;
         if (fuelInteraction != null) fuelInteraction.ConsumeFuel();
         SpawnGasAtRandomPoint();
         isRunning = false;
+        generatorRunEndTime = -1f;
     }
 
-    private IEnumerator ShowLightsShutdownWarning()
+    private IEnumerator ShowLightsShutdownWarning(float duration)
     {
-        float waitBeforeWarning = Mathf.Max(0f, runningSeconds - warningSecondsBeforeShutdown);
+        float waitBeforeWarning = Mathf.Max(0f, duration - warningSecondsBeforeShutdown);
         if (waitBeforeWarning > 0f)
             yield return new WaitForSeconds(waitBeforeWarning);
 
@@ -222,7 +294,7 @@ public class GeneratorKeySlot : MonoBehaviour
             yield break;
 
         showShutdownWarning = true;
-        float availableWarningTime = Mathf.Min(warningDisplayDuration, warningSecondsBeforeShutdown);
+        float availableWarningTime = Mathf.Min(warningDisplayDuration, warningSecondsBeforeShutdown, duration);
         yield return new WaitForSeconds(availableWarningTime);
         showShutdownWarning = false;
     }
@@ -231,9 +303,17 @@ public class GeneratorKeySlot : MonoBehaviour
     {
         SetLightState(generatorLight1, enabled);
         SetLightState(generatorLight2, enabled);
-        if (additionalGeneratorLights == null) return;
-        foreach (Light light in additionalGeneratorLights)
-            SetLightState(light, enabled);
+        if (additionalGeneratorLights != null)
+        {
+            foreach (Light light in additionalGeneratorLights)
+                SetLightState(light, enabled);
+        }
+
+        // The blackout trigger includes the extra generator lights that are not
+        // assigned directly to this key slot. Keep the entire set in sync so Gas
+        // only appears after every generator light has turned off.
+        foreach (GeneratorLightsOffTrigger trigger in Object.FindObjectsOfType<GeneratorLightsOffTrigger>())
+            trigger.SetControlledLights(enabled);
     }
 
     private static void SetLightState(Light light, bool enabled)
@@ -330,7 +410,13 @@ public class GeneratorKeySlot : MonoBehaviour
 
         if (gasRespawnTemplate == null)
             PrepareGasRespawnTemplate();
-        if (gasRespawnTemplate == null || HasActiveGas())
+        if (gasRespawnTemplate == null)
+            return;
+
+        if (AreAnyGeneratorLightsOn)
+            return;
+
+        if (HasActiveGas())
             return;
 
         FindGasSpawnPointsIfNeeded();
@@ -366,6 +452,7 @@ public class GeneratorKeySlot : MonoBehaviour
             body.velocity = Vector3.zero;
             body.angularVelocity = Vector3.zero;
         }
+
     }
 
     private GameObject FindSceneGas()
@@ -383,6 +470,24 @@ public class GeneratorKeySlot : MonoBehaviour
     private bool HasActiveGas()
     {
         return FindSceneGas() != null;
+    }
+
+    private void RemoveActiveSceneGas()
+    {
+        foreach (PickupItem pickup in Resources.FindObjectsOfTypeAll<PickupItem>())
+        {
+            if (pickup == null || pickup.gameObject.scene != gameObject.scene ||
+                !pickup.gameObject.activeInHierarchy ||
+                !string.Equals(pickup.itemName, "Gas", System.StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            GameObject gas = pickup.gameObject;
+            gas.SetActive(false);
+            if (Inventory.Instance != null && Inventory.Instance.GetItems().Contains(gas))
+                Inventory.Instance.RemoveAndDestroy(gas);
+            else
+                Destroy(gas);
+        }
     }
 
     private void FindGasSpawnPointsIfNeeded()
@@ -427,11 +532,6 @@ public class GeneratorKeySlot : MonoBehaviour
         }
     }
 
-    private void ReportDebug(string message)
-    {
-        if (!debugKeySlot || lastDebugState == message) return;
-        lastDebugState = message;
-    }
     private void OnGUI()
     {
         if (showShutdownWarning)
