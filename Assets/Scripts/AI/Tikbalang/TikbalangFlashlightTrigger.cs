@@ -48,7 +48,7 @@ public class TikbalangFlashlightTrigger : MonoBehaviour
 
         // Do not move Tikbalang during the first encounter or any jumpscare sequence.
         // Flashlight teleports are allowed only while Tikbalang is actively chasing the player.
-        if (target == null || !target.IsChasingPlayer) return;
+        if (target == null || !target.IsChasingPlayer || AIEncounterGate.IsBlocked(target)) return;
 
         target.TeleportToSpawnPoint();
     }

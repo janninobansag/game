@@ -1,6 +1,5 @@
 // Q&A, player-lock, and answer result logic for MonsterAI_New.
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,10 +35,6 @@ public partial class MonsterAI_New
     private bool isPlayerLocked = false;
     private bool isQnAComplete = false;
     private bool hasUnlockedAfterQnA = false;
-    private readonly List<MutantAI> frozenMutantAIs = new List<MutantAI>();
-    private readonly List<bool> frozenMutantAIStates = new List<bool>();
-    private readonly List<NavMeshAgent> frozenMutantAgents = new List<NavMeshAgent>();
-    private readonly List<bool> frozenMutantAgentStates = new List<bool>();
     private readonly List<Button> qnaButtons = new List<Button>();
     private readonly List<UnityEngine.Events.UnityAction> qnaButtonActions = new List<UnityEngine.Events.UnityAction>();
 
@@ -72,6 +67,9 @@ public partial class MonsterAI_New
             return;
         }
 
+        if (!AIEncounterGate.IsOwnedBy(this) && !AIEncounterGate.TryBegin(this))
+            return;
+
         StartCoroutine(QnASequence());
     }
 
@@ -93,7 +91,6 @@ public partial class MonsterAI_New
         isPlayerLocked = true;
 
         LockAllPlayerControls(true);
-        FreezeOtherAI();
 
         currentQuestionIndex = GetRandomQuestionIndex();
         if (currentQuestionIndex == -1)
@@ -106,6 +103,7 @@ public partial class MonsterAI_New
 
         if (qnaPanel != null)
         {
+            RestoreQnAInput();
             qnaPanel.SetActive(true);
             qnaCanvasGroup.alpha = 0f;
 
@@ -132,11 +130,10 @@ public partial class MonsterAI_New
             questionTimer += Time.deltaTime;
             UpdateQnATimer();
 
-            if (Cursor.visible == false)
-            {
-                Cursor.visible = true;
+            if (Cursor.lockState != CursorLockMode.None)
                 Cursor.lockState = CursorLockMode.None;
-            }
+            if (!Cursor.visible)
+                Cursor.visible = true;
 
             if (playerController != null && playerController.enabled)
             {
@@ -347,6 +344,21 @@ public partial class MonsterAI_New
         }
     }
 
+    private void RestoreQnAInput()
+    {
+        if (qnaCanvasGroup != null)
+        {
+            qnaCanvasGroup.interactable = true;
+            qnaCanvasGroup.blocksRaycasts = true;
+        }
+
+        foreach (Button button in qnaButtons)
+        {
+            if (button != null)
+                button.interactable = true;
+        }
+    }
+
     void OnDestroy()
     {
         for (int i = 0; i < qnaButtons.Count; i++)
@@ -386,7 +398,7 @@ public partial class MonsterAI_New
         TeleportMonsterAway();
         JumpscareSystemNEW.Instance?.ReleaseJumpscareLock();
 
-        yield return new WaitForSeconds(0.2f);
+        yield return StartCoroutine(WaitForJumpscareRelease());
         CloseQnA();
     }
 
@@ -408,8 +420,17 @@ public partial class MonsterAI_New
         TeleportMonsterAway();
         JumpscareSystemNEW.Instance?.ReleaseJumpscareLock();
 
-        yield return new WaitForSeconds(0.2f);
+        yield return StartCoroutine(WaitForJumpscareRelease());
         CloseQnA();
+    }
+
+    private IEnumerator WaitForJumpscareRelease()
+    {
+        JumpscareSystemNEW jumpscareSystem = JumpscareSystemNEW.Instance;
+        float releaseDeadline = Time.time + 2f;
+        while (jumpscareSystem != null && jumpscareSystem.isActiveAndEnabled &&
+            jumpscareSystem.IsJumpscareActive && Time.time < releaseDeadline)
+            yield return null;
     }
 
     void ShowFeedback(string message, Color color)
@@ -426,48 +447,6 @@ public partial class MonsterAI_New
                 tmpro.color = color;
             }
         }
-    }
-
-    void FreezeOtherAI()
-    {
-        frozenMutantAIs.Clear();
-        frozenMutantAIStates.Clear();
-        frozenMutantAgents.Clear();
-        frozenMutantAgentStates.Clear();
-
-        foreach (MutantAI mutantAI in FindObjectsOfType<MutantAI>())
-        {
-            if (mutantAI == null || mutantAI.gameObject == gameObject)
-                continue;
-
-            NavMeshAgent mutantAgent = mutantAI.GetComponent<NavMeshAgent>();
-
-            frozenMutantAIs.Add(mutantAI);
-            frozenMutantAIStates.Add(mutantAI.enabled);
-            frozenMutantAgents.Add(mutantAgent);
-            frozenMutantAgentStates.Add(mutantAgent != null && mutantAgent.enabled);
-
-            mutantAI.enabled = false;
-            if (mutantAgent != null)
-                mutantAgent.enabled = false;
-        }
-    }
-
-    void RestoreOtherAI()
-    {
-        for (int i = 0; i < frozenMutantAIs.Count; i++)
-        {
-            if (frozenMutantAgents[i] != null)
-                frozenMutantAgents[i].enabled = frozenMutantAgentStates[i];
-
-            if (frozenMutantAIs[i] != null)
-                frozenMutantAIs[i].enabled = frozenMutantAIStates[i];
-        }
-
-        frozenMutantAIs.Clear();
-        frozenMutantAIStates.Clear();
-        frozenMutantAgents.Clear();
-        frozenMutantAgentStates.Clear();
     }
 
     void CloseQnA()
@@ -489,12 +468,11 @@ public partial class MonsterAI_New
             qnaPanel.SetActive(false);
         }
 
-        RestoreOtherAI();
-
         LockAllPlayerControls(false);
         isQnAComplete = true;
 
         ResetMonsterState();
+        AIEncounterGate.End(this);
 
         StartCoroutine(ResetCloseFlag());
     }

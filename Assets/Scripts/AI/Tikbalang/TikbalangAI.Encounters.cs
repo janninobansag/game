@@ -18,6 +18,9 @@ public partial class TikbalangAI
             return false;
         }
 
+        if (!AIEncounterGate.TryBegin(this))
+            return false;
+
         StartCoroutine(PlayDetectionJumpscare());
         return true;
     }
@@ -64,12 +67,13 @@ public partial class TikbalangAI
         yield return StartCoroutine(ShowJumpscareQuestion(false));
 
         TeleportToSpawnPoint(true);
-yield return StartCoroutine(RestoreCameraAfterJumpscare());
+        yield return StartCoroutine(RestoreCameraAfterJumpscare());
         SetPlayerQuestionLock(false);
         ShowGeneratorObjectivePopup();
         nextCatchTime = Time.time + catchCooldown;
         isCatchSequencePlaying = false;
         ResumeChaseAfterEncounter();
+        AIEncounterGate.End(this);
     }
 
     // Smoothly turns the jumpscare camera toward Tikbalang face.

@@ -438,7 +438,9 @@ public class GeneratorKeySlot : MonoBehaviour
             pickup.enabled = true;
             pickup.isPickedUp = false;
             pickup.isHeld = false;
-            pickup.wasDropped = false;
+            // DroppedItemData stores world transforms for items outside the
+            // inventory. Preserve this spawn position across save and load.
+            pickup.wasDropped = true;
         }
 
         foreach (Collider itemCollider in gas.GetComponentsInChildren<Collider>(true))

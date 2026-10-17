@@ -64,10 +64,14 @@ public partial class MutantAI
 
     void Attack()
     {
-        PlaySound(attackSound);
+        if (AIEncounterGate.IsBlocked(this))
+            return;
 
-        if (JumpscareSystem.Instance != null)
-            JumpscareSystem.Instance.TriggerJumpscare(gameObject);
+        if (JumpscareSystem.Instance != null &&
+            !JumpscareSystem.Instance.TryTriggerJumpscare(gameObject))
+            return;
+
+        PlaySound(attackSound);
 
         PlayerHealth ph = player.GetComponent<PlayerHealth>();
         if (ph != null)

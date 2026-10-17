@@ -60,6 +60,7 @@ public partial class MenuManager : MonoBehaviour
             SaveSystem.Instance.ClearBatteryData();
             SaveSystem.Instance.ClearRitualItemData();
             SaveSystem.Instance.ClearNewGameWorldState();
+            SaveSystem.Instance.ClearOneShotEventStates();
             SaveSystem.Instance.ClearProgressionData();
             SaveSystem.Instance.ClearStoryIntroData();
             SaveSystem.Instance.ClearSubtitleData();
@@ -117,6 +118,7 @@ public partial class MenuManager : MonoBehaviour
             SaveSystem.Instance.ClearBatteryData();
             SaveSystem.Instance.ClearRitualItemData();
             SaveSystem.Instance.ClearNewGameWorldState();
+            SaveSystem.Instance.ClearOneShotEventStates();
             SaveSystem.Instance.ClearProgressionData();
             SaveSystem.Instance.ClearStoryIntroData();
             SaveSystem.Instance.ClearSubtitleData();
@@ -141,7 +143,11 @@ public partial class MenuManager : MonoBehaviour
             using (var connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite))
             {
                 connection.CreateTable<AIPositionData>();
+                connection.CreateTable<GameStateData>();
+                connection.CreateTable<NoteData>();
                 connection.DeleteAll<ProgressionData>();
+                connection.DeleteAll<NoteData>();
+                connection.Execute("DELETE FROM GameStateData WHERE \"Key\" LIKE ?", "OneShot:%");
                 connection.DeleteAll<AIPositionData>();
                 connection.DeleteAll<DroppedItemData>();
                 connection.DeleteAll<DrawerData>();
