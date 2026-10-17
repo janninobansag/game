@@ -40008,7 +40008,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectiveText: bedroom!!
   displayDuration: 4
-  triggerOnce: 0
+  triggerOnce: 1
   playerTag: Player
   saveId: 
   objectivePanel: {fileID: 0}

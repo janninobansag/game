@@ -341,6 +341,15 @@ public partial class SaveSystem : MonoBehaviour
                 }
             }
             // ── SAVE CHECKPOINT ──
+            // Preserve completed one-shot events from other scenes before rebuilding game state.
+            HashSet<string> completedOneShotKeys = new HashSet<string>(
+                connection.Table<GameStateData>().ToList()
+                    .Where(state => state.Key != null &&
+                        state.Key.StartsWith("OneShot:", System.StringComparison.Ordinal) &&
+                        state.Value == "true")
+                    .Select(state => state.Key),
+                System.StringComparer.Ordinal);
+
             connection.DeleteAll<GameStateData>();
             SavePathGuideProgress();
             if (CheckpointTrigger.HasCheckpointSaved)
@@ -376,6 +385,7 @@ public partial class SaveSystem : MonoBehaviour
 
             SaveTikbalangState();
             SaveGeneratorLightState();
+            SaveOneShotEventStates(completedOneShotKeys);
 
             // ── SAVE USED KEYS ──
             var usedKeyCount = connection.Table<KeyData>().Where(k => k.WasUsed).Count();
@@ -635,6 +645,31 @@ public partial class SaveSystem : MonoBehaviour
                 Value = guide.CurrentLocationIndex.ToString()
             });
         }
+    }
+
+    private void SaveOneShotEventStates(HashSet<string> completedKeys)
+    {
+        Scene activeScene = SceneManager.GetActiveScene();
+        foreach (Note note in Resources.FindObjectsOfTypeAll<Note>())
+        {
+            if (note == null || note.gameObject.scene != activeScene)
+                continue;
+
+            if (note.HasBeenRead())
+                completedKeys.Add(note.SaveStateKey);
+            if (note.onCloseAudio != null && note.onCloseAudio.HasPlayed)
+                completedKeys.Add(note.AudioSaveStateKey);
+        }
+
+        foreach (WhiteLadyTeleportTrigger trigger in Resources.FindObjectsOfTypeAll<WhiteLadyTeleportTrigger>())
+        {
+            if (trigger != null && trigger.gameObject.scene == activeScene &&
+                trigger.triggerOnce && trigger.HasTriggered)
+                completedKeys.Add(trigger.SaveStateKey);
+        }
+
+        foreach (string key in completedKeys)
+            connection.Insert(new GameStateData { Key = key, Value = "true" });
     }
 
     private void RestorePathGuideProgress()

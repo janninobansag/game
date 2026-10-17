@@ -7,6 +7,8 @@ public class Note : MonoBehaviour
     public PlayerSubtitleTrigger linkedSubtitleTrigger;
     [Header("Objectives")] public ObjectiveTrigger onCloseObjective;
     [Header("On Close Audio")] public AudioTrigger onCloseAudio;
+    [Tooltip("Optional stable ID for save files. Leave empty to use the scene hierarchy path.")]
+    public string saveId;
     // Text and interaction distance for this readable note.
     [Header("English Note")]
     public string noteTitle = "Old Note";
@@ -26,6 +28,24 @@ public class Note : MonoBehaviour
     public bool IsReading => isReading;
     // Other scripts use this to detect whether the player has already read the note.
     public bool HasBeenRead() => hasBeenRead;
+    public string SaveStateKey => SaveSystem.GetOneShotStateKey(this, "NoteClosed", saveId);
+    public string AudioSaveStateKey => SaveStateKey + ":Audio";
+
+    public void RestoreReadState(bool wasRead)
+    {
+        hasBeenRead = wasRead;
+        if (onCloseAudio != null)
+            onCloseAudio.RestorePlayedState(wasRead);
+        if (!wasRead)
+            return;
+
+        ObjectiveTriggerActivator activator = GetComponent<ObjectiveTriggerActivator>();
+        if (activator != null)
+            activator.ActivateObjectiveTrigger();
+
+        if (linkedSubtitleTrigger != null)
+            linkedSubtitleTrigger.gameObject.SetActive(true);
+    }
 
     public string GetLocalizedTitle()
     {
@@ -113,12 +133,19 @@ public class Note : MonoBehaviour
         NoteUIController.GetOrCreate().Close(this);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        bool firstClose = !hasBeenRead;
         hasBeenRead = true;
 
         DrawerInteraction drawer = GetComponentInParent<DrawerInteraction>();
         if (drawer != null) drawer.SetBusy(true);
-        if (onCloseAudio != null) onCloseAudio.TriggerAudio();
-        if (onCloseObjective != null) onCloseObjective.TriggerObjective();
+        if (firstClose && onCloseAudio != null) onCloseAudio.TriggerAudio();
+        if (firstClose && onCloseObjective != null) onCloseObjective.TriggerObjective();
+        if (firstClose && SaveSystem.Instance != null)
+        {
+            SaveSystem.Instance.MarkOneShotEventCompleted(SaveStateKey);
+            if (onCloseAudio != null && onCloseAudio.HasPlayed)
+                SaveSystem.Instance.MarkOneShotEventCompleted(AudioSaveStateKey);
+        }
         ObjectiveTriggerActivator activator = GetComponent<ObjectiveTriggerActivator>();
         if (activator != null) activator.ActivateObjectiveTrigger();
         ItemSubtitleTrigger subtitle = GetComponent<ItemSubtitleTrigger>();

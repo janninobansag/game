@@ -58,6 +58,7 @@ public partial class MutantAI : MonoBehaviour
     private float attackTimer = 0f;
     private bool isReady = false;
     private CameraHeadBob playerCameraBob;
+    private readonly AIEncounterPause encounterPause = new AIEncounterPause();
 
     // Roaming
     private float roamTimer = 0f;
@@ -90,6 +91,8 @@ public partial class MutantAI : MonoBehaviour
     IEnumerator InitializeOnNavMesh()
     {
         yield return new WaitForSeconds(0.2f);
+        while (AIEncounterGate.IsBlocked(this))
+            yield return null;
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(transform.position,
@@ -114,6 +117,8 @@ public partial class MutantAI : MonoBehaviour
         while (!isReady && attempts < 10)
         {
             yield return new WaitForSeconds(1f);
+            while (AIEncounterGate.IsBlocked(this))
+                yield return null;
             attempts++;
 
             NavMeshHit hit;
@@ -132,6 +137,13 @@ public partial class MutantAI : MonoBehaviour
 
     void Update()
     {
+        if (encounterPause.Update(this, agent, animator, audioSource))
+        {
+            if (playerCameraBob != null)
+                playerCameraBob.externalShakeAmount = 0f;
+            return;
+        }
+
         if (!isReady || player == null) return;
         if (!agent.isOnNavMesh) return;
 
@@ -166,6 +178,11 @@ public partial class MutantAI : MonoBehaviour
             case State.Chase:  UpdateChase(dist, playerVisible); break;
             case State.Attack: UpdateAttack(dist); break;
         }
+    }
+
+    private void OnDisable()
+    {
+        encounterPause.Restore(agent, animator, audioSource);
     }
 
     // ── NEW: Check if player is inside a bush ──

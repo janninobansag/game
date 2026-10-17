@@ -65,6 +65,7 @@ public partial class MonsterAI_New : MonoBehaviour
     private float jumpscareAnimTimer = 0f;
     private Vector3 jumpscareLockPosition;
     private bool hasTriggeredJumpscare = false;
+    private readonly AIEncounterPause encounterPause = new AIEncounterPause();
 
     // ── Q&A State ──
     private enum State { Patrol, Chase, Jumpscare, Idle, QnA }
@@ -134,6 +135,8 @@ public partial class MonsterAI_New : MonoBehaviour
     IEnumerator InitializeAndPatrol()
     {
         yield return new WaitForSeconds(0.3f);
+        while (AIEncounterGate.IsBlocked(this))
+            yield return null;
 
         currentState = State.Patrol;
         isIdle = false;
@@ -155,6 +158,8 @@ public partial class MonsterAI_New : MonoBehaviour
     IEnumerator EnsurePatrolMovement()
     {
         yield return new WaitForSeconds(0.5f);
+        while (AIEncounterGate.IsBlocked(this))
+            yield return null;
 
         if (agent != null && agent.velocity.magnitude < 0.1f && !agent.pathPending)
         {
@@ -170,6 +175,9 @@ public partial class MonsterAI_New : MonoBehaviour
 
     void Update()
     {
+        if (encounterPause.Update(this, agent, animator, audioSource))
+            return;
+
         bool isPaused = pauseMenu != null && pauseMenu.isPaused;
 
         if (qnaPanel != null && isQnAActive)
@@ -415,7 +423,7 @@ public partial class MonsterAI_New : MonoBehaviour
 
     void PerformJumpscare()
     {
-        if (hasTriggeredJumpscare) return;
+        if (hasTriggeredJumpscare || !AIEncounterGate.TryBegin(this)) return;
         hasTriggeredJumpscare = true;
 
         // The jumpscare and chase use this same AudioSource. Stop the looping chase
@@ -459,20 +467,26 @@ public partial class MonsterAI_New : MonoBehaviour
         if (player != null)
         {
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
-            if (playerHealth != null && !playerHealth.IsDead())
+            if (playerHealth != null && !playerHealth.IsDead() &&
+                questions != null && questions.Length > 0)
             {
                 TriggerQnA();
-            }
-            else
-            {
-                isJumpscaring = false;
-                isWaitingForQnA = false;
-                agent.enabled = true;
-                hasTriggeredJumpscare = false;
-                currentState = State.Patrol;
-                SetNewPatrolTarget();
+                yield break;
             }
         }
+
+        // A dead or missing player (or an unconfigured question set) cannot
+        // complete Q&A, so do not leave every other AI frozen indefinitely.
+        isJumpscaring = false;
+        isWaitingForQnA = false;
+        agent.enabled = true;
+        hasTriggeredJumpscare = false;
+        jumpscareTimer = jumpscareCooldown;
+        currentState = State.Patrol;
+        SetNewPatrolTarget();
+        JumpscareSystemNEW.Instance?.ReleaseJumpscareLock();
+        yield return StartCoroutine(WaitForJumpscareRelease());
+        AIEncounterGate.End(this);
     }
 
     void SetNewPatrolTarget()
@@ -591,7 +605,7 @@ public partial class MonsterAI_New : MonoBehaviour
         qnaPanelHiddenForPause = false;
         agent.enabled = true;
 
-        RestoreOtherAI();
+        AIEncounterGate.End(this);
 
         if (qnaPanel != null)
             qnaPanel.SetActive(false);
@@ -614,6 +628,12 @@ public partial class MonsterAI_New : MonoBehaviour
         StartCoroutine(DelayedAnimationReset());
 
         if (audioSource != null) audioSource.Stop();
+    }
+
+    private void OnDisable()
+    {
+        encounterPause.Restore(agent, animator, audioSource);
+        AIEncounterGate.End(this);
     }
 
     void OnDrawGizmosSelected()

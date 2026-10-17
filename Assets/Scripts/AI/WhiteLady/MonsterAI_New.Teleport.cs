@@ -65,6 +65,8 @@ public partial class MonsterAI_New
     private IEnumerator ResumePatrolAfterTeleport()
     {
         yield return null;
+        while (AIEncounterGate.IsBlocked(this))
+            yield return null;
 
         if (agent == null)
             yield break;

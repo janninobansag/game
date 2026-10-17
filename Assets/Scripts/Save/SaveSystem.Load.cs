@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public partial class SaveSystem : MonoBehaviour
 {
     public bool LoadGame()
@@ -99,6 +100,7 @@ public partial class SaveSystem : MonoBehaviour
             if (stamina != null && staminaData != null)
                 stamina.RestoreStamina(staminaData.CurrentStamina);
 
+            RestoreOneShotEventStates();
             RestoreAIPositions();
             RestoreTikbalangState();
             RestoreGeneratorLightState();
@@ -998,6 +1000,49 @@ List<string> inventoryItemNames = new List<string>();
         catch (System.Exception e)
         {
             return false;
+        }
+    }
+
+    private void RestoreOneShotEventStates()
+    {
+        HashSet<string> completedKeys = new HashSet<string>(
+            connection.Table<GameStateData>().ToList()
+                .Where(state => state.Key != null &&
+                    state.Key.StartsWith("OneShot:", System.StringComparison.Ordinal) &&
+                    state.Value == "true")
+                .Select(state => state.Key),
+            System.StringComparer.Ordinal);
+
+        Scene activeScene = SceneManager.GetActiveScene();
+        Note[] notes = Resources.FindObjectsOfTypeAll<Note>()
+            .Where(note => note != null && note.gameObject.scene == activeScene)
+            .ToArray();
+
+        // Older saves only recorded note titles. Migrate those when the title is unique
+        // in this scene; duplicate titles cannot identify a specific note safely.
+        HashSet<string> legacyReadTitles = new HashSet<string>(
+            connection.Table<NoteData>().ToList()
+                .Where(data => data.IsRead && data.NoteTitle != null)
+                .Select(data => data.NoteTitle),
+            System.StringComparer.Ordinal);
+        var noteTitleCounts = notes.Where(note => note.noteTitle != null)
+            .GroupBy(note => note.noteTitle)
+            .ToDictionary(group => group.Key, group => group.Count());
+
+        foreach (Note note in notes)
+        {
+            bool legacyRead = note.noteTitle != null &&
+                noteTitleCounts[note.noteTitle] == 1 &&
+                legacyReadTitles.Contains(note.noteTitle);
+            note.RestoreReadState(completedKeys.Contains(note.SaveStateKey) || legacyRead);
+            if (note.onCloseAudio != null && completedKeys.Contains(note.AudioSaveStateKey))
+                note.onCloseAudio.RestorePlayedState(true);
+        }
+
+        foreach (WhiteLadyTeleportTrigger trigger in Resources.FindObjectsOfTypeAll<WhiteLadyTeleportTrigger>())
+        {
+            if (trigger != null && trigger.gameObject.scene == activeScene)
+                trigger.RestoreTriggeredState(completedKeys.Contains(trigger.SaveStateKey));
         }
     }
 }

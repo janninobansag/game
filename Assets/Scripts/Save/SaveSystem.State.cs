@@ -1,8 +1,59 @@
 // PURPOSE: Saves and restores game progress and player state using the selected difficulty database.
 using System.IO;
+using System.Linq;
 using UnityEngine;
 public partial class SaveSystem : MonoBehaviour
 {
+    public static string GetOneShotStateKey(Component source, string eventType, string saveId)
+    {
+        string identity = string.IsNullOrWhiteSpace(saveId) ? string.Empty : saveId.Trim();
+        if (identity.Length == 0)
+        {
+            Transform current = source.transform;
+            while (current != null)
+            {
+                identity = current.name + "[" + current.GetSiblingIndex() + "]/" + identity;
+                current = current.parent;
+            }
+        }
+
+        return "OneShot:" + eventType + ":" + source.gameObject.scene.path + ":" + identity;
+    }
+
+    public void ClearOneShotEventStates()
+    {
+        EnsureDatabaseReady();
+        if (!isDatabaseReady)
+            return;
+
+        connection.DeleteAll<NoteData>();
+        foreach (GameStateData state in connection.Table<GameStateData>().ToList())
+        {
+            if (state.Key != null && state.Key.StartsWith("OneShot:", System.StringComparison.Ordinal))
+                connection.Delete(state);
+        }
+    }
+
+    public void MarkOneShotEventCompleted(string key)
+    {
+        if (string.IsNullOrEmpty(key))
+            return;
+
+        EnsureDatabaseReady();
+        if (!isDatabaseReady)
+            return;
+
+        GameStateData savedState = connection.Table<GameStateData>()
+            .FirstOrDefault(state => state.Key == key);
+        if (savedState == null)
+            connection.Insert(new GameStateData { Key = key, Value = "true" });
+        else if (savedState.Value != "true")
+        {
+            savedState.Value = "true";
+            connection.Update(savedState);
+        }
+    }
+
     public void MarkGeneratorCoverRemoved(string coverId)
     {
         if (string.IsNullOrEmpty(coverId))

@@ -15,8 +15,10 @@ public class WhiteLadyTeleportTrigger : MonoBehaviour
     public Transform[] teleportPoints;
     [Tooltip("Time between each fast teleport.")]
     [Min(0.01f)] public float teleportInterval = 0.12f;
-    [Tooltip("Runs only once per play session.")]
+    [Tooltip("Runs only once per New Game; its completed state is saved.")]
     public bool triggerOnce = true;
+    [Tooltip("Optional stable ID for save files. Leave empty to use the scene hierarchy path.")]
+    public string saveId;
 
     [Header("Teleport Sound Effects")]
     [Tooltip("Optional. Drag an AudioSource here. If empty, the script looks for one on the White Lady or this trigger.")]
@@ -38,7 +40,28 @@ public class WhiteLadyTeleportTrigger : MonoBehaviour
     [Min(0f)] public float hideDelay = 0.12f;
 
     private bool hasTriggered;
+    private bool retryAfterEncounter;
+    private bool isTeleporting;
     private NavMeshAgent whiteLadyAgent;
+
+    public bool HasTriggered => hasTriggered;
+    public string SaveStateKey => SaveSystem.GetOneShotStateKey(this, "WhiteLadyTeleport", saveId);
+
+    public void RestoreTriggeredState(bool wasTriggered)
+    {
+        if (!triggerOnce)
+            return;
+
+        hasTriggered = wasTriggered;
+        if (wasTriggered)
+        {
+            retryAfterEncounter = false;
+            StopAllCoroutines();
+            isTeleporting = false;
+            if (hideWhiteLadyAfterSequence && whiteLady != null)
+                whiteLady.gameObject.SetActive(false);
+        }
+    }
 
     private void Awake()
     {
@@ -56,11 +79,46 @@ public class WhiteLadyTeleportTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((triggerOnce && hasTriggered) || !IsPlayer(other) || whiteLady == null || teleportPoints == null || teleportPoints.Length == 0)
+        TryStartTeleport(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (retryAfterEncounter)
+            TryStartTeleport(other);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (IsPlayer(other))
+            retryAfterEncounter = false;
+    }
+
+    private void TryStartTeleport(Collider other)
+    {
+        if (isTeleporting || (triggerOnce && hasTriggered) || !IsPlayer(other) ||
+            whiteLady == null || teleportPoints == null || teleportPoints.Length == 0)
             return;
 
+        if (PlayerPrefs.GetInt("ShouldLoadSave", 0) == 1)
+        {
+            retryAfterEncounter = true;
+            return;
+        }
+
+        if (AIEncounterGate.IsActive)
+        {
+            retryAfterEncounter = true;
+            return;
+        }
+
+        retryAfterEncounter = false;
+        isTeleporting = true;
         if (triggerOnce)
+        {
             hasTriggered = true;
+            SaveSystem.Instance?.MarkOneShotEventCompleted(SaveStateKey);
+        }
         StartCoroutine(TeleportSequence());
     }
 
@@ -68,6 +126,9 @@ public class WhiteLadyTeleportTrigger : MonoBehaviour
     {
         for (int index = 0; index < teleportPoints.Length; index++)
         {
+            while (AIEncounterGate.IsActive)
+                yield return null;
+
             Transform teleportPoint = teleportPoints[index];
             if (teleportPoint == null)
                 continue;
@@ -86,8 +147,13 @@ public class WhiteLadyTeleportTrigger : MonoBehaviour
             if (hideDelay > 0f)
                 yield return new WaitForSeconds(hideDelay);
 
+            while (AIEncounterGate.IsActive)
+                yield return null;
+
             whiteLady.gameObject.SetActive(false);
         }
+
+        isTeleporting = false;
     }
 
     private void TeleportWhiteLady(Transform teleportPoint)

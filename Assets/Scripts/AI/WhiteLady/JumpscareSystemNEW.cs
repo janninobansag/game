@@ -26,6 +26,8 @@ public class JumpscareSystemNEW : MonoBehaviour
     public LayerMask teleportLayerMask = -1;
 
     private bool isJumpscaring = false;
+    public bool IsJumpscareActive => isJumpscaring;
+    private bool releaseRequested;
     private bool awaitingExternalRelease = false;
     private Transform lockedMonster;
     private Transform playerCamera;
@@ -117,6 +119,7 @@ public class JumpscareSystemNEW : MonoBehaviour
     IEnumerator JumpscareSequence(GameObject monster, bool holdCameraUntilReleased)
     {
         isJumpscaring = true;
+        releaseRequested = false;
 
         // Disable player control
         if (playerController != null)
@@ -177,6 +180,8 @@ public class JumpscareSystemNEW : MonoBehaviour
         {
             lockedMonster = monsterTransform;
             awaitingExternalRelease = true;
+            if (releaseRequested)
+                ReleaseJumpscareLock();
             yield break;
         }
 
@@ -188,8 +193,14 @@ public class JumpscareSystemNEW : MonoBehaviour
 
     public void ReleaseJumpscareLock()
     {
-        if (!awaitingExternalRelease)
+        if (!isJumpscaring)
             return;
+
+        if (!awaitingExternalRelease)
+        {
+            releaseRequested = true;
+            return;
+        }
 
         StartCoroutine(ReleaseJumpscareLockRoutine());
     }
@@ -197,6 +208,7 @@ public class JumpscareSystemNEW : MonoBehaviour
     private IEnumerator ReleaseJumpscareLockRoutine()
     {
         awaitingExternalRelease = false;
+        releaseRequested = false;
         lockedMonster = null;
         yield return StartCoroutine(RestoreCameraAndPlayerControl());
         isJumpscaring = false;
@@ -267,6 +279,9 @@ public class JumpscareSystemNEW : MonoBehaviour
     public void ResetJumpscare()
     {
         isJumpscaring = false;
+        awaitingExternalRelease = false;
+        releaseRequested = false;
+        lockedMonster = null;
         isBreathing = false;
         if (headBob != null)
             headBob.externalShakeAmount = 0f;

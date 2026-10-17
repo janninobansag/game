@@ -101,6 +101,7 @@ public partial class TikbalangAI
         }
         isQuestionPanelOpen = false;
         qnaPanel.SetActive(false);
+        SetAnswerButtonsInteractable(true);
         SetPlayerQuestionLock(false);
     }
 

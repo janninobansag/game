@@ -49,8 +49,8 @@ Normal and Hard modes share the following core tables, but each mode has its own
 | `DoorData` | Door unlock/open state and rotation. | `SaveSystem.cs`, door scripts |
 | `DrawerData` | Drawer identity, open/closed state, and exact local position. `SaveProfileId` is a foreign key to `SaveProfileData.Id`; `DrawerId` identifies the matching Unity drawer object. | `SaveSystem.cs`, `DrawerInteraction.cs` |
 | `RitualData` | Ritual completion state. | `SaveSystem.cs`, ritual scripts |
-| `NoteData` | Notes that have been read. | `SaveSystem.cs`, note scripts |
-| `GameStateData` | General named game-state values: `HasCheckpoint`, `CheckpointPos`, `HasMap`, `PathGuide:<guide-id>` (waypoint index), `TikbalangAwakened`, `GeneratorLightsOn`, `GeneratorIsRunning`, and `GeneratorRunSecondsRemaining`. | `SaveSystem.cs`, `PathGuideIndicator.cs`, Tikbalang, generator, and gameplay scripts |
+| `NoteData` | Notes that have been read; older saves can use these records to restore uniquely titled notes. | `SaveSystem.cs`, note scripts |
+| `GameStateData` | General named game-state values: `HasCheckpoint`, `CheckpointPos`, `HasMap`, `PathGuide:<guide-id>` (waypoint index), `TikbalangAwakened`, `GeneratorLightsOn`, `GeneratorIsRunning`, `GeneratorRunSecondsRemaining`, and `OneShot:` keys for completed White Lady teleport scares, note closes, and note-linked audio. | `SaveSystem.cs`, `PathGuideIndicator.cs`, Tikbalang, generator, and gameplay scripts |
 | `DroppedItemData` | Dropped item name, held/dropped state, position, and rotation. It owns the world transform for dropped flashlight, battery, ritual items, wrench, and gas. | `SaveSystem.cs`, inventory/pickup scripts |
 | `FlashlightData` | Flashlight battery, on/off state, and held state. | `SaveSystem.cs`, `FlashlightPickup.cs` |
 | `KeyData` | Used keys. | `SaveSystem.cs`, `Key.cs` |
@@ -81,6 +81,10 @@ Player chooses Load Game
 
 - Do not manually delete individual tables or rows unless you have made a backup first.
 - `gameSave_v2.db` and `gameSave_Hard_v2.db` are different saves. Editing one does not edit the other.
+- In Hard mode, a Gas canister spawned after generator shutdown is saved in `DroppedItemData` at its current world position. Loading that save restores the same position instead of choosing another random spawn point. After the first pour, Gas remains absent while the generator is fueled or its lights are on.
+- One-time White Lady teleport scares and note-close audio/objectives remain completed after Save and Load. Completion is written immediately and retained on later saves. Note-close state is keyed by scene path and hierarchy path (or an optional Inspector save ID), so notes with the same title remain distinct. Legacy `NoteData` rows restore read state only when the title is unique in the loaded scene.
+- Shyna's note-linked `bedroom!!` objective is configured with `triggerOnce` in both Chapter 1 and Chapter 2; `ObjectiveTrigger` keeps its own per-difficulty one-time flag in PlayerPrefs.
+- Starting a New Game clears `OneShot:` keys and legacy `NoteData` read records for the selected difficulty. No new table or schema version is needed.
 - Starting a New Game clears IntroData and SubtitleData only for the selected difficulty, so the story and one-time subtitles can play again.
 - `settings.db` is global: English, Korean, or Tagalog selection is shared by both difficulties.
 - The visual `SettingsPanel` can be inactive. Keep the separate `Setting pannel cs` manager active so it can load settings.

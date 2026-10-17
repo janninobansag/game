@@ -77,11 +77,19 @@ public class JumpscareSystem : MonoBehaviour
 
     public void TriggerJumpscare(GameObject mutant = null)
     {
-        if (isJumpscaring) return;
+        TryTriggerJumpscare(mutant);
+    }
+
+    public bool TryTriggerJumpscare(GameObject mutant = null)
+    {
+        if (isJumpscaring || !AIEncounterGate.TryBegin(this))
+            return false;
+
         mutantObj = mutant;
         if (mutantObj == null)
             mutantObj = GameObject.FindGameObjectWithTag("Mutant");
         StartCoroutine(JumpscareSequence());
+        return true;
     }
 
     public void ResetJumpscare()
@@ -94,7 +102,15 @@ public class JumpscareSystem : MonoBehaviour
         shakeTimer = 0f;
         shakeOffset = Vector2.zero;
         movingMutant = false;
+        AIEncounterGate.End(this);
 
+    }
+
+    private void OnDestroy()
+    {
+        AIEncounterGate.End(this);
+        if (Instance == this)
+            Instance = null;
     }
 
     IEnumerator JumpscareSequence()

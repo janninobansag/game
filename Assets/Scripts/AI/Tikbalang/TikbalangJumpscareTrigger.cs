@@ -39,6 +39,18 @@ public class TikbalangJumpscareTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        TryTriggerEncounter(other);
+    }
+
+    // If another AI owned the encounter on entry, retry once that Q&A ends
+    // even when the player has remained inside this detector.
+    private void OnTriggerStay(Collider other)
+    {
+        TryTriggerEncounter(other);
+    }
+
+    private void TryTriggerEncounter(Collider other)
+    {
         if (hasTriggered)
             return;
 

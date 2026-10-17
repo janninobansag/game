@@ -146,6 +146,7 @@ public partial class TikbalangAI : MonoBehaviour
     private bool answerReceived;
     private bool isQuestionPanelOpen;
     private bool wasPlayerControllerEnabled;
+    private readonly AIEncounterPause encounterPause = new AIEncounterPause();
     private readonly System.Collections.Generic.List<Button> qnaButtons = new System.Collections.Generic.List<Button>();
     private readonly System.Collections.Generic.List<PaintedTreeObstacle> paintedTrees = new System.Collections.Generic.List<PaintedTreeObstacle>();
 
@@ -190,6 +191,8 @@ public partial class TikbalangAI : MonoBehaviour
     {
         FindPlayerIfNeeded();
         UpdateGeneratorObjectivePopup();
+        if (encounterPause.Update(this, agent, animator, audioSource))
+            return;
         if (player == null) return;
 
         // Tikbalang remains dormant until TikbalangJumpscareTrigger starts the first encounter.
@@ -202,7 +205,8 @@ public partial class TikbalangAI : MonoBehaviour
         float activeCatchRange = hasBeenSeenByPlayer ? Mathf.Max(catchRange, runningCatchRange) : catchRange;
         if (Time.time >= nextCatchTime && Vector3.Distance(transform.position, player.position) <= activeCatchRange)
         {
-            StartCoroutine(PlayCatchJumpscare());
+            if (AIEncounterGate.TryBegin(this))
+                StartCoroutine(PlayCatchJumpscare());
             return;
         }
 
@@ -220,6 +224,12 @@ public partial class TikbalangAI : MonoBehaviour
             Cursor.visible = true;
         }
 
+    }
+
+    private void OnDisable()
+    {
+        encounterPause.Restore(agent, animator, audioSource);
+        AIEncounterGate.End(this);
     }
     // Called by TikbalangJumpscareTrigger when the player enters its detector collider.
     // Rejects invalid requests and starts the first encounter sequence when valid.

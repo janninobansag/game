@@ -23,6 +23,22 @@ public class AudioTrigger : MonoBehaviour
     private AudioSource audioSource;
     private bool hasPlayed = false;
     private bool isPlaying = false;
+    private bool retryAfterLoad;
+
+    public bool HasPlayed => hasPlayed;
+
+    public void RestorePlayedState(bool wasPlayed)
+    {
+        hasPlayed = wasPlayed;
+        if (wasPlayed)
+        {
+            retryAfterLoad = false;
+            StopAllCoroutines();
+            if (audioSource != null)
+                audioSource.Stop();
+            isPlaying = false;
+        }
+    }
 
    void Start()
 {
@@ -43,10 +59,27 @@ public class AudioTrigger : MonoBehaviour
 }
     void OnTriggerEnter(Collider other)
     {
-        // Start audio only when the configured player enters this trigger.
+        TryTriggerFromCollider(other);
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (retryAfterLoad)
+            TryTriggerFromCollider(other);
+    }
+
+    private void TryTriggerFromCollider(Collider other)
+    {
         if (!other.CompareTag(playerTag)) return;
         if (playOnce && hasPlayed) return;
 
+        if (playOnce && PlayerPrefs.GetInt("ShouldLoadSave", 0) == 1)
+        {
+            retryAfterLoad = true;
+            return;
+        }
+
+        retryAfterLoad = false;
         hasPlayed = true;
         isPlaying = true;
 
@@ -67,6 +100,7 @@ public class AudioTrigger : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag(playerTag)) return;
+        retryAfterLoad = false;
         if (!loop) return; // only fade out looping audio on exit
 
         StopAllCoroutines();
