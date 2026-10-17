@@ -118,7 +118,7 @@ public class VarenSaveAndGameplayTests
         GameObject firstNoteObject = new GameObject("Note A");
         GameObject secondNoteObject = new GameObject("Note B");
         GameObject audioObject = new GameObject("Note Audio");
-        GameObject triggerObject = new GameObject("White Lady Trigger");
+        GameObject triggerObject = new GameObject("White Lady Trigger", typeof(BoxCollider));
         GameObject whiteLadyObject = new GameObject("White Lady Jumpscare");
 
         try
@@ -195,7 +195,7 @@ public class VarenSaveAndGameplayTests
     public void RespawnedGas_MarksItsWorldPositionForSaving()
     {
         const string markerName = "Respawned Gas Test Marker";
-        GameObject slotObject = new GameObject("Test Generator Slot");
+        GameObject slotObject = new GameObject("Test Generator Slot", typeof(BoxCollider));
         GameObject gasTemplate = new GameObject("Test Gas Template");
         GameObject spawnPoint = new GameObject("Test Gas Spawn Point");
 
