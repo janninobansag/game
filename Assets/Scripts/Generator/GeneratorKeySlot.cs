@@ -5,6 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class GeneratorKeySlot : MonoBehaviour
 {
+    private enum GasRestoreAction
+    {
+        KeepExistingGas,
+        RemoveGas,
+        RespawnGas
+    }
+
     // Generator parts that react after the correct key is inserted.
     [Header("References")]
     public GeneratorFuelInteraction fuelInteraction;
@@ -122,11 +129,12 @@ public class GeneratorKeySlot : MonoBehaviour
     /// </summary>
     public void ReconcileGasWithLightState(bool savedGasWasHeldOrDropped)
     {
-        if (fuelInteraction == null || !fuelInteraction.HasEverPouredGas)
+        if (fuelInteraction == null)
             return;
 
-        bool anyGeneratorLightIsOn = AreAnyGeneratorLightsOn;
-        if (!anyGeneratorLightIsOn)
+        bool hasEverPouredGas = fuelInteraction.HasEverPouredGas;
+        bool anyGeneratorLightIsOn = hasEverPouredGas && AreAnyGeneratorLightsOn;
+        if (hasEverPouredGas && !anyGeneratorLightIsOn)
         {
             foreach (GeneratorKeySlot generator in Object.FindObjectsOfType<GeneratorKeySlot>())
             {
@@ -138,7 +146,16 @@ public class GeneratorKeySlot : MonoBehaviour
             }
         }
 
-        if (anyGeneratorLightIsOn || isRunning || fuelInteraction.HasFuel())
+        GasRestoreAction action = DetermineGasRestoreAction(
+            hasEverPouredGas,
+            anyGeneratorLightIsOn,
+            isRunning,
+            fuelInteraction.HasFuel());
+
+        if (action == GasRestoreAction.KeepExistingGas)
+            return;
+
+        if (action == GasRestoreAction.RemoveGas)
         {
             bool removedByFuelInteraction = false;
             foreach (GeneratorFuelInteraction generator in Object.FindObjectsOfType<GeneratorFuelInteraction>())
@@ -159,6 +176,17 @@ public class GeneratorKeySlot : MonoBehaviour
             RemoveActiveSceneGas();
 
         SpawnGasAtRandomPoint();
+    }
+
+    private static GasRestoreAction DetermineGasRestoreAction(bool hasEverPouredGas,
+        bool anyGeneratorLightIsOn, bool isRunning, bool hasFuel)
+    {
+        if (!hasEverPouredGas)
+            return GasRestoreAction.KeepExistingGas;
+
+        return anyGeneratorLightIsOn || isRunning || hasFuel
+            ? GasRestoreAction.RemoveGas
+            : GasRestoreAction.RespawnGas;
     }
 
     private void Awake()

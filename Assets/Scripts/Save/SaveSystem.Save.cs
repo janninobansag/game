@@ -485,20 +485,7 @@ public partial class SaveSystem : MonoBehaviour
 
                 if (isDropped)
                 {
-                    DroppedItemData droppedData = new DroppedItemData
-                    {
-                        ItemName = cleanName,
-                        IsHeld = false,
-                        IsDropped = true,
-                        PosX = obj.transform.position.x,
-                        PosY = obj.transform.position.y,
-                        PosZ = obj.transform.position.z,
-                        RotX = obj.transform.rotation.x,
-                        RotY = obj.transform.rotation.y,
-                        RotZ = obj.transform.rotation.z,
-                        RotW = obj.transform.rotation.w
-                    };
-                    connection.Insert(droppedData);
+                    connection.Insert(CreateDroppedItemData(obj, cleanName));
                     droppedCount++;
                 }
             }
@@ -524,6 +511,25 @@ public partial class SaveSystem : MonoBehaviour
         }
 
         isSaving = false;
+    }
+
+    private static DroppedItemData CreateDroppedItemData(GameObject item, string cleanName)
+    {
+        Vector3 position = item.transform.position;
+        Quaternion rotation = item.transform.rotation;
+        return new DroppedItemData
+        {
+            ItemName = cleanName,
+            IsHeld = false,
+            IsDropped = true,
+            PosX = position.x,
+            PosY = position.y,
+            PosZ = position.z,
+            RotX = rotation.x,
+            RotY = rotation.y,
+            RotZ = rotation.z,
+            RotW = rotation.w
+        };
     }
 
     private PickupItem FindScenePickupByName(string itemName)

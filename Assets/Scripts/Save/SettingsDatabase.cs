@@ -17,14 +17,19 @@ public static class SettingsDatabase
 
     public static bool TryLoad(out SettingsData settings)
     {
+        return TryLoad(DatabasePath, out settings);
+    }
+
+    internal static bool TryLoad(string databasePath, out SettingsData settings)
+    {
         settings = null;
-        if (!File.Exists(DatabasePath))
+        if (!File.Exists(databasePath))
             return false;
 
         SQLiteConnection connection = null;
         try
         {
-            connection = new SQLiteConnection(DatabasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
+            connection = new SQLiteConnection(databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
             connection.CreateTable<SettingsData>();
             settings = connection.Table<SettingsData>().FirstOrDefault();
             return settings != null;
@@ -42,13 +47,18 @@ public static class SettingsDatabase
 
     public static bool Save(SettingsData settings)
     {
+        return Save(DatabasePath, settings);
+    }
+
+    private static bool Save(string databasePath, SettingsData settings)
+    {
         if (settings == null)
             return false;
 
         SQLiteConnection connection = null;
         try
         {
-            connection = new SQLiteConnection(DatabasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
+            connection = new SQLiteConnection(databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
             connection.CreateTable<SettingsData>();
             settings.Id = 1;
             connection.InsertOrReplace(settings);
