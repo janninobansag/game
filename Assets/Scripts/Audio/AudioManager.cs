@@ -36,10 +36,20 @@ public class AudioManager : MonoBehaviour
 
     public void LoadAndApplySettings()
     {
+        LoadAndApplySettingsFromDatabase(null);
+    }
+
+    // Allows callers in this assembly to apply a selected settings database while
+    // keeping the normal game path on SettingsDatabase's default persistent file.
+    private void LoadAndApplySettingsFromDatabase(string databasePath)
+    {
         // Read saved options, then apply them to the current game session.
-        // Use settings.db so this also works when a gameplay scene is launched directly.
         SettingsData savedSettings;
-        if (SettingsDatabase.TryLoad(out savedSettings))
+        bool hasSavedSettings = string.IsNullOrEmpty(databasePath)
+            ? SettingsDatabase.TryLoad(out savedSettings)
+            : SettingsDatabase.TryLoad(databasePath, out savedSettings);
+
+        if (hasSavedSettings)
         {
             currentVolume = savedSettings.Volume;
             currentSensitivity = savedSettings.Sensitivity;

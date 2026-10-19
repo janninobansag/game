@@ -60,7 +60,11 @@ public class RitualManager : MonoBehaviour
         bool bible = bibleHolder != null && bibleHolder.HasItem();
         bool cross = crossHolder != null && crossHolder.HasItem();
 
- 
+        return AreAllRitualItemsPlaced(candle1, candle2, bible, cross);
+    }
+
+    private static bool AreAllRitualItemsPlaced(bool candle1, bool candle2, bool bible, bool cross)
+    {
         return candle1 && candle2 && bible && cross;
     }
 

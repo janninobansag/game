@@ -8,3 +8,4 @@ This folder contains the project documentation.
 - [Database guide](DATABASE_README.md)
 - [Game story](GAME%20STORY.md)
 - [Player guide: Linux and macOS](PLAYING_ON_LINUX_AND_MAC.md)
+- [Regression test cases for the testing plan](TESTING_REGRESSIONS.md)

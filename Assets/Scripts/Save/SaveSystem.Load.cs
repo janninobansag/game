@@ -891,20 +891,13 @@ List<string> inventoryItemNames = new List<string>();
                     continue;
                 }
 
-                Vector3 position = new Vector3(droppedData.PosX, droppedData.PosY, droppedData.PosZ);
-                Quaternion rotation = new Quaternion(droppedData.RotX, droppedData.RotY, droppedData.RotZ, droppedData.RotW);
-
                 PickupItem scenePickup = FindScenePickupByName(droppedData.ItemName);
                 if (scenePickup != null)
                 {
                     if (IsHardModeDatabase() && (IsWrench(scenePickup) || IsGas(scenePickup)))
                         scenePickup.transform.SetParent(null, true);
 
-                    scenePickup.transform.position = position;
-                    scenePickup.transform.rotation = rotation;
-                    scenePickup.ResetItem();
-                    scenePickup.wasDropped = true;
-                    scenePickup.isHeld = false;
+                    ApplyDroppedItemData(scenePickup, droppedData);
                     if (Inventory.Instance != null)
                     {
                         Inventory.Instance.RestoreDropLight(scenePickup.gameObject);
@@ -914,6 +907,8 @@ List<string> inventoryItemNames = new List<string>();
 
                 if (PrefabManager.Instance != null)
                 {
+                    Vector3 position = new Vector3(droppedData.PosX, droppedData.PosY, droppedData.PosZ);
+                    Quaternion rotation = new Quaternion(droppedData.RotX, droppedData.RotY, droppedData.RotZ, droppedData.RotW);
                     GameObject spawnedItem = PrefabManager.Instance.SpawnDroppedItem(droppedData.ItemName, position, rotation);
 
                     if (spawnedItem != null)
@@ -1001,6 +996,15 @@ List<string> inventoryItemNames = new List<string>();
         {
             return false;
         }
+    }
+
+    private static void ApplyDroppedItemData(PickupItem pickup, DroppedItemData data)
+    {
+        pickup.transform.position = new Vector3(data.PosX, data.PosY, data.PosZ);
+        pickup.transform.rotation = new Quaternion(data.RotX, data.RotY, data.RotZ, data.RotW);
+        pickup.ResetItem();
+        pickup.wasDropped = true;
+        pickup.isHeld = false;
     }
 
     private void RestoreOneShotEventStates()
