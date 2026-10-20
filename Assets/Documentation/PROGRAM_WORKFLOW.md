@@ -1,10 +1,39 @@
 # VAREN Program Workflow
 
-This document describes the current implemented workflow of VAREN, from launch to game completion. It is based on the Unity scenes and C# scripts in this repository.
+This document describes both the development workflow for VAREN changes and the implemented in-game workflow from launch to completion. It is based on the Unity project, scenes, scripts, and testing notes in this repository.
 
 See the [Activity Diagram](ACTIVITY_DIAGRAM.md) for a compact visual version of this workflow.
 
 See the [Use Case Diagram](USE_CASE_DIAGRAM.md) for the Player-facing system features.
+
+## Development Workflow
+
+Use this workflow when adding or changing a game feature. Check the related scene, scripts, data, and documentation first so the planned change accounts for scene wiring and saved state where relevant.
+
+```mermaid
+flowchart TD
+    A[Feature request, defect, or player feedback] --> B[Review requirements and existing documentation]
+    B --> C[Plan scope and affected scenes, scripts, assets, and saved data]
+    C --> D[Implement the change in Unity]
+    D --> E[Review the changes and compile]
+    E --> F[Run applicable EditMode and PlayMode tests]
+    F --> G[Manually validate affected gameplay scenes]
+    G --> H{Checks pass?}
+    H -->|No| D
+    H -->|Yes| I[Update documentation and record test results]
+    I --> J[Build and package for the target platform]
+    J --> K[Share or publish the build]
+    K --> L[Collect feedback and reported issues]
+    L --> B
+```
+
+### Development and verification notes
+
+- Use Unity `2022.3.62f3` and preserve Unity asset `.meta` files when adding or moving project assets.
+- Run EditMode tests from **Window > General > Test Runner > EditMode > Run All**. Run PlayMode tests from the same window's **PlayMode** tab when the change affects runtime interactions between systems.
+- Test scene-dependent behavior in the affected gameplay scene. Automated fixtures do not replace checks involving real scene wiring, physics, NavMesh movement, rendered UI, input, or audible output.
+- Record actual test outcomes only after running the relevant checks. Update the testing notes and any affected system or database documentation with the change.
+- Build using **File > Build Settings** for the intended target. Verify the built player before sharing or publishing it through the chosen distribution channel.
 
 ## 1. System Overview
 
