@@ -3,6 +3,9 @@
 This folder contains the project documentation.
 
 - [Project details and change log](DETAILS.md)
+- [Business Model Canvas](BUSINESS_MODEL_CANVAS.md)
+- [Business Roadmap](BUSINESS_ROADMAP.md)
+- [Conceptual framework](CONCEPTUAL_FRAMEWORK.md)
 - [System data dictionary](DATA_DICTIONARY.md)
 - [Network design](NETWORK_DESIGN.md)
 - [Database guide](DATABASE_README.md)
