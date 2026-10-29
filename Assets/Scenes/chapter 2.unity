@@ -2498,7 +2498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (17)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -8315,7 +8315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (13)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -11248,7 +11248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (10)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -13880,7 +13880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (14)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -21218,7 +21218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (11)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -26826,7 +26826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (15)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -27866,7 +27866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (16)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -31183,7 +31183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (18)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -40276,7 +40276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (9)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
@@ -41129,7 +41129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (19)
   progressPoints: 4
   triggerOnce: 1
   playerTag: Player
@@ -45214,7 +45214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc73f1e988cf6041b298ddeaddda75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerName: progress trigger (8)
+  triggerName: progress trigger (12)
   progressPoints: 5
   triggerOnce: 1
   playerTag: Player
