@@ -22,22 +22,22 @@ public static class MenuLocalization
     // Each dictionary maps an English UI label to its translated replacement.
     private static readonly Dictionary<string, string> korean = new Dictionary<string, string>
     {
-        { "NEWGAME", "\uC0C8 \uAC8C\uC784" },
-        { "CONTROLS", "\uC870\uC791\uBC95" },
-        { "BACK", "\uB4A4\uB85C" },
-        { "SAVE", "\uC800\uC7A5" },
-        { "GRAPHICS", "\uADF8\uB798\uD53D" },
-        { "GRAPHICSQUALITY", "\uADF8\uB798\uD53D \uD488\uC9C8" },
-        { "LANGUAGE", "\uC5B8\uC5B4" },
-        { "LOW", "\uB0AE\uC74C" },
-        { "MEDIUM", "\uC911\uAC04" },
-        { "HIGH", "\uB192\uC74C" },
-        { "ENG", "\uC601\uC5B4" },
-        { "KOR", "\uD55C\uAD6D\uC5B4" },
-        { "KR", "\uD55C\uAD6D\uC5B4" },
-        { "PH", "\uD0C0\uAC08\uB85C\uADF8\uC5B4" },
-        { "WASD-MOVESPACE-JUMPMOUSE-LOOKAROUNDCTRLS-CROUCHRIGHTCLICK-TOUSEBATTERYSROLLUP/DOWN-SWITCHITEMS", "W A S D - \uC774\uB3D9\n\nSPACE - \uC810\uD504\n\nMOUSE - \uC2DC\uC810 \uC774\uB3D9\n\nCTRL - \uC549\uAE30\n\nRIGHT CLICK - \uBC30\uD130\uB9AC \uC0AC\uC6A9\n\nSCROLL UP/DOWN - \uC544\uC774\uD15C \uC804\uD658" },
-        { "SHIFT-SPRINTF-FLASHLIGHTE-INTERACTG-DROPITEMSM-MAPESC-PAUSE", "SHIFT - \uB2EC\uB9AC\uAE30\n\nF - \uC190\uC804\uB4F1\n\nE - \uC0C1\uD638\uC791\uC6A9\n\nG - \uC544\uC774\uD15C \uBC84\uB9AC\uAE30\n\nM - \uC9C0\uB3C4\n\nESC - \uC77C\uC2DC\uC815\uC9C0" }
+        { "NEWGAME", "새 게임" },
+        { "CONTROLS", "조작법" },
+        { "BACK", "뒤로" },
+        { "SAVE", "저장" },
+        { "GRAPHICS", "그래픽" },
+        { "GRAPHICSQUALITY", "그래픽 품질" },
+        { "LANGUAGE", "언어" },
+        { "LOW", "낮음" },
+        { "MEDIUM", "중간" },
+        { "HIGH", "높음" },
+        { "ENG", "영어" },
+        { "KOR", "한국어" },
+        { "KR", "한국어" },
+        { "PH", "타갈로그어" },
+        { "WASD-MOVESPACE-JUMPMOUSE-LOOKAROUNDCTRLS-CROUCHRIGHTCLICK-TOUSEBATTERYSROLLUP/DOWN-SWITCHITEMS", "W A S D - 이동\n\nSPACE - 점프\n\nMOUSE - 시점 이동\n\nCTRL - 앉기\n\nRIGHT CLICK - 배터리 사용\n\nSCROLL UP/DOWN - 아이템 전환" },
+        { "SHIFT-SPRINTF-FLASHLIGHTE-INTERACTG-DROPITEMSM-MAPESC-PAUSE", "SHIFT - 달리기\n\nF - 손전등\n\nE - 상호작용\n\nG - 아이템 버리기\n\nM - 지도\n\nESC - 일시정지" }
     };
     private static readonly Dictionary<string, string> tagalog = new Dictionary<string, string>
     {
