@@ -303,6 +303,9 @@ public partial class TikbalangAI : MonoBehaviour
         if (!showGeneratorObjectiveAfterIntro || string.IsNullOrWhiteSpace(generatorObjectiveMessage))
             return;
 
+        if (generatorKeySlot != null && generatorKeySlot.AreAnyGeneratorLightsOn)
+            return;
+
         showGeneratorObjectivePopup = true;
         generatorObjectivePopupTimer = Mathf.Max(0.1f, generatorObjectivePopupDuration);
     }

@@ -93,55 +93,7 @@ public partial class MapSystem
             playerMapPos.y = Mathf.Clamp(
                 playerMapPos.y, my + 10f, my + mapHeight - 10f);
 
-            // Get player rotation on Y axis
-            float angle = player.eulerAngles.y;
-            float rad = angle * Mathf.Deg2Rad;
-
-            // Arrow size
-            float arrowSize = 14f;
-
-            // Calculate arrow triangle points
-            // Tip (forward direction)
-            float tipX = playerMapPos.x +
-                Mathf.Sin(rad) * arrowSize;
-            float tipY = playerMapPos.y -
-                Mathf.Cos(rad) * arrowSize;
-
-            // Left base
-            float leftX = playerMapPos.x +
-                Mathf.Sin(rad - 2.4f) * arrowSize * 0.6f;
-            float leftY = playerMapPos.y -
-                Mathf.Cos(rad - 2.4f) * arrowSize * 0.6f;
-
-            // Right base
-            float rightX = playerMapPos.x +
-                Mathf.Sin(rad + 2.4f) * arrowSize * 0.6f;
-            float rightY = playerMapPos.y -
-                Mathf.Cos(rad + 2.4f) * arrowSize * 0.6f;
-
-            // Draw arrow outline (black)
-            float outS = 2f;
-            GUI.color = new Color(0f, 0f, 0f, mapAlpha * 0.8f);
-            DrawTriangle(
-                new Vector2(tipX, tipY),
-                new Vector2(leftX - outS, leftY + outS),
-                new Vector2(rightX + outS, rightY + outS),
-                outS);
-
-            // Draw arrow (yellow/gold)
-            GUI.color = new Color(1f, 0.9f, 0.2f, mapAlpha);
-            DrawTriangle(
-                new Vector2(tipX, tipY),
-                new Vector2(leftX, leftY),
-                new Vector2(rightX, rightY),
-                1.5f);
-
-            // Center dot
-            GUI.color = new Color(1f, 1f, 1f, mapAlpha);
-            GUI.DrawTexture(new Rect(
-                playerMapPos.x - 3f,
-                playerMapPos.y - 3f,
-                6f, 6f), Texture2D.whiteTexture);
+            DrawPlayerDirectionMarker(playerMapPos);
         }
 
         GUI.color = Color.white;
