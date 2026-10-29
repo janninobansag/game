@@ -31,6 +31,8 @@ public partial class MapSystem : MonoBehaviour
     private bool isOpen = false;
     private float mapAlpha = 0f;
     private Transform player;
+    private Transform playerView;
+    private Texture2D playerArrowTexture;
 
 
     public bool HasMap => hasMap;
@@ -42,7 +44,17 @@ public partial class MapSystem : MonoBehaviour
         if (playerObj != null)
             player = playerObj.transform;
 
+        Camera playerCamera = Camera.main;
+        if (playerCamera != null)
+            playerView = playerCamera.transform;
+
         hasMap = mapStartsUnlocked;
+    }
+
+    private void OnDestroy()
+    {
+        if (playerArrowTexture != null)
+            Destroy(playerArrowTexture);
     }
 
     void Update()

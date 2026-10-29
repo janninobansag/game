@@ -3,71 +3,56 @@ using UnityEngine;
 
 public partial class MapSystem
 {
-    void DrawTriangle(Vector2 p1, Vector2 p2,
-        Vector2 p3, float lineWidth)
+    private void DrawPlayerDirectionMarker(Vector2 position)
     {
-        DrawLine(p1, p2, lineWidth);
-        DrawLine(p2, p3, lineWidth);
-        DrawLine(p3, p1, lineWidth);
+        if (playerArrowTexture == null)
+            playerArrowTexture = CreatePlayerArrowTexture();
 
-        // Fill triangle with small rects
-        float minX = Mathf.Min(p1.x, p2.x, p3.x);
-        float maxX = Mathf.Max(p1.x, p2.x, p3.x);
-        float minY = Mathf.Min(p1.y, p2.y, p3.y);
-        float maxY = Mathf.Max(p1.y, p2.y, p3.y);
+        float angle = playerView != null
+            ? playerView.eulerAngles.y
+            : player.eulerAngles.y;
+        Matrix4x4 previousMatrix = GUI.matrix;
+        Color previousColor = GUI.color;
+        GUIUtility.RotateAroundPivot(angle, position);
 
-        for (float y = minY; y <= maxY; y += 1.5f)
+        GUI.color = new Color(0f, 0f, 0f, mapAlpha * 0.9f);
+        GUI.DrawTexture(new Rect(position.x - 16f, position.y - 20f, 32f, 40f),
+            playerArrowTexture);
+
+        GUI.color = new Color(1f, 0.9f, 0.2f, mapAlpha);
+        GUI.DrawTexture(new Rect(position.x - 11f, position.y - 15f, 22f, 30f),
+            playerArrowTexture);
+
+        GUI.matrix = previousMatrix;
+        GUI.color = previousColor;
+    }
+
+    private Texture2D CreatePlayerArrowTexture()
+    {
+        const int textureWidth = 32;
+        const int textureHeight = 40;
+        Texture2D texture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false)
         {
-            float x1 = maxX, x2 = minX;
-            if (IsInsideTriangle(new Vector2(minX, y),
-                p1, p2, p3)) x2 = minX;
-            if (IsInsideTriangle(new Vector2(maxX, y),
-                p1, p2, p3)) x1 = maxX;
+            name = "Map Player Direction Triangle",
+            filterMode = FilterMode.Bilinear,
+            wrapMode = TextureWrapMode.Clamp,
+            hideFlags = HideFlags.HideAndDontSave
+        };
 
-            for (float x = minX; x <= maxX; x += 1f)
+        Color32[] pixels = new Color32[textureWidth * textureHeight];
+        for (int y = 0; y < textureHeight; y++)
+        {
+            float halfWidth = (1f - y / (float)(textureHeight - 1)) *
+                (textureWidth - 1) * 0.5f;
+            for (int x = 0; x < textureWidth; x++)
             {
-                if (IsInsideTriangle(new Vector2(x, y),
-                    p1, p2, p3))
-                {
-                    if (x < x2) x2 = x;
-                    if (x > x1) x1 = x;
-                }
+                if (Mathf.Abs(x - (textureWidth - 1) * 0.5f) <= halfWidth)
+                    pixels[y * textureWidth + x] = Color.white;
             }
-
-            if (x1 >= x2)
-                GUI.DrawTexture(new Rect(x2, y,
-                    x1 - x2 + 1f, 1.5f),
-                    Texture2D.whiteTexture);
         }
+
+        texture.SetPixels32(pixels);
+        texture.Apply();
+        return texture;
     }
-
-    bool IsInsideTriangle(Vector2 p,
-        Vector2 a, Vector2 b, Vector2 c)
-    {
-        float d1 = Sign(p, a, b);
-        float d2 = Sign(p, b, c);
-        float d3 = Sign(p, c, a);
-
-        bool hasNeg = (d1 < 0) || (d2 < 0) || (d3 < 0);
-        bool hasPos = (d1 > 0) || (d2 > 0) || (d3 > 0);
-
-        return !(hasNeg && hasPos);
-    }
-
-    float Sign(Vector2 p1, Vector2 p2, Vector2 p3)
-    {
-        return (p1.x - p3.x) * (p2.y - p3.y) -
-               (p2.x - p3.x) * (p1.y - p3.y);
-    }
-
-    void DrawLine(Vector2 from, Vector2 to, float width)
-    {
-        float angle = Mathf.Atan2(
-            to.y - from.y, to.x - from.x) * Mathf.Rad2Deg;
-        float length = Vector2.Distance(from, to);
-
-        GUIUtility.RotateAroundPivot(angle, from);
-        GUI.DrawTexture(new Rect(from.x, from.y - width / 2f,
-            length, width), Texture2D.whiteTexture);
-        GUIUtility.RotateAroundPivot(-angle, from);
-    }}
+}
