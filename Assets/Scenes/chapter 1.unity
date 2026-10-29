@@ -726,7 +726,7 @@ GameObject:
   - component: {fileID: 58607809}
   - component: {fileID: 58607808}
   m_Layer: 0
-  m_Name: progress trigger (6)
+  m_Name: progress trigger (6)  Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3704,7 +3704,7 @@ GameObject:
   - component: {fileID: 271979007}
   - component: {fileID: 271979006}
   m_Layer: 0
-  m_Name: progress trigger (2)
+  m_Name: progress trigger (2) Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4781,7 +4781,7 @@ GameObject:
   - component: {fileID: 346273381}
   - component: {fileID: 346273382}
   m_Layer: 0
-  m_Name: progress trigger
+  m_Name: progress trigger Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5989,7 +5989,7 @@ GameObject:
   - component: {fileID: 401678734}
   - component: {fileID: 401678733}
   m_Layer: 0
-  m_Name: progress trigger (8)
+  m_Name: progress trigger (8) Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18875,7 +18875,7 @@ GameObject:
   - component: {fileID: 1162649591}
   - component: {fileID: 1162649590}
   m_Layer: 0
-  m_Name: progress trigger (1)
+  m_Name: progress trigger (1) Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24925,7 +24925,7 @@ GameObject:
   - component: {fileID: 1635552984}
   - component: {fileID: 1635552983}
   m_Layer: 0
-  m_Name: progress trigger (3)
+  m_Name: progress trigger (3) Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25244,7 +25244,7 @@ GameObject:
   - component: {fileID: 1668733760}
   - component: {fileID: 1668733759}
   m_Layer: 0
-  m_Name: progress trigger (5)
+  m_Name: progress trigger (5) Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26826,7 +26826,7 @@ GameObject:
   - component: {fileID: 1770962788}
   - component: {fileID: 1770962787}
   m_Layer: 0
-  m_Name: progress trigger (7)
+  m_Name: progress trigger (7) Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32159,7 +32159,7 @@ GameObject:
   - component: {fileID: 2098549668}
   - component: {fileID: 2098549667}
   m_Layer: 0
-  m_Name: progress trigger (4)
+  m_Name: progress trigger (4) Chap 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
