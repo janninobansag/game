@@ -49,7 +49,7 @@ public partial class SettingsPanel : MonoBehaviour
         float displayedValue = volumeSlider != null ? volumeSlider.value : value;
         if (volumeLabel != null)
             volumeLabel.text = GetSelectedLanguage() == GameLanguage.Korean && koreanFont != null
-                ? $"\uBCFC\uB968: {Mathf.RoundToInt(displayedValue)}%"
+                ? $"볼륨: {Mathf.RoundToInt(displayedValue)}%"
                 : GetSelectedLanguage() == GameLanguage.Tagalog
                     ? $"Lakas ng tunog: {Mathf.RoundToInt(displayedValue)}%"
                     : $"Volume: {Mathf.RoundToInt(displayedValue)}%";
@@ -60,7 +60,7 @@ public partial class SettingsPanel : MonoBehaviour
         float displayedValue = sensitivitySlider != null ? sensitivitySlider.value : value;
         if (sensitivityLabel != null)
             sensitivityLabel.text = GetSelectedLanguage() == GameLanguage.Korean && koreanFont != null
-                ? $"\uAC10\uB3C4: {displayedValue:F1}"
+                ? $"감도: {displayedValue:F1}"
                 : GetSelectedLanguage() == GameLanguage.Tagalog
                     ? $"Sensitibidad: {displayedValue:F1}"
                     : $"Sensitivity: {displayedValue:F1}";
@@ -71,7 +71,7 @@ public partial class SettingsPanel : MonoBehaviour
         float displayedValue = brightnessSlider != null ? brightnessSlider.value : value;
         if (brightnessLabel != null)
             brightnessLabel.text = GetSelectedLanguage() == GameLanguage.Korean && koreanFont != null
-                ? $"\uBC1D\uAE30: {Mathf.RoundToInt(displayedValue * 100)}%"
+                ? $"밝기: {Mathf.RoundToInt(displayedValue * 100)}%"
                 : GetSelectedLanguage() == GameLanguage.Tagalog
                     ? $"Liwanag: {Mathf.RoundToInt(displayedValue * 100)}%"
                     : $"Brightness: {Mathf.RoundToInt(displayedValue * 100)}%";
