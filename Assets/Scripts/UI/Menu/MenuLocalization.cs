@@ -122,6 +122,9 @@ public static class MenuLocalization
         }
 
         foreach (MenuManager menuManager in Object.FindObjectsOfType<MenuManager>(true))
+        {
             menuManager.RefreshAboutLocalization();
+            menuManager.RefreshProfileLocalization();
+        }
     }
 }

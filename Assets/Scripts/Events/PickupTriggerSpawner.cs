@@ -31,7 +31,7 @@ public class PickupTriggerSpawner : MonoBehaviour
     void Start()
     {
 
-        if (persistThroughSaves && PlayerPrefs.GetInt(saveKey, 0) == 1)
+        if (persistThroughSaves && PlayerPrefs.GetInt(GameProfiles.ProgressKey(saveKey), 0) == 1)
         {
             activated = true;
             if (objectToActivate != null)
@@ -61,7 +61,7 @@ public class PickupTriggerSpawner : MonoBehaviour
 
             if (persistThroughSaves)
             {
-                PlayerPrefs.SetInt(saveKey, 1);
+                PlayerPrefs.SetInt(GameProfiles.ProgressKey(saveKey), 1);
                 PlayerPrefs.Save();
             }
 
@@ -130,7 +130,7 @@ public class PickupTriggerSpawner : MonoBehaviour
         
         if (persistThroughSaves)
         {
-            PlayerPrefs.SetInt(saveKey, 0);
+            PlayerPrefs.SetInt(GameProfiles.ProgressKey(saveKey), 0);
             PlayerPrefs.Save();
         }
     }

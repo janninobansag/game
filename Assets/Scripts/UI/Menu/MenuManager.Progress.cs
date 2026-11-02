@@ -17,34 +17,42 @@ public partial class MenuManager : MonoBehaviour
     // ── Check if ANY save file exists (Normal or Hard) ──
     private bool HasAnySaveFile()
     {
-        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
-        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
-
-        bool normalExists = File.Exists(normalPath);
-        bool hardExists = File.Exists(hardPath);
-        return normalExists || hardExists;
+        return HasNormalSave() || HasHardSave();
     }
 
     private bool CanLoadSave(string fileName)
     {
-        string savePath = Path.Combine(Application.persistentDataPath, fileName);
-        return File.Exists(savePath) && GetProgressFromDatabase(savePath) < 100;
+        string savePath = GameProfiles.GetSavePath(fileName);
+        return HasPlayerSave(fileName) && GetProgressFromDatabase(savePath) < 100;
     }
 
     // ── Check if Normal save exists ──
     private bool HasNormalSave()
     {
-        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
-        bool exists = File.Exists(normalPath);
-        return exists;
+        return HasPlayerSave("gameSave_v2.db");
     }
 
     // ── Check if Hard save exists ──
     private bool HasHardSave()
     {
-        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
-        bool exists = File.Exists(hardPath);
-        return exists;
+        return HasPlayerSave("gameSave_Hard_v2.db");
+    }
+
+    private bool HasPlayerSave(string fileName)
+    {
+        string path = GameProfiles.GetSavePath(fileName);
+        if (!File.Exists(path))
+            return false;
+
+        try
+        {
+            using (var database = new SQLiteConnection(path, SQLiteOpenFlags.ReadOnly))
+                return database.Table<PlayerData>().FirstOrDefault() != null;
+        }
+        catch (System.Exception)
+        {
+            return false;
+        }
     }
 
     // ── Update visibility of Normal and Hard load buttons ──
@@ -84,7 +92,7 @@ public partial class MenuManager : MonoBehaviour
         // ── Load Normal mode progression ──
         if (normalProgressText != null)
         {
-            string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
+            string normalPath = GameProfiles.GetSavePath("gameSave_v2.db");
             int normalProgress = GetProgressFromDatabase(normalPath);
 
             if (normalProgress >= 100)
@@ -107,7 +115,7 @@ public partial class MenuManager : MonoBehaviour
         // ── Load Hard mode progression ──
         if (hardProgressText != null)
         {
-            string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
+            string hardPath = GameProfiles.GetSavePath("gameSave_Hard_v2.db");
             int hardProgress = GetProgressFromDatabase(hardPath);
 
             if (hardProgress >= 100)

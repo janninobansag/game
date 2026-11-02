@@ -35,9 +35,8 @@ public partial class MenuManager : MonoBehaviour
     // ── Load Normal save ──
     public void LoadNormalSave()
     {
+        if (!RequireProfileSelection()) return;
         PlayClickSound();
-
-        string normalPath = Path.Combine(Application.persistentDataPath, "gameSave_v2.db");
 
         if (CanLoadSave("gameSave_v2.db"))
         {
@@ -69,9 +68,8 @@ public partial class MenuManager : MonoBehaviour
     // ── Load Hard save ──
     public void LoadHardSave()
     {
+        if (!RequireProfileSelection()) return;
         PlayClickSound();
-
-        string hardPath = Path.Combine(Application.persistentDataPath, "gameSave_Hard_v2.db");
 
         if (CanLoadSave("gameSave_Hard_v2.db"))
         {

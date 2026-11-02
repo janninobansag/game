@@ -48,11 +48,11 @@ The active build scene order is:
 
 ## Save Data
 
-The game creates its save files in Unity's persistent-data folder, not inside the repository:
+The profile picker appears on first use. After a player profile exists, the game keeps the last active profile selected at startup; players can still open **Switch Profile** from the menu. The **Original Save** profile keeps existing saves in Unity's persistent-data folder. New profiles store their own Normal and Hard SQLite save files under `Profiles/<profile-id>/` in that same folder. Players can delete a new profile from the profile panel after confirming; **Original Save** is protected:
 
 - `gameSave_v2.db` - Normal-mode save
 - `gameSave_Hard_v2.db` - Hard-mode save
-- `settings.db` - global volume, graphics, sensitivity, brightness, and language settings
+- `settings.db` - global volume, graphics, sensitivity, brightness, and language settings, always at the root of the persistent-data folder
 
 Normal and Hard mode use separate save databases. See the [database guide](Assets/Documentation/DATABASE_README.md) for the full schema and save/load flow.
 

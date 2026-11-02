@@ -40,6 +40,7 @@ public partial class SaveSystem : MonoBehaviour
         // Create missing tables and update the database structure before saving or loading.
         try
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
             connection = new SQLiteConnection(savePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
             RelationalSaveSchema.Create(connection, IsHardModeDatabase());
 
@@ -114,7 +115,7 @@ public partial class SaveSystem : MonoBehaviour
         // ── Use different database files for different difficulties ──
         string difficulty = GetDifficultyForActiveScene();
         string fileName = difficulty == "Hard" ? "gameSave_Hard_v2.db" : "gameSave_v2.db";
-        savePath = Path.Combine(Application.persistentDataPath, fileName);
+        savePath = GameProfiles.GetSavePath(fileName);
 
         // We'll initialize on the next operation
     }
