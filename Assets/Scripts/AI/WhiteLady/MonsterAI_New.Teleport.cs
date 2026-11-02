@@ -48,7 +48,7 @@ public partial class MonsterAI_New
         if (spawnPoint != null)
             transform.rotation = spawnPoint.rotation;
 
-        currentState = State.Patrol;
+        currentState = State.Patrol; // Restart the FSM in Patrol after moving White Lady to a spawn point.
         isJumpscaring = false;
         isWaitingForQnA = false;
         jumpscareTimer = Mathf.Max(jumpscareTimer, jumpscareCooldown);

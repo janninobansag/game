@@ -12,6 +12,29 @@ The game uses SQLite database files in Unity's persistent-data folder. These fil
 
 `settings.db` is separate so changing menu settings cannot create, overwrite, or damage a Normal or Hard player save.
 
+The two game-save filenames are reused inside each custom player's directory. The database schema remains version 8; profiles separate progress by selecting a different directory and therefore different SQLite files:
+
+```text
+Application.persistentDataPath/
+  gameSave_v2.db                     # Original Save, Normal
+  gameSave_Hard_v2.db                # Original Save, Hard
+  settings.db                        # Shared settings
+  Profiles/<profile-id>/
+    profile.json                     # Profile ID and display name
+    gameSave_v2.db                   # This profile, Normal
+    gameSave_Hard_v2.db              # This profile, Hard
+```
+
+## Player profiles
+
+On first use, the menu asks the player to choose a profile before New Game or Load Game. After a custom profile exists, startup keeps the last active profile selected and does not automatically open the picker. **Switch Profile** opens it manually. **Original Save** continues to use the two save files directly under `Application.persistentDataPath`, so existing progress remains available. Each new profile has a generated ID and stores its name in `Profiles/<profile-id>/profile.json`; its Normal and Hard databases live in that same directory. The display name is never used as a file path. The active ID is remembered in PlayerPrefs. The profile panel is stored under the menu scene's Canvas.
+
+The Delete button asks for confirmation, then permanently removes that profile's directory, both save databases, and its recorded progress keys. The **Original Save** profile cannot be deleted from this panel.
+
+One-time progression and objective flags, pickup spawner flags, random item spawn choices, and cached progress are scoped to the selected player profile. Custom profiles prefix their PlayerPrefs keys with their generated profile ID. The Original Save keeps using the legacy unprefixed keys, so existing progress remains available. Global language, volume, graphics, and other device settings remain shared in `settings.db`.
+
+The `SaveProfileData` row described below is part of the schema inside each database. It is separate from the player profiles shown in the menu.
+
 ## Settings database
 
 ### `SettingsData`
@@ -69,7 +92,7 @@ Hard mode also creates `WrenchData`, `GasData`, and `GeneratorCoverData` for the
 Player presses Save / game auto-saves
         -> SaveSystem.SaveGame()
         -> Writes player, inventory, door, drawer, item, ritual, stamina, subtitle, and progression data
-        -> gameSave_v2.db or gameSave_Hard_v2.db
+        -> selected profile's gameSave_v2.db or gameSave_Hard_v2.db
 
 Player chooses Load Game
         -> MenuManager checks the correct database file and its ProgressionData
@@ -80,7 +103,7 @@ Player chooses Load Game
 ## Important rules
 
 - Do not manually delete individual tables or rows unless you have made a backup first.
-- `gameSave_v2.db` and `gameSave_Hard_v2.db` are different saves. Editing one does not edit the other.
+- Each player profile has separate Normal and Hard saves. Starting a New Game does not change another player's progress.
 - In Hard mode, a Gas canister spawned after generator shutdown is saved in `DroppedItemData` at its current world position. Loading that save restores the same position instead of choosing another random spawn point. After the first pour, Gas remains absent while the generator is fueled or its lights are on.
 - One-time White Lady teleport scares and note-close audio/objectives remain completed after Save and Load. Completion is written immediately and retained on later saves. Note-close state is keyed by scene path and hierarchy path (or an optional Inspector save ID), so notes with the same title remain distinct. Legacy `NoteData` rows restore read state only when the title is unique in the loaded scene.
 - Shyna's note-linked `bedroom!!` objective is configured with `triggerOnce` in both Chapter 1 and Chapter 2; `ObjectiveTrigger` keeps its own per-difficulty one-time flag in PlayerPrefs.

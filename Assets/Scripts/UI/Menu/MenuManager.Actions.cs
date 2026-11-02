@@ -13,6 +13,7 @@ public partial class MenuManager : MonoBehaviour
 
     public void LoadGame()
     {
+        if (!RequireProfileSelection()) return;
         PlayClickSound();
 
         if (HasAnySaveFile())

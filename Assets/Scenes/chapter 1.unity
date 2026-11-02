@@ -2872,7 +2872,6 @@ MonoBehaviour:
   interactRange: 2
   playerTag: Player
   isBusy: 0
-  logUnexpectedPositionChanges: 1
 --- !u!1 &221081417
 GameObject:
   m_ObjectHideFlags: 0
@@ -9812,6 +9811,45 @@ MonoBehaviour:
   displayDuration: 3.05
   delayBeforeShow: 0
   subtitleId: 3f98b7f3c1904f0cbe104362a4490440
+--- !u!21 &659032416
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &661545136
 GameObject:
   m_ObjectHideFlags: 0
@@ -10933,45 +10971,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!21 &718275530
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties:
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!108 &721227860 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 3808567235710681099, guid: 47b7585dfee2ed04abdc67c8f5a1657a,
@@ -11016,6 +11015,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Old Note
   noteContent: 'I heard Father Mateo speaking inside the church last night.
 
@@ -11197,7 +11197,6 @@ MonoBehaviour:
   subtitleText: "\u201CA ritual\u2026 to keep something trapped?"
   displayDuration: 4
   delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
   subtitleId: b86fd83423184c479d872765a6fcc070
 --- !u!114 &724227466
 MonoBehaviour:
@@ -11969,7 +11968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 718275530}
+  m_Material: {fileID: 659032416}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -13269,7 +13268,6 @@ MonoBehaviour:
   interactRange: 2
   playerTag: Player
   isBusy: 0
-  logUnexpectedPositionChanges: 1
 --- !u!1 &887013935
 GameObject:
   m_ObjectHideFlags: 0
@@ -13679,7 +13677,6 @@ MonoBehaviour:
   interactRange: 2
   playerTag: Player
   isBusy: 0
-  logUnexpectedPositionChanges: 1
 --- !u!1 &917863050
 GameObject:
   m_ObjectHideFlags: 0
@@ -14793,7 +14790,6 @@ MonoBehaviour:
   interactRange: 2
   playerTag: Player
   isBusy: 0
-  logUnexpectedPositionChanges: 1
 --- !u!114 &932680003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16701,6 +16697,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Father Mateo's Final Prayer
   noteContent: "If you found this, then the sacred items are together again.\r\n\rPlace
     the two candles, the Bible, and the cross where they belong inside the church.\r\n\rThese
@@ -21632,6 +21629,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Jude's Guard Log
   noteContent: 'Mil and I have been watching Father Mateo.
 
@@ -21794,7 +21792,6 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
   subtitleId: 545bf218e0b2420784bb2c76e7f86348
 --- !u!114 &1420467416
 MonoBehaviour:
@@ -27021,7 +27018,6 @@ MonoBehaviour:
   interactRange: 2
   playerTag: Player
   isBusy: 0
-  logUnexpectedPositionChanges: 1
 --- !u!114 &1775658488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27129,6 +27125,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 414109452}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Ann's Journal
   noteContent: "Laica came here earlier and left one candle with me.\r\n\rShe said
     Father Mateo needed it for the prayer inside the church. The other candle is
@@ -28350,6 +28347,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 675674281}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 339704663}
+  saveId: 
   noteTitle: Mil's Final Note
   noteContent: "Jude was right. Father Mateo is possessed.\r\n\rThe thing inside
     him is called Varen.\r\n\rWe tried to stop the ritual, but Varen killed Father
@@ -28489,7 +28487,6 @@ MonoBehaviour:
   subtitleText: "It\u2019s not in the church anymore\u2026"
   displayDuration: 4
   delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
   subtitleId: dbaeb89492984f4292e9f50be57c38e1
 --- !u!114 &1853023355
 MonoBehaviour:
@@ -28506,6 +28503,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 709685910}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Old note.
   noteContent: "Jude was right. Father Mateo is possessed.\r\n\rThe thing inside
     him is called Varen.\r\n\rWe tried to stop the ritual, but Varen killed Father
@@ -28534,6 +28532,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 1251300721}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Old Note
   noteContent: "Jude was right. Father Mateo is possessed.\r\n\rThe thing inside
     him is called Varen.\r\n\rWe tried to stop the ritual, but Varen killed Father
@@ -31302,6 +31301,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 1829975272}
   onCloseAudio: {fileID: 980127727}
+  saveId: 
   noteTitle: Shyna's Note
   noteContent: 'Laica is still preparing the candles Father Mateo asked for. I do
     not understand why he needs them for a simple prayer. He also asked us to prepare
@@ -54605,7 +54605,6 @@ MonoBehaviour:
   subtitleText: "They were trying to keep people out\u2026 why?"
   displayDuration: 4
   delayBeforeShow: 0.5
-  logPickupSubtitleDebug: 1
   subtitleId: c2cab7cfb1ff41db9a66df281823068f
 --- !u!4 &7770078832008455148
 Transform:
@@ -57592,7 +57591,6 @@ MonoBehaviour:
   interactRange: 2
   playerTag: Player
   isBusy: 0
-  logUnexpectedPositionChanges: 1
 --- !u!65 &8638546823166932146
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -102,12 +102,13 @@ public class ProgressionTrigger : MonoBehaviour
     string GetSavedStateKey()
     {
         string difficulty = PlayerPrefs.GetString("GameDifficulty", "Normal");
-        return $"ProgressionTrigger_{difficulty}_{triggerName}";
+        return GameProfiles.ProgressKey($"ProgressionTrigger_{difficulty}_{triggerName}");
     }
 
     void RegisterSavedStateKey()
     {
-        string keys = PlayerPrefs.GetString("ProgressionTriggerKeys", "");
+        string registryKey = GameProfiles.ProgressKey("ProgressionTriggerKeys");
+        string keys = PlayerPrefs.GetString(registryKey, "");
         string key = triggerName;
 
         if (string.IsNullOrEmpty(keys))
@@ -115,24 +116,25 @@ public class ProgressionTrigger : MonoBehaviour
         else if (!System.Array.Exists(keys.Split('|'), entry => entry == key))
             keys += "|" + key;
 
-        PlayerPrefs.SetString("ProgressionTriggerKeys", keys);
+        PlayerPrefs.SetString(registryKey, keys);
         PlayerPrefs.Save();
     }
 
     public static void ClearSavedStates()
     {
-        string keys = PlayerPrefs.GetString("ProgressionTriggerKeys", "");
+        string registryKey = GameProfiles.ProgressKey("ProgressionTriggerKeys");
+        string keys = PlayerPrefs.GetString(registryKey, "");
 
         if (!string.IsNullOrEmpty(keys))
         {
             foreach (string key in keys.Split('|'))
             {
-                PlayerPrefs.DeleteKey("ProgressionTrigger_Normal_" + key);
-                PlayerPrefs.DeleteKey("ProgressionTrigger_Hard_" + key);
+                PlayerPrefs.DeleteKey(GameProfiles.ProgressKey("ProgressionTrigger_Normal_" + key));
+                PlayerPrefs.DeleteKey(GameProfiles.ProgressKey("ProgressionTrigger_Hard_" + key));
             }
         }
 
-        PlayerPrefs.DeleteKey("ProgressionTriggerKeys");
+        PlayerPrefs.DeleteKey(registryKey);
         PlayerPrefs.Save();
     }
 

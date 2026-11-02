@@ -72,6 +72,6 @@ public class RandomKeySpawn : MonoBehaviour
     private string GetProfileSaveKey()
     {
         string difficulty = PlayerPrefs.GetString("GameDifficulty", "Normal");
-        return saveKey + "_" + difficulty;
+        return GameProfiles.ProgressKey(saveKey + "_" + difficulty);
     }
 }

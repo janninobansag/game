@@ -102,20 +102,20 @@ public class ProgressionSystem : MonoBehaviour
 
     public void LoadProgress()
     {
-        currentProgress = PlayerPrefs.GetInt(saveKey, 0);
+        currentProgress = PlayerPrefs.GetInt(GameProfiles.ProgressKey(saveKey), 0);
         isInitialized = true;
     }
 
     public void SaveProgress()
     {
-        PlayerPrefs.SetInt(saveKey, currentProgress);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey(saveKey), currentProgress);
         PlayerPrefs.Save();
     }
 
     public void ResetProgress()
     {
         currentProgress = 0;
-        PlayerPrefs.DeleteKey(saveKey);
+        PlayerPrefs.DeleteKey(GameProfiles.ProgressKey(saveKey));
         PlayerPrefs.Save();
     }
 

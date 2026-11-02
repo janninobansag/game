@@ -39,7 +39,7 @@ public partial class SaveSystem : MonoBehaviour
         // Just set the path based on difficulty, but don't initialize yet
         string difficulty = GetDifficultyForActiveScene();
         string fileName = difficulty == "Hard" ? "gameSave_Hard_v2.db" : "gameSave_v2.db";
-        savePath = Path.Combine(Application.persistentDataPath, fileName);
+        savePath = GameProfiles.GetSavePath(fileName);
 
         // ── Don't call InitializeDatabase() here ──
         // We will initialize only when needed

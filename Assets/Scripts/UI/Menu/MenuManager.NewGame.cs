@@ -7,6 +7,7 @@ public partial class MenuManager : MonoBehaviour
 {
     public void PlayGame()
     {
+        if (!RequireProfileSelection()) return;
         PlayClickSound();
 
         if (difficultyPanel != null)
@@ -17,6 +18,7 @@ public partial class MenuManager : MonoBehaviour
 
     public void StartNormal()
     {
+        if (!RequireProfileSelection()) return;
         PlayClickSound();
         ProgressionTrigger.ClearSavedStates();
         ObjectiveTrigger.ClearSavedStates();
@@ -32,25 +34,24 @@ public partial class MenuManager : MonoBehaviour
         }
 
         // ── Reset ALL PlayerPrefs keys ──
-        PlayerPrefs.SetInt("CandleOneRevealed", 0);
-        PlayerPrefs.SetInt("BibleSpawner", 0);
-        PlayerPrefs.SetInt("CrossSpawner", 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("CandleOneRevealed"), 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("BibleSpawner"), 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("CrossSpawner"), 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("CrossRevealed"), 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("BibbleRevealed"), 0);
         PlayerPrefs.SetInt("ShouldLoadSave", 0);
         PlayerPrefs.SetInt("SkipIntro", 0);
         PlayerPrefs.SetString("GameDifficulty", "Normal");
         PlayerPrefs.SetString("SavedScene", "chapter 1");
         PlayerPrefs.SetString("SaveTime", System.DateTime.Now.ToString("MM/dd/yyyy HH:mm"));
-        PlayerPrefs.DeleteKey("GameProgress");
+        PlayerPrefs.DeleteKey(GameProfiles.ProgressKey("GameProgress"));
         // A fresh game must choose a new Mansion key location.
-        PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Normal");
-        PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
-        PlayerPrefs.DeleteKey("WaitingRoomKeySpawnIndex_Normal");
-        PlayerPrefs.DeleteKey("WaitingRoomKeySpawnIndex_Hard");
-        PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
-        PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
-        PlayerPrefs.DeleteKey("WrenchSpawnIndex_Normal");
-        PlayerPrefs.DeleteKey("WrenchSpawnIndex_Hard");
+        ClearSavedSpawnChoices();
         PlayerPrefs.Save();
+
+        if (ProgressionSystem.Instance != null)
+            ProgressionSystem.Instance.ResetProgress();
+        CheckpointTrigger.HasCheckpointSaved = false;
 
         // Force SaveSystem to use Normal database
         if (SaveSystem.Instance != null)
@@ -75,6 +76,7 @@ public partial class MenuManager : MonoBehaviour
 
     public void StartHard()
     {
+        if (!RequireProfileSelection()) return;
         PlayClickSound();
         ProgressionTrigger.ClearSavedStates();
         ObjectiveTrigger.ClearSavedStates();
@@ -90,25 +92,24 @@ public partial class MenuManager : MonoBehaviour
         }
 
         // ── Reset ALL PlayerPrefs keys ──
-        PlayerPrefs.SetInt("CandleOneRevealed", 0);
-        PlayerPrefs.SetInt("BibleSpawner", 0);
-        PlayerPrefs.SetInt("CrossSpawner", 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("CandleOneRevealed"), 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("BibleSpawner"), 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("CrossSpawner"), 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("CrossRevealed"), 0);
+        PlayerPrefs.SetInt(GameProfiles.ProgressKey("BibbleRevealed"), 0);
         PlayerPrefs.SetInt("ShouldLoadSave", 0);
         PlayerPrefs.SetInt("SkipIntro", 0);
         PlayerPrefs.SetString("GameDifficulty", "Hard");
         PlayerPrefs.SetString("SavedScene", "chapter 2");
         PlayerPrefs.SetString("SaveTime", System.DateTime.Now.ToString("MM/dd/yyyy HH:mm"));
-        PlayerPrefs.DeleteKey("GameProgress");
+        PlayerPrefs.DeleteKey(GameProfiles.ProgressKey("GameProgress"));
         // A fresh game must choose a new Mansion key location.
-        PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Normal");
-        PlayerPrefs.DeleteKey("MansionKeySpawnIndex_Hard");
-        PlayerPrefs.DeleteKey("WaitingRoomKeySpawnIndex_Normal");
-        PlayerPrefs.DeleteKey("WaitingRoomKeySpawnIndex_Hard");
-        PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Normal");
-        PlayerPrefs.DeleteKey("FlashlightSpawnIndex_Hard");
-        PlayerPrefs.DeleteKey("WrenchSpawnIndex_Normal");
-        PlayerPrefs.DeleteKey("WrenchSpawnIndex_Hard");
+        ClearSavedSpawnChoices();
         PlayerPrefs.Save();
+
+        if (ProgressionSystem.Instance != null)
+            ProgressionSystem.Instance.ResetProgress();
+        CheckpointTrigger.HasCheckpointSaved = false;
 
         // Force SaveSystem to use Hard database
         if (SaveSystem.Instance != null)
@@ -133,7 +134,7 @@ public partial class MenuManager : MonoBehaviour
 
     private void ClearProgressionDataFromFile(string fileName)
     {
-        string dbPath = Path.Combine(Application.persistentDataPath, fileName);
+        string dbPath = GameProfiles.GetSavePath(fileName);
 
         if (!File.Exists(dbPath))
             return;
@@ -166,5 +167,21 @@ public partial class MenuManager : MonoBehaviour
         catch (System.Exception)
         {
         }
+    }
+
+    private static void ClearSavedSpawnChoices()
+    {
+        string[] keys =
+        {
+            "MansionKeySpawnIndex_Normal", "MansionKeySpawnIndex_Hard",
+            "WaitingRoomKeySpawnIndex_Normal", "WaitingRoomKeySpawnIndex_Hard",
+            "FlashlightSpawnIndex_Normal", "FlashlightSpawnIndex_Hard",
+            "WrenchSpawnIndex_Normal", "WrenchSpawnIndex_Hard",
+            "VaultKeySpawnIndex_Normal", "VaultKeySpawnIndex_Hard",
+            "OfficeKeySpawnIndex_Normal", "OfficeKeySpawnIndex_Hard"
+        };
+
+        foreach (string key in keys)
+            PlayerPrefs.DeleteKey(GameProfiles.ProgressKey(key));
     }
 }

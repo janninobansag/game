@@ -42,7 +42,7 @@ public class RandomWrenchSpawn : MonoBehaviour
             return;
         }
 
-        string profileKey = saveKey + "_" + PlayerPrefs.GetString("GameDifficulty", "Normal");
+        string profileKey = GameProfiles.ProgressKey(saveKey + "_" + PlayerPrefs.GetString("GameDifficulty", "Normal"));
         int index = PlayerPrefs.GetInt(profileKey, -1);
 
         if (index < 0 || index >= spawnPoints.Length || spawnPoints[index] == null)

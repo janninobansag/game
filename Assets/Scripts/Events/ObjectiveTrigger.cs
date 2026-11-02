@@ -152,7 +152,7 @@ public class ObjectiveTrigger : MonoBehaviour
     private string GetSavedStateKey()
     {
         string difficulty = PlayerPrefs.GetString("GameDifficulty", "Normal");
-        return $"ObjectiveTrigger_{difficulty}_{GetTriggerId()}";
+        return GameProfiles.ProgressKey($"ObjectiveTrigger_{difficulty}_{GetTriggerId()}");
     }
 
     private string GetTriggerId()
@@ -174,7 +174,7 @@ public class ObjectiveTrigger : MonoBehaviour
 
     private void RegisterSavedStateKey()
     {
-        const string registryKey = "ObjectiveTriggerKeys";
+        string registryKey = GameProfiles.ProgressKey("ObjectiveTriggerKeys");
         string key = GetTriggerId();
         string keys = PlayerPrefs.GetString(registryKey, "");
 
@@ -189,15 +189,15 @@ public class ObjectiveTrigger : MonoBehaviour
 
     public static void ClearSavedStates()
     {
-        const string registryKey = "ObjectiveTriggerKeys";
+        string registryKey = GameProfiles.ProgressKey("ObjectiveTriggerKeys");
         string keys = PlayerPrefs.GetString(registryKey, "");
 
         if (!string.IsNullOrEmpty(keys))
         {
             foreach (string key in keys.Split('|'))
             {
-                PlayerPrefs.DeleteKey("ObjectiveTrigger_Normal_" + key);
-                PlayerPrefs.DeleteKey("ObjectiveTrigger_Hard_" + key);
+                PlayerPrefs.DeleteKey(GameProfiles.ProgressKey("ObjectiveTrigger_Normal_" + key));
+                PlayerPrefs.DeleteKey(GameProfiles.ProgressKey("ObjectiveTrigger_Hard_" + key));
             }
         }
 

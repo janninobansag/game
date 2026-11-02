@@ -33,6 +33,9 @@ public partial class MenuManager : MonoBehaviour
 
     private void Update()
     {
+        if (!Application.isPlaying && profileTemplatesRoot != null && !profileTemplatesRoot.gameObject.activeSelf)
+            profileTemplatesRoot.gameObject.SetActive(true);
+
         if (aboutPanel != null && aboutPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
             CloseAbout();
     }

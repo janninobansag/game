@@ -182,6 +182,45 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6020965645523806278, guid: b176645ce344e2e4982fbfb9558e664c, type: 3}
+--- !u!21 &18106757
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ReliableBloodDamage
+  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Intensity: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    m_Colors:
+    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &19831440
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,7 +810,7 @@ Transform:
   m_GameObject: {fileID: 40835463}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.76, y: -0.25, z: 51.9}
+  m_LocalPosition: {x: 10.645, y: 6.147, z: 46.732}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3855,7 +3894,7 @@ Transform:
   m_GameObject: {fileID: 243422774}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -71.67, y: -7.15, z: 7.02}
+  m_LocalPosition: {x: -71.67, y: -7.291, z: 7.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6461,22 +6500,22 @@ PrefabInstance:
     - target: {fileID: -4249475081006935681, guid: c4ac5d2e1673b9c4a953f4f23e0cc682,
         type: 3}
       propertyPath: spawnPoints.Array.data[0]
-      value:
+      value: 
       objectReference: {fileID: 977493665}
     - target: {fileID: -4249475081006935681, guid: c4ac5d2e1673b9c4a953f4f23e0cc682,
         type: 3}
       propertyPath: spawnPoints.Array.data[1]
-      value:
+      value: 
       objectReference: {fileID: 10122337}
     - target: {fileID: -4249475081006935681, guid: c4ac5d2e1673b9c4a953f4f23e0cc682,
         type: 3}
       propertyPath: spawnPoints.Array.data[2]
-      value:
+      value: 
       objectReference: {fileID: 271164503}
     - target: {fileID: -4249475081006935681, guid: c4ac5d2e1673b9c4a953f4f23e0cc682,
         type: 3}
       propertyPath: spawnPoints.Array.data[3]
-      value:
+      value: 
       objectReference: {fileID: 877897194}
     - target: {fileID: 4690861355787627061, guid: c4ac5d2e1673b9c4a953f4f23e0cc682,
         type: 3}
@@ -9589,22 +9628,22 @@ PrefabInstance:
     - target: {fileID: 3995944305442618399, guid: 2395a460a030a3e49ae149efd35b4b94,
         type: 3}
       propertyPath: spawnPoints.Array.data[0]
-      value:
+      value: 
       objectReference: {fileID: 1715167255}
     - target: {fileID: 3995944305442618399, guid: 2395a460a030a3e49ae149efd35b4b94,
         type: 3}
       propertyPath: spawnPoints.Array.data[1]
-      value:
+      value: 
       objectReference: {fileID: 1588692078}
     - target: {fileID: 3995944305442618399, guid: 2395a460a030a3e49ae149efd35b4b94,
         type: 3}
       propertyPath: spawnPoints.Array.data[2]
-      value:
+      value: 
       objectReference: {fileID: 1018340315}
     - target: {fileID: 3995944305442618399, guid: 2395a460a030a3e49ae149efd35b4b94,
         type: 3}
       propertyPath: spawnPoints.Array.data[3]
-      value:
+      value: 
       objectReference: {fileID: 1632637841}
     - target: {fileID: 4207886303617557560, guid: 2395a460a030a3e49ae149efd35b4b94,
         type: 3}
@@ -9970,45 +10009,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 517787956}
   m_CullTransparentMesh: 1
---- !u!21 &520582096
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ReliableBloodDamage
-  m_Shader: {fileID: 4800000, guid: 43b46f7642a94e52b737a694657b2f0c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties:
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _Intensity: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    m_Colors:
-    - _Color: {r: 0.55, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &522890165
 GameObject:
   m_ObjectHideFlags: 0
@@ -10034,7 +10034,7 @@ Transform:
   m_GameObject: {fileID: 522890165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.6, y: -7.31, z: 61.43}
+  m_LocalPosition: {x: -22.46, y: -6.885, z: 63.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13443,6 +13443,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Note
   noteContent: 'If you are reading this, you woke up before he found you.
 
@@ -13930,6 +13931,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Old Note
   noteContent: 'I heard Father Mateo speaking inside the church last night.
 
@@ -15181,7 +15183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 520582096}
+  m_Material: {fileID: 18106757}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -22655,6 +22657,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Father Mateo's Final Prayer
   noteContent: "If you found this, then the sacred items are together again.\r\n\rPlace
     the two candles, the Bible, and the cross where they belong inside the church.\r\n\rThese
@@ -30848,6 +30851,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Jude's Guard Log
   noteContent: 'Mil and I have been watching Father Mateo.
 
@@ -36097,7 +36101,7 @@ Transform:
   m_GameObject: {fileID: 1632191440}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -47.57, y: -7.15, z: 44.91}
+  m_LocalPosition: {x: -47.57, y: -7.109, z: 45.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -38978,6 +38982,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 414109452}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Ann's Journal
   noteContent: "Laica came here earlier and left one candle with me.\r\n\rShe said
     Father Mateo needed it for the prayer inside the church. The other candle is
@@ -40355,6 +40360,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 675674281}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 339704663}
+  saveId: 
   noteTitle: Mil's Final Note
   noteContent: "Jude was right. Father Mateo is possessed.\r\n\rThe thing inside
     him is called Varen.\r\n\rWe tried to stop the ritual, but Varen killed Father
@@ -40510,6 +40516,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 709685910}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Old note.
   noteContent: "Jude was right. Father Mateo is possessed.\r\n\rThe thing inside
     him is called Varen.\r\n\rWe tried to stop the ritual, but Varen killed Father
@@ -40538,6 +40545,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 1251300721}
   onCloseObjective: {fileID: 0}
   onCloseAudio: {fileID: 0}
+  saveId: 
   noteTitle: Old Note
   noteContent: "Jude was right. Father Mateo is possessed.\r\n\rThe thing inside
     him is called Varen.\r\n\rWe tried to stop the ritual, but Varen killed Father
@@ -43786,6 +43794,7 @@ MonoBehaviour:
   linkedSubtitleTrigger: {fileID: 0}
   onCloseObjective: {fileID: 1829975272}
   onCloseAudio: {fileID: 980127727}
+  saveId: 
   noteTitle: Shyna's Note
   noteContent: 'Laica is still preparing the candles Father Mateo asked for. I do
     not understand why he needs them for a simple prayer. He also asked us to prepare
@@ -87310,6 +87319,7 @@ MonoBehaviour:
   - {fileID: 2331808544771346170}
   teleportInterval: 0.12
   triggerOnce: 1
+  saveId: 
   teleportAudioSource: {fileID: 8735502187682799622}
   teleportSound: {fileID: 0}
   teleportSoundVolume: 1

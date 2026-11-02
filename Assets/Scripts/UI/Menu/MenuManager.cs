@@ -78,5 +78,6 @@ public partial class MenuManager : MonoBehaviour
         UpdateLoadButtonVisibility();
         UpdateLoadButtonsVisibility();
         LoadAndDisplayProgression();
+        InitializeProfileMenu();
     }
 }

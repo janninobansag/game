@@ -67,9 +67,17 @@ public partial class MonsterAI_New : MonoBehaviour
     private bool hasTriggeredJumpscare = false;
     private readonly AIEncounterPause encounterPause = new AIEncounterPause();
 
-    // ── Q&A State ──
-    private enum State { Patrol, Chase, Jumpscare, Idle, QnA }
-    private State currentState = State.Patrol;
+    // FINITE STATE MACHINE (FSM): Update selects one high-level behavior for White Lady each frame.
+    private enum State
+    {
+        Patrol,    // Walk between patrol destinations while the player is not detected.
+        Chase,     // Move toward a visible player who is within detection range.
+        Jumpscare, // Stop close to the player and start the catch sequence when in attack range.
+        Idle,      // Pause briefly between patrol destinations.
+        QnA        // Stay still while the player answers the encounter question.
+    }
+
+    private State currentState = State.Patrol; // Start in patrol mode until detection changes the state.
 
     void Start()
     {
@@ -138,7 +146,7 @@ public partial class MonsterAI_New : MonoBehaviour
         while (AIEncounterGate.IsBlocked(this))
             yield return null;
 
-        currentState = State.Patrol;
+        currentState = State.Patrol; // Initialize the FSM in its normal roaming state.
         isIdle = false;
         agent.isStopped = false;
         agent.speed = walkSpeed;
@@ -246,43 +254,45 @@ public partial class MonsterAI_New : MonoBehaviour
             }
         }
 
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position); // Measure distance for FSM detection and attack transitions.
         bool canSeePlayer = CanSeePlayer();
 
         bool isInBush = IsPlayerInBush();
-        bool playerVisible = IsPlayerVisible() && !isInBush;
+        bool playerVisible = IsPlayerVisible() && !isInBush; // Bushes and obstacles prevent the FSM from treating the player as visible.
 
+        // FSM transition: a visible player inside detection range changes White Lady to Chase or Jumpscare.
         if (playerVisible && distanceToPlayer <= detectionRange)
         {
-            playerInSight = true;
+            playerInSight = true; // Record that the detection condition is currently satisfied.
             if (distanceToPlayer <= attackRange && !hasTriggeredJumpscare)
-                currentState = State.Jumpscare;
+                currentState = State.Jumpscare; // Enter Jumpscare when close enough and no jumpscare is already active.
             else
-                currentState = State.Chase;
+                currentState = State.Chase; // Otherwise pursue the visible player.
         }
         else
         {
-            playerInSight = false;
+            playerInSight = false; // Clear the detection flag when the player cannot be seen nearby.
             if (currentState != State.Jumpscare && currentState != State.Idle && currentState != State.QnA)
-                currentState = State.Patrol;
+                currentState = State.Patrol; // Return to patrol unless an interrupt state must finish first.
         }
 
+        // FSM dispatch: run the behavior belonging to the state chosen above.
         switch (currentState)
         {
-            case State.Patrol:
-                Patrol();
-                break;
-            case State.Chase:
-                Chase();
-                break;
-            case State.Jumpscare:
-                Jumpscare();
-                break;
-            case State.Idle:
-                Idle();
-                break;
-            case State.QnA:
-                break;
+            case State.Patrol: // The patrol state moves White Lady between destinations.
+                Patrol(); // Execute patrol behavior for this frame.
+                break; // Finish this state branch so no other state runs this frame.
+            case State.Chase: // The chase state follows the detected player.
+                Chase(); // Execute chase behavior for this frame.
+                break; // Finish this state branch so no other state runs this frame.
+            case State.Jumpscare: // The jumpscare state checks range and starts the encounter.
+                Jumpscare(); // Execute jumpscare behavior for this frame.
+                break; // Finish this state branch so no other state runs this frame.
+            case State.Idle: // The idle state pauses before choosing the next patrol destination.
+                Idle(); // Execute idle behavior for this frame.
+                break; // Finish this state branch so no other state runs this frame.
+            case State.QnA: // Q&A is controlled by its coroutine and input callbacks, so Update does no movement here.
+                break; // Keep White Lady in Q&A without running another movement state.
         }
 
         UpdateAnimations();
@@ -333,98 +343,104 @@ public partial class MonsterAI_New : MonoBehaviour
         return true;
     }
 
+    // Patrol state's actions and its transition to Idle when the current route ends.
     void Patrol()
     {
-        isChasing = false;
-        agent.speed = walkSpeed;
-        agent.isStopped = false;
+        isChasing = false; // Stop chase audio and report that active pursuit has ended.
+        agent.speed = walkSpeed; // Use the walking speed while patrolling.
+        agent.isStopped = false; // Allow the NavMeshAgent to follow its patrol path.
 
+        // A missing or completed path means patrol movement has reached a pause point.
         if (!agent.hasPath || agent.remainingDistance < 0.5f)
         {
             if (!isIdle)
             {
-                isIdle = true;
-                idleTimer = Random.Range(idleTimeMin, idleTimeMax);
-                currentState = State.Idle;
+                isIdle = true; // Prevent repeatedly starting the same idle transition.
+                idleTimer = Random.Range(idleTimeMin, idleTimeMax); // Choose how long this idle state lasts.
+                currentState = State.Idle; // Transition from Patrol to Idle.
             }
         }
     }
 
+    // Idle state's actions and transition back to Patrol after its timer expires.
     void Idle()
     {
-        agent.isStopped = true;
-        isChasing = false;
+        agent.isStopped = true; // Hold position while the idle state is active.
+        isChasing = false; // Ensure chase audio is not treated as active while idle.
 
-        idleTimer -= Time.deltaTime;
+        idleTimer -= Time.deltaTime; // Count down the remaining idle duration.
         if (idleTimer <= 0f)
         {
-            isIdle = false;
-            agent.isStopped = false;
-            SetNewPatrolTarget();
-            currentState = State.Patrol;
+            isIdle = false; // Clear the idle flag before resuming movement.
+            agent.isStopped = false; // Allow the NavMeshAgent to move again.
+            SetNewPatrolTarget(); // Select the route for the next patrol cycle.
+            currentState = State.Patrol; // Transition from Idle back to Patrol.
         }
     }
 
+    // Chase state's actions; the state remains Chase while the player is detected in range.
     void Chase()
     {
-        isChasing = true;
-        agent.speed = chaseSpeed;
-        agent.isStopped = false;
+        isChasing = true; // Mark pursuit active so the chase audio and animation can play.
+        agent.speed = chaseSpeed; // Apply the faster movement speed used in Chase.
+        agent.isStopped = false; // Let the NavMeshAgent move toward the player.
 
-        if (player != null)
+        if (player != null) // Only calculate pursuit movement when the player reference exists.
         {
-            if (Time.time >= nextPaintedTreeDestinationUpdate)
+            if (Time.time >= nextPaintedTreeDestinationUpdate) // Refresh the route only at the configured interval.
             {
-                SetDestinationAvoidingPaintedTrees(player.position);
-                nextPaintedTreeDestinationUpdate = Time.time + paintedTreeDestinationRefreshRate;
+                SetDestinationAvoidingPaintedTrees(player.position); // Set a route toward the player that accounts for painted trees.
+                nextPaintedTreeDestinationUpdate = Time.time + paintedTreeDestinationRefreshRate; // Schedule the next route update.
             }
 
-            Vector3 direction = (player.position - transform.position).normalized;
-            direction.y = 0f;
-            if (direction != Vector3.zero)
+            Vector3 direction = (player.position - transform.position).normalized; // Find the direction from White Lady to the player.
+            direction.y = 0f; // Keep rotation level so she does not tilt vertically.
+            if (direction != Vector3.zero) // Avoid creating a rotation from a zero-length direction.
             {
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                Quaternion lookRotation = Quaternion.LookRotation(direction); // Compute the horizontal facing rotation.
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Turn smoothly toward the player.
             }
         }
     }
 
+    // Jumpscare state's actions; it returns to Chase if the player leaves attack range.
     void Jumpscare()
     {
-        if (isJumpscaring || hasTriggeredJumpscare) return;
+        if (isJumpscaring || hasTriggeredJumpscare) return; // Do not start a second jumpscare while one is already running.
 
-        agent.isStopped = true;
+        agent.isStopped = true; // Stop navigation while checking whether the player is close enough to catch.
 
-        if (player != null)
+        if (player != null) // A catch can only happen when the player reference is valid.
         {
-            Vector3 direction = (player.position - transform.position).normalized;
-            direction.y = 0f;
-            if (direction != Vector3.zero)
+            Vector3 direction = (player.position - transform.position).normalized; // Find the horizontal direction toward the player.
+            direction.y = 0f; // Keep White Lady upright while she turns.
+            if (direction != Vector3.zero) // Skip rotation if White Lady and player occupy the same position.
             {
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                Quaternion lookRotation = Quaternion.LookRotation(direction); // Compute the facing rotation for the encounter.
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Turn smoothly toward the player.
             }
 
-            float distance = Vector3.Distance(transform.position, player.position);
-            if (distance > attackRange + 1f)
+            float distance = Vector3.Distance(transform.position, player.position); // Measure whether the player is still in catch range.
+            if (distance > attackRange + 1f) // Add a small tolerance so NavMesh spacing does not block the transition.
             {
-                currentState = State.Chase;
-                agent.isStopped = false;
-                return;
+                currentState = State.Chase; // Transition back to Chase if the player is no longer close enough to catch.
+                agent.isStopped = false; // Resume movement after returning to Chase.
+                return; // Stop this state update before any jumpscare can start.
             }
 
-            if (jumpscareTimer <= 0f)
+            if (jumpscareTimer <= 0f) // Start a catch only after the cooldown has elapsed.
             {
-                PerformJumpscare();
-                jumpscareTimer = jumpscareCooldown;
+                PerformJumpscare(); // Begin the jumpscare/Q&A encounter sequence.
+                jumpscareTimer = jumpscareCooldown; // Set the cooldown before another catch can be attempted.
             }
         }
     }
 
+    // Entry action called by the Jumpscare state after its range and cooldown checks pass.
     void PerformJumpscare()
     {
-        if (hasTriggeredJumpscare || !AIEncounterGate.TryBegin(this)) return;
-        hasTriggeredJumpscare = true;
+        if (hasTriggeredJumpscare || !AIEncounterGate.TryBegin(this)) return; // Stop duplicates or defer if another AI owns the encounter.
+        hasTriggeredJumpscare = true; // Lock this catch so Update cannot start it again.
 
         // The jumpscare and chase use this same AudioSource. Stop the looping chase
         // before playing the one-shot so the two sounds never overlap.
@@ -450,14 +466,14 @@ public partial class MonsterAI_New : MonoBehaviour
             JumpscareSystemNEW.Instance.TriggerJumpscare(gameObject, true);
         }
 
-        isJumpscaring = true;
-        isWaitingForQnA = true;
-        jumpscareAnimTimer = 2.23f;
-        jumpscareLockPosition = transform.position;
-        agent.enabled = false;
-        transform.position = jumpscareLockPosition;
+        isJumpscaring = true; // Tell Update and animation logic that the jumpscare sequence is active.
+        isWaitingForQnA = true; // Keep the jumpscare state active until the question flow starts or aborts.
+        jumpscareAnimTimer = 2.23f; // Set how long the jumpscare animation lock should last.
+        jumpscareLockPosition = transform.position; // Save White Lady's position for the locked animation.
+        agent.enabled = false; // Disable navigation so the agent cannot move during the jumpscare.
+        transform.position = jumpscareLockPosition; // Hold the monster at the saved jumpscare position.
 
-        StartCoroutine(TriggerQnADelayed());
+        StartCoroutine(TriggerQnADelayed()); // Start the delayed transition from jumpscare to Q&A.
     }
 
     IEnumerator TriggerQnADelayed()
@@ -482,7 +498,7 @@ public partial class MonsterAI_New : MonoBehaviour
         agent.enabled = true;
         hasTriggeredJumpscare = false;
         jumpscareTimer = jumpscareCooldown;
-        currentState = State.Patrol;
+        currentState = State.Patrol; // Resume the normal FSM state if the encounter cannot proceed to Q&A.
         SetNewPatrolTarget();
         JumpscareSystemNEW.Instance?.ReleaseJumpscareLock();
         yield return StartCoroutine(WaitForJumpscareRelease());
@@ -584,7 +600,7 @@ public partial class MonsterAI_New : MonoBehaviour
 
     public void ResetMonster()
     {
-        currentState = State.Patrol;
+        currentState = State.Patrol; // Reset the FSM so the monster restarts in patrol mode.
         agent.Warp(startPosition);
         agent.ResetPath();
         agent.isStopped = false;

@@ -80,7 +80,7 @@ public partial class MonsterAI_New
         isResolvingQnA = false;
         isQnAComplete = false;
         hasUnlockedAfterQnA = false;
-        currentState = State.QnA;
+        currentState = State.QnA; // Transition into Q&A so Update stops patrol and chase movement.
         isWaitingForAnswer = false;
         hasAnswered = false;
         SetQnAIdleAnimation();
@@ -459,7 +459,7 @@ public partial class MonsterAI_New
         qnaPanelHiddenForPause = false;
         isWaitingForAnswer = false;
         hasAnswered = false;
-        currentState = State.Patrol;
+        currentState = State.Patrol; // Return to patrol after the Q&A closes.
         agent.isStopped = false;
         agent.speed = walkSpeed;
 
@@ -501,7 +501,7 @@ public partial class MonsterAI_New
             animator.SetBool("run", false);
         }
 
-        currentState = State.Patrol;
+        currentState = State.Patrol; // Ensure the reset state is Patrol before choosing a fresh route.
 
         SetNewPatrolTarget();
 
