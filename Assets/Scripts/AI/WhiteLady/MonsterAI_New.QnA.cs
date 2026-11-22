@@ -99,7 +99,7 @@ public partial class MonsterAI_New
             currentQuestionIndex = Random.Range(0, questions.Length);
         }
         usedQuestionIndices.Add(currentQuestionIndex);
-        currentQuestion = questions[currentQuestionIndex];
+        currentQuestion = questions[currentQuestionIndex]?.CreateShuffledCopy();
 
         if (qnaPanel != null)
         {

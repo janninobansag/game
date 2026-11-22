@@ -60,6 +60,7 @@ public partial class SettingsPanel : MonoBehaviour
     public int currentQuality;
     void Awake()
     {
+        InitializeLanguageConfirmation();
         LoadAllSettings();
         ApplyAllSettings();
         ApplyFrameRateCap();

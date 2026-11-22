@@ -154,14 +154,24 @@ public class PlayerController : MonoBehaviour
 
         isSprinting = wantsToSprint && canSprint;
 
+        if (staminaController != null)
+        {
+            staminaController.UpdateStamina(isSprinting);
+            if (staminaController.IsExhaustionStunned)
+            {
+                horizontalVelocity = Vector3.zero;
+                isSprinting = false;
+                wasSprintingBeforeJump = false;
+                return;
+            }
+            isSprinting = isSprinting && staminaController.CanSprint;
+        }
+
         // Do not retain movement momentum while crouching after the player
         // releases the movement keys. This must not depend on the ground check.
         if (isCrouching && input.sqrMagnitude <= 0.001f)
         {
             horizontalVelocity = Vector3.zero;
-
-            if (staminaController != null)
-                staminaController.UpdateStamina(false);
 
             return;
         }
@@ -180,13 +190,13 @@ public class PlayerController : MonoBehaviour
 
         horizontalVelocity = Vector3.MoveTowards(
             horizontalVelocity, targetVelocity, acceleration * Time.deltaTime);
-
-        if (staminaController != null)
-            staminaController.UpdateStamina(isSprinting);
     }
 
     void HandleJump()
     {
+        if (staminaController != null && staminaController.IsExhaustionStunned)
+            return;
+
         if (Input.GetButtonDown("Jump") && isGrounded && !isCrouching)
         {
             velocity.y = Mathf.Sqrt(2f * Mathf.Abs(gravity) * jumpHeight);

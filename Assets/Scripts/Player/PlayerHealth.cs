@@ -92,8 +92,14 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        TakeDamage(damage, false);
+    }
+
+    // Exhaustion is a guaranteed cost even during enemy-hit invulnerability.
+    public void TakeDamage(float damage, bool ignoreInvincibility)
+    {
         if (isDead) return;
-        if (isInvincible) return;
+        if (isInvincible && !ignoreInvincibility) return;
 
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
@@ -110,7 +116,7 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
-        else
+        else if (!isInvincible)
         {
             // Start invincibility frames
             StartCoroutine(InvincibilityFrames());

@@ -4,6 +4,11 @@ public partial class SettingsPanel : MonoBehaviour
 {
     void OnDestroy()
     {
+        CancelLanguageChange();
+        if (confirmLanguageButton != null)
+            confirmLanguageButton.onClick.RemoveListener(ConfirmLanguageChange);
+        if (cancelLanguageButton != null)
+            cancelLanguageButton.onClick.RemoveListener(CancelLanguageChange);
         if (volumeSlider != null)
             volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
         if (sensitivitySlider != null)

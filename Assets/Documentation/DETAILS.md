@@ -76,6 +76,8 @@ When Tikbalang reaches the configurable **Catch Range** (default `1.4`), it star
 
 The `TikbalangAI` Inspector exposes the Q&A panel, questions, answer options, correct-answer index, timing, wrong-answer damage, catch range, cooldown, and optional jumpscare camera settings.
 
+Tikbalang and White Lady shuffle the four answer choices whenever a new question is presented. The correct-answer index follows its option into the shuffled slot. Each encounter uses a copy, preserving the question bank configured in the Inspector. Localization is applied after shuffling, and pausing or resuming the same question keeps its current choice order.
+
 ### Shadows And Voices
 
 The forest contains shadows and voices that may sound like the player's mother, friends, or the player. The warning is: **Do not answer.**
@@ -133,9 +135,11 @@ Books, notes, and picture frames use a shared `PlayerController.IsReadingDocumen
 
 ### Hard-Mode Stamina
 
-Hard mode uses `StaminaController.cs` on the Chapter 2 player. Holding `Left Shift` drains a 100-point stamina bar over eight seconds. After a 0.5-second delay without sprinting, stamina recovers over about five seconds. At zero stamina, the player walks until stamina recovers. Normal mode has unlimited sprinting and does not show the stamina bar.
+Hard mode uses `StaminaController.cs` on the Chapter 2 player. Holding `Left Shift` drains a 100-point stamina bar over eight seconds. After a 0.5-second recovery delay, stamina recovers at 20 points per second. Reaching zero immediately stops horizontal movement and prevents jumping for 0.6 seconds; camera look and gravity continue. After that stun, the player can walk but cannot sprint until stamina reaches 30% of its maximum. During exhaustion, stamina recovers even if Shift remains held. Once sprinting is available again, holding Shift without sprinting pauses recovery until Shift is released. Pausing freezes the stun and recovery timers. Normal mode has unlimited sprinting and does not show the stamina bar.
 
-The current stamina value is saved in the mode's SQLite database and restored when a Hard-mode save is loaded.
+Each time sprinting drains stamina to zero, the player loses 8 HP once, even during damage invulnerability. Remaining at zero does not repeatedly damage the player. The penalty uses the normal health UI, damage effects, and death handling, and can be fatal.
+
+The current stamina value is saved in the mode's SQLite database and restored when a Hard-mode save is loaded. Loading below 30% keeps sprinting locked until the recovery threshold is reached; loading at zero also applies the 0.6-second exhaustion stun without charging the HP penalty again. The stun duration, recovery threshold, and exhaustion damage are adjustable in the StaminaController Inspector.
 
 `CameraHeadBob.cs` checks whether sprinting is actually permitted. If stamina reaches zero while Shift is still held, the camera and held item use the normal walking bob instead of sprint bob.
 
