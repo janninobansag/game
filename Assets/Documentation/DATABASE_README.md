@@ -50,6 +50,10 @@ One row is stored in this table. It is loaded whenever the menu settings manager
 | `QualityLevel` | Graphics quality: 0 Low, 1 Medium, 2 High. |
 | `Language` | 0 English, 1 Korean, 2 Tagalog. |
 
+In the main menu or either chapter's Settings, selecting a different language first opens **Language Confirmation**. The message and Confirm/Cancel buttons use the current language. Confirm applies the requested language; Cancel keeps the current language. Other settings controls are disabled while confirmation is open. Escape cancels confirmation (P also cancels it while paused).
+
+In either chapter, open **Pause > Settings**, select **English**, **Tagalog**, or **Korean**, confirm, and press **Save**. Language selection is previewed in the settings UI until Save commits it to the shared `settings.db` and the `GameLanguage` PlayerPrefs cache. Save resumes gameplay. Leaving with Escape restores the saved settings; reopening Settings also reloads the saved selection. Language remains shared across player profiles. The confirmation UI is editable under **Canvas > SettingsPanel > Language Confirmation** in each scene.
+
 Connections:
 
 - `SettingsPanel.cs` reads the row on menu startup and applies the sliders, labels, graphics, volume, and language.

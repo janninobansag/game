@@ -47,6 +47,7 @@ public partial class SettingsPanel : MonoBehaviour
 
     public void RestoreSavedSettings()
     {
+        CancelLanguageChange();
         SettingsData savedSettings;
         if (SettingsDatabase.TryLoad(out savedSettings))
         {

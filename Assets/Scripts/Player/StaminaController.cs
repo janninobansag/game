@@ -12,22 +12,32 @@ public class StaminaController : MonoBehaviour
     [Min(0f)] public float recoveryDelay = 0.5f;
     [Min(0f)] public float recoveryPerSecond = 20f;
 
+    [Header("Exhaustion")]
+    [Min(0f)] public float exhaustionStunDuration = 0.6f;
+    [Range(0.01f, 1f)] public float sprintRecoveryThreshold = 0.3f;
+    [Min(0f)] public float exhaustionDamage = 8f;
+
     [Header("UI")]
     [Tooltip("Assign the StaminaBar Slider from the Chapter 2 Canvas.")]
     public Slider staminaBar;
 
     private float currentStamina;
     private float recoveryTimer;
+    private float exhaustionStunTimer;
+    private bool isExhausted;
+    private PlayerHealth playerHealth;
     private float nextStaminaBarSearchTime;
     private float lastDisplayedStamina = float.NaN;
 
     public float CurrentStamina => currentStamina;
     public bool IsHardMode => SceneManager.GetActiveScene().name == "chapter 2" || PlayerPrefs.GetString("GameDifficulty", "Normal") == "Hard";
-    public bool CanSprint => !IsHardMode || currentStamina > 0.01f;
+    public bool IsExhaustionStunned => IsHardMode && exhaustionStunTimer > 0f;
+    public bool CanSprint => !IsHardMode || (!isExhausted && !IsExhaustionStunned && currentStamina > 0.01f);
 
     void Awake()
     {
         currentStamina = maxStamina;
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     void Start()
@@ -42,20 +52,33 @@ public class StaminaController : MonoBehaviour
         {
             currentStamina = maxStamina;
             recoveryTimer = 0f;
+            exhaustionStunTimer = 0f;
+            isExhausted = false;
             RefreshUI();
             return;
         }
 
         bool isHoldingShift = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        exhaustionStunTimer = Mathf.Max(0f, exhaustionStunTimer - Time.deltaTime);
 
-        if (isSprinting && currentStamina > 0f)
+        if (isSprinting && !isExhausted && currentStamina > 0f)
         {
             currentStamina = Mathf.Max(0f, currentStamina - sprintDrainPerSecond * Time.deltaTime);
             recoveryTimer = 0f;
+            if (currentStamina <= 0f)
+            {
+                isExhausted = true;
+                exhaustionStunTimer = exhaustionStunDuration;
+                // Charge once on depletion, never every frame at zero or on load.
+                if (playerHealth == null)
+                    playerHealth = GetComponent<PlayerHealth>();
+                if (playerHealth != null && exhaustionDamage > 0f)
+                    playerHealth.TakeDamage(exhaustionDamage, true);
+            }
         }
-        // Holding Shift means the player is still trying to sprint. Do not let
-        // stamina recover until they release it, including when stamina is empty.
-        else if (isHoldingShift)
+        // Exhaustion must recover even while Shift is held, otherwise a player
+        // could remain stuck at zero instead of reaching the sprint threshold.
+        else if (isHoldingShift && !isExhausted)
         {
             recoveryTimer = 0f;
         }
@@ -66,6 +89,9 @@ public class StaminaController : MonoBehaviour
                 currentStamina = Mathf.Min(maxStamina, currentStamina + recoveryPerSecond * Time.deltaTime);
         }
 
+        if (isExhausted && currentStamina >= maxStamina * sprintRecoveryThreshold)
+            isExhausted = false;
+
         RefreshUI();
     }
 
@@ -73,6 +99,10 @@ public class StaminaController : MonoBehaviour
     {
         currentStamina = Mathf.Clamp(savedStamina, 0f, maxStamina);
         recoveryTimer = 0f;
+        // Saves contain the stamina value, so conservatively retain the sprint
+        // lock below the recovery threshold after loading or respawning.
+        isExhausted = currentStamina < maxStamina * sprintRecoveryThreshold;
+        exhaustionStunTimer = currentStamina <= 0f ? exhaustionStunDuration : 0f;
         RefreshUI();
     }
 

@@ -57,6 +57,7 @@ public partial class TikbalangAI
             yield break;
         }
 
+        currentQuestion = currentQuestion.CreateShuffledCopy();
         SetPlayerQuestionLock(true);
         PopulateQuestionUI();
         qnaPanel.SetActive(true);

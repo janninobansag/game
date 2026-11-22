@@ -13,6 +13,7 @@ public partial class SettingsPanel : MonoBehaviour
 
     public void CloseSettings()
     {
+        CancelLanguageChange();
         // PlayClickSound(); // Commented out - no SoundManager
         if (settingsPanel != null)
             settingsPanel.SetActive(false);

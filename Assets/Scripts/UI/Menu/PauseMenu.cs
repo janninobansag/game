@@ -107,6 +107,16 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        if (isPaused && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P)))
+        {
+            SettingsPanel settingsManager = FindObjectOfType<SettingsPanel>();
+            if (settingsManager != null && settingsManager.IsLanguageConfirmationOpen)
+            {
+                settingsManager.CancelLanguageChange();
+                return;
+            }
+        }
+
         if (isPaused)
         {
             UpdatePauseMenuHover();
@@ -316,6 +326,13 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenSettings()
     {
+        SettingsPanel settingsManager = FindObjectOfType<SettingsPanel>();
+        if (settingsManager != null)
+        {
+            settingsManager.RestoreSavedSettings();
+            settingsManager.ShowSettingsPanel();
+        }
+
         // Re-read saved settings here as well as at scene startup. This supports
         // pressing Play directly from Chapter 2, without first opening the menu scene.
         LoadSettings();
@@ -366,6 +383,10 @@ public class PauseMenu : MonoBehaviour
         // for controls behind it. Only selectable controls should receive raycasts.
         foreach (Graphic graphic in panel.GetComponentsInChildren<Graphic>(true))
         {
+            // Keep the confirmation backdrop able to intercept pointer events.
+            Canvas graphicCanvas = graphic.GetComponentInParent<Canvas>();
+            if (graphicCanvas != panelCanvas && graphicCanvas != null && graphicCanvas.overrideSorting)
+                continue;
             if (graphic.GetComponent<Selectable>() == null)
                 graphic.raycastTarget = false;
         }

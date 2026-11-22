@@ -6,6 +6,11 @@ public partial class SettingsPanel : MonoBehaviour
 {
     public void SetLanguage(int languageIndex)
     {
+        RequestLanguageChange(languageIndex);
+    }
+
+    private void ApplyLanguageChange(int languageIndex)
+    {
         CaptureCurrentSliderValues();
         currentLanguage = Mathf.Clamp(languageIndex, 0, 2);
         // Pause settings are a preview until the player presses Save. The main menu
