@@ -1,6 +1,7 @@
 // VAREN Chapter 2 Hard-mode save database ERD: gameSave_Hard_v2.db
 // Paste this file into https://dbdiagram.io to view the diagram.
-// Source: Assets/SaveDatabaseSchema.cs and Assets/SaveModels.cs
+// Source: Assets/Scripts/Save/SaveDatabaseSchema.cs and Assets/Scripts/Save/SaveModels.cs
+// Schema version 11; updated 2026-11-25.
 // Every game-state table references SaveProfileData.Id through SaveProfileId.
 
 Table SaveProfileData {
@@ -82,6 +83,7 @@ Table GameStateData {
 
 Table DroppedItemData {
   Id integer [pk, increment]
+  BananaFruitId varchar [note: 'Logical link to BananaFruitData.FruitId for world bananas; null for other items. Not a SQLite foreign key.']
   SaveProfileId integer [not null]
   ItemName varchar
   IsHeld boolean
@@ -192,23 +194,53 @@ Table GeneratorCoverData {
 }
 
 // Real foreign-key relationships
-Ref: SaveProfileData.Id < PlayerData.SaveProfileId
-Ref: SaveProfileData.Id < InventoryData.SaveProfileId
-Ref: SaveProfileData.Id < DoorData.SaveProfileId
-Ref: SaveProfileData.Id < DrawerData.SaveProfileId
-Ref: SaveProfileData.Id < RitualData.SaveProfileId
-Ref: SaveProfileData.Id < NoteData.SaveProfileId
-Ref: SaveProfileData.Id < GameStateData.SaveProfileId
-Ref: SaveProfileData.Id < DroppedItemData.SaveProfileId
-Ref: SaveProfileData.Id < FlashlightData.SaveProfileId
-Ref: SaveProfileData.Id < KeyData.SaveProfileId
-Ref: SaveProfileData.Id < BatteryData.SaveProfileId
-Ref: SaveProfileData.Id < RitualItemData.SaveProfileId
-Ref: SaveProfileData.Id < ProgressionData.SaveProfileId
-Ref: SaveProfileData.Id < SubtitleData.SaveProfileId
-Ref: SaveProfileData.Id < StaminaData.SaveProfileId
-Ref: SaveProfileData.Id < IntroData.SaveProfileId
-Ref: SaveProfileData.Id < AIPositionData.SaveProfileId
-Ref: SaveProfileData.Id < WrenchData.SaveProfileId
-Ref: SaveProfileData.Id < GasData.SaveProfileId
-Ref: SaveProfileData.Id < GeneratorCoverData.SaveProfileId
+Ref: SaveProfileData.Id < PlayerData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < InventoryData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < DoorData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < DrawerData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < RitualData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < NoteData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < GameStateData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < DroppedItemData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < FlashlightData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < KeyData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < BatteryData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < RitualItemData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < ProgressionData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < SubtitleData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < StaminaData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < IntroData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < AIPositionData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < WrenchData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < GasData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < GeneratorCoverData.SaveProfileId [delete: cascade]
+
+// Schema 11: independent banana snapshots in each profile's chapter database.
+Table BananaHarvestData {
+  SceneName varchar [pk]
+  SaveProfileId integer [not null]
+  CooldownRemaining float [note: 'Shared tree cooldown in remaining game seconds; starts at 30 after the final fruit is removed.']
+  SelectedInventoryIndex integer
+}
+
+Table BananaFruitData {
+  HasBeenPickedUp boolean [not null, default: false, note: 'First pickup permanently cancels uncollected expiry.']
+  UncollectedSecondsRemaining float [not null, default: 30]
+  FruitId varchar [pk]
+  SaveProfileId integer [not null]
+  SceneName varchar
+  InventoryIndex integer [note: '-1 = world fruit; nonnegative = inventory slot.']
+  IsActive boolean
+  HealingAmount float [note: 'HP restored per fruit; configured to 20 on the Banana Fruit prefab.']
+  ScaleX float
+  ScaleY float
+  ScaleZ float
+}
+
+Ref: SaveProfileData.Id < BananaHarvestData.SaveProfileId [delete: cascade]
+Ref: SaveProfileData.Id < BananaFruitData.SaveProfileId [delete: cascade]
+
+// BananaFruitData contains no Pos/Rot columns; world transforms use DroppedItemData.
+
+// Chapter 2 Hard uses its own database per player profile.
+// Tree placements remain Unity scene objects. DropLight is recreated at load, not stored as a table.

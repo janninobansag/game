@@ -361,7 +361,10 @@ public partial class MonsterAI_New
 
     void OnDestroy()
     {
-        for (int i = 0; i < qnaButtons.Count; i++)
+        // Cleanup can run on an instance whose initialization was interrupted.
+        if (qnaButtons == null || qnaButtonActions == null)
+            return;
+        for (int i = 0; i < Mathf.Min(qnaButtons.Count, qnaButtonActions.Count); i++)
         {
             if (qnaButtons[i] != null)
                 qnaButtons[i].onClick.RemoveListener(qnaButtonActions[i]);

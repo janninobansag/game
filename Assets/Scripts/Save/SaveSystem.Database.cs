@@ -31,6 +31,18 @@ public partial class SaveSystem : MonoBehaviour
     }
     private void EnsureDatabaseReady()
     {
+        // A persistent manager may survive a chapter or profile change. Never
+        // write the new chapter into its previously opened standard save file.
+        string sceneName = SceneManager.GetActiveScene().name;
+        string currentFile = Path.GetFileName(savePath);
+        if ((sceneName == "chapter 1" || sceneName == "chapter 2") &&
+            (currentFile == "gameSave_v2.db" || currentFile == "gameSave_Hard_v2.db"))
+        {
+            string expectedFile = sceneName == "chapter 2" ? "gameSave_Hard_v2.db" : "gameSave_v2.db";
+            string expectedPath = GameProfiles.GetSavePath(expectedFile);
+            if (!string.Equals(savePath, expectedPath, System.StringComparison.OrdinalIgnoreCase))
+                ReinitializeDatabase();
+        }
         if (isDatabaseReady) return;
         InitializeDatabase();
     }
@@ -60,6 +72,8 @@ public partial class SaveSystem : MonoBehaviour
             connection.CreateTable<SubtitleData>();
             connection.CreateTable<IntroData>();
             connection.CreateTable<AIPositionData>();
+            connection.CreateTable<BananaHarvestData>();
+            connection.CreateTable<BananaFruitData>();
 
             if (IsHardModeDatabase())
             {

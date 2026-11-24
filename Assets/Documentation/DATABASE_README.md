@@ -12,7 +12,7 @@ The game uses SQLite database files in Unity's persistent-data folder. These fil
 
 `settings.db` is separate so changing menu settings cannot create, overwrite, or damage a Normal or Hard player save.
 
-The two game-save filenames are reused inside each custom player's directory. The database schema remains version 8; profiles separate progress by selecting a different directory and therefore different SQLite files:
+The two game-save filenames are reused inside each custom player's directory. The database schema is version 11; profiles separate progress by selecting a different directory and therefore different SQLite files:
 
 ```text
 Application.persistentDataPath/
@@ -34,6 +34,12 @@ The Delete button asks for confirmation, then permanently removes that profile's
 One-time progression and objective flags, pickup spawner flags, random item spawn choices, and cached progress are scoped to the selected player profile. Custom profiles prefix their PlayerPrefs keys with their generated profile ID. The Original Save keeps using the legacy unprefixed keys, so existing progress remains available. Global language, volume, graphics, and other device settings remain shared in `settings.db`.
 
 The `SaveProfileData` row described below is part of the schema inside each database. It is separate from the player profiles shown in the menu.
+
+## Banana persistence (schema 11)
+
+Both game-save databases contain `BananaFruitData` and `BananaHarvestData`, scoped to the selected profile and scene. Normal Chapter 1 saves never share their banana snapshot with Hard Chapter 2. Each fruit has a GUID; duplicate display names do not merge fruit. Inventory bananas use `InventoryIndex` in `BananaFruitData` and are excluded from generic `InventoryData`. World fruit positions and rotations always use `DroppedItemData`, linked by `BananaFruitId`; the banana loader owns their restoration so the generic loader does not duplicate them.
+
+`BananaHarvestData` stores remaining cooldown seconds and the selected inventory slot. A saved empty fruit snapshot prevents eaten or removed scene fruit from respawning. Loading requires a Banana Tree in that scene with its Banana Fruit prefab assigned, recreates the saved fruit, restores inventory order, rebuilds the shared fruit count, and resumes the remaining game-time cooldown. A version-8 upgrade adds these tables without deleting existing game state. New Game and Delete Save clear the selected database's banana rows. Existing scene tree placements remain authored in Unity rather than copied into the database.
 
 ## Settings database
 
@@ -65,7 +71,7 @@ Older `PlayerPrefs` values are automatically copied into `SettingsData` the firs
 
 ## Player-save database tables
 
-Each schema-version 8 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
+Each schema-version 11 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
 
 Normal and Hard modes share the following core tables, but each mode has its own database file.
 
@@ -115,3 +121,9 @@ Player chooses Load Game
 - Starting a New Game clears IntroData and SubtitleData only for the selected difficulty, so the story and one-time subtitles can play again.
 - `settings.db` is global: English, Korean, or Tagalog selection is shared by both difficulties.
 - The visual `SettingsPanel` can be inactive. Keep the separate `Setting pannel cs` manager active so it can load settings.
+
+### Banana expiry and version 11 migration
+
+Never-collected fruit disappears after 30 seconds of active game time. The first successful pickup permanently cancels expiry, even after dropping it again. `HasBeenPickedUp` and `UncollectedSecondsRemaining` in `BananaFruitData` preserve this across saves; pausing and closing the game do not advance the timeout. Removing the last remaining fruit starts the shared 30-second tree cooldown. Fruit still in inventory keeps all trees locked.
+
+Version 11 copies missing legacy world banana transforms into `DroppedItemData` without merging duplicate names. The migration rebuilds `BananaFruitData` without position/rotation columns after copying missing dropped transforms. Existing `DroppedItemData` transforms take priority over legacy values; all world transforms are written and restored exclusively through `DroppedItemData`. Version 9 cannot identify previously collected world fruit, so those legacy world bananas receive the initial 30-second timeout. Each profile's Chapter 1/Normal and Chapter 2/Hard databases stay separate.

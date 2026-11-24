@@ -83,8 +83,7 @@ public partial class MonsterAI_New
         if (avoidPaintedTrees && TrySetPaintedTreeDetour(destination))
             return true;
 
-        agent.SetDestination(destination);
-        return true;
+        return navigationRecovery.TrySetDestination(agent, destination);
     }
 
     private bool TrySetPaintedTreeDetour(Vector3 destination)

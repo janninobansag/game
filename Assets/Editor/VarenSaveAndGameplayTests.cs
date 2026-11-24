@@ -10,10 +10,188 @@ using UnityEngine.UI;
 
 public class VarenSaveAndGameplayTests
 {
-    [Test]
-    public void SaveSchema_UsesVersionEight()
+    [TestCase(typeof(MonsterAI_New))]
+    [TestCase(typeof(TikbalangAI))]
+    [TestCase(typeof(MutantAI))]
+    public void AIControllers_ConstructionDefersNativeNavigationPath(Type controllerType)
     {
-        Assert.That(RelationalSaveSchema.SchemaVersion, Is.EqualTo(8));
+        GameObject enemy = new GameObject("AI Construction Test");
+        enemy.SetActive(false);
+        try
+        {
+            Component controller = enemy.AddComponent(controllerType);
+            Assert.That(controller, Is.Not.Null);
+            AINavigationRecovery recovery = GetPrivateField<AINavigationRecovery>(controller, "navigationRecovery");
+            Assert.That(recovery, Is.Not.Null);
+            Assert.That(GetPrivateField<UnityEngine.AI.NavMeshPath>(recovery, "path"), Is.Null,
+                "Native navigation paths must only be created during runtime routing.");
+
+            if (controller is MonsterAI_New)
+            {
+                Assert.That(GetPrivateField<object>(controller, "paintedTreeGrid"), Is.Not.Null);
+                Assert.That(GetPrivateField<object>(controller, "qnaButtons"), Is.Not.Null);
+            }
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(enemy);
+        }
+    }
+
+    [Test]
+    public void SaveSchema_UsesVersionEleven()
+    {
+        Assert.That(RelationalSaveSchema.SchemaVersion, Is.EqualTo(11));
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void BananaExpiry_StopsPermanentlyAfterFirstPickup(bool pickedUp)
+    {
+        GameObject fruit = new GameObject("Banana Expiry Test");
+        fruit.SetActive(false);
+        try
+        {
+            BananaUse banana = fruit.AddComponent<BananaUse>();
+            MethodInfo restore = typeof(BananaUse).GetMethod("RestoreCollectionState", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo advance = typeof(BananaUse).GetMethod("AdvanceUncollectedTimer", BindingFlags.Instance | BindingFlags.NonPublic);
+            restore.Invoke(banana, new object[] { false, 30f });
+            Assert.That(advance.Invoke(banana, new object[] { 29f }), Is.EqualTo(false));
+            if (pickedUp)
+                typeof(BananaUse).GetMethod("MarkPickedUp", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(banana, null);
+            Assert.That(advance.Invoke(banana, new object[] { 1f }), Is.EqualTo(!pickedUp));
+            if (pickedUp)
+                Assert.That(advance.Invoke(banana, new object[] { 300f }), Is.EqualTo(false));
+            // Restoring resumes the remaining game seconds rather than granting another 30.
+            restore.Invoke(banana, new object[] { false, 5f });
+            Assert.That(advance.Invoke(banana, new object[] { 0f }), Is.EqualTo(false), "Pause must not advance expiry.");
+            Assert.That(advance.Invoke(banana, new object[] { 5f }), Is.EqualTo(true));
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(fruit);
+        }
+    }
+
+    [TestCase(false, 9)]
+    [TestCase(true, 9)]
+    [TestCase(false, 10)]
+    [TestCase(true, 10)]
+    public void BananaMigration_RemovesTransformsAndPreservesAuthoritativeDrops(bool hardMode, int legacyVersion)
+    {
+        string path = Path.Combine(Path.GetTempPath(), "VarenBananaMigration_" + Guid.NewGuid().ToString("N") + ".db");
+        try
+        {
+            using (SQLiteConnection database = new SQLiteConnection(path, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create))
+            {
+                RelationalSaveSchema.Create(database, hardMode);
+                foreach (string column in new[] { "PosX", "PosY", "PosZ", "RotX", "RotY", "RotZ", "RotW" })
+                    database.Execute("ALTER TABLE BananaFruitData ADD COLUMN " + column + " REAL");
+                database.Insert(new BananaFruitData
+                {
+                    FruitId = "legacy", SceneName = hardMode ? "chapter 2" : "chapter 1", InventoryIndex = -1,
+                    HasBeenPickedUp = true, UncollectedSecondsRemaining = 7.25f, HealingAmount = 20f,
+                    ScaleX = 17f, ScaleY = 17f, ScaleZ = 17f, IsActive = true
+                });
+                database.Execute("UPDATE BananaFruitData SET PosX=12, PosY=2, PosZ=-4, RotX=0, RotY=0, RotZ=0, RotW=1");
+                if (legacyVersion == 10)
+                    database.Insert(new DroppedItemData { BananaFruitId = "legacy", ItemName = "Banana", PosX = 42f, RotW = 1f });
+                database.Execute("UPDATE SaveProfileData SET SchemaVersion = ?", legacyVersion);
+                RelationalSaveSchema.Create(database, hardMode);
+                Assert.That(database.GetTableInfo("BananaFruitData").Any(column =>
+                    column.Name.StartsWith("Pos") || column.Name.StartsWith("Rot")), Is.False);
+                Assert.That(database.Table<DroppedItemData>().First().PosX, Is.EqualTo(legacyVersion == 10 ? 42f : 12f));
+                Assert.That(database.Table<BananaFruitData>().First().UncollectedSecondsRemaining, Is.EqualTo(7.25f));
+                RelationalSaveSchema.Create(database, hardMode);
+                Assert.That(database.Table<DroppedItemData>().Count(), Is.EqualTo(1));
+                database.Execute("DELETE FROM SaveProfileData WHERE Id=1");
+                Assert.That(database.Table<BananaFruitData>().Count(), Is.Zero, "Rebuilt table must retain the profile foreign key.");
+            }
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    [Test]
+    public void SubtitleRestore_MaterializesRecordsBeforeSelectingStringIds()
+    {
+        string path = Path.Combine(Path.GetTempPath(), "VarenSubtitleQuery_" + Guid.NewGuid().ToString("N") + ".db");
+        try
+        {
+            using (SQLiteConnection database = new SQLiteConnection(path, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create))
+            {
+                RelationalSaveSchema.Create(database, false);
+                database.Insert(new SubtitleData { SubtitleId = "shown", IsTriggered = true });
+                database.Insert(new SubtitleData { SubtitleId = "unseen", IsTriggered = false });
+                var ids = database.Table<SubtitleData>().Where(row => row.IsTriggered).ToList().Select(row => row.SubtitleId).ToList();
+                Assert.That(ids, Is.EqualTo(new[] { "shown" }));
+            }
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    [TestCase(false, "chapter 1")]
+    [TestCase(true, "chapter 2")]
+    public void BananaSaveSchema_RoundTripsDistinctFruitAndCooldown(bool hardMode, string sceneName)
+    {
+        string path = Path.Combine(Path.GetTempPath(), "VarenBananas_" + Guid.NewGuid().ToString("N") + ".db");
+        try
+        {
+            using (SQLiteConnection database = new SQLiteConnection(path, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create))
+            {
+                RelationalSaveSchema.Create(database, hardMode);
+                database.Insert(new BananaFruitData
+                {
+                    FruitId = "banana-one", SceneName = sceneName, InventoryIndex = -1,
+                    IsActive = true, HealingAmount = 20f, ScaleX = 17f, ScaleY = 17f, ScaleZ = 17f
+                });
+                database.Insert(new BananaFruitData
+                {
+                    FruitId = "banana-two", SceneName = sceneName, InventoryIndex = 1,
+                    IsActive = true, HealingAmount = 20f, ScaleX = 17f, ScaleY = 17f, ScaleZ = 17f
+                });
+                database.Insert(new DroppedItemData
+                {
+                    BananaFruitId = "banana-one", ItemName = "Banana", IsDropped = true,
+                    PosX = 3.5f, PosY = 1f, PosZ = -4f, RotW = 1f
+                });
+                database.Insert(new BananaHarvestData
+                {
+                    SceneName = sceneName, CooldownRemaining = 18.5f, SelectedInventoryIndex = 1
+                });
+            }
+            using (SQLiteConnection database = new SQLiteConnection(path, SQLiteOpenFlags.ReadWrite))
+            {
+                Assert.That(database.Table<BananaFruitData>().Count(), Is.EqualTo(2));
+                BananaFruitData dropped = database.Table<BananaFruitData>().First(row => row.FruitId == "banana-one");
+                Assert.That(dropped.InventoryIndex, Is.EqualTo(-1));
+                Assert.That(database.GetTableInfo("BananaFruitData").Any(column =>
+                    column.Name.StartsWith("Pos") || column.Name.StartsWith("Rot")), Is.False);
+                Assert.That(dropped.ScaleX, Is.EqualTo(17f));
+                Assert.That(database.Table<BananaFruitData>().First(row => row.FruitId == "banana-two").InventoryIndex, Is.EqualTo(1));
+                Assert.That(database.Table<BananaHarvestData>().First().CooldownRemaining, Is.EqualTo(18.5f));
+                // An additive version-8 upgrade preserves existing banana rows too.
+                database.Execute("UPDATE SaveProfileData SET SchemaVersion = 8");
+                RelationalSaveSchema.Create(database, hardMode);
+                Assert.That(database.Table<BananaFruitData>().Count(), Is.EqualTo(2));
+                DroppedItemData migratedDrop = database.Table<DroppedItemData>().First(row => row.BananaFruitId == "banana-one");
+                Assert.That(migratedDrop.PosX, Is.EqualTo(3.5f));
+                Assert.That(migratedDrop.PosZ, Is.EqualTo(-4f));
+                Assert.That(database.Table<DroppedItemData>().Count(), Is.EqualTo(1), "Inventory fruit must not have a world drop row.");
+                RelationalSaveSchema.Create(database, hardMode);
+                Assert.That(database.Table<DroppedItemData>().Count(), Is.EqualTo(1), "Reopening must not duplicate a banana drop.");
+                Assert.That(database.ExecuteScalar<int>("SELECT SchemaVersion FROM SaveProfileData"), Is.EqualTo(11));
+            }
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
     }
 
     [Test]

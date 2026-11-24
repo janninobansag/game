@@ -230,6 +230,10 @@ public class Inventory : MonoBehaviour
             bp.wasUsed = false;
         }
 
+        BananaUse banana = item.GetComponent<BananaUse>();
+        if (banana != null)
+            banana.MarkPickedUp();
+
         items.Add(item);
 
         RemoveDropLight(item);
@@ -277,7 +281,14 @@ public class Inventory : MonoBehaviour
 
         items.RemoveAt(index);
 
-        if (PrefabManager.Instance != null)
+        // Bananas carry a unique save ID and collection/expiry state. Keep the
+        // same instance when dropping instead of spawning a newly registered fruit.
+        if (item.GetComponent<BananaUse>() != null)
+        {
+            Vector3 dropPos = GetDropPosition(item, out bool wallIsTooClose);
+            DropItemFallback(item, dropPos, batteryValue, wallIsTooClose);
+        }
+        else if (PrefabManager.Instance != null)
         {
             Vector3 dropPos = GetDropPosition(item, out bool wallIsTooClose);
             GameObject droppedItem = PrefabManager.Instance.HasExactPrefab(cleanName)

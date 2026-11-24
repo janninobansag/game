@@ -1,6 +1,6 @@
 # VAREN Relational Save Relationships
 
-Schema version 8 uses a real SQLite relational save schema. Each database contains one
+Schema version 11 uses a real SQLite relational save schema. Each database contains one
 `SaveProfileData` row (`Id = 1`) for the local single-player save. Every game-state
 table stores `SaveProfileId`, which is a foreign key to that profile with
 `ON DELETE CASCADE`.
@@ -19,6 +19,8 @@ erDiagram
     SaveProfileData ||--o{ NoteData : "owns"
     SaveProfileData ||--o{ SubtitleData : "owns"
     SaveProfileData ||--o{ AIPositionData : "owns"
+    SaveProfileData ||--o{ BananaFruitData : "owns"
+    SaveProfileData ||--o{ BananaHarvestData : "owns"
     SaveProfileData ||--|| RitualData : "owns"
     SaveProfileData ||--|| StaminaData : "owns"
     SaveProfileData ||--|| ProgressionData : "owns"
@@ -41,3 +43,11 @@ identifier, not a foreign key. During loading, `SaveSystem` uses it to find the
 matching `DrawerInteraction` object, then restores its saved open state and exact
 local position. Deleting the save profile also deletes its drawer rows through
 `ON DELETE CASCADE`.
+
+## Banana health-reward persistence
+
+Both chapter ERDs include `BananaFruitData` (identity, healing value, inventory slot, scale, collection history, and expiry) and `BananaHarvestData` (scene-specific shared cooldown and selected slot). Each table belongs to `SaveProfileData` through an enforced cascading foreign key. Chapter 1/Normal and Chapter 2/Hard use separate database files inside each player's profile directory.
+
+`DroppedItemData.BananaFruitId` logically matches `BananaFruitData.FruitId` for a world banana. This is an application-level join, not an enforced SQLite foreign key or unique constraint; the DBML explains it in a column note instead of drawing an enforced relationship. Inventory bananas have no dropped row. World position/rotation are only in `DroppedItemData`; `BananaFruitData` has no Pos/Rot fields. Tree placements remain scene-authored and drop lights are rebuilt from inventory settings on load.
+
+The `HealingAmount` value is configured to 20 HP on the fruit prefab. The resulting player HP is stored in `PlayerData.Health`; no separate health-reward table is needed.
