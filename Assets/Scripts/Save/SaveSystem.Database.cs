@@ -68,7 +68,6 @@ public partial class SaveSystem : MonoBehaviour
             connection.CreateTable<KeyData>();
             connection.CreateTable<BatteryData>();
             connection.CreateTable<RitualItemData>();
-            connection.CreateTable<StaminaData>();
             connection.CreateTable<SubtitleData>();
             connection.CreateTable<IntroData>();
             connection.CreateTable<AIPositionData>();
@@ -77,6 +76,7 @@ public partial class SaveSystem : MonoBehaviour
 
             if (IsHardModeDatabase())
             {
+                connection.CreateTable<StaminaData>();
                 connection.CreateTable<GeneratorCoverData>();
                 connection.CreateTable<WrenchData>();
                 connection.CreateTable<GasData>();

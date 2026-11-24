@@ -96,10 +96,13 @@ public partial class SaveSystem : MonoBehaviour
                 pc.mouseSensitivity = playerData.Sensitivity;
             }
 
-            StaminaController stamina = player.GetComponent<StaminaController>();
-            StaminaData staminaData = connection.Table<StaminaData>().FirstOrDefault();
-            if (stamina != null && staminaData != null)
-                stamina.RestoreStamina(staminaData.CurrentStamina);
+            if (IsHardModeDatabase())
+            {
+                StaminaController stamina = player.GetComponent<StaminaController>();
+                StaminaData staminaData = connection.Table<StaminaData>().FirstOrDefault();
+                if (stamina != null && staminaData != null)
+                    stamina.RestoreStamina(staminaData.CurrentStamina);
+            }
 
             RestoreOneShotEventStates();
             RestoreAIPositions();

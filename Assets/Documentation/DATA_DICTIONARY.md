@@ -44,7 +44,7 @@ SQLite booleans are stored as `0` (false) or `1` (true). All player-save tables 
 | `RitualItemData` | `Id`, `SaveProfileId`, `ItemName`, `IsRevealed`, `IsPlaced` | Candle, Cross, Bible, and other ritual-item reveal and placement state. Its dropped transform is stored in `DroppedItemData`. |
 | `ProgressionData` | `Id`, `SaveProfileId`, `ProgressValue`, `TotalPoints` | Current and total points for progress percentage. |
 | `SubtitleData` | `SubtitleId` (primary key), `SaveProfileId`, `IsTriggered` | One-time subtitle identifier and shown state. |
-| `StaminaData` | `Id`, `SaveProfileId`, `CurrentStamina` | Player stamina, used by Hard mode. |
+| `StaminaData` | `Id`, `SaveProfileId`, `CurrentStamina` | Chapter 2/Hard player stamina; the table is absent from Chapter 1/Normal saves. |
 | `BananaFruitData` | `FruitId` (text primary key), `SaveProfileId`, `SceneName`, `InventoryIndex`, `HasBeenPickedUp`, `UncollectedSecondsRemaining`, `IsActive`, `HealingAmount`, `ScaleX/Y/Z` | Uneaten banana GUID and state. InventoryIndex -1 means world fruit; nonnegative values preserve its inventory slot. Replaces generic inventory records for bananas. World transforms live in DroppedItemData, linked by BananaFruitId. First pickup cancels the 30-second expiry permanently. |
 | `BananaHarvestData` | `SceneName` (text primary key), `SaveProfileId`, `CooldownRemaining`, `SelectedInventoryIndex` | Shared tree lock is reconstructed from fruit. CooldownRemaining stores up to 30 remaining game-time seconds. Empty snapshots preserve eaten-fruit absence. |
 | `IntroData` | `Id` (primary key), `SaveProfileId`, `SectionIndex`, `LineIndex`, `IsComplete` | Story intro position and completion state. |

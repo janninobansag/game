@@ -1,7 +1,7 @@
 // VAREN Chapter 1 Normal save database ERD: gameSave_v2.db
 // Paste this file into https://dbdiagram.io to view the diagram.
 // Source: Assets/Scripts/Save/SaveDatabaseSchema.cs and Assets/Scripts/Save/SaveModels.cs
-// Schema version 11; updated 2026-11-25.
+// Schema version 12; updated 2026-11-25.
 // Every game-state table references SaveProfileData.Id through SaveProfileId.
 
 Table SaveProfileData {
@@ -144,12 +144,6 @@ Table SubtitleData {
   IsTriggered boolean
 }
 
-Table StaminaData {
-  Id integer [pk, increment]
-  SaveProfileId integer [not null]
-  CurrentStamina float
-}
-
 Table IntroData {
   Id integer [pk]
   SaveProfileId integer [not null]
@@ -187,11 +181,10 @@ Ref: SaveProfileData.Id < BatteryData.SaveProfileId [delete: cascade]
 Ref: SaveProfileData.Id < RitualItemData.SaveProfileId [delete: cascade]
 Ref: SaveProfileData.Id < ProgressionData.SaveProfileId [delete: cascade]
 Ref: SaveProfileData.Id < SubtitleData.SaveProfileId [delete: cascade]
-Ref: SaveProfileData.Id < StaminaData.SaveProfileId [delete: cascade]
 Ref: SaveProfileData.Id < IntroData.SaveProfileId [delete: cascade]
 Ref: SaveProfileData.Id < AIPositionData.SaveProfileId [delete: cascade]
 
-// Schema 11: independent banana snapshots in each profile's chapter database.
+// Schema 12: independent banana snapshots in each profile's chapter database.
 Table BananaHarvestData {
   SceneName varchar [pk]
   SaveProfileId integer [not null]

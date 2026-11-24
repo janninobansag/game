@@ -1,7 +1,7 @@
 // VAREN Chapter 2 Hard-mode save database ERD: gameSave_Hard_v2.db
 // Paste this file into https://dbdiagram.io to view the diagram.
 // Source: Assets/Scripts/Save/SaveDatabaseSchema.cs and Assets/Scripts/Save/SaveModels.cs
-// Schema version 11; updated 2026-11-25.
+// Schema version 12; updated 2026-11-25.
 // Every game-state table references SaveProfileData.Id through SaveProfileId.
 
 Table SaveProfileData {
@@ -215,7 +215,7 @@ Ref: SaveProfileData.Id < WrenchData.SaveProfileId [delete: cascade]
 Ref: SaveProfileData.Id < GasData.SaveProfileId [delete: cascade]
 Ref: SaveProfileData.Id < GeneratorCoverData.SaveProfileId [delete: cascade]
 
-// Schema 11: independent banana snapshots in each profile's chapter database.
+// Schema 12: independent banana snapshots in each profile's chapter database.
 Table BananaHarvestData {
   SceneName varchar [pk]
   SaveProfileId integer [not null]

@@ -56,14 +56,17 @@ public partial class SaveSystem : MonoBehaviour
 
                 connection.Insert(playerData);
 
-                connection.DeleteAll<StaminaData>();
-                StaminaController stamina = player.GetComponent<StaminaController>();
-                if (stamina != null && stamina.IsHardMode)
+                if (IsHardModeDatabase())
                 {
-                    connection.Insert(new StaminaData
+                    connection.DeleteAll<StaminaData>();
+                    StaminaController stamina = player.GetComponent<StaminaController>();
+                    if (stamina != null && stamina.IsHardMode)
                     {
-                        CurrentStamina = stamina.CurrentStamina
-                    });
+                        connection.Insert(new StaminaData
+                        {
+                            CurrentStamina = stamina.CurrentStamina
+                        });
+                    }
                 }
             }
             else

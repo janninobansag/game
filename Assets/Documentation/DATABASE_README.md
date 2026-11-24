@@ -12,7 +12,7 @@ The game uses SQLite database files in Unity's persistent-data folder. These fil
 
 `settings.db` is separate so changing menu settings cannot create, overwrite, or damage a Normal or Hard player save.
 
-The two game-save filenames are reused inside each custom player's directory. The database schema is version 11; profiles separate progress by selecting a different directory and therefore different SQLite files:
+The two game-save filenames are reused inside each custom player's directory. The database schema is version 12; profiles separate progress by selecting a different directory and therefore different SQLite files:
 
 ```text
 Application.persistentDataPath/
@@ -35,7 +35,7 @@ One-time progression and objective flags, pickup spawner flags, random item spaw
 
 The `SaveProfileData` row described below is part of the schema inside each database. It is separate from the player profiles shown in the menu.
 
-## Banana persistence (schema 11)
+## Banana persistence (schema 12)
 
 Both game-save databases contain `BananaFruitData` and `BananaHarvestData`, scoped to the selected profile and scene. Normal Chapter 1 saves never share their banana snapshot with Hard Chapter 2. Each fruit has a GUID; duplicate display names do not merge fruit. Inventory bananas use `InventoryIndex` in `BananaFruitData` and are excluded from generic `InventoryData`. World fruit positions and rotations always use `DroppedItemData`, linked by `BananaFruitId`; the banana loader owns their restoration so the generic loader does not duplicate them.
 
@@ -71,7 +71,7 @@ Older `PlayerPrefs` values are automatically copied into `SettingsData` the firs
 
 ## Player-save database tables
 
-Each schema-version 11 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
+Each schema-version 12 player-save database has one `SaveProfileData` parent row. Every game-state table stores `SaveProfileId` and references that row through a SQLite foreign key. Deleting a profile cascades to its saved game state.
 
 Normal and Hard modes share the following core tables, but each mode has its own database file.
 
@@ -89,12 +89,11 @@ Normal and Hard modes share the following core tables, but each mode has its own
 | `KeyData` | Used keys. | `SaveSystem.cs`, `Key.cs` |
 | `BatteryData` | Battery recharge amount, used state, and held state. | `SaveSystem.cs`, `BatteryPickup.cs` |
 | `RitualItemData` | Candle, cross, Bible, and other ritual-item reveal and placed state. | `SaveSystem.cs`, ritual item scripts |
-| `StaminaData` | Current Hard-mode stamina. | `SaveSystem.cs`, `StaminaController.cs` |
 | `SubtitleData` | Whether one-time subtitles have already triggered. | `SaveSystem.cs`, subtitle trigger scripts |
 | `IntroData` | Story intro section, sentence, and completion state. | `SaveSystem.cs`, `StoryIntro.cs` |
 | `ProgressionData` | Current progress points and total points used for the load-panel percentage. | `SaveSystem.cs`, `ProgressionSystem.cs`, `MenuManager.cs` |
 
-Hard mode also creates `WrenchData`, `GasData`, and `GeneratorCoverData` for the Chapter 2 generator sequence.
+Hard mode also creates `StaminaData` for Chapter 2 stamina and `WrenchData`, `GasData`, and `GeneratorCoverData` for the generator sequence. The Chapter 1/Normal database does not create `StaminaData`. Schema version 12 removes this unused table from existing Normal saves without changing their player progress.
 
 ## Save and load flow
 
