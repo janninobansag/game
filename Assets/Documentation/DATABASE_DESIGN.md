@@ -39,12 +39,11 @@ SaveProfileData (parent)
         +-- RitualItemData
         +-- ProgressionData
         +-- SubtitleData
-        +-- StaminaData
         +-- IntroData
         +-- AIPositionData
         +-- BananaFruitData
         +-- BananaHarvestData
-        +-- WrenchData, GasData, GeneratorCoverData (Hard mode only)
+        +-- StaminaData, WrenchData, GasData, GeneratorCoverData (Hard mode only)
 ```
 
 `SaveProfileData.Id` is the parent primary key. Each game-state table includes `SaveProfileId`, which is a foreign key to that parent row.
@@ -72,15 +71,15 @@ SaveProfileData (parent)
 | `SubtitleData` | `SubtitleId` | One-time subtitle completion state. |
 | `IntroData` | `Id` | Current intro section, line, and completion state. |
 | `AIPositionData` | `Id` | AI identity, scene, and saved transform. |
-| `StaminaData` | `Id` | Current player stamina for Hard mode. |
 | `GameStateData` | `Id` | Named state values for gameplay that does not need its own fixed table: checkpoints, map ownership, path-guide waypoints, Tikbalang's awakened state, and generator light/run state. |
 
 ## 5. Hard-mode Entities
 
-The following tables exist only in `gameSave_Hard_v2.db` because they belong to the Chapter 2 generator sequence.
+The following tables exist only in `gameSave_Hard_v2.db`. Stamina is a Chapter 2 difficulty mechanic; the other tables belong to its generator sequence.
 
 | Entity | Primary key | Purpose |
 | --- | --- | --- |
+| `StaminaData` | `Id` | Current player stamina in Hard mode. |
 | `WrenchData` | `WrenchId` | Tracks the wrench held/dropped state. Its world transform is stored in `DroppedItemData`. |
 | `GasData` | `GasId` | Tracks gas held/dropped state. Its world transform is stored in `DroppedItemData`. |
 | `GeneratorCoverData` | `CoverId` | Stores whether the generator cover is removed/open and other named generator states. |

@@ -371,11 +371,11 @@ public partial class SaveSystem : MonoBehaviour
 
             if (IsHardModeDatabase())
             {
+                connection.DeleteAll<StaminaData>();
                 connection.DeleteAll<WrenchData>();
                 connection.DeleteAll<GeneratorCoverData>();
                 connection.DeleteAll<GasData>();
             }
-            connection.DeleteAll<GeneratorCoverData>();
         }
         catch (System.Exception)
         {
@@ -511,6 +511,7 @@ public partial class SaveSystem : MonoBehaviour
             connection.DeleteAll<AIPositionData>();
             if (IsHardModeDatabase())
             {
+                connection.DeleteAll<StaminaData>();
                 connection.DeleteAll<WrenchData>();
                 connection.DeleteAll<GeneratorCoverData>();
                 connection.DeleteAll<GasData>();
@@ -527,7 +528,6 @@ public partial class SaveSystem : MonoBehaviour
             connection.DeleteAll<KeyData>();
             connection.DeleteAll<BatteryData>();
             connection.DeleteAll<RitualItemData>();
-            connection.DeleteAll<StaminaData>();
             connection.DeleteAll<SubtitleData>();
             connection.DeleteAll<IntroData>();
             // ── NEW: Delete ProgressionData ──

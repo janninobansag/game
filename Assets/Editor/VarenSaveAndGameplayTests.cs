@@ -39,9 +39,47 @@ public class VarenSaveAndGameplayTests
     }
 
     [Test]
-    public void SaveSchema_UsesVersionEleven()
+    public void SaveSchema_UsesVersionTwelve()
     {
-        Assert.That(RelationalSaveSchema.SchemaVersion, Is.EqualTo(11));
+        Assert.That(RelationalSaveSchema.SchemaVersion, Is.EqualTo(12));
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void SaveSchema_StaminaTableExistsOnlyInHardMode(bool hardMode)
+    {
+        string path = Path.Combine(Path.GetTempPath(), "VarenStaminaSchema_" + Guid.NewGuid().ToString("N") + ".db");
+        try
+        {
+            using (SQLiteConnection database = new SQLiteConnection(path, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create))
+            {
+                RelationalSaveSchema.Create(database, hardMode);
+                database.Insert(new PlayerData { Health = 75f });
+
+                if (!hardMode)
+                {
+                    // Version 11 also created StaminaData in the Normal database.
+                    database.CreateTable<StaminaData>();
+                    database.Insert(new StaminaData { CurrentStamina = 25f });
+                    database.Execute("UPDATE SaveProfileData SET SchemaVersion = 11");
+                    RelationalSaveSchema.Create(database, false);
+                }
+                else
+                {
+                    database.Insert(new StaminaData { CurrentStamina = 25f });
+                }
+
+                Assert.That(database.GetTableInfo("StaminaData").Count > 0, Is.EqualTo(hardMode));
+                Assert.That(database.Table<PlayerData>().First().Health, Is.EqualTo(75f));
+                Assert.That(database.ExecuteScalar<int>("SELECT SchemaVersion FROM SaveProfileData"), Is.EqualTo(12));
+                if (hardMode)
+                    Assert.That(database.Table<StaminaData>().First().CurrentStamina, Is.EqualTo(25f));
+            }
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
     }
 
     [TestCase(false)]
@@ -185,7 +223,7 @@ public class VarenSaveAndGameplayTests
                 Assert.That(database.Table<DroppedItemData>().Count(), Is.EqualTo(1), "Inventory fruit must not have a world drop row.");
                 RelationalSaveSchema.Create(database, hardMode);
                 Assert.That(database.Table<DroppedItemData>().Count(), Is.EqualTo(1), "Reopening must not duplicate a banana drop.");
-                Assert.That(database.ExecuteScalar<int>("SELECT SchemaVersion FROM SaveProfileData"), Is.EqualTo(11));
+                Assert.That(database.ExecuteScalar<int>("SELECT SchemaVersion FROM SaveProfileData"), Is.EqualTo(12));
             }
         }
         finally

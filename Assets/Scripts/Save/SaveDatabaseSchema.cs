@@ -5,7 +5,7 @@ using SQLite4Unity3d;
 public static class RelationalSaveSchema
 {
     public const int LocalProfileId = 1;
-    public const int SchemaVersion = 11;
+    public const int SchemaVersion = 12;
 
     public static void Create(SQLiteConnection connection, bool isHardMode)
     {
@@ -106,7 +106,6 @@ public static class RelationalSaveSchema
         CreateChildTable(connection, "RitualItemData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, IsRevealed INTEGER, IsPlaced INTEGER");
         CreateChildTable(connection, "ProgressionData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ProgressValue INTEGER, TotalPoints INTEGER");
         CreateChildTable(connection, "SubtitleData", "SubtitleId TEXT PRIMARY KEY", "IsTriggered INTEGER NOT NULL DEFAULT 0");
-        CreateChildTable(connection, "StaminaData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "CurrentStamina REAL");
         CreateChildTable(connection, "IntroData", "Id INTEGER PRIMARY KEY", "SectionIndex INTEGER, LineIndex INTEGER, IsComplete INTEGER");
         CreateChildTable(connection, "AIPositionData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "AIId TEXT, SceneName TEXT, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
         CreateChildTable(connection, "BananaHarvestData", "SceneName TEXT PRIMARY KEY", "CooldownRemaining REAL, SelectedInventoryIndex INTEGER");
@@ -147,8 +146,13 @@ public static class RelationalSaveSchema
         connection.Execute("UPDATE SaveProfileData SET Difficulty = '" + difficulty + "', SchemaVersion = " + SchemaVersion + " WHERE Id = " + LocalProfileId);
 
         if (!isHardMode)
+        {
+            // Older Normal saves included this unused Hard-mode table.
+            connection.Execute("DROP TABLE IF EXISTS StaminaData");
             return;
+        }
 
+        CreateChildTable(connection, "StaminaData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "CurrentStamina REAL");
         CreateChildTable(connection, "WrenchData", "WrenchId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER");
         CreateChildTable(connection, "GasData", "GasId TEXT PRIMARY KEY", "IsHeld INTEGER, IsDropped INTEGER");
         CreateChildTable(connection, "GeneratorCoverData", "CoverId TEXT PRIMARY KEY", "IsRemoved INTEGER");

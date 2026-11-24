@@ -13,7 +13,7 @@ This folder contains the project documentation.
 - [Player guide: Linux and macOS](PLAYING_ON_LINUX_AND_MAC.md)
 - [Regression test cases for the testing plan](TESTING_REGRESSIONS.md)
 
-## Database ERDs (schema 11)
+## Database ERDs (schema 12)
 
 - [Chapter 1 / Normal ERD](CHAPTER_1_DATABASE_ERD.dbml)
 - [Chapter 2 / Hard ERD](CHAPTER_2_DATABASE_ERD.dbml)

@@ -1,6 +1,6 @@
 # VAREN Relational Save Relationships
 
-Schema version 11 uses a real SQLite relational save schema. Each database contains one
+Schema version 12 uses a real SQLite relational save schema. Each database contains one
 `SaveProfileData` row (`Id = 1`) for the local single-player save. Every game-state
 table stores `SaveProfileId`, which is a foreign key to that profile with
 `ON DELETE CASCADE`.
@@ -22,7 +22,7 @@ erDiagram
     SaveProfileData ||--o{ BananaFruitData : "owns"
     SaveProfileData ||--o{ BananaHarvestData : "owns"
     SaveProfileData ||--|| RitualData : "owns"
-    SaveProfileData ||--|| StaminaData : "owns"
+    SaveProfileData ||--o{ StaminaData : "Chapter 2 only"
     SaveProfileData ||--|| ProgressionData : "owns"
     SaveProfileData ||--|| IntroData : "owns"
     SaveProfileData ||--o{ GameStateData : "owns"
@@ -32,7 +32,9 @@ erDiagram
 ```
 
 `gameSave_v2.db` uses the shared tables for Chapter 1. `gameSave_Hard_v2.db` also
-includes the three Chapter 2 generator tables. `settings.db` stays separate because
+includes `StaminaData` and the three Chapter 2 generator tables. Schema version 12
+removes the unused stamina table from existing Normal saves while preserving their other
+tables. `settings.db` stays separate because
 it stores global menu settings, not player progress.
 
 ## Drawer relationship and identity

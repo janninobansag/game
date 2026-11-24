@@ -35,7 +35,6 @@ following tables exist in both modes:
 | Ritual objects | `RitualItemData` |
 | Progress values | `ProgressionData` |
 | Triggered subtitles | `SubtitleData` |
-| Player stamina | `StaminaData` |
 | Intro/cutscene progress | `IntroData` |
 | AI transforms per scene | `AIPositionData` |
 | Unique banana fruit, expiry/collection state, scale, healing value, and inventory slots | `BananaFruitData` |
@@ -51,6 +50,7 @@ Chapter 1 database:
 
 | System | Table |
 | --- | --- |
+| Player stamina | `StaminaData` |
 | Wrench held/dropped state | `WrenchData` |
 | Wrench world position and rotation | `DroppedItemData` |
 | Gas-can held/dropped state | `GasData` |
@@ -59,7 +59,7 @@ Chapter 1 database:
 
 ## Relationships
 
-Schema version 11 is a formal relational SQLite save schema. Each player-save database
+Schema version 12 is a formal relational SQLite save schema. Each player-save database
 contains one `SaveProfileData` parent row (`Id = 1`). Every game-state table has a
 `SaveProfileId` foreign key that references this parent with `ON DELETE CASCADE`.
 
