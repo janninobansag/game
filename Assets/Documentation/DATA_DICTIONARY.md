@@ -45,6 +45,8 @@ SQLite booleans are stored as `0` (false) or `1` (true). All player-save tables 
 | `ProgressionData` | `Id`, `SaveProfileId`, `ProgressValue`, `TotalPoints` | Current and total points for progress percentage. |
 | `SubtitleData` | `SubtitleId` (primary key), `SaveProfileId`, `IsTriggered` | One-time subtitle identifier and shown state. |
 | `StaminaData` | `Id`, `SaveProfileId`, `CurrentStamina` | Player stamina, used by Hard mode. |
+| `BananaFruitData` | `FruitId` (text primary key), `SaveProfileId`, `SceneName`, `InventoryIndex`, `HasBeenPickedUp`, `UncollectedSecondsRemaining`, `IsActive`, `HealingAmount`, `ScaleX/Y/Z` | Uneaten banana GUID and state. InventoryIndex -1 means world fruit; nonnegative values preserve its inventory slot. Replaces generic inventory records for bananas. World transforms live in DroppedItemData, linked by BananaFruitId. First pickup cancels the 30-second expiry permanently. |
+| `BananaHarvestData` | `SceneName` (text primary key), `SaveProfileId`, `CooldownRemaining`, `SelectedInventoryIndex` | Shared tree lock is reconstructed from fruit. CooldownRemaining stores up to 30 remaining game-time seconds. Empty snapshots preserve eaten-fruit absence. |
 | `IntroData` | `Id` (primary key), `SaveProfileId`, `SectionIndex`, `LineIndex`, `IsComplete` | Story intro position and completion state. |
 | `AIPositionData` | `Id`, `SaveProfileId`, `AIId`, `SceneName`, `PosX/Y/Z`, `RotX/Y/Z/W` | Monster/AI identifier, scene, and transform. |
 
@@ -101,3 +103,5 @@ When adding a persistent field, table, or PlayerPrefs key, update this file. For
 - [Database schema and ERD links](DATABASE_SCHEMA.md)
 - [Database design](DATABASE_DESIGN.md)
 - [Program workflow](PROGRAM_WORKFLOW.md)
+
+`DroppedItemData.BananaFruitId` is nullable text: a stable GUID link for banana world transforms; null for other item types. The banana loader restores these rows separately from generic name-based drops.

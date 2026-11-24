@@ -4,9 +4,13 @@ using UnityEngine.AI;
 
 public partial class TikbalangAI
 {
+    private readonly AINavigationRecovery navigationRecovery = new AINavigationRecovery();
+    private float navigationFallbackUntil;
+    private float blockedDoorSince;
+
     private void ChasePlayer()
     {
-        if (!agent.enabled || !agent.isOnNavMesh)
+        if (!navigationRecovery.EnsureOnNavMesh(agent))
         {
             SetMovementAnimation(false);
             return;
@@ -24,8 +28,9 @@ public partial class TikbalangAI
         agent.speed = shouldRun ? runSpeed : walkSpeed;
         agent.stoppingDistance = stoppingDistance;
 
-        if (HandleDoorAhead())
+        if (Time.time >= navigationFallbackUntil && HandleDoorAhead())
         {
+            navigationRecovery.ResetProgress();
             SetMovementAnimation(false);
             StopChaseSound();
             return;
@@ -33,9 +38,13 @@ public partial class TikbalangAI
 
         agent.isStopped = false;
 
-        if (Time.time >= nextDestinationUpdate)
+        if (navigationRecovery.ShouldRepath(agent))
+            ChooseNavigationFallback();
+
+        if (Time.time >= navigationFallbackUntil && Time.time >= nextDestinationUpdate)
         {
-            SetChaseDestination();
+            if (!SetChaseDestination())
+                ChooseNavigationFallback();
             nextDestinationUpdate = Time.time + destinationRefreshRate;
         }
 
@@ -44,6 +53,12 @@ public partial class TikbalangAI
             PlayChaseSound();
         else
             StopChaseSound();
+    }
+
+    private void ChooseNavigationFallback()
+    {
+        navigationFallbackUntil = Time.time + 3f;
+        navigationRecovery.TrySetRoamDestination(agent, transform.position, 8f);
     }
 
     // Targets the closest walkable point near the player rather than the player's
@@ -57,8 +72,6 @@ public partial class TikbalangAI
         if (!NavMesh.SamplePosition(player.position, out NavMeshHit playerNavMeshPoint,
                                     searchRadius, agent.areaMask))
         {
-            agent.ResetPath();
-            SetMovementAnimation(false);
             return false;
         }
 
@@ -66,8 +79,6 @@ public partial class TikbalangAI
         if (!agent.CalculatePath(playerNavMeshPoint.position, chasePath) ||
             chasePath.status != NavMeshPathStatus.PathComplete)
         {
-            agent.ResetPath();
-            SetMovementAnimation(false);
             return false;
         }
 
@@ -193,6 +204,15 @@ public partial class TikbalangAI
                 return true;
             }
 
+            // A locked door may never open. Move elsewhere rather than waiting
+            // forever at the same collider, then retry pursuit after the detour.
+            if (Time.time - blockedDoorSince >= 3f)
+            {
+                doorBlockingPath = null;
+                ChooseNavigationFallback();
+                return false;
+            }
+
             agent.isStopped = true;
             return true;
         }
@@ -211,6 +231,7 @@ public partial class TikbalangAI
             return false;
 
         doorBlockingPath = door;
+        blockedDoorSince = Time.time;
         agent.isStopped = true;
         return true;
     }

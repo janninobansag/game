@@ -366,6 +366,8 @@ public partial class SaveSystem : MonoBehaviour
         {
             connection.DeleteAll<AIPositionData>();
             connection.DeleteAll<DroppedItemData>();
+            connection.DeleteAll<BananaFruitData>();
+            connection.DeleteAll<BananaHarvestData>();
 
             if (IsHardModeDatabase())
             {
@@ -504,6 +506,8 @@ public partial class SaveSystem : MonoBehaviour
         try
         {
             connection.DeleteAll<PlayerData>();
+            connection.DeleteAll<BananaFruitData>();
+            connection.DeleteAll<BananaHarvestData>();
             connection.DeleteAll<AIPositionData>();
             if (IsHardModeDatabase())
             {

@@ -6,6 +6,7 @@ public partial class MutantAI
     void UpdateChase(float dist, bool playerVisible)
     {
         agent.speed = chaseSpeed;
+        agent.isStopped = false;
         SetAnimation(false, true);
         PlayChaseSound();
 
@@ -18,8 +19,20 @@ public partial class MutantAI
             return;
         }
 
-        if (agent.isOnNavMesh)
-            agent.SetDestination(player.position);
+        if (navigationRecovery.ShouldRepath(agent))
+        {
+            SetNewRoamDestination();
+            navigationFallbackUntil = Time.time + 2f;
+        }
+        if (Time.time >= navigationFallbackUntil && Time.time >= nextNavigationDestinationUpdate)
+        {
+            nextNavigationDestinationUpdate = Time.time + 0.3f;
+            if (!navigationRecovery.TrySetDestination(agent, player.position))
+            {
+                SetNewRoamDestination();
+                navigationFallbackUntil = Time.time + 2f;
+            }
+        }
 
         FacePlayer();
 

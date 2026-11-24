@@ -133,6 +133,20 @@ The cursor is locked during normal gameplay and released for menus, readable doc
 
 Books, notes, and picture frames use a shared `PlayerController.IsReadingDocument` lock. While one is open, player movement and mouse look are disabled, and the cursor stays unlocked and visible. Closing the current document/viewer restores normal controls. This shared lock also prevents other interaction scripts from repeatedly hiding the cursor while a document is open.
 
+### Banana Tree Harvesting
+
+`BananaTreeInteraction.cs` is configured on `Assets/0ANDRIE/TREES N GRASS/Banana Tree.prefab`. Look at the trunk within 3 metres and hold E continuously for 1.5 seconds to shake the tree and drop three `Banana  Fruit` prefab instances. Releasing E or looking away resets the hold. The `Shake Visuals` group moves while the trunk collider stays stationary. Dropped fruit receives a Rigidbody and a mesh-bounds BoxCollider so gravity drops it onto the ground.
+
+Adjust the interaction range, hold duration, shake strength, fruit count, drop height/radius, or optional drop-point Transform on the component. All trees, including duplicated trees, share `BananaHarvestCycle`: harvesting any tree locks every tree while any banana remains on the ground or in inventory. Never-collected fruit disappears after 30 seconds of game time; picking it up once permanently cancels expiry, including after later drops. Eating or despawning the final banana starts a 30-second regrowth timer; after it expires, any tree can produce the next batch. Picking up, hiding, and dropping fruit do not clear the lock. Looking at a tree shows the remaining fruit count or regrowth countdown. The timer uses game time and freezes while paused. Release E before starting a new harvest.
+
+Pause, document reading, and AI encounters block harvesting. The shared supply includes hand-placed banana fruit with `BananaUse`. Fruit destroyed by another system is removed from the count to avoid a permanent lock. Saving captures all uneaten fruit with unique IDs, scale, healing amount, collection history, remaining expiry time, and inventory slots in `BananaFruitData`; world position and rotation are stored in `DroppedItemData`, linked by `BananaFruitId`. `BananaHarvestData` stores the shared cooldown's remaining game seconds and selected inventory slot. Loading replaces the scene's banana snapshot to prevent duplication and rebuilds the harvest lock from the restored fruit. Eaten bananas remain absent. Cooldown does not advance while the game is closed.
+
+Chapter 1 / Normal and Chapter 2 / Hard use their selected profile's separate databases, and records also include the scene name. Duplicated trees share the restored cycle within that chapter; no per-tree ID is needed. New Game clears banana rows only from the selected difficulty database. Version-8 saves are upgraded additively to schema 9 and keep the initial scene fruit until a banana snapshot is first saved.
+
+The Banana Fruit prefab uses `PickupItem`: look at the fruit within 2 metres and press E to collect it into an available inventory slot. It can be held, selected, and dropped with G using the existing inventory controls. `BananaFruitPhysics` supplies a mesh-bounds collider and Rigidbody for both hand-placed and tree-spawned fruit.
+
+Select a banana and left-click to eat it. `BananaUse` restores 20 HP through `PlayerHealth.Heal`, clamps health to the maximum, and consumes the fruit through the inventory's remove-and-destroy path. Full health does not consume a banana. Eating is blocked during pause, document reading, and AI encounters, and cannot revive a dead player. Healing Amount is adjustable on the Banana Fruit prefab.
+
 ### Hard-Mode Stamina
 
 Hard mode uses `StaminaController.cs` on the Chapter 2 player. Holding `Left Shift` drains a 100-point stamina bar over eight seconds. After a 0.5-second recovery delay, stamina recovers at 20 points per second. Reaching zero immediately stops horizontal movement and prevents jumping for 0.6 seconds; camera look and gravity continue. After that stun, the player can walk but cannot sprint until stamina reaches 30% of its maximum. During exhaustion, stamina recovers even if Shift remains held. Once sprinting is available again, holding Shift without sprinting pauses recovery until Shift is released. Pausing freezes the stun and recovery timers. Normal mode has unlimited sprinting and does not show the stamina bar.
@@ -218,6 +232,14 @@ Successfully completing the ritual tree awards 5 progression points (5% of the 1
 - `ItemSubtitleTrigger.cs` and `PlayerSubtitleTrigger.cs`: display subtitle events.
 
 ## Varen AI And Q&A
+
+### Continuous patrol and navigation recovery
+
+White Lady, Tikbalang, and Varen use `AINavigationRecovery` through their shared controllers, covering their scene instances and prefabs in Normal and Hard chapters. White Lady and Varen choose another reachable patrol destination immediately on arrival instead of their previous random idle waits. White Lady leaves chase/catch approach when the player is no longer visible, and Varen resumes roaming when hiding ends pursuit.
+
+New patrol routes must be complete and lead away from the current position. Missing, partial, finished, or stalled routes are retried with a one-second retry limit; lack of 0.2 metres of progress for two seconds triggers another route. An unreachable chase target causes a temporary reachable roaming route before pursuit is retried. Tikbalang leaves an unopenable door after three seconds. Enabled agents slightly outside their NavMesh can retry a nearby NavMesh placement, limited to two metres.
+
+Encounter ownership, jumpscares, Q&A, pause, disabled components, and Tikbalang's initial dormant state still control intentional stops. NavMesh coverage and properly baked or carving obstacles remain necessary: recovery cannot create a path where the scene has no connected walkable area. These routing checks do not replace live gameplay validation in both chapters.
 
 `MonsterAI_New.cs` is the newer Varen behavior system. It uses a `NavMeshAgent` and supports:
 
@@ -541,3 +563,19 @@ For the complete table-by-table database reference, see DATABASE_README.md.
 - Starting a New Game now clears IntroData and SubtitleData for the selected difficulty after its database is reinitialized.
 - The story intro appears again for a New Game, while loading an existing save still resumes or skips it based on IntroData.
 - Gameplay subtitle localization now reads the selected language directly from SettingsData, with PlayerPrefs only as a fallback.
+
+Banana inventory previews are visual-only and do not register with the shared harvest supply or save snapshot. Dropping a collected banana reuses the same object, preserving its GUID, healing value, and permanently cancelled expiry; pickup/drop does not increase the remaining-fruit count.
+
+Loading ground bananas recreates their DropLight using the scene inventory's drop-light settings. Carried bananas do not receive a ground light.
+
+### Oral-defense recommendation: item-based health rewards
+
+**Recommendation:** Add health rewards through in-game items.
+
+**Implementation status: Implemented.** In Chapter 1 (Normal) and Chapter 2 (Hard), players can harvest banana fruit by holding E at a banana tree, pick up the fruit with E, and eat the selected banana with Left Click to restore 20 HP. Healing is capped at maximum health, and full health does not consume the item.
+
+The system saves fruit identity, inventory placement, healing value, collection/expiry state, and the shared tree cooldown separately for each chapter and player profile. World position and rotation belong to `DroppedItemData`, linked by `BananaFruitId`. Inventory preview copies are excluded from gameplay counts, and loaded ground fruit recreates its drop light.
+
+**Suggested IODRF remarks:** “Implemented banana fruit as a consumable health reward in both chapters. Eating a banana restores 20 HP without exceeding maximum health.”
+
+This status records implementation; final gameplay acceptance should be recorded after checking harvesting, pickup, eating, dropping, and save/load in both chapters. It does not mark unrun manual tests as passed.

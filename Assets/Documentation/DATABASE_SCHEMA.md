@@ -38,6 +38,8 @@ following tables exist in both modes:
 | Player stamina | `StaminaData` |
 | Intro/cutscene progress | `IntroData` |
 | AI transforms per scene | `AIPositionData` |
+| Unique banana fruit, expiry/collection state, scale, healing value, and inventory slots | `BananaFruitData` |
+| Shared banana cooldown and selected inventory slot per scene | `BananaHarvestData` |
 
 `DrawerData` contains `Id` (primary key), `SaveProfileId` (foreign key to
 `SaveProfileData.Id`), `DrawerId`, `DrawerName`, `IsOpen`, and `LocalPosX`,
@@ -57,7 +59,7 @@ Chapter 1 database:
 
 ## Relationships
 
-Schema version 8 is a formal relational SQLite save schema. Each player-save database
+Schema version 11 is a formal relational SQLite save schema. Each player-save database
 contains one `SaveProfileData` parent row (`Id = 1`). Every game-state table has a
 `SaveProfileId` foreign key that references this parent with `ON DELETE CASCADE`.
 
@@ -82,3 +84,5 @@ The SQLite schema is defined in `Assets/SaveDatabaseSchema.cs`; `Assets/SaveMode
 defines the matching C# data models, and `Assets/SaveSystem.cs` reads and writes the
 records. If a schema or data-model class changes, update the data dictionary and both
 ERD files so the documentation remains accurate.
+
+Banana world transforms belong to `DroppedItemData` (`BananaFruitId` links to the fruit GUID). BananaFruitData has no position or rotation columns. Collection/expiry state is stored in `BananaFruitData`.

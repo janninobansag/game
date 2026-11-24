@@ -798,3 +798,107 @@ public class VarenIntegrationPlayModeTests
         }
     }
 }
+
+// Synchronous PlayMode regression cases: Awake must run as it does in gameplay.
+public class BananaInventoryRegressionTests
+{
+    private const BindingFlags PrivateStatic = BindingFlags.Static | BindingFlags.NonPublic;
+    private const BindingFlags PrivateInstance = BindingFlags.Instance | BindingFlags.NonPublic;
+    private readonly List<GameObject> created = new List<GameObject>();
+    private HashSet<BananaUse> fruitSet;
+    private HashSet<BananaUse> originalFruit;
+    private Inventory originalInventory;
+    private PrefabManager originalPrefabs;
+    private float originalReadyAt;
+    private bool originalSpawning;
+
+    [SetUp]
+    public void SetUp()
+    {
+        fruitSet = (HashSet<BananaUse>)typeof(BananaHarvestCycle).GetField("remainingFruit", PrivateStatic).GetValue(null);
+        originalFruit = new HashSet<BananaUse>(fruitSet);
+        fruitSet.Clear();
+        originalReadyAt = (float)typeof(BananaHarvestCycle).GetField("readyAt", PrivateStatic).GetValue(null);
+        originalSpawning = (bool)typeof(BananaHarvestCycle).GetField("spawningFruit", PrivateStatic).GetValue(null);
+        originalInventory = Inventory.Instance;
+        originalPrefabs = PrefabManager.Instance;
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        for (int index = created.Count - 1; index >= 0; index--)
+            if (created[index] != null)
+                UnityEngine.Object.DestroyImmediate(created[index]);
+        created.Clear();
+        fruitSet.Clear();
+        fruitSet.UnionWith(originalFruit);
+        typeof(BananaHarvestCycle).GetField("readyAt", PrivateStatic).SetValue(null, originalReadyAt);
+        typeof(BananaHarvestCycle).GetField("spawningFruit", PrivateStatic).SetValue(null, originalSpawning);
+        Inventory.Instance = originalInventory;
+        PrefabManager.Instance = originalPrefabs;
+    }
+
+    private GameObject CreateObject(string name)
+    {
+        GameObject result = new GameObject(name);
+        created.Add(result);
+        return result;
+    }
+
+    private BananaUse CreateFruit()
+    {
+        return CreateObject("Banana").AddComponent<BananaUse>();
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public void InventoryPreview_BananaNeverIncreasesHarvestCount(bool sourceActive)
+    {
+        BananaUse source = CreateFruit();
+        CreateFruit();
+        CreateFruit();
+        Assert.That(BananaHarvestCycle.RemainingFruitCount, Is.EqualTo(3));
+        source.gameObject.SetActive(sourceActive);
+        InventoryItemPreview preview = CreateObject("Banana Preview Test").AddComponent<InventoryItemPreview>();
+        GameObject root = CreateObject("Banana Preview Root Test");
+        typeof(InventoryItemPreview).GetField("previewRoot", PrivateInstance).SetValue(preview, root);
+        GameObject model = (GameObject)typeof(InventoryItemPreview).GetMethod("CreateVisualModel", PrivateInstance)
+            .Invoke(preview, new object[] { source.gameObject, 0 });
+        created.Add(model);
+        Assert.That(model.activeSelf, Is.True);
+        Assert.That(BananaHarvestCycle.RemainingFruitCount, Is.EqualTo(3));
+        Assert.That((bool)typeof(BananaUse).GetProperty("IsConsumed", PrivateInstance).GetValue(model.GetComponent<BananaUse>()), Is.True);
+        BananaHarvestCycle.RegisterFruit(model.GetComponent<BananaUse>());
+        Assert.That(BananaHarvestCycle.RemainingFruitCount, Is.EqualTo(3), "Preview registration must also be rejected explicitly.");
+        Assert.That((bool)typeof(InventoryItemPreview).GetProperty("IsCreatingPreview", PrivateStatic).GetValue(null), Is.False);
+    }
+
+    [Test]
+    public void InventoryDrop_BananaKeepsIdentityCountAndCollectionState()
+    {
+        BananaUse fruit = CreateFruit();
+        CreateFruit();
+        CreateFruit();
+        GameObject inventoryObject = CreateObject("Banana Inventory Test");
+        inventoryObject.SetActive(false);
+        Inventory inventory = inventoryObject.AddComponent<Inventory>();
+        Inventory.Instance = inventory;
+        inventory.enableDropLight = false;
+        GameObject managerObject = CreateObject("Banana Prefab Manager Test");
+        managerObject.SetActive(false);
+        PrefabManager manager = managerObject.AddComponent<PrefabManager>();
+        PrefabManager.Instance = manager;
+        manager.RegisterPrefab(fruit.gameObject, "Banana");
+        string id = (string)typeof(BananaUse).GetProperty("PersistentId", PrivateInstance).GetValue(fruit);
+        Assert.That(inventory.AddItem(fruit.gameObject), Is.True);
+        inventory.DropItem(0);
+        Assert.That(inventory.GetCount(), Is.Zero);
+        Assert.That(BananaHarvestCycle.RemainingFruitCount, Is.EqualTo(3));
+        Assert.That(fruit.GetComponent<PickupItem>().wasDropped, Is.True);
+        Assert.That(fruit.GetComponent<PickupItem>().isPickedUp, Is.False);
+        Assert.That((string)typeof(BananaUse).GetProperty("PersistentId", PrivateInstance).GetValue(fruit), Is.EqualTo(id));
+        Assert.That((bool)typeof(BananaUse).GetProperty("HasBeenPickedUp", PrivateInstance).GetValue(fruit), Is.True);
+        Assert.That(typeof(BananaUse).GetMethod("AdvanceUncollectedTimer", PrivateInstance).Invoke(fruit, new object[] { 60f }), Is.EqualTo(false));
+    }
+}

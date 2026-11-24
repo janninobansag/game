@@ -4,9 +4,14 @@ using UnityEngine.AI;
 
 public partial class MutantAI
 {
+    private readonly AINavigationRecovery navigationRecovery = new AINavigationRecovery();
+    private float nextNavigationDestinationUpdate;
+    private float navigationFallbackUntil;
+
     void UpdateRoam(float dist, bool playerVisible)
     {
         agent.speed = roamSpeed;
+        agent.isStopped = false;
 
         // Switch to chase if player in range AND visible (not in bush)
         if (dist <= detectionRange && playerVisible)
@@ -21,42 +26,14 @@ public partial class MutantAI
         SetAnimation(true, false);
         StopChaseSound();
 
-        if (isWaiting)
-        {
-            SetAnimation(false, false);
-            roamTimer += Time.deltaTime;
-            if (roamTimer >= roamWaitTime)
-            {
-                isWaiting = false;
-                roamTimer = 0f;
-                SetNewRoamDestination();
-            }
-            return;
-        }
-
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
-        {
-            isWaiting = true;
-            roamTimer = 0f;
-            roamWaitTime = Random.Range(roamWaitMin, roamWaitMax);
-        }
+        if (navigationRecovery.ShouldRepath(agent))
+            SetNewRoamDestination();
     }
 
     void SetNewRoamDestination()
     {
-        for (int i = 0; i < 10; i++)
-        {
-            Vector3 randomDir = Random.insideUnitSphere * roamRadius;
-            randomDir += startPosition;
-
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomDir, out hit,
-                roamRadius, NavMesh.AllAreas))
-            {
-                agent.SetDestination(hit.position);
-                return;
-            }
-        }
+        if (!navigationRecovery.TrySetRoamDestination(agent, startPosition, roamRadius))
+            navigationRecovery.TrySetRoamDestination(agent, transform.position, 8f);
     }
 
 }

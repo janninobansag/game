@@ -66,6 +66,8 @@ public partial class MonsterAI_New : MonoBehaviour
     private Vector3 jumpscareLockPosition;
     private bool hasTriggeredJumpscare = false;
     private readonly AIEncounterPause encounterPause = new AIEncounterPause();
+    private readonly AINavigationRecovery navigationRecovery = new AINavigationRecovery();
+    private float navigationFallbackUntil;
 
     // FINITE STATE MACHINE (FSM): Update selects one high-level behavior for White Lady each frame.
     private enum State
@@ -97,7 +99,6 @@ public partial class MonsterAI_New : MonoBehaviour
         PopulateTeleportSpawnsIfNeeded();
         CachePaintedTrees();
         agent.speed = walkSpeed;
-        agent.isStopped = false;
 
         if (agent.isOnNavMesh == false)
         {
@@ -107,6 +108,9 @@ public partial class MonsterAI_New : MonoBehaviour
                 agent.Warp(hit.position);
             }
         }
+
+        if (agent.enabled && agent.isOnNavMesh)
+            agent.isStopped = false;
 
         if (player != null)
         {
@@ -145,6 +149,13 @@ public partial class MonsterAI_New : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         while (AIEncounterGate.IsBlocked(this))
             yield return null;
+
+        while (!navigationRecovery.EnsureOnNavMesh(agent))
+        {
+            yield return new WaitForSeconds(1f);
+            while (AIEncounterGate.IsBlocked(this))
+                yield return null;
+        }
 
         currentState = State.Patrol; // Initialize the FSM in its normal roaming state.
         isIdle = false;
@@ -254,6 +265,9 @@ public partial class MonsterAI_New : MonoBehaviour
             }
         }
 
+        if (isPaused || !navigationRecovery.EnsureOnNavMesh(agent))
+            return;
+
         float distanceToPlayer = Vector3.Distance(transform.position, player.position); // Measure distance for FSM detection and attack transitions.
         bool canSeePlayer = CanSeePlayer();
 
@@ -272,8 +286,13 @@ public partial class MonsterAI_New : MonoBehaviour
         else
         {
             playerInSight = false; // Clear the detection flag when the player cannot be seen nearby.
-            if (currentState != State.Jumpscare && currentState != State.Idle && currentState != State.QnA)
-                currentState = State.Patrol; // Return to patrol unless an interrupt state must finish first.
+            if (currentState == State.Chase || currentState == State.Jumpscare)
+            {
+                currentState = State.Patrol;
+                isIdle = false;
+                navigationRecovery.ResetProgress();
+                SetNewPatrolTarget();
+            }
         }
 
         // FSM dispatch: run the behavior belonging to the state chosen above.
@@ -343,7 +362,7 @@ public partial class MonsterAI_New : MonoBehaviour
         return true;
     }
 
-    // Patrol state's actions and its transition to Idle when the current route ends.
+    // Patrol continuously; completed or blocked routes choose another destination.
     void Patrol()
     {
         isChasing = false; // Stop chase audio and report that active pursuit has ended.
@@ -351,15 +370,8 @@ public partial class MonsterAI_New : MonoBehaviour
         agent.isStopped = false; // Allow the NavMeshAgent to follow its patrol path.
 
         // A missing or completed path means patrol movement has reached a pause point.
-        if (!agent.hasPath || agent.remainingDistance < 0.5f)
-        {
-            if (!isIdle)
-            {
-                isIdle = true; // Prevent repeatedly starting the same idle transition.
-                idleTimer = Random.Range(idleTimeMin, idleTimeMax); // Choose how long this idle state lasts.
-                currentState = State.Idle; // Transition from Patrol to Idle.
-            }
-        }
+        if (navigationRecovery.ShouldRepath(agent))
+            SetNewPatrolTarget();
     }
 
     // Idle state's actions and transition back to Patrol after its timer expires.
@@ -385,11 +397,21 @@ public partial class MonsterAI_New : MonoBehaviour
         agent.speed = chaseSpeed; // Apply the faster movement speed used in Chase.
         agent.isStopped = false; // Let the NavMeshAgent move toward the player.
 
+        if (navigationRecovery.ShouldRepath(agent))
+        {
+            SetNewPatrolTarget();
+            navigationFallbackUntil = Time.time + 2f;
+        }
+
         if (player != null) // Only calculate pursuit movement when the player reference exists.
         {
-            if (Time.time >= nextPaintedTreeDestinationUpdate) // Refresh the route only at the configured interval.
+            if (Time.time >= navigationFallbackUntil && Time.time >= nextPaintedTreeDestinationUpdate)
             {
-                SetDestinationAvoidingPaintedTrees(player.position); // Set a route toward the player that accounts for painted trees.
+                if (!SetDestinationAvoidingPaintedTrees(player.position))
+                {
+                    SetNewPatrolTarget();
+                    navigationFallbackUntil = Time.time + 2f;
+                }
                 nextPaintedTreeDestinationUpdate = Time.time + paintedTreeDestinationRefreshRate; // Schedule the next route update.
             }
 
@@ -507,37 +529,10 @@ public partial class MonsterAI_New : MonoBehaviour
 
     void SetNewPatrolTarget()
     {
-        if (agent == null) return;
-
-        if (!agent.enabled)
-        {
-            agent.enabled = true;
-        }
-
-        for (int i = 0; i < 15; i++)
-        {
-            Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
-            randomDirection += startPosition;
-
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomDirection, out hit, patrolRadius, NavMesh.AllAreas))
-            {
-                SetDestinationAvoidingPaintedTrees(hit.position);
-                agent.isStopped = false;
-                return;
-            }
-        }
-
-        if (NavMesh.SamplePosition(startPosition, out NavMeshHit fallbackHit, 10f, NavMesh.AllAreas))
-        {
-            SetDestinationAvoidingPaintedTrees(fallbackHit.position);
-            agent.isStopped = false;
-        }
-        else
-        {
-            SetDestinationAvoidingPaintedTrees(transform.position);
-            agent.isStopped = false;
-        }
+        if (!navigationRecovery.TrySetRoamDestination(agent, startPosition, patrolRadius) && agent != null)
+            navigationRecovery.TrySetRoamDestination(agent, transform.position, 8f);
+        if (agent != null && agent.enabled && agent.isOnNavMesh && agent.hasPath)
+            SetDestinationAvoidingPaintedTrees(agent.destination);
     }
 
     void UpdateAnimations()

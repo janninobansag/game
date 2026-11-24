@@ -19,6 +19,10 @@ public sealed class InventoryItemPreview : MonoBehaviour
     }
 
     private static InventoryItemPreview instance;
+    private static int previewCreationDepth;
+
+    // Instantiate invokes Awake before callers can disable preview behaviours.
+    internal static bool IsCreatingPreview => previewCreationDepth > 0;
     private readonly List<PreviewSlot> slots = new List<PreviewSlot>();
     private Camera previewCamera;
     private GameObject previewRoot;
@@ -120,32 +124,40 @@ public sealed class InventoryItemPreview : MonoBehaviour
 
     private GameObject CreateVisualModel(GameObject source, int slotIndex)
     {
-        GameObject model = Instantiate(source);
-        model.name = $"Preview - {source.name}";
-        model.hideFlags = HideFlags.HideAndDontSave;
-        model.transform.SetParent(previewRoot.transform, false);
-        model.transform.localPosition = new Vector3(slotIndex * 20f, 0f, 0f);
-        model.transform.localRotation = Quaternion.Euler(15f, -25f, 0f);
+        previewCreationDepth++;
+        try
+        {
+            GameObject model = Instantiate(source);
+            model.name = $"Preview - {source.name}";
+            model.hideFlags = HideFlags.HideAndDontSave;
+            model.transform.SetParent(previewRoot.transform, false);
+            model.transform.localPosition = new Vector3(slotIndex * 20f, 0f, 0f);
+            model.transform.localRotation = Quaternion.Euler(15f, -25f, 0f);
 
-        SetLayerRecursively(model, PreviewLayer);
+            SetLayerRecursively(model, PreviewLayer);
 
-        foreach (MonoBehaviour behaviour in model.GetComponentsInChildren<MonoBehaviour>(true))
-            behaviour.enabled = false;
-        foreach (Collider collider in model.GetComponentsInChildren<Collider>(true))
-            collider.enabled = false;
-        foreach (Rigidbody body in model.GetComponentsInChildren<Rigidbody>(true))
-            body.isKinematic = true;
-        foreach (AudioSource audioSource in model.GetComponentsInChildren<AudioSource>(true))
-            audioSource.enabled = false;
-        foreach (Light light in model.GetComponentsInChildren<Light>(true))
-            light.enabled = false;
-        foreach (Camera cameraComponent in model.GetComponentsInChildren<Camera>(true))
-            cameraComponent.enabled = false;
-        foreach (Renderer renderer in model.GetComponentsInChildren<Renderer>(true))
-            renderer.enabled = true;
+            foreach (MonoBehaviour behaviour in model.GetComponentsInChildren<MonoBehaviour>(true))
+                behaviour.enabled = false;
+            foreach (Collider collider in model.GetComponentsInChildren<Collider>(true))
+                collider.enabled = false;
+            foreach (Rigidbody body in model.GetComponentsInChildren<Rigidbody>(true))
+                body.isKinematic = true;
+            foreach (AudioSource audioSource in model.GetComponentsInChildren<AudioSource>(true))
+                audioSource.enabled = false;
+            foreach (Light light in model.GetComponentsInChildren<Light>(true))
+                light.enabled = false;
+            foreach (Camera cameraComponent in model.GetComponentsInChildren<Camera>(true))
+                cameraComponent.enabled = false;
+            foreach (Renderer renderer in model.GetComponentsInChildren<Renderer>(true))
+                renderer.enabled = true;
 
-        model.SetActive(true);
-        return model;
+            model.SetActive(true);
+            return model;
+        }
+        finally
+        {
+            previewCreationDepth--;
+        }
     }
 
     private static bool TryGetBounds(GameObject model, out Bounds bounds)

@@ -1,5 +1,30 @@
 using SQLite4Unity3d;
 
+[Table("BananaHarvestData")]
+public class BananaHarvestData
+{
+    [PrimaryKey] public string SceneName { get; set; }
+    public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+    public float CooldownRemaining { get; set; }
+    public int SelectedInventoryIndex { get; set; }
+}
+
+[Table("BananaFruitData")]
+public class BananaFruitData
+{
+    [PrimaryKey] public string FruitId { get; set; }
+    public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;
+    public string SceneName { get; set; }
+    public int InventoryIndex { get; set; }
+    public bool HasBeenPickedUp { get; set; }
+    public float UncollectedSecondsRemaining { get; set; } = 30f;
+    public bool IsActive { get; set; }
+    public float HealingAmount { get; set; }
+    public float ScaleX { get; set; }
+    public float ScaleY { get; set; }
+    public float ScaleZ { get; set; }
+}
+
 // PURPOSE: SQLite data records used by SaveSystem. Each class maps to one save table.
 
 // ── SQLITE DATA MODELS ──
@@ -136,6 +161,7 @@ public string Key { get; set; }
 [Table("DroppedItemData")]
 public class DroppedItemData
 {
+    public string BananaFruitId { get; set; }
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
         public int SaveProfileId { get; set; } = RelationalSaveSchema.LocalProfileId;

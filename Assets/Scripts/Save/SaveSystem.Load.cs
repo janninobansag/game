@@ -15,6 +15,7 @@ public partial class SaveSystem : MonoBehaviour
             return false;
         }
 
+        BananaLoadState bananaLoadState = null;
         try
         {
             PlayerData playerData = connection.Table<PlayerData>().FirstOrDefault();
@@ -205,6 +206,7 @@ public partial class SaveSystem : MonoBehaviour
 
             }
             // ── Get data from database ──
+            bananaLoadState = PrepareBananaRestore();
             var inventoryItems = connection.Table<InventoryData>().ToList();
 List<string> inventoryItemNames = new List<string>();
             foreach (InventoryData invData in inventoryItems)
@@ -212,7 +214,8 @@ List<string> inventoryItemNames = new List<string>();
                 inventoryItemNames.Add(invData.ItemName);
             }
 
-            var droppedItems = connection.Table<DroppedItemData>().ToList();
+            var droppedItems = connection.Table<DroppedItemData>().ToList()
+                .Where(row => string.IsNullOrEmpty(row.BananaFruitId)).ToList();
             List<string> droppedItemNames = new List<string>();
             foreach (DroppedItemData droppedData in droppedItems)
             {
@@ -746,7 +749,7 @@ List<string> inventoryItemNames = new List<string>();
             }
 
             // ── RESTORE INVENTORY ──
-            if (inventoryItems.Count > 0 && Inventory.Instance != null)
+            if ((inventoryItems.Count > 0 || bananaLoadState != null) && Inventory.Instance != null)
             {
                 while (Inventory.Instance.GetItems().Count > 0)
                 {
@@ -836,6 +839,7 @@ List<string> inventoryItemNames = new List<string>();
             }
 
             // ── RESTORE DROPPED ITEMS ──
+            RestoreBananaState(bananaLoadState);
             foreach (DroppedItemData droppedData in droppedItems)
             {
                 if (inventoryItemNames.Contains(droppedData.ItemName))
@@ -957,8 +961,10 @@ List<string> inventoryItemNames = new List<string>();
             }
 
             // -- LOAD ONE-TIME SUBTITLES --
+            // Materialize mapped records before LINQ projection: SQLite4Unity3d
+            // otherwise tries to construct System.String as a database row.
             var shownSubtitleIds = new HashSet<string>(
-                connection.Table<SubtitleData>().Where(data => data.IsTriggered).Select(data => data.SubtitleId));
+                connection.Table<SubtitleData>().Where(data => data.IsTriggered).ToList().Select(data => data.SubtitleId));
             foreach (ItemSubtitleTrigger trigger in Resources.FindObjectsOfTypeAll<ItemSubtitleTrigger>())
             {
                 if (trigger != null && trigger.gameObject.scene.IsValid())
@@ -994,7 +1000,13 @@ List<string> inventoryItemNames = new List<string>();
         }
         catch (System.Exception e)
         {
+            Debug.LogError("[SaveSystem] Load failed: " + e);
             return false;
+        }
+        finally
+        {
+            if (bananaLoadState != null && !bananaLoadState.Completed)
+                BananaHarvestCycle.RestoreCooldown(bananaLoadState.Harvest.CooldownRemaining);
         }
     }
 

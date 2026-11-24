@@ -42,6 +42,8 @@ SaveProfileData (parent)
         +-- StaminaData
         +-- IntroData
         +-- AIPositionData
+        +-- BananaFruitData
+        +-- BananaHarvestData
         +-- WrenchData, GasData, GeneratorCoverData (Hard mode only)
 ```
 

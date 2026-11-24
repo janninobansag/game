@@ -73,6 +73,7 @@ public partial class SaveSystem : MonoBehaviour
             }
 
             // ── SAVE INVENTORY ──
+
             SaveAIPositions();
             if (IsHardModeDatabase())
             {
@@ -88,7 +89,7 @@ public partial class SaveSystem : MonoBehaviour
                 for (int index = 0; index < inventoryItemsToSave.Count; index++)
                 {
                     GameObject item = inventoryItemsToSave[index];
-                    if (item != null)
+                    if (item != null && item.GetComponent<BananaUse>() == null)
                     {
                         string cleanName = item.name.Replace("(Clone)", "");
 
@@ -418,6 +419,7 @@ public partial class SaveSystem : MonoBehaviour
             foreach (GameObject obj in allObjects)
             {
                 if (obj == null) continue;
+                if (obj.GetComponent<BananaUse>() != null) continue;
 
                 PickupItem pickup = obj.GetComponent<PickupItem>();
                 Key key = obj.GetComponent<Key>();
@@ -489,6 +491,9 @@ public partial class SaveSystem : MonoBehaviour
                     droppedCount++;
                 }
             }
+
+            // Save after the generic dropped-table refresh so banana positions survive.
+            SaveBananaState();
 
             // ── NEW: SAVE PROGRESSION ──
             if (ProgressionSystem.Instance != null)

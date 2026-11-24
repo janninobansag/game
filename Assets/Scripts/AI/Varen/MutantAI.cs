@@ -60,10 +60,6 @@ public partial class MutantAI : MonoBehaviour
     private CameraHeadBob playerCameraBob;
     private readonly AIEncounterPause encounterPause = new AIEncounterPause();
 
-    // Roaming
-    private float roamTimer = 0f;
-    private float roamWaitTime = 0f;
-    private bool isWaiting = false;
     public Vector3 startPosition;
 
     void Start()
@@ -113,13 +109,11 @@ public partial class MutantAI : MonoBehaviour
 
     IEnumerator RetryNavMesh()
     {
-        int attempts = 0;
-        while (!isReady && attempts < 10)
+        while (!isReady)
         {
             yield return new WaitForSeconds(1f);
             while (AIEncounterGate.IsBlocked(this))
                 yield return null;
-            attempts++;
 
             NavMeshHit hit;
             if (NavMesh.SamplePosition(transform.position,
@@ -145,7 +139,7 @@ public partial class MutantAI : MonoBehaviour
         }
 
         if (!isReady || player == null) return;
-        if (!agent.isOnNavMesh) return;
+        if (!navigationRecovery.EnsureOnNavMesh(agent)) return;
 
         attackTimer -= Time.deltaTime;
 
@@ -171,6 +165,12 @@ public partial class MutantAI : MonoBehaviour
 
         // ── NEW: If player is in bush, don't chase ──
         bool playerVisible = !isInBush;
+
+        if (!playerVisible && currentState == State.Attack)
+        {
+            currentState = State.Roam;
+            SetNewRoamDestination();
+        }
 
         switch (currentState)
         {
@@ -217,8 +217,6 @@ public partial class MutantAI : MonoBehaviour
         }
 
         currentState = State.Roam;
-        isWaiting = false;
-        roamTimer = 0f;
         attackTimer = 0f;
         enabled = true;
 

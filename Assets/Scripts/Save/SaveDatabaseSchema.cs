@@ -5,7 +5,7 @@ using SQLite4Unity3d;
 public static class RelationalSaveSchema
 {
     public const int LocalProfileId = 1;
-    public const int SchemaVersion = 8;
+    public const int SchemaVersion = 11;
 
     public static void Create(SQLiteConnection connection, bool isHardMode)
     {
@@ -91,7 +91,6 @@ public static class RelationalSaveSchema
             }
         }
 
-        connection.Execute("UPDATE SaveProfileData SET Difficulty = '" + difficulty + "', SchemaVersion = " + SchemaVersion + " WHERE Id = " + LocalProfileId);
 
         CreateChildTable(connection, "PlayerData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL, Health REAL, MaxHealth REAL, Sensitivity REAL, CurrentScene TEXT");
         CreateChildTable(connection, "InventoryData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "ItemName TEXT, Quantity INTEGER, IsEquipped INTEGER");
@@ -110,6 +109,42 @@ public static class RelationalSaveSchema
         CreateChildTable(connection, "StaminaData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "CurrentStamina REAL");
         CreateChildTable(connection, "IntroData", "Id INTEGER PRIMARY KEY", "SectionIndex INTEGER, LineIndex INTEGER, IsComplete INTEGER");
         CreateChildTable(connection, "AIPositionData", "Id INTEGER PRIMARY KEY AUTOINCREMENT", "AIId TEXT, SceneName TEXT, PosX REAL, PosY REAL, PosZ REAL, RotX REAL, RotY REAL, RotZ REAL, RotW REAL");
+        CreateChildTable(connection, "BananaHarvestData", "SceneName TEXT PRIMARY KEY", "CooldownRemaining REAL, SelectedInventoryIndex INTEGER");
+        CreateChildTable(connection, "BananaFruitData", "FruitId TEXT PRIMARY KEY", "SceneName TEXT, InventoryIndex INTEGER, IsActive INTEGER, HealingAmount REAL, HasBeenPickedUp INTEGER NOT NULL DEFAULT 0, UncollectedSecondsRemaining REAL NOT NULL DEFAULT 30, ScaleX REAL, ScaleY REAL, ScaleZ REAL");
+
+        // Add missing version-10 state before migrating version-9 or version-10 saves.
+        if (!connection.GetTableInfo("DroppedItemData").Exists(column => column.Name == "BananaFruitId"))
+            connection.Execute("ALTER TABLE DroppedItemData ADD COLUMN BananaFruitId TEXT");
+        if (!connection.GetTableInfo("BananaFruitData").Exists(column => column.Name == "HasBeenPickedUp"))
+            connection.Execute("ALTER TABLE BananaFruitData ADD COLUMN HasBeenPickedUp INTEGER NOT NULL DEFAULT 0");
+        if (!connection.GetTableInfo("BananaFruitData").Exists(column => column.Name == "UncollectedSecondsRemaining"))
+            connection.Execute("ALTER TABLE BananaFruitData ADD COLUMN UncollectedSecondsRemaining REAL NOT NULL DEFAULT 30");
+        // Rebuild instead of DROP COLUMN for Unity's older bundled SQLite versions.
+        // The transaction preserves both fruit state and existing authoritative drops.
+        if (connection.GetTableInfo("BananaFruitData").Exists(column => column.Name == "PosX"))
+        {
+            connection.RunInTransaction(() =>
+            {
+                connection.Execute("INSERT INTO DroppedItemData " +
+                    "(BananaFruitId, SaveProfileId, ItemName, IsHeld, IsDropped, PosX, PosY, PosZ, RotX, RotY, RotZ, RotW) " +
+                    "SELECT FruitId, SaveProfileId, 'Banana', 0, 1, PosX, PosY, PosZ, RotX, RotY, RotZ, RotW " +
+                    "FROM BananaFruitData WHERE InventoryIndex < 0 AND NOT EXISTS " +
+                    "(SELECT 1 FROM DroppedItemData WHERE BananaFruitId = BananaFruitData.FruitId)");
+                if (storedSchemaVersion < 10)
+                    connection.Execute("UPDATE BananaFruitData SET HasBeenPickedUp = 1 WHERE InventoryIndex >= 0");
+                CreateChildTable(connection, "BananaFruitData_New", "FruitId TEXT PRIMARY KEY",
+                    "SceneName TEXT, InventoryIndex INTEGER, IsActive INTEGER, HealingAmount REAL, " +
+                    "HasBeenPickedUp INTEGER NOT NULL DEFAULT 0, UncollectedSecondsRemaining REAL NOT NULL DEFAULT 30, " +
+                    "ScaleX REAL, ScaleY REAL, ScaleZ REAL");
+                const string fields = "FruitId, SaveProfileId, SceneName, InventoryIndex, IsActive, HealingAmount, " +
+                    "HasBeenPickedUp, UncollectedSecondsRemaining, ScaleX, ScaleY, ScaleZ";
+                connection.Execute("INSERT INTO BananaFruitData_New (" + fields + ") SELECT " + fields + " FROM BananaFruitData");
+                connection.Execute("DROP TABLE BananaFruitData");
+                connection.Execute("ALTER TABLE BananaFruitData_New RENAME TO BananaFruitData");
+            });
+        }
+
+        connection.Execute("UPDATE SaveProfileData SET Difficulty = '" + difficulty + "', SchemaVersion = " + SchemaVersion + " WHERE Id = " + LocalProfileId);
 
         if (!isHardMode)
             return;

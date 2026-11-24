@@ -146,6 +146,10 @@ public partial class MenuManager : MonoBehaviour
                 connection.CreateTable<AIPositionData>();
                 connection.CreateTable<GameStateData>();
                 connection.CreateTable<NoteData>();
+                connection.CreateTable<BananaFruitData>();
+                connection.CreateTable<BananaHarvestData>();
+                connection.DeleteAll<BananaFruitData>();
+                connection.DeleteAll<BananaHarvestData>();
                 connection.DeleteAll<ProgressionData>();
                 connection.DeleteAll<NoteData>();
                 connection.Execute("DELETE FROM GameStateData WHERE \"Key\" LIKE ?", "OneShot:%");
